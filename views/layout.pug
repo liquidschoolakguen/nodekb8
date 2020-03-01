@@ -1,0 +1,21 @@
+doctype html
+html
+    head
+        title Knowledgebase
+        link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+    body
+        nav.navbar.navbar-expand-md.navbar-dark.bg-dark
+            
+            a.navbar-brand(href='/') Knowledgebase
+        
+            ul.nav.navbar-nav
+                li.nav-item.active
+                    a.nav-link(href='/')| Home
+                li.nav-item
+                    a.nav-link(href='/articles/add') Add Article
+        .container
+                    block content
+                    br
+                    hr
+                    footer
+                        p Copyright &copy; 2020
