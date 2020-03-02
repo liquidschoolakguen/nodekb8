@@ -59,6 +59,17 @@ app.get('/', function(req, res){
         
     });
 });
+
+// get Single Article
+app.get('/article/:id', function(req, res){
+    Article.findById(req.params.id, function(err, article){
+       res.render('article', {
+           article:article
+        });
+    });
+});
+
+
 // Add route
 
 app.get('/articles/add', function(req, res){
@@ -71,27 +82,52 @@ app.get('/articles/add', function(req, res){
 });
 
 // add submit POST route
-
 app.post('/articles/add', function(req, res){
 
     let article = new Article();
     article.title= req.body.title;
     article.author= req.body.author;
-    article.body= req.body.author;
+    article.body= req.body.body;
     
     article.save(function(err){
 
         if(err){
-
             console.log(err);
             return;
         }else {
             res.redirect('/');
         }
-
-
     })
-   
 });
 
+
+// Update submit POST route
+app.post('/articles/edit/:id', function(req, res){
+
+    let article = {};
+    article.title= req.body.title;
+    article.author= req.body.author;
+    article.body= req.body.body;
+    
+    let query = {_id:req.params.id}
+    Article.update(query, article, function(err){
+        if(err){
+            console.log(err);
+            return;
+        }else {
+            res.redirect('/');
+        }
+    })
+});
+// Load edit form
+app.get('/article/edit/:id', function(req, res){
+    Article.findById(req.params.id, function(err, article){
+       res.render('edit_article', {
+           title:'Edit Article',
+           article:article
+        });
+    });
+});
+
+// Start server
 app.listen(3000, () => console.log(`Example app listening on port 3000!`))
