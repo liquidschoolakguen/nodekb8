@@ -11,8 +11,9 @@ html
                 ul.navbar-nav.mr-auto
                     li.nav-item.active
                         a.nav-link(href='/')| Home
-                    li.nav-item
-                        a.nav-link(href='/articles/add') Add Articlesss
+                    if user   
+                        li.nav-item
+                            a.nav-link(href='/articles/add') Add Articlesss
             .mx-auto.order-0
                 a.navbar-brand.mx-auto(href='#') Knowledgebase
                 button.navbar-toggler(type='button', data-toggle='collapse', data-target='.dual-collapse2')

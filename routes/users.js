@@ -53,14 +53,12 @@ router.post('/register', function(req, res){
                     if(err){
                         console.log(err);
                         return
-
                     }
                     else{
                         req.flash('success', 'You are now registered und can log in');
                         res.redirect('/users/login');
                     }
                 });
-                
             });
         })
     }
@@ -87,7 +85,9 @@ router.post('/login', function(req, res, next){
 router.get('/logout', function(req, res){
     req.logout();
     req.flash('success', 'You are loggedd out');
-    res.redirect('/users/login');
+    res.redirect('/'); 
+    //res.redirect('/');
+
 });
 module.exports = router;
 
