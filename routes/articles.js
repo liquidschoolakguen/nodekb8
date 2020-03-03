@@ -82,7 +82,6 @@ router.delete('/:id', function(req, res){
       }
       res.send('success');
   });
-
 });
 
 // Get Single Article
