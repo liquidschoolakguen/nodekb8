@@ -19,25 +19,20 @@ html
                     span.navbar-toggler-icon
             .navbar-collapse.collapse.w-100.order-3.dual-collapse2
                 ul.navbar-nav.ml-auto
-                    if user
-                        li  
-                            a.nav-link(href='/users/logout') logout
-                    else
-                        li.nav-item
-                            a.nav-link(href='/users/register') Register
-                        li.nav-item
-                            a.nav-link(href='/users/login') Login
-        .container_x               
-            .container
-                        != messages('message', locals)
-                        if errors
-                            each error, i in errors
-                                div(class="alert, alert-danger") #{error.msg}
-                        block content
-                        br
-                        hr
-                        footer
-                            p Copyright &copy; 2020
+                    li.nav-item
+                        a.nav-link(href='/users/register') Register
+                    li.nav-item
+                        a.nav-link(href='/users/login') Login
+        .container
+                    != messages('message', locals)
+                    if errors
+                        each error, i in errors
+                            div(class="alert, alert-danger") #{error.msg}
+                    block content
+                    br
+                    hr
+                    footer
+                        p Copyright &copy; 2020
 
         script(src='/bower_components/jquery/dist/jquery.js')
         script(src='/bower_components/bootstrap/dist/js/bootstrap.js')  

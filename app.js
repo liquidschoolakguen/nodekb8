@@ -5,8 +5,11 @@ const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const session= require('express-session');
+const passport= require('passport');
 
-mongoose.connect('mongodb://localhost/nodekb');
+const config= require('./config/database');
+
+mongoose.connect(config.database);
 
 let db = mongoose.connection;
 
@@ -73,6 +76,19 @@ app.use(expressValidator({
   }
 }));
 
+// Passwort congig
+
+require('./config/passport')(passport);
+
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('*', function(req, res, next){
+  res.locals.user = req.user || null;
+  next();
+});
+
 
 // Home Route
 
@@ -93,7 +109,10 @@ app.get('/', function(req, res){
 
 // Router Files
 let articles = require( './routes/articles');
+let users = require( './routes/users');
+
 app.use('/articles/', articles);
+app.use('/users/', users);
 
 // Start server
 app.listen(3000, () => console.log(`Example app listening on port 3000!`));
