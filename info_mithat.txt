@@ -28,4 +28,66 @@ in der console:
 
 // Der Webserver muss NICHT geschlossen werden für ein upgrade. Nach dem PULL ist die neue Version bereits im Browser verfügbar
 
-)
+
+-------------------------------------------
+
+02.03.2020
+
+1.push into githup with Console IDE Visual Studio Code 
+
+ 1- git config --global user.name "liquidschoolakguen"
+ 2- git config --global user.email "bubu000051@gmail.com"
+ 3- git init
+ 4- git add -A
+ 5- git commit -m "hallo"
+ 6- git push -u origin master
+	
+2.pull to DigitalOcean
+
+
+dann wird putty geöffnet:   C:\Users\mitat\Desktop\digitalOcean\putty.exe
+start konsole mit    ---> "NODEKB" markieren dann open
+
+in der console:
+1- cd nodekbn/
+2- git pull
+	
+
+       ---- Installationen---
+1 - $ npm install --save express-messages express-session connect-flash express-validator
+2-  $ npm install --save passport passport-local bcryptjs
+
+Wenn express validator nicht funktioniert dann
+npm install express-validator@5.3.1
+
+03.03
+
+1- git pull --> DigitalOCean:
+Für neue Package installationen:  npm install
+
+kapital 9
+
+#### Wichtig: ######
+
+Wenn git pull zu DigitalOcean nicht richtig funktioniert:
+
+	1.git init
+	2.git config user.name "someone"
+	3.git config user.email "someone@someplace.com"
+	4.git add *
+	5.git commit -m "some init msg"
+
+##################  Database MONGODB ################################
+
+NICHT DIE DigitalOCean Console BENUTZEN, WENN MAN DIE DATENBANK VERÄNDERN WILL ---> (WEIL MAN DAFÜR DEN SERVER STOPPEN MUSS)
+STATTDESSEN PUTTY BENUTZEN FÜR DATENBANKÄNDERUNGEN!!!
+
+Zugang zu Datenbank
+exportLC_ALL=C
+mongo
+show dbs
+use nodekb
+db.articles.remove({})    //löscht alle artikel
+
+
+
