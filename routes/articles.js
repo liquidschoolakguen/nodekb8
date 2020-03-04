@@ -78,12 +78,25 @@ router.get('/edit/:id',ensureAuthenticated, function(req, res){
 // Update submit POST route
 router.post('/edit/:id', function(req, res){
 
-    let article = {};
-    article.title= req.body.title;
-    article.author= req.body.author;
-    article.body= req.body.body;
+    
     
     let query = {_id:req.params.id}
+
+
+    Article.findById(req.params.id, function(err, articleX){
+      
+      if(err){
+        console.log('wwwwww');
+        console.log(err);
+    }
+     
+
+      let article = {};
+      article.title= req.body.title;
+      article.author= articleX.author;
+      article.body= req.body.body;
+
+
     Article.update(query, article, function(err){
         if(err){
             console.log(err);
@@ -93,6 +106,8 @@ router.post('/edit/:id', function(req, res){
           res.redirect('/');
         }
     })
+
+  }) 
 });
 
 // Delete Article
@@ -148,6 +163,8 @@ function ensureAuthenticated(req, res, next){
     res.redirect('/users/login');
   }
 
-
 }
+
+
+
 module.exports = router;

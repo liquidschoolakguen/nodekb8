@@ -110,9 +110,12 @@ app.get('/', function(req, res){
 // Router Files
 let articles = require( './routes/articles');
 let users = require( './routes/users');
+let profiles = require( './routes/profiles');
 
 app.use('/articles/', articles);
 app.use('/users/', users);
+app.use('/profiles/', profiles);
+
 
 // Start server
 app.listen(3000, () => console.log(`Example app listening on port 3000!`));

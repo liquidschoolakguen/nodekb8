@@ -70,7 +70,7 @@ router.get('/login', function(req, res ){
     res.render('login');
 })
 
-// Login Process
+/* // Login Process
 router.post('/login', function(req, res, next){
 
         passport.authenticate('local', {
@@ -80,7 +80,22 @@ router.post('/login', function(req, res, next){
         
     })(req, res, next);
 
+}); */
+
+
+// Login Process
+router.post('/login', function(req, res, next){
+
+    passport.authenticate('local', {
+    successRedirect:'/',
+    failureRedirect:'/users/login',
+    failureFlash: true
+    
+})(req, res, next);
+
 });
+
+
 
 router.get('/logout', function(req, res){
     req.logout();
@@ -90,5 +105,3 @@ router.get('/logout', function(req, res){
 
 });
 module.exports = router;
-
-
