@@ -90,4 +90,7 @@ use nodekb
 db.articles.remove({})    //löscht alle artikel
 
 
+Ordner der Programms
 
+Putty   --- > C:\Users\mitat\Desktop\digitalOcean\putty.exe
+Project --- > C:\Projects\nodekb
