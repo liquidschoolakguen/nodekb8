@@ -1,0 +1,31 @@
+﻿
+Wie mann github push 
+
+ 1- git config --global user.name "liquidschoolakguen"
+ 2- git config --global user.email "bubu000051@gmail.com"
+ 3- git init
+ 4- git add -A
+ 5- git commit -m "hallo"
+ 6- git push -u origin master
+ 
+// wichtig: Wenn repository nicht existiert
+1. Manuel neue repository erzeugen
+
+2. git push --set-upstream https://github.com/liquidschoolakguen/nodekb.git master
+-------------------------------------------------------
+
+dann wird putty geöffnet:
+start konsole mit "mithat_session"
+
+in der console:
+1- cd chat-example-project/
+2- git pull
+
+
+// VisualSTudioTerminal wird benutzt, um auf github zu pushen
+// Putty wird benutzt, um von digitalOcean aus ein git pull zu machen
+// die Konsole auf der Seite von digitalOcean wird genutzt, um den webserver zu starten/restarten/schließen
+
+// Der Webserver muss NICHT geschlossen werden für ein upgrade. Nach dem PULL ist die neue Version bereits im Browser verfügbar
+
+)
