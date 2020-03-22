@@ -1,0 +1,144 @@
+extends layout
+
+block content
+    h1 #{title}
+    u1.list-group
+        each article, i in articles
+            li.list-group-item
+                a(href="/articles/"+article._id)= article.title
+    br
+    br
+    h1 #{andfachs}
+    u1.list-group
+        each fach, i in fachs
+            li.list-group-item
+                a(href="/fachs/"+fach._id)= fach.title
+    br
+    br
+    table.table.table-bordered
+      thead
+        tr
+          th(scope='col').bbb_ 
+          th(scope='col').bbb Montag
+          th(scope='col').bbb Dienstag
+          th(scope='col').bbb Mittwoch
+          th(scope='col').bbb Donnerstag
+          th(scope='col').bbb Freitag
+      tbody
+        tr
+          th(scope='row') 8.00 Uhr
+          td.bbb 
+           select.custom-select.form-control(name='ben', type=text)
+            option(selected='') Kein Unterricht
+            each fach, i in fachs
+                option(value=fach._id) #{fach.title}
+          td 
+          td 
+          td 
+          td 
+        tr
+          th(scope='row') 8.30 Uhr
+          td 
+          td 
+          td 
+          td 
+          td 
+        tr
+          th(scope='row') 9.15 Uhr
+          td 
+          td 
+          td 
+          td 
+          td 
+        tr
+          th(scope='row') 10.00 Uhr
+          td 
+          td 
+          td 
+          td 
+          td 
+        tr
+          th(scope='row') 10.25 Uhr
+          td 
+          td 
+          td 
+          td 
+          td 
+        tr
+          th(scope='row') 11.10 Uhr
+          td 
+          td 
+          td 
+          td 
+          td 
+        tr
+          th(scope='row') 11.55 Uhr
+          td 
+          td 
+          td 
+          td 
+          td 
+        tr
+          th(scope='row') 12.15 Uhr
+          td 
+          td 
+          td 
+          td 
+          td 
+        tr
+          th(scope='row') 13.00 Uhr
+          td 
+          td 
+          td 
+          td 
+          td 
+        tr
+          th(scope='row') 14.00 Uhr
+          td 
+          td 
+          td 
+          td 
+          td 
+        tr
+          th(scope='row') 14.25 Uhr
+          td 
+          td 
+          td 
+          td 
+          td 
+        tr
+          th(scope='row') 15.10 Uhr
+          td 
+          td 
+          td 
+          td 
+          td 
+        tr
+          th(scope='row') 15.55 Uhr
+          td 
+          td 
+          td 
+          td 
+          td 
+    .container
+        .row
+            #fields.control-group
+            label.control-label(for='field1') Nice Multiple Form Fields
+            .controls
+                form(role='form', autocomplete='off')
+                .entry.input-group.col-xs-3
+                    input.form-control(name='fields[]', type='text', placeholder='Type something')
+                    span.input-group-btn
+                    button.btn.btn-success.btn-add(type='button')
+                        span.glyphicon.glyphicon-plus
+                br
+                small
+                | Press 
+                span.glyphicon.glyphicon-plus.gs
+                |  to add another form field :)    
+    h1 Upload Image
+    
+    .embed-responsive.embed-responsive-16by9
+      iframe.embed-responsive-item(src='https://www.wikipedia.de/', frameborder='0', allowfullscreen='')
+
+

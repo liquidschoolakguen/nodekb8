@@ -1,0 +1,107 @@
+extend layout
+
+
+
+block content
+    .container.padding_null
+        .row.h-100.d-flex.justify-content-center
+            .col-12
+                .card.border.border-success
+                    .card-header
+                        ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
+                            li.nav-item
+                                a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{hausarbeit.article.klasse}  |  #{hausarbeit.article.fach}  |  #{hausarbeit.article.lehrer.name}
+                    .card-body.padding_null
+                        .tab-content.mt-3.my-min-height
+                            #description.tab-pane.active(role='tabpanel')
+                                p.card-text
+                                    .col-md-12
+                                        h5.color-red Bitte bis #{hausarbeit.article.termin} abgeben.
+                                        h5#invisible #{hausarbeit.article.body}
+                                        h6#hier-kommt-was-rein
+    .container.padding_null
+        .row.h-100.d-flex.justify-content-center
+            .col-12
+                .card.border.border-success
+                    .card-header
+                        ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
+                            li.nav-item
+                                a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') Von #{hausarbeit.schueler.name}  |  #{hausarbeit.created}
+                    .card-body.padding_null
+                        .tab-content.mt-3.my-min-height
+                            #description.tab-pane.active(role='tabpanel')
+                                p.card-text
+                                    .col-md-12
+                                        h5.color-red Bitte bis #{hausarbeit.article.termin} abgeben.
+                                        h5#invisible2 #{hausarbeit.body}
+                                        h6#hier-kommt-was-rein2
+                                        | #{hausarbeit.reflexion_hilfe}
+                                        | #{hausarbeit.reflexion_schwer}
+                                        | #{hausarbeit.reflexion_zeit}
+                                        | #{hausarbeit.reflexion_text}
+    .container.padding_null
+        .row.h-100.d-flex.justify-content-center
+            .col-12
+                .card.border.border-success
+                    .card-header
+                        ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
+                            li.nav-item
+                                a.nav-link.active(href='#description2', role='tab', aria-controls='description2', aria-selected='true') Korrektur und Beurteilung
+                    .card-body.padding_null
+                            #description2.tab-pane.active(role='tabpanel')
+                                p.card-text
+                                    .col-md-12
+                                        form#reused_form.montform(method='POST' action='/articles/korrektur_hausarbeit/'+hausarbeit._id)
+                                            #form-transition-group.my-margin-top
+                                                .form-row
+                                                    input.form-control.invisible(type='text', placeholder='hausaufgabeId',  name='hausaufgabe_id', value= hausarbeit._id)
+                                                .form-row
+                                                    textarea#area2.form-control.is-valid(name='ergebnis_text', type=text, placeholder='Kommentar zur Hausaufgabe von ' + hausarbeit.schueler.name + ' \(optional\)')
+                                                .form-row.my-margin-top
+                                                    .form-group.col-md-4 
+                                                        label Ist die Arbeit ok?                                 
+                                                        select#validationServer01.form-control.custom-select.form-control(name='ergebnis_ok', type=text,  required='', placeholder='Arbeit ok')
+                                                            option(selected='')
+                                                            option Ok
+                                                            option Nicht ok
+                                                        .valid-feedback                                          
+                                                    .form-group.col-md-4 
+                                                        label Weche Note verdient #{hausarbeit.schueler.name} (optional)?                                
+                                                        select#validationServer01.form-control.custom-select.form-control(name='ergebnis_note', type=text, placeholder='Weche Note verdient')
+                                                            option(selected='')
+                                                            option E1
+                                                            option E2
+                                                            option E3
+                                                            option E4
+                                                            option G1
+                                                            option G2
+                                                            option G3
+                                                            option G4
+                                                            option G5
+                                                            option G6
+                                                            option 1
+                                                            option 2
+                                                            option 3
+                                                            option 4
+                                                            option 5
+                                                            option 6
+                                                    .form-group.col-md-4 
+                                                        label Wie viele "PauliDollar" (Leistungspunkte)?                                
+                                                        select#validationServer01.form-control.custom-select.form-control(name='ergebnis_dollar', type=text,  placeholder='Wie viele "PauliDollar')
+                                                            option 1
+                                                            option 2
+                                                            option 3
+                                                            option 4
+                                                            option 5                                             
+                                                input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right.my-margin-bottom(type='submit', value='Korrektur abschicken')
+                                                p.my-margin-top.bold-green
+                                                    | Wenn du die Korrektur abschickst, kannst du sie nicht mehr ändern.
+
+        script(src='/js/nic_edit.js')
+        script(type='text/javascript').
+            bkLib.onDomLoaded(nicEditors.allTextAreas) 
+            new nicEditor({buttonList : ['bold','italic','underline','left','center','right','justify','ol','ul','superscript','upload','fontFormat','fontFamily','upload','','','','','','','','','','','','','']}).panelInstance('area2');
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+        script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+        script(src='/js/article.js')
+        script(src='/js/article2.js')                                                   

@@ -1,0 +1,42 @@
+extends layout
+
+block content
+    .card
+      .card-header
+        | Hausaufgabe erstellen - Bedienungsanleitung
+      .card-body
+        blockquote.blockquote.mb-0
+            p
+                | Hier kannst du zum Arbeitsmaterial hochladen und zum anderen einen Arbeitsauftrag mit Abgabefrist erteilen. Das hochgeladene Arbeitsmaterial kann ein Bild sein (.jpg/.png) oder ein Link. Den SuS wird das entsprechende Material angezeigt, sodass sie die Aufgabe bearbeiten können.
+            p
+                | Die SuS können die Afgaben zur Zeit lediglich in digitaler / getippter Form "abgeben". "Abgegebene" Ausarbeitungen Deiner SuS erscheinen Dir auf der Hauptseite. Du kannst Deinen SuS eine Rückmeldung über ihre Leistunen geben in Form einer Punktezahl von 1-10 (1 ist schlecht).
+    br
+    br
+    .card.border.border-success
+        .card-header.bg-success.text-white
+            | Arbetsmaterial - Hier kannst du ein Bild hochladen
+        .card-body
+            blockquote.blockquote.mb-0
+                form(method='post', enctype='multipart/form-data', action='/articles/upload')
+                    .input-group
+                        .custom-file   
+                            input.btn.btn-outline-secondary.custom_breit(type='file', name='file')
+                        .input-group-append    
+                            input#primaryButton.btn.btn-outline-secondary.custom(type='submit', value='hochladen')
+                            a.btn.btn-outline-secondary.custom.nav-link(href='/articles/add2') brauche ich nicht
+    br
+    br
+    
+    br
+
+
+
+
+                                    .form-row.my-margin-top
+                                    .form-group.col-md-6 
+                                        label Hier kannst du Material hochladen - z.Z. nur Bilder (.jpg/.png)
+                                        input.zwang(name='file', type='file')
+                                    .form-group.col-md-6 
+                                        label Hier kannst du ein Link reinkopieren
+                                        input.form-control(name='link', type=text)
+

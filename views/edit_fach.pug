@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1 #{title}
+    form(method='POST', action='/fachs/edit/' + fach._id)
+        #form-transition-group  
+            label Title:
+            input.form-control(name='title', type=text, value=fach.title)
+        #form-transition-group  
+            label Faktor:
+            input.form-control(name='faktor', type=text, value=fach.faktor)
+        br
+        input.btn.btn-primary(type='submit', value='Submit')

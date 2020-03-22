@@ -1,31 +1,52 @@
 doctype html
 html
     head
-        title Knowledgebase
+        title St. Pauli macht weiter
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
-        link(rel='stylesheet' href='/css/style.css')
+        link(rel='stylesheet' href='/css/style.css') 
+        link(rel='stylesheet', href='https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css')  
 
     body
         nav.navbar.navbar-expand-md.navbar-dark.bg-dark
             .navbar-collapse.collapse.w-100.order-1.order-md-0.dual-collapse2
                 ul.navbar-nav.mr-auto
-                    li.nav-item.active
-                        a.nav-link(href='/')| Home
-                    if user   
+                    if user
+                        li
+                            .led-green-main
+                        li.nav-item.active
+                            a.nav-link(href='/')| #{user.name}
+                        if user.type == 'lehrer' 
+                            li.nav-item
+                                a.nav-link(href='/')| Meine Aufträge 
+                            li.nav-item
+                                a.nav-link(href='/index_all')| Alle Aufträge
+                            li.nav-item.active
+                                a.nav-link(href='/articles/add') Neuen Auftrag erstellen
+                        else
+                            li.nav-item
+                                p.white
+                                    | #{user.money} 
+                    else 
                         li.nav-item
-                            a.nav-link(href='/articles/add') Add Articlesss
+                            a.nav-link(href='/')| Home
+
             .mx-auto.order-0
-                a.navbar-brand.mx-auto(href='#') Knowledgebase
+                a.navbar-brand.mx-auto(href='#') 
                 button.navbar-toggler(type='button', data-toggle='collapse', data-target='.dual-collapse2')
                     span.navbar-toggler-icon
             .navbar-collapse.collapse.w-100.order-3.dual-collapse2
                 ul.navbar-nav.ml-auto
                     if user
                         li  
-                            a.nav-link(href='/users/logout') logout
+                            a.nav-link(href='/users/logout/'  + user._id) logout
                     else
                         li.nav-item
-                            a.nav-link(href='/users/register') Register
+                            a.nav-link(href='/users/register_lehrer') Für Lehrkräfte
+                        li.nav-item
+                            a.nav-link(href='/users/register_schueler') Registrierung
                         li.nav-item
                             a.nav-link(href='/users/login') Login
         .container_x               
@@ -36,10 +57,68 @@ html
                                 div(class="alert, alert-danger") #{error.msg}
                         block content
                         br
-                        hr
-                        footer
-                            p Copyright &copy; 2020
-
-        script(src='/bower_components/jquery/dist/jquery.js')
-        script(src='/bower_components/bootstrap/dist/js/bootstrap.js')  
-        script(src='/js/main.js')      
+                        br
+                        br
+                        br
+                        br
+    if !user
+        footer.page-footer.font-small.mdb-color.pt-4
+            .container.text-center.text-md-left
+                .row.text-center.text-md-left.mt-3.pb-3
+                    .col-md-3.col-lg-3.col-xl-3.mx-auto.mt-3
+                        h6.text-uppercase.mb-4.font-weight-bold LiquidSchool
+                        p
+                            | Hier entsteht eine barrierefreie Schulsoftware, die auch für jüngere SchülerInnen ideal geeignet ist. 
+                            | Alles unkompliziert.
+                    hr.w-100.clearfix.d-md-none
+                    .col-md-2.col-lg-2.col-xl-2.mx-auto.mt-3
+                        h6.text-uppercase.mb-4.font-weight-bold Products
+                        p
+                            a(href='#!') Einfach ist besser
+                        p
+                            a(href='#!') Häufige Fragen
+                        p
+                            a(href='#!') Und nochwas
+                    hr.w-100.clearfix.d-md-none
+                    .col-md-3.col-lg-2.col-xl-2.mx-auto.mt-3
+                        h6.text-uppercase.mb-4.font-weight-bold Rechtliches
+                        p
+                            a(href='#!') Verantwortliche
+                        p
+                            a(href='/disclaimer') Disclaimer
+                        p
+                            a(href='/datenschutz') Datenschutz
+                    hr.w-100.clearfix.d-md-none
+                    .col-md-4.col-lg-3.col-xl-3.mx-auto.mt-3
+                        h6.text-uppercase.mb-4.font-weight-bold Kontakt
+                        p
+                            i.fas.fa-home.mr-3
+                            |  Hamburg, 21107, DE
+                        p
+                            i.fas.fa-envelope.mr-3
+                            |  mithat.akguen@sah-hamburg.de
+                        p
+                            i.fas.fa-phone.mr-3
+                            |  + 01 234 567 88
+                    hr
+                    .row.d-flex.align-items-center
+                        .col-md-7.col-lg-8
+                            p.text-center.text-md-left
+                                | © 2020 Copyright:
+                                a(href='https://google.com/')
+                                    strong  liquidschool.com
+                        .col-md-5.col-lg-4.ml-lg-0
+                            .text-center.text-md-right
+                                ul.list-unstyled.list-inline
+                                    li.list-inline-item
+                                        a.btn-floating.btn-sm.rgba-white-slight.mx-1
+                                            i.fab.fa-facebook-f
+                                    li.list-inline-item
+                                        a.btn-floating.btn-sm.rgba-white-slight.mx-1
+                                            i.fab.fa-twitter
+                                    li.list-inline-item
+                                        a.btn-floating.btn-sm.rgba-white-slight.mx-1
+                                            i.fab.fa-google-plus-g
+                                    li.list-inline-item
+                                        a.btn-floating.btn-sm.rgba-white-slight.mx-1
+                                            i.fab.fa-linkedin-in

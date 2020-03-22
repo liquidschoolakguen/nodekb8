@@ -1,0 +1,71 @@
+extends layout
+
+block content
+    if !user
+      .shadow.p-3.mb-5.bg-white.rounded
+        .card
+          .card-header
+            | Hallo liebe Schülerinnen und Schüler
+          .card-body
+            blockquote.blockquote.mb-0
+              p
+                | Wie Ihr längst wisst, bleibt die Schule zur Zeit wegen von Ansteckungsgefahr geschlossen. Und wir, eure Lehrerinnen und Lehrer können uns gut vorstellen, dass euch das vielleicht etwas beunruhigt aber andererseits auch ein wenig freut.  
+              p
+                | Wir haben uns überlegt, was wir tun können um euch zu zeigen, dass schon bald alles wie immer sein wird. Und wir kamen auf folgende Idee: Hausaufgaben. Schöne, lange, schwere Hausaufgaben. :)
+              footer.blockquote-footer Herr Akgün
+    else      
+      if user.type === 'lehrer'
+        .container.padding_null
+          .row.h-100.d-flex.justify-content-center
+            .col-12
+              .card.border.border-success
+                .card-header
+                  ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
+                    li.nav-item
+                      a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') SuS, die den Auftrag "#{article.title}" bearbeitet haben
+                .card-body.padding_null
+                  .tab-content.mt-3.my-min-height
+                    #description.tab-pane.active(role='tabpanel')
+                      p.card-text
+                        if length !=0
+                          .col-md-4.col-6.float-right.padding_null
+                            input#inputFilter.form-control.my-margin-bottom-right(type='text', placeholder='suche..')
+                          table#customerTable.table.table-striped.table-bordered.table-sm(cellspacing='0', width='100%')
+                            thead
+                              tr 
+                                th.th-sm.align-middle
+                                  | Profil                              
+                                th.th-sm.align-middle
+                                  | Name | Passwort                 
+                                th.th-sm.align-middle
+                                  | HAs 
+                            tbody
+                              each hausarbeit, i in hausarbeits
+                                tr
+                                  td.align-middle
+                                     a.btn.btn-outline-success.btn-circle.btn-lg(href="/articles/schueler/"+hausarbeit.schueler._id, role='button')
+                                      svg.bi.bi-person-fill(width='1em', height='1em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
+                                        path(fill-rule='evenodd', d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 100-6 3 3 0 000 6z', clip-rule='evenodd')                                
+                                  td.align-middle 
+                                    .montainer
+                                      | #{hausarbeit.schueler.name}
+                                    .montainer
+                                      .left-element
+                                        | #{hausarbeit.schueler.password_visible}
+                                  td.align-middle
+                                    if hausarbeit.status ==='1'
+                                        a.btn.btn-outline-warning(href="/articles/hausarbeit/"+hausarbeit._id, role='button')
+                                            svg.bi.bi-file-richtext(width='1em', height='1em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
+                                                path(fill-rule='evenodd', d='M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z', clip-rule='evenodd')
+                                                path(fill-rule='evenodd', d='M4.5 11.5A.5.5 0 015 11h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 9h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm1.639-3.708l1.33.886 1.854-1.855a.25.25 0 01.289-.047l1.888.974V7.5a.5.5 0 01-.5.5H5a.5.5 0 01-.5-.5V7s1.54-1.274 1.639-1.208zM6.25 5a.75.75 0 100-1.5.75.75 0 000 1.5z', clip-rule='evenodd')
+                                    if hausarbeit.status ==='2'
+                                        a.disabled.btn.btn-outline-success(href="/articles/hausarbeit/"+hausarbeit._id, role='button')
+                                            svg.bi.bi-file-richtext(width='1em', height='1em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
+                                                path(fill-rule='evenodd', d='M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z', clip-rule='evenodd')
+                                                path(fill-rule='evenodd', d='M4.5 11.5A.5.5 0 015 11h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 9h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm1.639-3.708l1.33.886 1.854-1.855a.25.25 0 01.289-.047l1.888.974V7.5a.5.5 0 01-.5.5H5a.5.5 0 01-.5-.5V7s1.54-1.274 1.639-1.208zM6.25 5a.75.75 0 100-1.5.75.75 0 000 1.5z', clip-rule='evenodd')                                 
+                        else
+                          h64.my-margin-right-boy Noch hat kein SoS den Auftrag bearbeitet
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+    script(type='text/javascript', src='https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.js')
+    script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+    script(src='/js/index.js')

@@ -1,0 +1,79 @@
+extend layout
+
+
+
+block content
+    .container.padding_null
+        .row.h-100.d-flex.justify-content-center
+            .col-12
+                .card.border.border-success
+                    .card-header
+                        ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
+                            li.nav-item
+                                a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{hausarbeit.article.klasse} - #{hausarbeit.article.fach} - #{hausarbeit.article.created}
+                    .card-body.padding_null
+                        .tab-content.mt-3.my-min-height
+                            #description.tab-pane.active(role='tabpanel')
+                                p.card-text
+                                    .col-md-12
+                                        h5.color-red Bitte bis #{hausarbeit.article.termin} abgeben.
+                                        h5#invisible #{hausarbeit.article.body}
+                                        h6#hier-kommt-was-rein
+    if user.type == 'schueler'
+        .container.padding_null
+            .row.h-100.d-flex.justify-content-center
+                .col-12
+                    .card.border.border-success
+                        .card-header
+                            ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
+                                li.nav-item
+                                    a.nav-link.active(href='#description2', role='tab', aria-controls='description2', aria-selected='true') Hausarbeit ändern
+                        .card-body.padding_null
+                            .tab-content.mt-3
+                                #description2.tab-pane.active(role='tabpanel')
+                                    p.card-text
+                                        .col-md-12
+                                            form#reused_form.montform(method='POST', action='/articles/edit_hausarbeit/' + hausarbeit._id)
+                                                #form-transition-group.my-margin-top
+                                                    .form-row
+                                                        input.form-control.invisible(type='text', placeholder='articleId',  name='article_id', value= hausarbeit.article._id)
+                                                    .form-row
+                                                        textarea#area2.form-control.is-valid(name='body', type=text, placeholder='Arbeitsauftrag')=hausarbeit.body
+                                                    .form-row.my-margin-top
+                                                        .form-group.col-md-4 
+                                                            label Hattest du bei der Arbeit Hilfe?                                 
+                                                            select#validationServer01.form-control.custom-select.form-control(name='reflexion_hilfe', type=text,  required='', placeholder='Wähle eine Klasse')
+                                                                option(selected='') #{hausarbeit.reflexion_hilfe}
+                                                                option Ja, habe im Internet Hilfe gefunden
+                                                                option Ja, von der Familie/ von Freunden
+                                                                option Nein, alles alleine gemacht
+                                                            .valid-feedback                                          
+                                                        .form-group.col-md-4 
+                                                            label War es schwer?                                
+                                                            select#validationServer01.form-control.custom-select.form-control(name='reflexion_schwer', type=text,  required='', placeholder='Wähle eine Klasse')
+                                                                option(selected='') #{hausarbeit.reflexion_schwer}
+                                                                option Nein, zu leicht
+                                                                option Genau richtig
+                                                                option Etwas zu schwer
+                                                                option Viel zu schwer                                                            
+                                                        .form-group.col-md-4 
+                                                            label Hattest du genug Zeit?                                
+                                                            select#validationServer01.form-control.custom-select.form-control(name='reflexion_zeit', type=text,  required='', placeholder='Wähle eine Klasse')
+                                                                option(selected='') #{hausarbeit.reflexion_zeit}
+                                                                option Ja
+                                                                option Musste, mich schon ziemlich beeilen
+                                                                option Nein, zu wenig Zeit
+                                                    .form-row
+                                                        .form-group.col-md-12
+                                                            input#validationServer01.form-control(type='text', placeholder='Das möchte ich der Lehrkraft noch sagen' name='reflexion_text' , value=hausarbeit.reflexion_text)                                               
+                                                    input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right.my-margin-bottom(type='submit', value='Hausarbeit abgeben')
+                                                    p.my-margin-top.bold-green
+                                                        | Solange deine Arbeit noch nicht überprüft wurde, kannst du sie noch ändern.
+            script(src='/js/article2.js')
+    script(src='/js/nic_edit.js')
+    script(type='text/javascript').
+        bkLib.onDomLoaded(nicEditors.allTextAreas) 
+        new nicEditor({buttonList : ['bold','italic','underline','left','center','right','justify','ol','ul','superscript','upload','fontFormat','fontFamily','upload','','','','','','','','','','','','','']}).panelInstance('area2');
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+    script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+    script(src='/js/article.js')

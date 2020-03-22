@@ -1,13 +1,81 @@
 extends layout
 
 block content
-    h1 #{title}
-    form(method='POST', action='/articles/add')
-        #form-transition-group  
-            label title
-            input.form-control(name='title', type=text)
-       
-        #form-transition-group  
-            label body
-            textarea.form-control(name='body', type=text)
-        input.btn.btn-primary(type='submit', value='Submit')
+            form#reused_form.montform(method='POST', enctype='multipart/form-data' action='/articles/add')
+                .card.border.border-success
+                    .card-header.bg-success.text-white
+                        | Hausarbeit erstellen
+                    .card-body
+                        #form-transition-group.my-margin-top
+                                .form-row
+                                    .form-group.col-md-12
+                                        input#validationServer01.form-control(type='text', placeholder='Titel der Hausarbeit',  required='' name='title')
+                                        .valid-feedback
+                                .form-row.my-margin-top
+                                    .form-group.col-md-4 
+                                        label Für die Klasse                                  
+                                        select#validationServer01.form-control.custom-select.form-control(name='klasse', type=text,  required='', placeholder='Wähle eine Klasse')
+                                            option(selected='')
+                                            option St. Pauli 5a
+                                            option St. Pauli 5b 
+                                            option St. Pauli 6a
+                                            option St. Pauli 6b 
+                                            option St. Pauli 7a
+                                            option St. Pauli 7b
+                                            option St. Pauli LB/WS 5-7                                            
+                                            option St. Pauli 8a
+                                            option St. Pauli 8b 
+                                            option St. Pauli 9a
+                                            option St. Pauli 9b 
+                                            option St. Pauli LB/WS 8-9                                            
+                                            option St. Pauli 10a
+                                            option St. Pauli 10b 
+                                            option Neustadt 5a
+                                            option Neustadt 5b
+                                            option Neustadt 5c
+                                            option Neustadt 6a 
+                                            option Neustadt 6b
+                                            option Neustadt 7a
+                                            option Neustadt 7b
+                                            option Neustadt 7c
+                                            option Neustadt 8a
+                                            option Neustadt 8b
+                                            option Neustadt 8c
+                                            option Neustadt 8d
+                                            option Neustadt VK 7/8
+                                            option Neustadt 9a
+                                            option Neustadt 9b
+                                            option Neustadt 9c
+                                            option Neustadt VK 9
+                                            option Neustadt 10a
+                                            option Neustadt 10b
+                                            option Neustadt 10c
+                                            option Neustadt 10d
+                                            option Neustadt VK 10
+                                        .valid-feedback                                          
+                                    .form-group.col-md-4 
+                                        label Für das Fach                                 
+                                        select#validationServer01.form-control.custom-select.form-control(name='fach', type=text,  required='', placeholder='Wähle eine Klasse')
+                                            option(selected='')
+                                            option Mathematik
+                                            option Deutsch
+                                            option Englisch
+                                            option Gesellschaft 
+                                            option Natur
+                                            option Philosophie
+                                            option Lesezeit 
+                                    .form-group.col-md-4 
+                                        label Abgabetermin (Standard: 3 Tage später)
+                                        input#validationServer01.form-control(name='termin', type=text,  required='', placeholder='Abgabetermin', value=abgabe + ', 16 Uhr')
+                                .form-row
+                                        label Auftrag
+                                        textarea#area2.form-control.is-valid(name='body', type=text, placeholder='Arbeitsauftrag')
+                                    
+                                input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Ok')
+            script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+            script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+            script(src='/js/add_article.js')  
+            script(src='/js/nic_edit.js')  
+            script(type='text/javascript').
+                bkLib.onDomLoaded(nicEditors.allTextAreas) 
+                new nicEditor({buttonList : ['bold','italic','underline','left','center','right','justify','ol','ul','superscript','upload','fontFormat','fontFamily','upload','','','','','','','','','','','','','']}).panelInstance('area2');

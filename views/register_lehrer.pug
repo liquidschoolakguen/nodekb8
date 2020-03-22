@@ -1,0 +1,30 @@
+extends layout
+
+block content
+    .container
+      .row.h-100.d-flex.justify-content-center
+        .col-12.col-sm-8.col-md-6.col-lg-4
+          .card.border.border-success
+            .card-header
+              ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
+                li.nav-item
+                  a.nav-link.active(href='#history', role='tab', aria-controls='history', aria-selected='true') Für LehrerInnen
+            .card-body
+              h4.card-title Hier kannst du dich registrieren
+              .tab-content.mt-3
+                #history.tab-pane.active(role='tabpanel')
+                  p.card-text
+                    form(method='POST', action='/users/register_lehrer')
+                        #form-group  
+                            input#validationServer01.form-control.is-valid.form-control(name='name', type=text, required='', placeholder='Sichtbarer Name ')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control.is-valid.form-control(name='username', type=text, required='', placeholder='Behörden-Email')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control.is-valid.form-control(type=text, name='password', required='', placeholder='Passwort')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control.is-valid.form-control(type=text, name='password2', required='', placeholder='Passwort wiederholen')                             
+                        br
+                        input.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Ok')

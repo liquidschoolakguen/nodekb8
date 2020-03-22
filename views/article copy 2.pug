@@ -1,0 +1,28 @@
+extend layout
+
+
+
+block content
+    .card.text-white.bg-success.mb-12
+        .card-header 
+            .form-row
+                .form-group.col-md-4 
+                    label #{article.klasse} - #{article.fach} 
+        .card-body
+            h5.card-title #{article.title}
+            p.card-text
+    br
+    h5#invisible #{x}
+    h6#hier-kommt-was-rein
+    h5 Von  #{article.lehrer.name}
+    if user
+        if user.id == article.author
+            a.btn.btn-default(href='/articles/edit/'+ article._id) edit
+            a.btn.btn-danger.delete-article.text-white(href='#', data-id=article._id) Delete
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+    script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+    script(src='/js/article.js')  
+    script(src='/js/nic_edit.js')  
+    script(type='text/javascript').
+        bkLib.onDomLoaded(nicEditors.allTextAreas) 
+        new nicEditor({buttonList : ['bold','italic','underline','left','center','right','justify','ol','ul','superscript','upload','fontFormat','fontFamily','upload','','','','','','','','','','','','','']}).panelInstance('area2');

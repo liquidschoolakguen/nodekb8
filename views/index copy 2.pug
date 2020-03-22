@@ -1,0 +1,60 @@
+extends layout
+
+block content
+    if !user
+      .shadow.p-3.mb-5.bg-white.rounded
+        .card
+          .card-header
+            | Hallo liebe Schülerinnen und Schüler
+          .card-body
+            blockquote.blockquote.mb-0
+              p
+                | Wie Ihr längst wisst, bleibt die Schule zur Zeit wegen von Ansteckungsgefahr geschlossen. Und wir, eure Lehrerinnen und Lehrer können uns gut vorstellen, dass euch das vielleicht etwas beunruhigt aber andererseits auch ein wenig freut.  
+              p
+                | Wir haben uns überlegt, was wir tun können um euch zu zeigen, dass schon bald alles wie immer sein wird. Und wir kamen auf folgende Idee: Hausaufgaben. Schöne, lange, schwere Hausaufgaben. :)
+              footer.blockquote-footer Herr Akgün
+    else      
+      if user.type === 'lehrer'
+        h3 #{user.name}s Hausaufgaben      
+        .container-fluid
+          .row
+            each my_article, i in my_articles
+              .col-md-4.col-6(style='margin-bottom:10px;')
+                  .card.card-default
+                    h6 #{my_article.fach} - #{my_article.klasse} - #{my_article.lehrer.name} 
+                    p
+                      |#{my_article.title} - #{my_article.created}
+                    li.list-group-item
+                      a(href="/articles/"+my_article._id)= my_article.title
+        h3 Alle Hausaufgaben
+        .col-md-4.col-6.float-right
+          input#inputFilter.form-control(type='text', placeholder='suche..')
+        table#customerTable.table.table-striped.table-bordered.table-sm(cellspacing='0', width='100%')
+          thead
+            tr
+              th.th-sm
+                | Gruppe 
+              th.th-sm
+                | Titel
+              th.th-sm
+                | 
+          tbody
+            each article, i in articles
+              tr
+                td 
+                    | #{article.klasse} - #{article.fach}
+                    .montainer
+                      .left-element
+                        | #{article.lehrer.name}
+                      .right-element
+                        if article.lehrer.logged
+                          .led-green
+                        else
+                          .led-green-gone
+                td #{article.title}
+                td 
+                  a.btn.btn-success.bg-success.text-white.btn-block(href="/articles/"+article._id, role='button') Aufgabe
+    hr
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+    script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+    script(src='/js/index.js')  

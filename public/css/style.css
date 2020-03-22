@@ -1,4 +1,43 @@
 
+  body {
+    
+
+
+    background:  linear-gradient(
+      rgba(0, 0, 0, 0.4), 
+      rgba(0, 0, 0, 0.4)
+    ),
+    url("/back.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+/* Add the blur effect */
+
+background-color: rgb(226, 226, 226);
+background-blend-mode: screen;
+  }
+
+  footer {
+
+
+    background-color: rgb(255, 255, 255); /* Fallback color */
+    background-color: rgba(255, 255, 255, 0.90); /* Black w/opacity/see-through */
+   
+  
+
+  }
+
+
+  .alert{
+
+font-size: 1.2em!important;
+    
+  }
+
+
+
   p {
     margin-top: 0;
     margin-bottom: 1rem;
@@ -13,7 +52,7 @@
   }
 
   .container {
-    margin-top: 70px;
+    margin-top: 50px;
 
   }
 
@@ -32,4 +71,326 @@
   }
 
 
+  .bbb_ {
+    width: 130px !important;
+   
+}
+
+  .bbb {
+
+    width: 190px !important;
+}
+
+.my-margin-top{
+
+  margin-top: 15px !important;
+}
+
+.my-margin-top-big{
+
+  margin-top: 25px !important;
+}
+
+
+
+.custom {
+  width: 180px !important;
+
+}
+.custom2 {
+  width: 200px !important;
+
+}
+
+.custom_breit {
+  width: 1000px !important;
+
+ 
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
   
+}
+textarea {
+  display:table-cell; 
+  width:100%;
+  min-height: 300px  !important;
+}
+
+.zwang {
+  
+  border-color: rgb(255, 255, 255) !important;
+ 
+}
+img {
+  max-width:100% !important;
+  height:auto !important;
+}
+
+ .bg {
+
+  width:auto; 
+  text-align:center; 
+  padding:20px;
+
+
+ } 
+
+ .bg2 {
+
+  
+
+ /* background-color: #404040!important; */
+ 
+ }
+
+
+ img {
+  height: 100vh;
+  width: 115vh;
+  object-fit: cover;
+}
+
+
+#invisible{
+
+  display: none;
+}
+
+
+
+
+a {
+ 
+}
+
+
+
+.nav-link.active {
+  color: rgb(0, 138, 23) !important;
+}
+
+
+.form-control:focus {
+  border-color: #ffffff;
+  outline: 0;
+ 
+  box-shadow: inset 0 0px 1px rgba(0, 138, 23),0 0 8px rgba(0, 138, 23);
+}
+
+.nicEdit-selected {
+  
+}
+
+.nicEdit-panel {
+  background-color: rgb(255, 255, 255) !important;
+  
+}
+
+.nicEdit-button {
+  background-color: #fff !important;
+}
+
+
+
+
+.containerv {
+	background-size: cover;
+  background: rgb(226,226,226); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(226,226,226,1)), color-stop(50%,rgba(219,219,219,1)), color-stop(51%,rgba(209,209,209,1)), color-stop(100%,rgba(254,254,254,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe',GradientType=0 ); /* IE6-9 */
+  padding: 20px;
+}
+
+.led-box {
+  height: 30px;
+  width: 25%;
+  margin: 10px 0;
+  float: left;
+}
+
+.led-box p {
+  font-size: 12px;
+  text-align: center;
+  margin: 1em;
+}
+
+
+.led-green-main {
+  margin: 0 auto;
+  vertical-align: middle!important;
+  margin-top: 16px;
+  margin-right: 5px;
+  width: 12px;
+  height: 12px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 100%;
+  box-shadow: rgba(226, 226, 226, 0.2) 0 -1px 7px 3px, inset #80c001 0 -1px 9px, #89FF00 0 0px 12px;
+}
+
+.led-green {
+  margin: auto !important;
+  width: 12px;
+  height: 12px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 100%;
+  box-shadow: rgba(226, 226, 226, 0.2) 0 -1px 7px 3px, inset #80c001 0 -1px 9px, #89FF00 0 0px 12px;
+}
+
+
+
+.led-green-gone {
+  margin: auto !important;
+  width: 12px;
+  height: 12px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 100%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 0px 0px 0px, inset #cecece 0 -1px 9px, rgb(255, 255, 255) 0 20px 12px;
+}
+
+
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+bottom: .5em;
+}
+
+
+.montainer {
+  margin: auto !important;
+  vertical-align: middle!important;
+}
+
+.left-element {
+  
+ 
+}
+
+.right-element {
+ 
+ 
+  
+}
+
+.padding_null{
+padding: 0px !important;
+
+}
+
+.padding_bisschen{
+  padding-left: 0px !important;
+  padding-right: 20px !important;
+  padding-top: 0px !important;
+  padding-right: 0px !important;
+  }
+
+#inputfilter{
+
+  margin-right: 0px !important;
+}
+
+.table td {
+  text-align: center;
+  margin: auto !important;
+  vertical-align: middle!important;
+}
+.table th {
+  text-align: center;   
+}
+
+.centre-align {
+  padding: 10px;
+  border: 1px dashed gray;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+.my-margin-bottom-right{
+
+  margin-bottom: 10px !important;
+  
+}
+
+
+
+
+.button-margin{
+float: right !important;
+min-width: 100px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+
+.invisible {
+  display:none !important
+}
+
+
+
+.my-margin-bottom{
+
+  margin-bottom: 10px !important;
+  margin-right: 0px !important;
+}
+
+
+.bold-green{
+  font-weight: bold;
+  color: green;
+ margin-top: 22px !important;
+}
+
+
+.my-min-height {
+min-height: 320px!important;
+
+
+}
+
+
+.color-red {
+
+
+  color: rgb(255, 80, 80);
+}
+
+.my-margin-right-boy{
+
+
+  margin-left: 13px!important;
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+
+.btn-circle.btn-lg {
+  width: 50px;
+  height: 50px;
+  padding-top: 7px;
+  padding-left: 15px;
+  border-radius: 35px;
+}
+
+.white {
+
+  color: rgb(255, 255, 255);
+  font-size: 0.8em;
+  
+}
