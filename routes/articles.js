@@ -85,7 +85,7 @@ router.post("/add", upload.single("file" /* name attribute of <file> element in 
 
 
     if (!req.body.body || req.body.body.length <= 8) {
-      console.log('............... ' + req.body.body.length);
+      //console.log('............... ' + req.body.body.length);
 
       req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz.');
       res.redirect('/articles/add');
@@ -95,7 +95,7 @@ router.post("/add", upload.single("file" /* name attribute of <file> element in 
 
 
 
-      console.log('da is was');
+      //console.log('da is was');
 
       req.checkBody('title', 'Deine Hausaufgabe braucht einen Titel').notEmpty();
       req.checkBody('klasse', 'Gebe eine Klasse ein').not().equals('Wähle')
@@ -135,8 +135,8 @@ router.post("/add", upload.single("file" /* name attribute of <file> element in 
             console.log(err);
             return;
           } else {
-            console.log('ADDED ' + article.author);
-            console.log('ADDED ' + article.lehrer);
+            //console.log('ADDED ' + article.author);
+            //console.log('ADDED ' + article.lehrer);
             req.flash('success', 'Auftrag erteilt');
             res.redirect('/');
           }
@@ -168,7 +168,7 @@ router.post("/add_hausarbeit", upload.single("file" /* name attribute of <file> 
 
 
     if (!req.body.body || req.body.body.length <= 8) {
-      console.log('............... ' + req.body.body.length);
+      //console.log('............... ' + req.body.body.length);
 
       req.flash('danger', 'Deine Hausarbeit ist leer oder viel zu kurz. So geht das nicht.');
       res.redirect('/');
@@ -176,7 +176,7 @@ router.post("/add_hausarbeit", upload.single("file" /* name attribute of <file> 
     } else {
       //...
 
-      console.log('fast nix: ');
+      //console.log('fast nix: ');
 
 
 
@@ -185,7 +185,7 @@ router.post("/add_hausarbeit", upload.single("file" /* name attribute of <file> 
       Article.findById(req.body.article_id, function (err, article) {
 
         if (err) {
-          console.log('wwwERROR_______________________');
+          //console.log('wwwERROR_______________________');
           console.log(err);
 
         } else {
@@ -203,7 +203,7 @@ router.post("/add_hausarbeit", upload.single("file" /* name attribute of <file> 
           hausarbeit.reflexion_text = req.body.reflexion_text;
 
           const start = new Date();
-          var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
+          var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2); + ' Uhr';
 
           hausarbeit.created = nau;
 
@@ -314,20 +314,27 @@ router.get('/edit/:id', ensureAuthenticated, function (req, res) {
     //console.log('im edit article');
     //console.log(article);
     if (article.author != req.user._id) {
-      console.log('redirect');
+      //console.log('redirect');
       req.flash('danger', 'nicht autorisiert');
       res.redirect('/');
       return;
 
     } else {
-      console.log('ok');
+
+
+
+
+      //console.log('ok');
+
+      res.render('edit_article', {
+        title: 'Auftrag gespeichert',
+        article: article
+      });
+
 
     }
 
-    res.render('edit_article', {
-      title: 'Edit Article',
-      article: article
-    });
+
   });
 });
 
@@ -338,7 +345,7 @@ router.get('/edit/:id', ensureAuthenticated, function (req, res) {
 
 // Load edit_hausarbeit form
 router.get('/edit_hausarbeit/:id', ensureAuthenticated, function (req, res) {
-  console.log('x ' + req.params.id);
+  //console.log('x ' + req.params.id);
 
 
 
@@ -358,10 +365,10 @@ router.get('/edit_hausarbeit/:id', ensureAuthenticated, function (req, res) {
       if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
 
       if (ha) {
-        console.log('The ha is %s', ha);
+        //console.log('The ha is %s', ha);
 
 
-        console.log('x nnnnn ' + ha.article.klasse);
+        //console.log('x nnnnn ' + ha.article.klasse);
 
 
         res.render('edit_hausarbeit', {
@@ -394,7 +401,7 @@ router.get('/edit_hausarbeit/:id', ensureAuthenticated, function (req, res) {
 
 // Load edit_hausarbeit form
 router.get('/finished_hausarbeit/:id', ensureAuthenticated, function (req, res) {
-  console.log('x ' + req.params.id);
+  //console.log('x ' + req.params.id);
 
 
 
@@ -459,7 +466,7 @@ router.get('/finished_hausarbeit/:id', ensureAuthenticated, function (req, res) 
 // Update submit POST route HAUSARBEIT
 router.post('/edit_hausarbeit/:id', function (req, res) {
 
-  console.log(req.params.id);
+  //console.log(req.params.id);
 
 
 
@@ -507,7 +514,7 @@ router.post('/edit_hausarbeit/:id', function (req, res) {
 // Update submit POST route HAUSARBEIT
 router.post('/korrektur_hausarbeit/:id', function (req, res) {
 
-  console.log(req.params.id);
+  //console.log(req.params.id);
 
 
 
@@ -532,6 +539,7 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
 
 
 
+    
 
     User.findById(doc.schueler, function (err, user) {
 
@@ -551,9 +559,15 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
           opUser.money = user.money;
         }
        
-        console.log('opUser.money ' + opUser.money )
 
-        User.update(hausarbeit.schueler, opUser, function (err) {
+        console.log('opUser.money  ' + opUser.money  )
+
+
+        console.log('doc.schueler ' + doc.schueler)
+        //console.log('hausarbeit.schueler ' + hausarbeit.schueler )
+        //hausarbeit.schueler
+
+        User.update({_id: doc.schueler}, opUser, function (err) {
           if (err) {
             console.log(err);
             return;
@@ -637,7 +651,7 @@ router.post('/edit/:id', function (req, res) {
   Article.findById(req.params.id, function (err, articleX) {
 
     if (err) {
-      console.log('wwwwww');
+      //console.log('wwwwww');
       console.log(err);
     }
 
@@ -653,8 +667,12 @@ router.post('/edit/:id', function (req, res) {
 
 
     const start = new Date();
-    var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
-    var nau = start.getDate() + '.' + start.getMonth() + '. (' + start.getHours() + ':' + start.getMinutes() + ')'
+    
+
+
+
+    var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2); + ' Uhr';
+
 
     article.created = nau;
 
@@ -665,7 +683,7 @@ router.post('/edit/:id', function (req, res) {
         console.log(err);
         return;
       } else {
-        req.flash('success', 'Article Updated');
+        req.flash('success', 'Auftrag geändert');
         res.redirect('/');
       }
     })
@@ -683,7 +701,7 @@ router.post('/edit/:id', function (req, res) {
 router.delete('/:id', function (req, res) {
 
 
-  console.log('drinn')
+  //console.log('drinn')
   if (!req.user._id) {
 
     res.status(500).send();
@@ -759,10 +777,10 @@ router.get('/:id', function (req, res) {
       if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
 
       if (article) {
-        console.log('The author is %s', article);
+        //console.log('The author is %s', article);
 
         var x = article.body.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-        console.log('x nnnnn ' + article.lehrer.name);
+        //console.log('x nnnnn ' + article.lehrer.name);
 
 
         res.render('article', {
@@ -806,7 +824,7 @@ router.get('/hausarbeit/:id', function (req, res) {
       if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
 
       if (hausarbeit) {
-        console.log('The author is %s', hausarbeit);
+        //console.log('The author is %s', hausarbeit);
 
 
 
@@ -858,7 +876,7 @@ router.get('/schueler/:id', function (req, res) {
       if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
 
       if (user) {
-        console.log('The author is %s', user);
+        //console.log('The author is %s', user);
 
         Hausarbeit.
           find({ schueler: req.params.id }).
@@ -875,13 +893,13 @@ router.get('/schueler/:id', function (req, res) {
             let articles = [{}]
 
             hausarbeits.forEach(function (hausarbeit) {
-              console.log('The status is %s', hausarbeit.status);
+              //console.log('The status is %s', hausarbeit.status);
             });
 
 
             let lengthD = hausarbeits.length;
-            console.log('The lengthD is %s', lengthD);
-            console.log('The articles.length is %s', hausarbeits.length);
+            //console.log('The lengthD is %s', lengthD);
+            //console.log('The articles.length is %s', hausarbeits.length);
 
             res.render('schueler', {
               schueler: user,
@@ -951,13 +969,13 @@ router.get('/article_schuelers/:id', function (req, res) {
             if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
 
             if (hausarbeits) {
-              console.log('The hausarbeits is %s', hausarbeits);
+              //console.log('The hausarbeits is %s', hausarbeits);
 
 
               let schuelers = [];
 
               hausarbeits.forEach(function (hausarbeit) {
-                console.log('The hausarbeit is %s', hausarbeit);
+                //console.log('The hausarbeit is %s', hausarbeit);
 
                 schuelers.push(hausarbeit.schueler);
               });

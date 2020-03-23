@@ -21,7 +21,7 @@ let db = mongoose.connection;
 
 // check connection
 db.once('open', function () {
-  console.log('connection to MongoDB');
+  //console.log('connection to MongoDB');
 });
 
 //check for DB errors
@@ -121,7 +121,7 @@ app.get('/', function (req, res) {
     User.findById(req.user._id, function (err, user) {
 
       if (err) {
-        console.log('wwwwww');
+        //console.log('wwwwww');
         console.log(err);
       }
 
@@ -129,7 +129,7 @@ app.get('/', function (req, res) {
 
       if (user.type == 'lehrer') {
 
-        console.log('lehrer')
+        //console.log('lehrer')
 
 
 
@@ -341,13 +341,13 @@ const http = require('http').createServer(app);
 const socketio = require('socket.io')(http)
 
 Article.schema.post('save', function (doc) {
-  console.log('%s has been xcvcvv saved', doc._id);
+  //console.log('%s has been xcvcvv saved', doc._id);
 });
 
 
 var allClients = [];
 socketio.on("connection", (socket) => {
-  console.log('connection!!! ' + socket.id)
+  //console.log('connection!!! ' + socket.id)
 
 
 
@@ -355,7 +355,7 @@ socketio.on("connection", (socket) => {
   allClients.push(socket);
 
   socket.on('disconnect', function () {
-    console.log('Got disconnect!');
+    //console.log('Got disconnect!');
 
     var i = allClients.indexOf(socket);
     allClients.splice(i, 1);
@@ -380,7 +380,7 @@ socketio.on("connection", (socket) => {
       }
       else {
 
-        console.log(data);
+        //console.log(data);
 
 
 
@@ -396,7 +396,7 @@ socketio.on("connection", (socket) => {
   })
 })
 
-http.listen(3000, () => console.log(`Socket listen at 3000!`));
+http.listen(3000, () => {});
 
 
 
