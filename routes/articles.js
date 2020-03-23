@@ -392,6 +392,64 @@ router.get('/edit_hausarbeit/:id', ensureAuthenticated, function (req, res) {
 
 
 
+// Load edit_hausarbeit form
+router.get('/finished_hausarbeit/:id', ensureAuthenticated, function (req, res) {
+  console.log('x ' + req.params.id);
+
+
+
+
+
+
+
+  Hausarbeit.
+    findOne({
+      $and: [
+        { article: req.params.id },
+        { schueler: req.user._id }
+      ]
+    }).
+    populate('article').
+    exec(function (err, ha) {
+      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+
+      if (ha) {
+       // console.log('The ha is %s', ha);
+
+
+        //console.log('x nnnnn ' + ha.article.klasse);
+
+
+        res.render('finished_hausarbeit', {
+          hausarbeit: ha,
+
+        });
+      } else {
+
+        req.flash('danger', 'Der Auftrag wurde gelöscht. Diese Hausarbeit wird nicht mehr überprüft. ');
+        res.redirect('/');
+
+      }
+
+    });
+
+
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -471,8 +529,8 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
   Hausarbeit.findOneAndUpdate(query, hausarbeit, { upsert: true }, function (err, doc) {
     if (err) return res.send(500, { error: err });
 
-    
-    
+
+
 
 
     User.findById(doc.schueler, function (err, user) {
@@ -480,10 +538,20 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
       if (err) throw err;
       if (user) {
 
-
+        console.log('user.money ' + user.money)
+        console.log('hausarbeit.ergebnis_dollar ' + hausarbeit.ergebnis_dollar )
         let opUser = {}
-        opUser.money = user.money + parseInt(hausarbeit.ergebnis_dollar);
 
+        if(hausarbeit.ergebnis_dollar!='keine Auswahl'){
+
+          opUser.money = user.money + parseInt(hausarbeit.ergebnis_dollar);
+
+        }else {
+
+          opUser.money = user.money;
+        }
+       
+        console.log('opUser.money ' + opUser.money )
 
         User.update(hausarbeit.schueler, opUser, function (err) {
           if (err) {
