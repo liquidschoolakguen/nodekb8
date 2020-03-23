@@ -6,7 +6,7 @@ const passport = require('passport');
 let User = require('../models/user');
 
 // Register Form
-router.get('/register_lehrer', function (req, res) {
+router.get('/register_lehrer_sah', function (req, res) {
     res.render('register_lehrer');
 });
 router.get('/register_schueler', function (req, res) {
