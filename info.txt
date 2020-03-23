@@ -12,7 +12,7 @@ Wie mann github push
 // wichtig: Wenn repository nicht existiert
 1. Manuel neue repository erzeugen
 
-2. git push --set-upstream https://github.com/liquidschoolakguen/nodekb2.git master
+2. git push --set-upstream https://github.com/liquidschoolakguen/nodekb8.git master
 -------------------------------------------------------
 
 dann wird putty geöffnet:
