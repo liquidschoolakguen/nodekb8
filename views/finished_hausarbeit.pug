@@ -38,28 +38,28 @@ block content
                                         if hausarbeit.ergebnis_text != ''
                                             p.card-text #{hausarbeit.ergebnis_text}
                                         else
-                                            p.card-text Die Lehrkraft hat keinen Kommentar zu deiner Hausarbeit geschrieben.
+                                            p.card-text.kursiv (Die Lehrkraft hat keinen Kommentar zu deiner Hausarbeit geschrieben.)
                                 .card.bg-warning
                                     .card-body.text-center
                                         p.card-text Arbeit ok?
                                         if hausarbeit.ergebnis_ok != 'keine Auswahl'
-                                            p.card-text #{hausarbeit.ergebnis_ok}
+                                            p.card-text.norm #{hausarbeit.ergebnis_ok}
                                         else
-                                            p.card-text Es wurde kein "ok" oder "nicht ok" für deiner Hausarbeit gegeben.
+                                            p.card-text.kursiv (Es wurde kein "ok" oder "nicht ok" für deine Hausarbeit gegeben)
                                 .card.bg-danger.text-white
                                     .card-body.text-center
                                         p.card-text Note
                                         if hausarbeit.ergebnis_note != 'keine Auswahl'
-                                            p.card-text #{hausarbeit.ergebnis_note}
+                                            p.card-text.norm #{hausarbeit.ergebnis_note}
                                         else
-                                            p.card-text Es wurde keine Note für deiner Hausarbeit gegeben.
+                                            p.card-text.kursiv (Es wurde keine Note für deine Hausarbeit gegeben)
                                 .card.bg-success.text-white
                                     .card-body.text-center
                                         p.card-text PauliDollar
                                         if hausarbeit.ergebnis_note != 'keine Auswahl'
-                                            p.card-text #{hausarbeit.ergebnis_dollar}
+                                            p.card-text.norm #{hausarbeit.ergebnis_dollar}
                                         else
-                                            p.card-text Es wurden keine PauliDollar für deiner Hausarbeit vergeben.
+                                            p.card-text.kursiv (Es wurden keine PauliDollar für deine Hausarbeit vergeben)
 
             script(src='/js/article2.js')
     script(src='/js/nic_edit.js')
