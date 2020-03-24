@@ -33,13 +33,13 @@ router.post('/register_lehrer', function (req, res) {
     let errors = req.validationErrors();
 
     if (errors) {
-        res.render('register_lehrer', {
+        res.render('register_lehrer_sah', {
             errors: errors
 
         });
     } else {
 
-        let query = { username: username }
+        let query = { username: username.toString().toLowerCase() }
         User.findOne(query, function (err, user) {
             if (err) throw err;
             if (user) {
@@ -57,7 +57,7 @@ router.post('/register_lehrer', function (req, res) {
                 let newUser = new User({
                     type: 'lehrer',
                     name: name,
-                    username: username,
+                    username: username.toString().toLowerCase(),
                     password: password,
                     logged: false
 
@@ -125,7 +125,7 @@ router.post('/register_schueler', function (req, res) {
         });
     } else {
 
-        let query = { username: username }
+        let query = { username: username.toLowerCase() }
         User.findOne(query, function (err, user) {
             if (err) throw err;
             if (user) {
@@ -140,10 +140,12 @@ router.post('/register_schueler', function (req, res) {
 
             } else {
 
+                //console.log('username.toString().toLowerCase() '+username.toString().toLowerCase())
+
                 let newUser = new User({
                     type: 'schueler',
                     name: username,
-                    username: username,
+                    username: username.toString().toLowerCase(),
                     password: password,
                     password_visible: password,
                     klasse: klasse,

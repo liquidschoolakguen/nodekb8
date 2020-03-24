@@ -9,7 +9,7 @@ module.exports = function (passport) {
     passport.use(new LocalStrategy(function (username, password, done) {
 
         // Match Username
-        let query = { username: username }
+        let query = { username: username.toString().toLowerCase() }
         User.findOne(query, function (err, user) {
             if (err) throw err;
             if (!user) {
@@ -28,7 +28,7 @@ module.exports = function (passport) {
                     let logoutUser = {};
                     logoutUser.type = user.type;
                     logoutUser.name = user.name;
-                    logoutUser.username = user.username;
+                    logoutUser.username = user.username.toString().toLowerCase();
                     logoutUser.password = user.password;
                     logoutUser.logged = true
             

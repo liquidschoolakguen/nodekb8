@@ -4,15 +4,15 @@ block content
     .container
       .row.h-100.d-flex.justify-content-center
         .col-12.col-sm-8.col-md-6.col-lg-4
-          .card.border.border-success
+          .card.border.bg-custom-1
             .card-header
               ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                 li.nav-item
-                  a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') Für SchülerIn
-            .card-body
+                  a.nav-link.active.bg-custom-1.no-border(href='#', role='tab', aria-controls='history', aria-selected='true') Für SchülerInnen
+            .card-body.bg-custom-1
               h4.card-title Hier kannst du dich registrieren
               .tab-content.mt-3
-                #description.tab-pane.active(role='tabpanel')
+                #history.tab-pane.active(role='tabpanel')
                   p.card-text
                     form(method='POST', action='/users/register_schueler')
                         #form-group  

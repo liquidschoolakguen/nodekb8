@@ -161,14 +161,65 @@ $(document).ready(function () {
 
 
 
+	/* 
+		$('#customerTable').DataTable( {
+			"pageLength": 10,
+			"lengthChange": false,
+			"searching": false
+		} );
+	 */
 
-	$('#customerTable').DataTable( {
-		"pageLength": 10,
+	oTable = $('#customerTable').DataTable({
+		
 		"lengthChange": false,
-		"searching": false
-	} );
+		"bInfo" : false,
+
+		"language": {
+			"paginate": {
+			  "previous": "zurück",
+			
+				"next": "vor"
+			  }
+		  },
+		  
+		
+
+	});
 
 
+
+
+	oTable = $('#customerTable_Erklaerung').DataTable({
+		
+		"lengthChange": false,
+		"bInfo" : false,
+		"paging":   false,
+        "ordering": false,
+        "info":     false,
+		  'columnDefs': [
+			{
+				"targets": 0, // your case first column
+				"className": "text-center",
+		   },
+		   {
+				"targets": 1,
+				"className": "text-left",
+		   }],
+
+
+
+
+
+	});
+
+
+
+
+
+
+
+
+	
 
 
 });
@@ -177,11 +228,19 @@ $(document).ready(function () {
 
 $("#inputFilter").on("keyup", function () {
 
-	var inputValue = $(this).val().toLowerCase();
-	$("#customerTable tr").filter(function () {
-		$(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
-	});
+	/* 	var inputValue = $(this).val().toLowerCase();
+		$("#customerTable tr").filter(function () {
+			$(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
+		});
+	 */
+	oTable.search($(this).val()).draw();
+
 });
+
+
+
+
+
 
 
 setTimeout(function () {

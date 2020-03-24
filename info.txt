@@ -7,7 +7,7 @@ Wie mann github push
  4- git add -A
  5- git commit -m "hallo"
  6- git remote add origin https://github.com/liquidschoolakguen/nodekb8.git
- 7- git push -u origin master
+ 7- git push -u origin master                          ///   oder 			git push --set-upstream https://github.com/liquidschoolakguen/nodekb8.git master
  
 // wichtig: Wenn repository nicht existiert
 1. Manuel neue repository erzeugen

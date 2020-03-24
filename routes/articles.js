@@ -137,7 +137,7 @@ router.post("/add", upload.single("file" /* name attribute of <file> element in 
           } else {
             //console.log('ADDED ' + article.author);
             //console.log('ADDED ' + article.lehrer);
-            req.flash('success', 'Auftrag erteilt');
+            req.flash('success', 'Auftrag erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
             res.redirect('/');
           }
         })

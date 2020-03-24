@@ -169,7 +169,7 @@ a {
 
 
 .nav-link.active {
-  color: rgb(0, 138, 23) !important;
+  
 }
 
 
@@ -322,11 +322,6 @@ padding: 0px !important;
 }
 
 
-.my-margin-bottom-right{
-
-  margin-bottom: 10px !important;
-  
-}
 
 
 
@@ -384,10 +379,10 @@ min-height: 320px!important;
 
 
 .btn-circle.btn-lg {
-  width: 50px;
-  height: 50px;
-  padding-top: 7px;
-  padding-left: 15px;
+  width: 40px;
+  height: 40px;
+  padding-top: 1px;
+  padding-left: 10px;
   border-radius: 35px;
 }
 
@@ -412,4 +407,53 @@ min-height: 320px!important;
 .norm2{
 
   font-size: 1.1em !important;
+}
+
+
+
+
+
+
+.page-item.active .page-link {
+  background-color: #505050 !important;
+  border: 1px solid #3f3f3f;
+  border-radius: 4px;
+}
+
+.dataTables_wrapper .dataTables_filter {
+  float: right;
+  text-align: right;
+  visibility: hidden;
+  }
+  table.dataTable tr.odd { background-color: white; }
+  table.dataTable tr.even { background-color: white; }
+
+
+
+  .bg-custom-1 {
+    background-color: rgba(0, 0, 0, 0.137)!important;
+}
+
+
+
+.bg-custom-green {
+  background-color: rgba(91, 160, 0, 0.205)!important;
+}
+
+
+.no-border{
+  border: none !important;
+
+
+}
+
+
+.my-margin-bottom-right{
+
+  margin-right: 10px !important;
+  
+}
+
+.borderless td, .borderless th {
+  border: none;
 }
