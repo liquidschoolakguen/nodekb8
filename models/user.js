@@ -48,7 +48,25 @@ const UserSchema = mongoose.Schema({
     money: {
         type: String,
         required: false
-    }
+    },
+
+    notenschnit_eg: {
+        type: String,
+        required: false
+    },
+
+    notenschnit_no: {
+        type: String,
+        required: false
+    },
+
+    ok_quote: {
+        type: String,
+        required: false
+    },
+
+
+
 
 }
 );

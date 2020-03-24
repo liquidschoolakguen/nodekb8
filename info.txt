@@ -88,6 +88,19 @@ exportLC_ALL=C
 mongo
 show dbs
 use nodekb
+
+
+
+
+
+
+
+
+
+
+
+
+
 db.articles.remove({})    //löscht alle artikel
 
 
