@@ -9,12 +9,8 @@ const fs = require('fs');
 
 
 
-
-
 //User model
 let User = require('../models/user');
-
-// Bring in Article Model
 let Article = require('../models/article');
 let Hausarbeit = require('../models/hausarbeit');
 
@@ -38,48 +34,422 @@ const upload = multer({
 
 
 
-// router.post(
-//   "/upload",
-//   upload.single("file" /* name attribute of <file> element in your form */),
-//   (req, res) => {
-
-//     const tempPath = req.file.path;
-//     const targetPath = path.join(__dirname, "../uploads/" + req.user._id + "_" + Date.now() + path.extname(req.file.originalname).toLowerCase());
-//     console.log('bennoYYY ' + targetPath);
-//     if (path.extname(req.file.originalname).toLowerCase() == ".png" || path.extname(req.file.originalname).toLowerCase() == ".jpg") {
-//       fs.rename(tempPath, targetPath, err => {
-//         if (err) return handleError(err, res);
-
-//         res.render('add_article', {
-//           title: 'Add Articles',
-//           image: targetPath
-//         })
-//       });
-//     } else {
-//       fs.unlink(tempPath, err => {
-//         if (err) return handleError(err, res);
-
-//         res
-//           .status(403)
-//           .contentType("text/plain")
-//           .end("Only .png files are allowed!");
-//       });
-//     }
-//   }
-// );
 
 
 
-/* router.get('/uploads/:id', (req, res) => {
 
-  res.sendFile(path.join(__dirname, '../uploads/' + req.params.id));
+
+
+
+
+
+
+
+
+
+// Add Article
+router.get('/add', ensureAuthenticated, function (req, res) {
+
+
+  var today = new Date();
+  var tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 3);
+
+
+  const start = new Date();
+  //var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
+  var nau = tomorrow.getDate() + '.' + tomorrow.getMonth() + '.' + tomorrow.getFullYear()
+
+
+
+  res.render('add_article', {
+    title: 'Add Articles',
+    abgabe: nau
+  })
+
 });
- */
 
 
 
 
 
+
+
+
+
+
+
+
+// Edit article form
+router.get('/edit/:id', ensureAuthenticated, function (req, res) {
+  Article.findById(req.params.id, function (err, article) {
+    // stories: [{ type: Schema.Types.ObjectId, ref: 'Story' }]
+
+    //console.log('im edit article');
+    //console.log(article);
+    if (article.author != req.user._id) {
+      //console.log('redirect');
+      req.flash('danger', 'nicht autorisiert');
+      res.redirect('/');
+      return;
+
+    } else {
+
+
+
+
+      //console.log('ok');
+
+      res.render('edit_article', {
+        title: 'Auftrag gespeichert',
+        article: article
+      });
+
+
+    }
+
+
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+// Get Single hausarbeit
+router.get('/hausarbeit/:id', function (req, res) {
+
+  Hausarbeit.
+    findOne({ _id: req.params.id }).
+    populate('article').
+    populate('schueler').
+    exec(function (err, hausarbeit) {
+      if (err) return console.log('2_iiiiiiiiiiii ' + err);
+
+      if (hausarbeit) {
+        //console.log('The author is %s', hausarbeit);
+
+
+
+
+        res.render('korrektur', {
+          hausarbeit: hausarbeit,
+
+        });
+      } else {
+
+        req.flash('danger', 'Deie Hausarbeit wurde gelöscht. Keine Überprüfung mehr möglich. ');
+        res.redirect('/');
+
+      }
+
+    });
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+// Get Single Schueler
+router.get('/schueler/:id', function (req, res) {
+
+  User.
+    findOne({ _id: req.params.id }).
+    exec(function (err, user) {
+      if (err) return console.log('3_iiiiiiiiiiii ' + err);
+
+      if (user) {
+        //console.log('The author is %s', user);
+
+        Hausarbeit.
+          find({ schueler: req.params.id }).
+          populate({
+            path: 'article',
+            populate: {
+              path: 'lehrer'
+            }
+          }).
+          exec(function (err, hausarbeits) {
+
+
+
+            let articles = [{}]
+
+            hausarbeits.forEach(function (hausarbeit) {
+              //console.log('The status is %s', hausarbeit.status);
+            });
+
+
+            let lengthD = hausarbeits.length;
+            //console.log('The lengthD is %s', lengthD);
+            //console.log('The articles.length is %s', hausarbeits.length);
+
+            res.render('schueler', {
+              schueler: user,
+              hausarbeits: hausarbeits,
+              length: lengthD
+            });
+
+
+
+          });
+
+
+      } else {
+
+        req.flash('danger', 'Der Auftrag wurde gelöscht. Du musst diese Hausarbeit nicht mehr machen. ');
+        res.redirect('/');
+
+      }
+
+    });
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+router.get('/article_schuelers/:id', function (req, res) {
+
+
+
+
+
+
+  Article.
+    findOne({ _id: req.params.id }).
+    exec(function (err, article) {
+      if (err) return console.log('4_iiiiiiiiiiii ' + err);
+
+      if (article) {
+
+        Hausarbeit.
+          find({ article: req.params.id }).
+          populate('schueler').
+          exec(function (err, hausarbeits) {
+            if (err) return console.log('5_iiiiiiiiiiii ' + err);
+
+            if (hausarbeits) {
+              //console.log('The hausarbeits is %s', hausarbeits);
+
+
+              let schuelers = [];
+
+              hausarbeits.forEach(function (hausarbeit) {
+                //console.log('The hausarbeit is %s', hausarbeit);
+
+                schuelers.push(hausarbeit.schueler);
+              });
+
+              let length = hausarbeits.length;
+
+
+              res.render('index_schueler', {
+                article: article,
+                hausarbeits: hausarbeits,
+                length: length
+              });
+            } else {
+
+              req.flash('danger', 'Der User wurde gelöscht.');
+              res.redirect('/');
+
+            }
+
+          });
+
+
+
+
+
+
+
+
+      } else {
+
+        req.flash('danger', 'Der Artikel ist komischerweise gelöscht ');
+        res.redirect('/');
+
+      }
+
+    });
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+// Load edit_hausarbeit form
+router.get('/edit_hausarbeit/:id', ensureAuthenticated, function (req, res) {
+  //console.log('x ' + req.params.id);
+
+
+
+
+
+
+
+  Hausarbeit.
+    findOne({
+      $and: [
+        { article: req.params.id },
+        { schueler: req.user._id }
+      ]
+    }).
+    populate('article').
+    exec(function (err, ha) {
+      if (err) return console.log('6_iiiiiiiiiiii ' + err);
+
+      if (ha) {
+        //console.log('The ha is %s', ha);
+
+
+        //console.log('x nnnnn ' + ha.article.klasse);
+
+
+        res.render('edit_hausarbeit', {
+          hausarbeit: ha,
+
+        });
+      } else {
+
+        req.flash('danger', 'Der Auftrag wurde gelöscht. Du musst diese Hausarbeit nicht mehr machen. ');
+        res.redirect('/');
+
+      }
+
+    });
+
+
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Load edit_hausarbeit form
+router.get('/finished_hausarbeit/:id', ensureAuthenticated, function (req, res) {
+  //console.log('x ' + req.params.id);
+
+
+
+
+
+
+
+  Hausarbeit.
+    findOne({
+      $and: [
+        { article: req.params.id },
+        { schueler: req.user._id }
+      ]
+    }).
+    populate('article').
+    exec(function (err, ha) {
+      if (err) return console.log('7_iiiiiiiiiiii ' + err);
+
+      if (ha) {
+       // console.log('The ha is %s', ha);
+
+
+        //console.log('x nnnnn ' + ha.article.klasse);
+
+
+        res.render('finished_hausarbeit', {
+          hausarbeit: ha,
+
+        });
+      } else {
+
+        req.flash('danger', 'Der Auftrag wurde gelöscht. Diese Hausarbeit wird nicht mehr überprüft. ');
+        res.redirect('/');
+
+      }
+
+    });
+
+
+
+
+
+
+
+});
+
+
+
+
+
+
+
+                                                                                                                                                                  // get
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                                                                                                                                                                  // post
+
+
+
+
+
+// post add (article)
 router.post("/add", upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
 
@@ -163,6 +533,9 @@ router.post("/add", upload.single("file" /* name attribute of <file> element in 
 
 
 
+
+
+// post add_hausarbeit
 router.post("/add_hausarbeit", upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
 
@@ -249,220 +622,6 @@ router.post("/add_hausarbeit", upload.single("file" /* name attribute of <file> 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Add Route
-router.get('/add', ensureAuthenticated, function (req, res) {
-
-
-  var today = new Date();
-  var tomorrow = new Date();
-  tomorrow.setDate(today.getDate() + 3);
-
-
-  const start = new Date();
-  //var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
-  var nau = tomorrow.getDate() + '.' + tomorrow.getMonth() + '.' + tomorrow.getFullYear()
-
-
-
-  res.render('add_article', {
-    title: 'Add Articles',
-    abgabe: nau
-  })
-
-});
-
-
-
-
-
-
-
-
-
-
-// Load edit article form
-router.get('/edit/:id', ensureAuthenticated, function (req, res) {
-  Article.findById(req.params.id, function (err, article) {
-    // stories: [{ type: Schema.Types.ObjectId, ref: 'Story' }]
-
-    //console.log('im edit article');
-    //console.log(article);
-    if (article.author != req.user._id) {
-      //console.log('redirect');
-      req.flash('danger', 'nicht autorisiert');
-      res.redirect('/');
-      return;
-
-    } else {
-
-
-
-
-      //console.log('ok');
-
-      res.render('edit_article', {
-        title: 'Auftrag gespeichert',
-        article: article
-      });
-
-
-    }
-
-
-  });
-});
-
-
-
-
-
-
-// Load edit_hausarbeit form
-router.get('/edit_hausarbeit/:id', ensureAuthenticated, function (req, res) {
-  //console.log('x ' + req.params.id);
-
-
-
-
-
-
-
-  Hausarbeit.
-    findOne({
-      $and: [
-        { article: req.params.id },
-        { schueler: req.user._id }
-      ]
-    }).
-    populate('article').
-    exec(function (err, ha) {
-      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
-
-      if (ha) {
-        //console.log('The ha is %s', ha);
-
-
-        //console.log('x nnnnn ' + ha.article.klasse);
-
-
-        res.render('edit_hausarbeit', {
-          hausarbeit: ha,
-
-        });
-      } else {
-
-        req.flash('danger', 'Der Auftrag wurde gelöscht. Du musst diese Hausarbeit nicht mehr machen. ');
-        res.redirect('/');
-
-      }
-
-    });
-
-
-
-
-
-
-
-});
-
-
-
-
-
-
-
-
-// Load edit_hausarbeit form
-router.get('/finished_hausarbeit/:id', ensureAuthenticated, function (req, res) {
-  //console.log('x ' + req.params.id);
-
-
-
-
-
-
-
-  Hausarbeit.
-    findOne({
-      $and: [
-        { article: req.params.id },
-        { schueler: req.user._id }
-      ]
-    }).
-    populate('article').
-    exec(function (err, ha) {
-      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
-
-      if (ha) {
-       // console.log('The ha is %s', ha);
-
-
-        //console.log('x nnnnn ' + ha.article.klasse);
-
-
-        res.render('finished_hausarbeit', {
-          hausarbeit: ha,
-
-        });
-      } else {
-
-        req.flash('danger', 'Der Auftrag wurde gelöscht. Diese Hausarbeit wird nicht mehr überprüft. ');
-        res.redirect('/');
-
-      }
-
-    });
-
-
-
-
-
-
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Update submit POST route HAUSARBEIT
 router.post('/edit_hausarbeit/:id', function (req, res) {
 
@@ -500,7 +659,6 @@ router.post('/edit_hausarbeit/:id', function (req, res) {
 
 
 });
-
 
 
 
@@ -552,11 +710,11 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
 
         if(hausarbeit.ergebnis_dollar!='keine Auswahl'){
 
-          opUser.money = user.money + parseInt(hausarbeit.ergebnis_dollar);
+          opUser.money = parseInt(user.money) + parseInt(hausarbeit.ergebnis_dollar);
 
         }else {
 
-          opUser.money = user.money;
+          opUser.money = parseInt(user.money);
         }
        
 
@@ -608,29 +766,6 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
 
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -724,7 +859,7 @@ router.delete('/:id', function (req, res) {
       Hausarbeit.
         find({ article: req.params.id }).
         exec(function (err, hausarbeits) {
-          if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+          if (err) return console.log('8_iiiiiiiiiiii ' + err);
 
 
 
@@ -767,14 +902,21 @@ router.delete('/:id', function (req, res) {
 
 
 
+
+
+
+
+
+
+
 // Get Single Article
 router.get('/:id', function (req, res) {
-
+  
   Article.
     findOne({ _id: req.params.id }).
     populate('lehrer').
     exec(function (err, article) {
-      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+      if (err) return console.log('1_iiiiiiiiiiii ' + err);
 
       if (article) {
         //console.log('The author is %s', article);
@@ -813,40 +955,21 @@ router.get('/:id', function (req, res) {
 
 
 
-// Get Single Article
-router.get('/hausarbeit/:id', function (req, res) {
 
-  Hausarbeit.
-    findOne({ _id: req.params.id }).
-    populate('article').
-    populate('schueler').
-    exec(function (err, hausarbeit) {
-      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
 
-      if (hausarbeit) {
-        //console.log('The author is %s', hausarbeit);
 
 
 
 
-        res.render('korrektur', {
-          hausarbeit: hausarbeit,
 
-        });
-      } else {
 
-        req.flash('danger', 'Deie Hausarbeit wurde gelöscht. Keine Überprüfung mehr möglich. ');
-        res.redirect('/');
 
-      }
 
-    });
 
 
 
 
 
-});
 
 
 
@@ -858,173 +981,6 @@ router.get('/hausarbeit/:id', function (req, res) {
 
 
 
-
-
-
-
-
-
-
-
-
-// Get Single Schueler
-router.get('/schueler/:id', function (req, res) {
-
-  User.
-    findOne({ _id: req.params.id }).
-    exec(function (err, user) {
-      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
-
-      if (user) {
-        //console.log('The author is %s', user);
-
-        Hausarbeit.
-          find({ schueler: req.params.id }).
-          populate({
-            path: 'article',
-            populate: {
-              path: 'lehrer'
-            }
-          }).
-          exec(function (err, hausarbeits) {
-
-
-
-            let articles = [{}]
-
-            hausarbeits.forEach(function (hausarbeit) {
-              //console.log('The status is %s', hausarbeit.status);
-            });
-
-
-            let lengthD = hausarbeits.length;
-            //console.log('The lengthD is %s', lengthD);
-            //console.log('The articles.length is %s', hausarbeits.length);
-
-            res.render('schueler', {
-              schueler: user,
-              hausarbeits: hausarbeits,
-              length: lengthD
-            });
-
-
-
-          });
-
-
-      } else {
-
-        req.flash('danger', 'Der Auftrag wurde gelöscht. Du musst diese Hausarbeit nicht mehr machen. ');
-        res.redirect('/');
-
-      }
-
-    });
-
-
-
-
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-router.get('/article_schuelers/:id', function (req, res) {
-
-
-
-
-
-
-
-
-
-
-  Article.
-    findOne({ _id: req.params.id }).
-    exec(function (err, article) {
-      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
-
-      if (article) {
-
-        Hausarbeit.
-          find({ article: req.params.id }).
-          populate('schueler').
-          exec(function (err, hausarbeits) {
-            if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
-
-            if (hausarbeits) {
-              //console.log('The hausarbeits is %s', hausarbeits);
-
-
-              let schuelers = [];
-
-              hausarbeits.forEach(function (hausarbeit) {
-                //console.log('The hausarbeit is %s', hausarbeit);
-
-                schuelers.push(hausarbeit.schueler);
-              });
-
-              let length = hausarbeits.length;
-
-
-              res.render('index_schueler', {
-                article: article,
-                hausarbeits: hausarbeits,
-                length: length
-              });
-            } else {
-
-              req.flash('danger', 'Der User wurde gelöscht.');
-              res.redirect('/');
-
-            }
-
-          });
-
-
-
-
-
-
-
-
-      } else {
-
-        req.flash('danger', 'Der Artikel ist komischerweise gelöscht ');
-        res.redirect('/');
-
-      }
-
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-});
 
 
 

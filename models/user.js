@@ -46,7 +46,7 @@ const UserSchema = mongoose.Schema({
     
     
     money: {
-        type: Number,
+        type: String,
         required: false
     }
 

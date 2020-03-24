@@ -150,7 +150,7 @@ router.post('/register_schueler', function (req, res) {
                     password_visible: password,
                     klasse: klasse,
                     logged: false,
-                    money: 0
+                    money: '0'
 
                 });
 
