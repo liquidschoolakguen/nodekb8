@@ -916,7 +916,7 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
 
 
 
-            req.flash('success', 'Moe');
+            req.flash('success', 'Sauber! Schnell alles wegkorrigiert. Da wird sich '+user.name+' aber freuen.' );
             res.redirect('/articles/article_schuelers/' + doc.article);
 
 
