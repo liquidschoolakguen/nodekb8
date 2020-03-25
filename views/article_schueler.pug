@@ -28,6 +28,15 @@ block content
                     #description.tab-pane.active(role='tabpanel')
                       p.card-text
                         if length !=0
+                          .col-md-12.col-12
+                            if length == 1
+                              h4 
+                                | Eine SchülerIn hat ihre Hausarbeit zum Auftrag "#{article.title}" abgegeben.
+                            else
+                              h4 
+                                | #{length} SuS haben ihre Hausarbeit zum Auftrag "#{article.title}" abgegeben.
+                          br
+                          br
                           .col-md-4.col-6.float-right.padding_null
                             input#inputFilter.form-control.my-margin-bottom-right(type='text', placeholder='suche..')
                           table#customerTable.table.table-striped.table-bordered.table-sm(cellspacing='0', width='100%')

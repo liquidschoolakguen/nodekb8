@@ -55,6 +55,21 @@ let articleSchema = mongoose.Schema({
 
 
 
+    ha_gelb:{
+        type:String,
+        required:false   
+
+    },
+
+    ha_gruen:{
+        type:String,
+        required:false   
+
+
+    }
+
+
+
     
 
     

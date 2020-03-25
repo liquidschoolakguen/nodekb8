@@ -277,7 +277,7 @@ router.get('/article_schuelers/:id', function (req, res) {
 
               res.render('article_schueler', {
                 article: article,
-                hausarbeits: hausarbeits,
+                hausarbeits: hausarbeits.reverse(),
                 length: length
               });
             } else {
@@ -406,7 +406,7 @@ router.get('/finished_hausarbeit/:id', ensureAuthenticated, function (req, res) 
       if (err) return console.log('7_iiiiiiiiiiii ' + err);
 
       if (ha) {
-       // console.log('The ha is %s', ha);
+        // console.log('The ha is %s', ha);
 
 
         //console.log('x nnnnn ' + ha.article.klasse);
@@ -454,14 +454,14 @@ router.get('/hausarbeit_for_lehrer/:id', ensureAuthenticated, function (req, res
 
 
   Hausarbeit.
-    findOne({_id: req.params.id}).
+    findOne({ _id: req.params.id }).
     populate('article').
     populate('schueler').
     exec(function (err, ha) {
       if (err) return console.log('7_iiiiiiiiiiii ' + err);
 
       if (ha) {
-       // console.log('The ha is %s', ha);
+        // console.log('The ha is %s', ha);
 
 
         //console.log('x nnnnn ' + ha.article.klasse);
@@ -506,11 +506,11 @@ router.get('/hausarbeit_for_lehrer/:id', ensureAuthenticated, function (req, res
 
 
 
-                                                                                                                                                                  // get
+// get
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                                                                                                                                                                  // post
+// post
 
 
 
@@ -559,6 +559,9 @@ router.post("/add", upload.single("file" /* name attribute of <file> element in 
         article.termin = req.body.termin;
         article.body = req.body.body;
         article.lehrer = req.user._id;
+        article.ha_gelb = '0';
+        article.ha_gruen = '0'
+
 
         const start = new Date();
         var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
@@ -654,6 +657,40 @@ router.post("/add_hausarbeit", upload.single("file" /* name attribute of <file> 
               console.log(err);
               return;
             } else {
+
+
+
+
+              console.log('article.ha_gelb  ' + article.ha_gelb)
+              console.log('parseInt(article.ha_gelb) ' + parseInt(article.ha_gelb))
+
+              var inte = parseInt(article.ha_gelb);
+              inte += 1;
+
+              tuString = inte.toString();
+              console.log('tuString ergebnis ' + tuString)
+
+
+
+              var art = {}
+              art.ha_gelb = tuString
+
+
+
+              Article.findOneAndUpdate({ _id: article._id }, art, { upsert: true }, function (err, doc) {
+                if (err) return res.send(500, { error: err });
+
+                console.log('ha_gelb NEU  ' + doc.ha_gelb)
+
+
+
+
+              });
+
+
+
+
+
 
               req.flash('success', 'Super! Du hast deine Hausarbeit abgegeben. Solange deine Arbeit nicht überprüft wurde, kannst du sie noch ändern. ');
               res.redirect('/');
@@ -764,7 +801,7 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
 
 
 
-    
+
 
     User.findById(doc.schueler, function (err, user) {
 
@@ -772,35 +809,118 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
       if (user) {
 
         console.log('user.money ' + user.money)
-        console.log('hausarbeit.ergebnis_dollar ' + hausarbeit.ergebnis_dollar )
+        console.log('hausarbeit.ergebnis_dollar ' + hausarbeit.ergebnis_dollar)
         let opUser = {}
 
-        if(hausarbeit.ergebnis_dollar!='keine Auswahl'){
+        if (hausarbeit.ergebnis_dollar != 'keine Auswahl') {
 
           opUser.money = parseInt(user.money) + parseInt(hausarbeit.ergebnis_dollar);
 
-        }else {
+        } else {
 
           opUser.money = parseInt(user.money);
         }
-       
 
-        console.log('opUser.money  ' + opUser.money  )
+
+        console.log('opUser.money  ' + opUser.money)
 
 
         console.log('doc.schueler ' + doc.schueler)
         //console.log('hausarbeit.schueler ' + hausarbeit.schueler )
         //hausarbeit.schueler
 
-        User.update({_id: doc.schueler}, opUser, function (err) {
+        User.update({ _id: doc.schueler }, opUser, function (err) {
           if (err) {
             console.log(err);
             return;
           } else {
 
 
-            req.flash('success', 'Hausarbeit korrigiert');
-            res.redirect('/');
+
+
+
+
+            Article.findById(doc.article, function (err, articleX) {
+
+              if (err) {
+                //console.log('wwwwww');
+                console.log(err);
+              }
+
+
+
+
+
+
+
+              console.log('article.ha_gelb  ' + articleX.ha_gelb)
+              console.log('parseInt(article.ha_gelb) ' + parseInt(articleX.ha_gelb))
+
+              var inte_gelb = parseInt(articleX.ha_gelb);
+              inte_gelb -= 1;
+
+              tuString_gelb = inte_gelb.toString();
+              console.log('tuString_gelb ergebnis ' + tuString_gelb)
+
+
+
+
+              var inte_gruen = parseInt(articleX.ha_gruen);
+              inte_gruen += 1;
+
+              tuString_gruen = inte_gruen.toString();
+              console.log('tuString_gruen ergebnis ' + tuString_gruen)
+
+
+
+
+
+              var art = {}
+              art.ha_gelb = tuString_gelb
+              art.ha_gruen = tuString_gruen
+
+
+              Article.findOneAndUpdate({ _id: articleX._id }, art, { upsert: true }, function (err, docX) {
+                if (err) return res.send(500, { error: err });
+
+                console.log('docX.ha_gelb NEU  ' + docX.ha_gelb)
+                console.log('docX.ha_gruen NEU  ' + docX.ha_gruen)
+
+
+
+              });
+
+
+
+
+
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            req.flash('success', 'Moe');
+            res.redirect('/articles/article_schuelers/' + doc.article);
+
+
+
 
 
           }
@@ -869,7 +989,7 @@ router.post('/edit/:id', function (req, res) {
 
 
     const start = new Date();
-    
+
 
 
 
@@ -974,7 +1094,7 @@ router.delete('/:id', function (req, res) {
 
 // Get Single Article
 router.get('/:id', function (req, res) {
-  
+
   Article.
     findOne({ _id: req.params.id }).
     populate('lehrer').
