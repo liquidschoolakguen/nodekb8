@@ -17,14 +17,16 @@ html
                         li
                             .led-green-main
                         li.nav-item.active
-                            a.nav-link(href='/')| #{user.name}
+                            a.nav-link(href='/') #{user.name}
                         if user.type == 'lehrer' 
                             li.nav-item
-                                a.nav-link(href='/')| Meine Aufträge 
+                                a.nav-link(href='/') | Meine Aufträge 
                             li.nav-item
-                                a.nav-link(href='/index_all')| Alle Aufträge
+                                a.nav-link(href='/index_all') | Alle Aufträge
                             li.nav-item.active
-                                a.nav-link(href='/articles/add') Neuen Auftrag erstellen
+                                a.nav-link(href='/articles/add') | Neuen Auftrag +
+                            li.nav-item
+                                a.nav-link(href='/users/all_schueler') | Alle SuS
                         else
                             li.nav-item
                                 p.white

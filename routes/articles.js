@@ -275,7 +275,7 @@ router.get('/article_schuelers/:id', function (req, res) {
               let length = hausarbeits.length;
 
 
-              res.render('index_schueler', {
+              res.render('article_schueler', {
                 article: article,
                 hausarbeits: hausarbeits,
                 length: length
@@ -432,6 +432,73 @@ router.get('/finished_hausarbeit/:id', ensureAuthenticated, function (req, res) 
 
 
 });
+
+
+
+
+
+
+
+
+
+
+
+// Load edit_hausarbeit form
+router.get('/hausarbeit_for_lehrer/:id', ensureAuthenticated, function (req, res) {
+  //console.log('x ' + req.params.id);
+
+
+
+
+
+
+
+  Hausarbeit.
+    findOne({_id: req.params.id}).
+    populate('article').
+    populate('schueler').
+    exec(function (err, ha) {
+      if (err) return console.log('7_iiiiiiiiiiii ' + err);
+
+      if (ha) {
+       // console.log('The ha is %s', ha);
+
+
+        //console.log('x nnnnn ' + ha.article.klasse);
+
+
+        res.render('finished_hausarbeit', {
+          hausarbeit: ha,
+
+        });
+      } else {
+
+        req.flash('danger', 'Der Hausarbeit wurde gelöscht. ');
+        res.redirect('/');
+
+      }
+
+    });
+
+
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -873,10 +940,6 @@ router.delete('/:id', function (req, res) {
             });
 
           });
-
-
-
-
 
 
         });

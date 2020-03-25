@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 // Bring in Article Model
 let User = require('../models/user');
+let Article = require('../models/article');
+let Hausarbeit = require('../models/hausarbeit');
 
 // Register Form
 router.get('/register_lehrer_sah', function (req, res) {
@@ -206,6 +208,66 @@ router.post('/register_schueler', function (req, res) {
 
 
 
+
+
+
+router.get('/all_schueler', function (req, res) {
+
+
+
+
+
+
+    User.
+      find({ type: 'schueler' }).
+      exec(function (err, schuelers) {
+        if (err) return console.log('4_iiiiiiiiiiii ' + err);
+  
+        if (schuelers) {
+  
+              if (err) return console.log('5_iiiiiiiiiiii ' + err);
+  
+             
+
+                let length = schuelers.length;
+  
+  
+                res.render('all_schueler', {
+                    schuelers: schuelers,
+                  length: length
+                });
+             
+        
+  
+
+        } else {
+  
+          req.flash('danger', 'Es sind noch keine SuS registriert ');
+          res.redirect('/');
+  
+        }
+  
+      });
+  
+  
+  
+  
+  });
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Login Form
 router.get('/login', function (req, res) {
     res.render('login');
@@ -264,4 +326,183 @@ router.get('/logout/:id', function (req, res) {
 
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Delete Article
+router.delete('/:id', function (req, res) {
+
+    console.log('ööö')
+
+
+    //console.log('drinn')
+    if (!req.user._id) {
+  
+      res.status(500).send();
+  
+    }
+  
+  
+  
+    User.findById(req.params.id, function (err, user) {
+    
+  
+        console.log('ööö2 '+user.name)
+  
+  
+  
+        Article.
+          find({ lehrer: req.params.id }).
+          exec(function (err, articles) {
+            if (err) return console.log('8_iiiiiiiiiiii ' + err);
+  
+  
+  
+            articles.forEach(function (article) {
+
+
+
+
+
+                Hausarbeit.
+                find({ article: rarticle._id}).
+                exec(function (err, hausarbeits) {
+                  if (err) return console.log('8_iiiiiiiiiiii ' + err);
+        
+        
+        
+                  hausarbeits.forEach(function (hausarbeit) {
+        
+                    Hausarbeit.remove({ _id: hausarbeit._id }, function (err) {
+                      if (err) {
+                        console.log(err);
+                      }
+        
+                    });
+        
+                  });
+        
+        
+                });
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+  
+              Article.remove({ _id: article._id }, function (err) {
+                if (err) {
+                  console.log(err);
+                }
+  
+              });
+  
+            });
+
+  
+          });
+
+
+
+          Hausarbeit.
+          find({ schueler: req.params.id }).
+          exec(function (err, hausarbeits) {
+            if (err) return console.log('8_iiiiiiiiiiii ' + err);
+  
+  
+  
+            hausarbeits.forEach(function (hausarbeit) {
+  
+              Hausarbeit.remove({ _id: hausarbeit._id }, function (err) {
+                if (err) {
+                  console.log(err);
+                }
+  
+              });
+  
+            });
+  
+  
+  
+  
+  
+  
+          });
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+        let query = { _id: req.params.id }
+  
+        User.remove(query, function (err) {
+          if (err) {
+            console.log(err);
+          }
+          res.send('success');
+        });
+  
+  
+  
+  
+  
+    
+    });
+  
+  });
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = router;

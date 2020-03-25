@@ -189,7 +189,7 @@ $(document).ready(function () {
 
 
 
-	oTable = $('#customerTable_Erklaerung').DataTable({
+	oTableE = $('#customerTable_Erklaerung').DataTable({
 		
 		"lengthChange": false,
 		"bInfo" : false,
@@ -211,6 +211,85 @@ $(document).ready(function () {
 
 
 	});
+
+
+
+
+
+
+
+    $('.delete-article').on('click', function (e) {
+
+
+
+        var result = confirm("Wenn du diesen SoS löschst, werden auch die entsprechenden Hausarbeiten gelöscht?");
+ 
+              if(result)  {
+                $target = $(e.target);
+                const id = $target.attr('data-id');
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/users/' + id,
+                    success: function (response) {
+        
+                        //alert('delete article');
+                        window.location.href = '/';
+                    },
+                    error: function (err) {
+						window.location.href = '/';
+                    }
+                });
+              } else {
+                  
+              }
+        
+        
+    });
+
+
+   
+
+
+
+
+	$('.delete-user').on('click', function (e) {
+
+
+
+        var result = confirm("Wenn du diesen SoS löschst, werden auch die entsprechenden Hausarbeiten gelöscht?");
+ 
+              if(result)  {
+                $target = $(e.target);
+				const id = $target.attr('data-id');
+				alert('delete user '+id);
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/users/' + id,
+                    success: function (response) {
+        
+                      
+                        window.location.href = '/';
+                    },
+                    error: function (err) {
+						window.location.href = '/';
+                    }
+                });
+              } else {
+                  
+              }
+        
+        
+    });
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -19,7 +19,7 @@ block content
                                         h5.color-red Bitte bis #{hausarbeit.article.termin} abgeben.
                                         h5#invisible #{hausarbeit.article.body}
                                         h6#hier-kommt-was-rein
-    if user.type == 'schueler'
+    if user.type == 'schueler' || user.type == 'lehrer'
         .container.padding_null
             .row.h-100.d-flex.justify-content-center
                 .col-12
@@ -60,8 +60,6 @@ block content
                                             p.card-text.norm #{hausarbeit.ergebnis_dollar}$
                                         else
                                             p.card-text.kursiv (Es wurden keine PauliDollar für deine Hausarbeit vergeben)
-
-            script(src='/js/article2.js')
     script(src='/js/nic_edit.js')
     script(type='text/javascript').
         bkLib.onDomLoaded(nicEditors.allTextAreas) 
@@ -69,3 +67,4 @@ block content
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
     script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
     script(src='/js/article.js')
+    script(src='/js/article2.js')
