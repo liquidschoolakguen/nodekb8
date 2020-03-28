@@ -14,7 +14,7 @@ block content
                                                 each schueler, i in schuelers
                                                     .col-3(style='margin-bottom:0px; border:none !important;')
                                                         .card.card-default(style='margin-bottom:0px; border:none !important;')
-                                                            input#defaultCheck1.form-check-input(type='checkbox', value='true', checked='true' name='schueler_'+i)
+                                                            input#defaultCheck1.form-check-input(type='checkbox', value='true', checked='false' name='schueler_'+i)
                                                             input.form-control.invisible(type='text',  name='id_'+i, value= schueler._id)
                                                             label.form-check-label(for='defaultCheck1')
                                                             | #{schueler.name} 
