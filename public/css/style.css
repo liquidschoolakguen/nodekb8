@@ -387,7 +387,8 @@ min-height: 320px!important;
 }
 
 .white {
-
+  margin-left: -5px!important;
+ 
   color: rgb(255, 255, 255);
   font-size: 0.8em;
   

@@ -18,7 +18,7 @@ block content
         .container.padding_null
           .row.h-100.d-flex.justify-content-center
             .col-12
-              .card.border.border-success
+              .card.border.border-primary
                 .card-header
                   ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                     li.nav-item
@@ -47,13 +47,8 @@ block content
                                       svg.bi.bi-person-fill(width='1em', height='1em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
                                         path(fill-rule='evenodd', d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 100-6 3 3 0 000 6z', clip-rule='evenodd')                                
                                   td.align-middle 
-                                    .montainer
-                                    | "#{schueler.name}"
-                                    if schueler.logged
-                                      .led-green
-                                    else
-                                      .led-green-gone
-                                    | "#{schueler.password_visible}"  
+                                    .box
+                                    | "#{schueler.name}" | "#{schueler.password_visible}"  
                                   td.align-middle
                                     | #{schueler.money} $                                  
                         else
@@ -61,4 +56,4 @@ block content
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
     script(type='text/javascript', src='https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.js')
     script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
-    script(src='/js/index.js')
+    script(src='/js/all_schueler.js')

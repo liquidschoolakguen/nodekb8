@@ -22,12 +22,12 @@ html
                             li.nav-item
                                 a.nav-link(href='/index_all') Alle Aufträge
                             li.nav-item
-                                a.nav-link(href='/users/all_schueler') Alle SuS
-                            li.nav-item
-                                a.nav-link(href='/users/all_ha') Alle HAs     
+                                a.nav-link(href='/users/all_schueler') Alle SuS  
                             li.nav-item.active
                                 a.nav-link(href='/articles/add_article_klasse') | Neuer Auftrag +        
                         else
+                            li.nav-item.active
+                                a.nav-link(href='/') #{user.name}                      
                             li.nav-item
                                 p.white
                                     | #{user.money} 
