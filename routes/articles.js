@@ -967,7 +967,6 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
 
 
 
-
       var s00 = req.body.schueler_0
       var s01 = req.body.schueler_1
       var s02 = req.body.schueler_2
@@ -999,10 +998,72 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
       var s28 = req.body.schueler_28
       var s29 = req.body.schueler_29
       var s30 = req.body.schueler_30
+      var s01 = req.body.schueler_31
+      var s02 = req.body.schueler_32
+      var s03 = req.body.schueler_33
+      var s04 = req.body.schueler_34
+      var s05 = req.body.schueler_35
+      var s06 = req.body.schueler_36
+      var s07 = req.body.schueler_37
+      var s08 = req.body.schueler_38
+      var s09 = req.body.schueler_39
+      var s10 = req.body.schueler_40
+      var s11 = req.body.schueler_41
+      var s12 = req.body.schueler_42
+      var s13 = req.body.schueler_43
+      var s14 = req.body.schueler_44
+      var s15 = req.body.schueler_45
+      var s16 = req.body.schueler_46
+      var s17 = req.body.schueler_47
+      var s18 = req.body.schueler_48
+      var s19 = req.body.schueler_49
+      var s20 = req.body.schueler_50
+      var s21 = req.body.schueler_51
+      var s22 = req.body.schueler_52
+      var s23 = req.body.schueler_53
+      var s24 = req.body.schueler_54
+      var s25 = req.body.schueler_55
+      var s26 = req.body.schueler_56
+      var s27 = req.body.schueler_57
+      var s28 = req.body.schueler_58
+      var s29 = req.body.schueler_59
+      var s30 = req.body.schueler_60
+      var s01 = req.body.schueler_61
+      var s02 = req.body.schueler_62
+      var s03 = req.body.schueler_63
+      var s04 = req.body.schueler_64
+      var s05 = req.body.schueler_65
+      var s06 = req.body.schueler_66
+      var s07 = req.body.schueler_67
+      var s08 = req.body.schueler_68
+      var s09 = req.body.schueler_69
+      var s10 = req.body.schueler_70
+      var s11 = req.body.schueler_71
+      var s12 = req.body.schueler_72
+      var s13 = req.body.schueler_73
+      var s14 = req.body.schueler_74
+      var s15 = req.body.schueler_75
+      var s16 = req.body.schueler_76
+      var s17 = req.body.schueler_77
+      var s18 = req.body.schueler_78
+      var s19 = req.body.schueler_79
+      var s20 = req.body.schueler_80
+      var s21 = req.body.schueler_81
+      var s22 = req.body.schueler_82
+      var s23 = req.body.schueler_83
+      var s24 = req.body.schueler_84
+      var s25 = req.body.schueler_85
+      var s26 = req.body.schueler_86
+      var s27 = req.body.schueler_87
+      var s28 = req.body.schueler_88
+      var s29 = req.body.schueler_89
+      var s30 = req.body.schueler_90
+
+
+
 
 
       var oo = []
-
       oo.push(s00);
       oo.push(s01);
       oo.push(s02);
@@ -1034,15 +1095,71 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
       oo.push(s28);
       oo.push(s29);
       oo.push(s30);
+      oo.push(s31);
+      oo.push(s32);
+      oo.push(s33);
+      oo.push(s34);
+      oo.push(s35);
+      oo.push(s36);
+      oo.push(s37);
+      oo.push(s38);
+      oo.push(s39);
+      oo.push(s40);
+      oo.push(s41);
+      oo.push(s42);
+      oo.push(s43);
+      oo.push(s44);
+      oo.push(s45);
+      oo.push(s46);
+      oo.push(s47);
+      oo.push(s48);
+      oo.push(s49);
+      oo.push(s50);
+      oo.push(s51);
+      oo.push(s52);
+      oo.push(s53);
+      oo.push(s54);
+      oo.push(s55);
+      oo.push(s56);
+      oo.push(s57);
+      oo.push(s58);
+      oo.push(s59);
+      oo.push(s60);
+      oo.push(s61);
+      oo.push(s62);
+      oo.push(s63);
+      oo.push(s64);
+      oo.push(s65);
+      oo.push(s66);
+      oo.push(s67);
+      oo.push(s68);
+      oo.push(s69);
+      oo.push(s70);
+      oo.push(s71);
+      oo.push(s72);
+      oo.push(s73);
+      oo.push(s74);
+      oo.push(s75);
+      oo.push(s76);
+      oo.push(s77);
+      oo.push(s78);
+      oo.push(s79);
+      oo.push(s80);
+      oo.push(s81);
+      oo.push(s82);
+      oo.push(s83);
+      oo.push(s84);
+      oo.push(s85);
+      oo.push(s86);
+      oo.push(s87);
+      oo.push(s88);
+      oo.push(s89);
+      oo.push(s90);
 
 
 
 
-
-
-
-
-
+      
       var id00 = req.body.id_0
       var id01 = req.body.id_1
       var id02 = req.body.id_2
@@ -1074,12 +1191,73 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
       var id28 = req.body.id_28
       var id29 = req.body.id_29
       var id30 = req.body.id_30
+      var id31 = req.body.id_31
+      var id32 = req.body.id_32
+      var id33 = req.body.id_33
+      var id34 = req.body.id_34
+      var id35 = req.body.id_35
+      var id36 = req.body.id_36
+      var id37 = req.body.id_37
+      var id38 = req.body.id_38
+      var id39 = req.body.id_39
+      var id40 = req.body.id_40
+      var id41 = req.body.id_41
+      var id42 = req.body.id_42
+      var id43 = req.body.id_43
+      var id44 = req.body.id_44
+      var id45 = req.body.id_45
+      var id46 = req.body.id_46
+      var id47 = req.body.id_47
+      var id48 = req.body.id_48
+      var id49 = req.body.id_49
+      var id50 = req.body.id_50
+      var id51 = req.body.id_51
+      var id52 = req.body.id_52
+      var id53 = req.body.id_53
+      var id54 = req.body.id_54
+      var id55 = req.body.id_55
+      var id56 = req.body.id_56
+      var id57 = req.body.id_57
+      var id58 = req.body.id_58
+      var id59 = req.body.id_59
+      var id60 = req.body.id_60
+      var id61 = req.body.id_61
+      var id62 = req.body.id_62
+      var id63 = req.body.id_63
+      var id64 = req.body.id_64
+      var id65 = req.body.id_65
+      var id66 = req.body.id_66
+      var id67 = req.body.id_67
+      var id68 = req.body.id_68
+      var id69 = req.body.id_69
+      var id70 = req.body.id_70
+      var id71 = req.body.id_71
+      var id72 = req.body.id_72
+      var id73 = req.body.id_73
+      var id74 = req.body.id_74
+      var id75 = req.body.id_75
+      var id76 = req.body.id_76
+      var id77 = req.body.id_77
+      var id78 = req.body.id_78
+      var id79 = req.body.id_79
+      var id80 = req.body.id_80
+      var id81 = req.body.id_81
+      var id82 = req.body.id_82
+      var id83 = req.body.id_83
+      var id84 = req.body.id_84
+      var id85 = req.body.id_85
+      var id86 = req.body.id_86
+      var id87 = req.body.id_87
+      var id88 = req.body.id_88
+      var id89 = req.body.id_89
+      var id90 = req.body.id_90
+
+
 
 
 
 
       var ooId = []
-
       ooId.push(id00);
       ooId.push(id01);
       ooId.push(id02);
@@ -1111,6 +1289,66 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
       ooId.push(id28);
       ooId.push(id29);
       ooId.push(id30);
+      ooId.push(id31);
+      ooId.push(id32);
+      ooId.push(id33);
+      ooId.push(id34);
+      ooId.push(id35);
+      ooId.push(id36);
+      ooId.push(id37);
+      ooId.push(id38);
+      ooId.push(id39);
+      ooId.push(id40);
+      ooId.push(id41);
+      ooId.push(id42);
+      ooId.push(id43);
+      ooId.push(id44);
+      ooId.push(id45);
+      ooId.push(id46);
+      ooId.push(id47);
+      ooId.push(id48);
+      ooId.push(id49);
+      ooId.push(id50);
+      ooId.push(id51);
+      ooId.push(id52);
+      ooId.push(id53);
+      ooId.push(id54);
+      ooId.push(id55);
+      ooId.push(id56);
+      ooId.push(id57);
+      ooId.push(id58);
+      ooId.push(id59);
+      ooId.push(id60);
+      ooId.push(id61);
+      ooId.push(id62);
+      ooId.push(id63);
+      ooId.push(id64);
+      ooId.push(id65);
+      ooId.push(id66);
+      ooId.push(id67);
+      ooId.push(id68);
+      ooId.push(id69);
+      ooId.push(id70);
+      ooId.push(id71);
+      ooId.push(id72);
+      ooId.push(id73);
+      ooId.push(id74);
+      ooId.push(id75);
+      ooId.push(id76);
+      ooId.push(id77);
+      ooId.push(id78);
+      ooId.push(id79);
+      ooId.push(id80);
+      ooId.push(id81);
+      ooId.push(id82);
+      ooId.push(id83);
+      ooId.push(id84);
+      ooId.push(id85);
+      ooId.push(id86);
+      ooId.push(id87);
+      ooId.push(id88);
+      ooId.push(id89);
+      ooId.push(id90);
 
 
 
@@ -1183,7 +1421,7 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
       let errors = req.validationErrors();
 
       if (errors) {
-        res.render('add_article', {
+        res.render('add_article_neu', {
           title: 'Add Article',
           errors: errors
         });
@@ -1866,6 +2104,70 @@ router.post('/edit/:id', function (req, res) {
       var s28 = req.body.schueler_28
       var s29 = req.body.schueler_29
       var s30 = req.body.schueler_30
+      var s01 = req.body.schueler_31
+      var s02 = req.body.schueler_32
+      var s03 = req.body.schueler_33
+      var s04 = req.body.schueler_34
+      var s05 = req.body.schueler_35
+      var s06 = req.body.schueler_36
+      var s07 = req.body.schueler_37
+      var s08 = req.body.schueler_38
+      var s09 = req.body.schueler_39
+      var s10 = req.body.schueler_40
+      var s11 = req.body.schueler_41
+      var s12 = req.body.schueler_42
+      var s13 = req.body.schueler_43
+      var s14 = req.body.schueler_44
+      var s15 = req.body.schueler_45
+      var s16 = req.body.schueler_46
+      var s17 = req.body.schueler_47
+      var s18 = req.body.schueler_48
+      var s19 = req.body.schueler_49
+      var s20 = req.body.schueler_50
+      var s21 = req.body.schueler_51
+      var s22 = req.body.schueler_52
+      var s23 = req.body.schueler_53
+      var s24 = req.body.schueler_54
+      var s25 = req.body.schueler_55
+      var s26 = req.body.schueler_56
+      var s27 = req.body.schueler_57
+      var s28 = req.body.schueler_58
+      var s29 = req.body.schueler_59
+      var s30 = req.body.schueler_60
+      var s01 = req.body.schueler_61
+      var s02 = req.body.schueler_62
+      var s03 = req.body.schueler_63
+      var s04 = req.body.schueler_64
+      var s05 = req.body.schueler_65
+      var s06 = req.body.schueler_66
+      var s07 = req.body.schueler_67
+      var s08 = req.body.schueler_68
+      var s09 = req.body.schueler_69
+      var s10 = req.body.schueler_70
+      var s11 = req.body.schueler_71
+      var s12 = req.body.schueler_72
+      var s13 = req.body.schueler_73
+      var s14 = req.body.schueler_74
+      var s15 = req.body.schueler_75
+      var s16 = req.body.schueler_76
+      var s17 = req.body.schueler_77
+      var s18 = req.body.schueler_78
+      var s19 = req.body.schueler_79
+      var s20 = req.body.schueler_80
+      var s21 = req.body.schueler_81
+      var s22 = req.body.schueler_82
+      var s23 = req.body.schueler_83
+      var s24 = req.body.schueler_84
+      var s25 = req.body.schueler_85
+      var s26 = req.body.schueler_86
+      var s27 = req.body.schueler_87
+      var s28 = req.body.schueler_88
+      var s29 = req.body.schueler_89
+      var s30 = req.body.schueler_90
+
+
+
+
 
       var oo = []
       oo.push(s00);
@@ -1899,6 +2201,71 @@ router.post('/edit/:id', function (req, res) {
       oo.push(s28);
       oo.push(s29);
       oo.push(s30);
+      oo.push(s31);
+      oo.push(s32);
+      oo.push(s33);
+      oo.push(s34);
+      oo.push(s35);
+      oo.push(s36);
+      oo.push(s37);
+      oo.push(s38);
+      oo.push(s39);
+      oo.push(s40);
+      oo.push(s41);
+      oo.push(s42);
+      oo.push(s43);
+      oo.push(s44);
+      oo.push(s45);
+      oo.push(s46);
+      oo.push(s47);
+      oo.push(s48);
+      oo.push(s49);
+      oo.push(s50);
+      oo.push(s51);
+      oo.push(s52);
+      oo.push(s53);
+      oo.push(s54);
+      oo.push(s55);
+      oo.push(s56);
+      oo.push(s57);
+      oo.push(s58);
+      oo.push(s59);
+      oo.push(s60);
+      oo.push(s61);
+      oo.push(s62);
+      oo.push(s63);
+      oo.push(s64);
+      oo.push(s65);
+      oo.push(s66);
+      oo.push(s67);
+      oo.push(s68);
+      oo.push(s69);
+      oo.push(s70);
+      oo.push(s71);
+      oo.push(s72);
+      oo.push(s73);
+      oo.push(s74);
+      oo.push(s75);
+      oo.push(s76);
+      oo.push(s77);
+      oo.push(s78);
+      oo.push(s79);
+      oo.push(s80);
+      oo.push(s81);
+      oo.push(s82);
+      oo.push(s83);
+      oo.push(s84);
+      oo.push(s85);
+      oo.push(s86);
+      oo.push(s87);
+      oo.push(s88);
+      oo.push(s89);
+      oo.push(s90);
+
+
+
+
+      
       var id00 = req.body.id_0
       var id01 = req.body.id_1
       var id02 = req.body.id_2
@@ -1930,6 +2297,71 @@ router.post('/edit/:id', function (req, res) {
       var id28 = req.body.id_28
       var id29 = req.body.id_29
       var id30 = req.body.id_30
+      var id31 = req.body.id_31
+      var id32 = req.body.id_32
+      var id33 = req.body.id_33
+      var id34 = req.body.id_34
+      var id35 = req.body.id_35
+      var id36 = req.body.id_36
+      var id37 = req.body.id_37
+      var id38 = req.body.id_38
+      var id39 = req.body.id_39
+      var id40 = req.body.id_40
+      var id41 = req.body.id_41
+      var id42 = req.body.id_42
+      var id43 = req.body.id_43
+      var id44 = req.body.id_44
+      var id45 = req.body.id_45
+      var id46 = req.body.id_46
+      var id47 = req.body.id_47
+      var id48 = req.body.id_48
+      var id49 = req.body.id_49
+      var id50 = req.body.id_50
+      var id51 = req.body.id_51
+      var id52 = req.body.id_52
+      var id53 = req.body.id_53
+      var id54 = req.body.id_54
+      var id55 = req.body.id_55
+      var id56 = req.body.id_56
+      var id57 = req.body.id_57
+      var id58 = req.body.id_58
+      var id59 = req.body.id_59
+      var id60 = req.body.id_60
+      var id61 = req.body.id_61
+      var id62 = req.body.id_62
+      var id63 = req.body.id_63
+      var id64 = req.body.id_64
+      var id65 = req.body.id_65
+      var id66 = req.body.id_66
+      var id67 = req.body.id_67
+      var id68 = req.body.id_68
+      var id69 = req.body.id_69
+      var id70 = req.body.id_70
+      var id71 = req.body.id_71
+      var id72 = req.body.id_72
+      var id73 = req.body.id_73
+      var id74 = req.body.id_74
+      var id75 = req.body.id_75
+      var id76 = req.body.id_76
+      var id77 = req.body.id_77
+      var id78 = req.body.id_78
+      var id79 = req.body.id_79
+      var id80 = req.body.id_80
+      var id81 = req.body.id_81
+      var id82 = req.body.id_82
+      var id83 = req.body.id_83
+      var id84 = req.body.id_84
+      var id85 = req.body.id_85
+      var id86 = req.body.id_86
+      var id87 = req.body.id_87
+      var id88 = req.body.id_88
+      var id89 = req.body.id_89
+      var id90 = req.body.id_90
+
+
+
+
+
 
       var ooId = []
       ooId.push(id00);
@@ -1963,6 +2395,69 @@ router.post('/edit/:id', function (req, res) {
       ooId.push(id28);
       ooId.push(id29);
       ooId.push(id30);
+      ooId.push(id31);
+      ooId.push(id32);
+      ooId.push(id33);
+      ooId.push(id34);
+      ooId.push(id35);
+      ooId.push(id36);
+      ooId.push(id37);
+      ooId.push(id38);
+      ooId.push(id39);
+      ooId.push(id40);
+      ooId.push(id41);
+      ooId.push(id42);
+      ooId.push(id43);
+      ooId.push(id44);
+      ooId.push(id45);
+      ooId.push(id46);
+      ooId.push(id47);
+      ooId.push(id48);
+      ooId.push(id49);
+      ooId.push(id50);
+      ooId.push(id51);
+      ooId.push(id52);
+      ooId.push(id53);
+      ooId.push(id54);
+      ooId.push(id55);
+      ooId.push(id56);
+      ooId.push(id57);
+      ooId.push(id58);
+      ooId.push(id59);
+      ooId.push(id60);
+      ooId.push(id61);
+      ooId.push(id62);
+      ooId.push(id63);
+      ooId.push(id64);
+      ooId.push(id65);
+      ooId.push(id66);
+      ooId.push(id67);
+      ooId.push(id68);
+      ooId.push(id69);
+      ooId.push(id70);
+      ooId.push(id71);
+      ooId.push(id72);
+      ooId.push(id73);
+      ooId.push(id74);
+      ooId.push(id75);
+      ooId.push(id76);
+      ooId.push(id77);
+      ooId.push(id78);
+      ooId.push(id79);
+      ooId.push(id80);
+      ooId.push(id81);
+      ooId.push(id82);
+      ooId.push(id83);
+      ooId.push(id84);
+      ooId.push(id85);
+      ooId.push(id86);
+      ooId.push(id87);
+      ooId.push(id88);
+      ooId.push(id89);
+      ooId.push(id90);
+
+
+
 
       var jo = []
 
