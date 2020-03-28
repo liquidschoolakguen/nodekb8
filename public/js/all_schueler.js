@@ -1,3 +1,11 @@
+/*!
+ * jQuery Cookie Plugin v1.4.1
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2013 Klaus Hartl
+ * Released under the MIT license
+ */
+
 
 
 
@@ -17,13 +25,6 @@ $('#bologna-list a').on('click', function (e) {
 
 $(document).ready(function () {
 
-
-
-	var lastScrollTop = $.cookie('last-scroll-top');
-	if (lastScrollTop) {
-		$(window).scrollTop(lastScrollTop);
-		$.removeCookie('last-scroll-top');
-	}
 
 
 
@@ -65,8 +66,7 @@ $(document).ready(function () {
 			  }
 		  },
 		  
-		  "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
-		  "iDisplayLength": 50
+		
 
 	});
 
@@ -204,13 +204,6 @@ $("#inputFilter").on("keyup", function () {
 
 
 
-
-
-
-function open_new_window(link) {
-	alert(obj.getAttribute("href"));
-	return false;
-}
 
 
 
