@@ -16,17 +16,17 @@ html
                     if user
                         li
                             .led-green-main
-                        li.nav-item.active
-                            a.nav-link(href='/') #{user.name}
                         if user.type == 'lehrer' 
-                            li.nav-item
-                                a.nav-link(href='/') | Meine Aufträge 
-                            li.nav-item
-                                a.nav-link(href='/index_all') | Alle Aufträge
                             li.nav-item.active
-                                a.nav-link(href='/articles/add') | Neuen Auftrag +
+                                a.nav-link(href='/') #{user.name}s Aufträge
                             li.nav-item
-                                a.nav-link(href='/users/all_schueler') | Alle SuS
+                                a.nav-link(href='/index_all') Alle Aufträge
+                            li.nav-item
+                                a.nav-link(href='/users/all_schueler') Alle SuS
+                            li.nav-item
+                                a.nav-link(href='/users/all_ha') Alle HAs     
+                            li.nav-item.active
+                                a.nav-link(href='/articles/add_article_klasse') | Neuer Auftrag +        
                         else
                             li.nav-item
                                 p.white
@@ -34,7 +34,6 @@ html
                     else 
                         li.nav-item
                             a.nav-link(href='/')| Home
-
             .mx-auto.order-0
                 a.navbar-brand.mx-auto(href='#') 
                 button.navbar-toggler(type='button', data-toggle='collapse', data-target='.dual-collapse2')

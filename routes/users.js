@@ -219,42 +219,42 @@ router.get('/all_schueler', function (req, res) {
 
 
     User.
-      find({ type: 'schueler' }).
-      exec(function (err, schuelers) {
-        if (err) return console.log('4_iiiiiiiiiiii ' + err);
-  
-        if (schuelers) {
-  
-              if (err) return console.log('5_iiiiiiiiiiii ' + err);
-  
-             
+        find({ type: 'schueler' }).
+        exec(function (err, schuelers) {
+            if (err) return console.log('4_iiiiiiiiiiii ' + err);
+
+            if (schuelers) {
+
+                if (err) return console.log('5_iiiiiiiiiiii ' + err);
+
+
 
                 let length = schuelers.length;
-  
-  
+
+
                 res.render('all_schueler', {
                     schuelers: schuelers,
-                  length: length
+                    length: length
                 });
-             
-        
-  
 
-        } else {
-  
-          req.flash('danger', 'Es sind noch keine SuS registriert ');
-          res.redirect('/');
-  
-        }
-  
-      });
-  
-  
-  
-  
-  });
-  
-  
+
+
+
+            } else {
+
+                req.flash('danger', 'Es sind noch keine SuS registriert ');
+                res.redirect('/');
+
+            }
+
+        });
+
+
+
+
+});
+
+
 
 
 
@@ -275,17 +275,120 @@ router.get('/login', function (req, res) {
 
 
 
-// Login Process
-router.post('/login', function (req, res, next) {
+// Login Process Schueler
+router.post('/login_s', function (req, res, next) {
 
-    passport.authenticate('local', {
-        successRedirect: '/',
-        failureRedirect: '/users/login',
-        failureFlash: true
 
-    })(req, res, next);
+
+    let query = { username: req.body.username.toString().toLowerCase() }
+    User.findOne(query, function (err, user) {
+        if (err) throw err;
+        if (!user) {
+            return done(null, false, { message: 'Unbekannte Kennung' });
+        }
+
+
+        if (user.type === 'lehrer') {
+
+            req.flash('warning', 'Hier bist du falsch. Melde dich als "LehrerIn" an.');
+            res.redirect('/users/login');
+
+
+
+
+        } else {
+
+
+
+            passport.authenticate('local', {
+                successRedirect: '/',
+                failureRedirect: '/users/login',
+                failureFlash: true
+
+            })(req, res, next);
+
+
+
+
+
+        }
+
+
+
+
+
+
+    });
+
+
+
 
 });
+
+
+
+
+
+
+router.post('/login_l', function (req, res, next) {
+
+
+
+
+
+    let query = { username: req.body.username.toString().toLowerCase() }
+    User.findOne(query, function (err, user) {
+        if (err) throw err;
+        if (!user) {
+            return done(null, false, { message: 'Unbekannte Kennung' });
+        }
+
+
+        if (user.type === 'schueler') {
+
+
+            req.flash('warning', 'Hier bist du falsch. Melde dich als "SchülerIn" an.');
+            res.redirect('/users/login');
+
+
+
+
+        } else {
+
+
+
+
+            passport.authenticate('local', {
+                successRedirect: '/',
+                failureRedirect: '/users/login',
+                failureFlash: true
+
+            })(req, res, next);
+
+        }
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
 
 
 
@@ -351,52 +454,98 @@ router.delete('/:id', function (req, res) {
 
     //console.log('drinn')
     if (!req.user._id) {
-  
-      res.status(500).send();
-  
+
+        res.status(500).send();
+
     }
-  
-  
-  
+
+
+
     User.findById(req.params.id, function (err, user) {
-    
-  
-        console.log('ööö2 '+user.name)
-  
-  
-  
+
+
+        console.log('ööö2 ' + user.name)
+
+
+
         Article.
-          find({ lehrer: req.params.id }).
-          exec(function (err, articles) {
-            if (err) return console.log('8_iiiiiiiiiiii ' + err);
-  
-  
-  
-            articles.forEach(function (article) {
+            find({ lehrer: req.params.id }).
+            exec(function (err, articles) {
+                if (err) return console.log('8_iiiiiiiiiiii ' + err);
+
+
+
+                articles.forEach(function (article) {
 
 
 
 
 
-                Hausarbeit.
-                find({ article: rarticle._id}).
-                exec(function (err, hausarbeits) {
-                  if (err) return console.log('8_iiiiiiiiiiii ' + err);
-        
-        
-        
-                  hausarbeits.forEach(function (hausarbeit) {
-        
-                    Hausarbeit.remove({ _id: hausarbeit._id }, function (err) {
-                      if (err) {
-                        console.log(err);
-                      }
-        
+                    Hausarbeit.
+                        find({ article: rarticle._id }).
+                        exec(function (err, hausarbeits) {
+                            if (err) return console.log('8_iiiiiiiiiiii ' + err);
+
+
+
+                            hausarbeits.forEach(function (hausarbeit) {
+
+                                Hausarbeit.remove({ _id: hausarbeit._id }, function (err) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+
+                                });
+
+                            });
+
+
+                        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    Article.remove({ _id: article._id }, function (err) {
+                        if (err) {
+                            console.log(err);
+                        }
+
                     });
-        
-                  });
-        
-        
+
+                });
+
+
+            });
+
+
+
+        Hausarbeit.
+            find({ schueler: req.params.id }).
+            exec(function (err, hausarbeits) {
+                if (err) return console.log('8_iiiiiiiiiiii ' + err);
+
+
+
+                hausarbeits.forEach(function (hausarbeit) {
+
+                    Hausarbeit.remove({ _id: hausarbeit._id }, function (err) {
+                        if (err) {
+                            console.log(err);
+                        }
+
+                    });
+
                 });
 
 
@@ -404,53 +553,8 @@ router.delete('/:id', function (req, res) {
 
 
 
-
-
-
-
-
-
-
-                
-  
-              Article.remove({ _id: article._id }, function (err) {
-                if (err) {
-                  console.log(err);
-                }
-  
-              });
-  
             });
 
-  
-          });
-
-
-
-          Hausarbeit.
-          find({ schueler: req.params.id }).
-          exec(function (err, hausarbeits) {
-            if (err) return console.log('8_iiiiiiiiiiii ' + err);
-  
-  
-  
-            hausarbeits.forEach(function (hausarbeit) {
-  
-              Hausarbeit.remove({ _id: hausarbeit._id }, function (err) {
-                if (err) {
-                  console.log(err);
-                }
-  
-              });
-  
-            });
-  
-  
-  
-  
-  
-  
-          });
 
 
 
@@ -464,28 +568,27 @@ router.delete('/:id', function (req, res) {
 
 
 
-  
-  
+
         let query = { _id: req.params.id }
-  
+
         User.remove(query, function (err) {
-          if (err) {
-            console.log(err);
-          }
-          res.send('success');
+            if (err) {
+                console.log(err);
+            }
+            res.send('success');
         });
-  
-  
-  
-  
-  
-    
+
+
+
+
+
+
     });
-  
-  });
-  
-  
-  
+
+});
+
+
+
 
 
 

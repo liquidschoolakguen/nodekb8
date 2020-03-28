@@ -16,7 +16,7 @@ block content
               .tab-content.mt-3
                 #description.tab-pane.active(role='tabpanel')
                   p.card-text
-                    form(method='POST', action='/users/login')
+                    form(method='POST', action='/users/login_s')
                         #form-group  
                             label Dein Vorname:
                             input#validationServer01.form-control.is-valid.form-control(name='username', type=text, required='')
@@ -28,7 +28,7 @@ block content
                         input.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Ok')
                 #history.tab-pane(role='tabpanel', aria-labelledby='history-tab')
                   p.card-text
-                    form(method='POST', action='/users/login')
+                    form(method='POST', action='/users/login_l')
                         #form-group  
                             label Behörden-Email:
                             input#validationServer01.form-control.is-valid.form-control(name='username', type=text, required='')

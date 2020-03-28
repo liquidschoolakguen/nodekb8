@@ -14,7 +14,7 @@ let articleSchema = mongoose.Schema({
     },
     klasse:{
         type:String,
-        required:true   
+        required:false   
     },
     fach:{
         type:String,
@@ -66,9 +66,19 @@ let articleSchema = mongoose.Schema({
         required:false   
 
 
-    }
+    },
 
 
+    schuelers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }],
+
+
+      shadow_klasse:{
+        type:String,
+        required:false   
+    },
 
     
 

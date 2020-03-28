@@ -51,7 +51,7 @@ block content
                                             option Neustadt 10b
                                             option Neustadt 10c
                                             option Neustadt 10d
-                                            option Neustadt VK 10 
+                                            option Neustadt VK 10
                                             option TestKlasse 1
                                             option TestKlasse 2
                                             option Testklasse 3
@@ -60,18 +60,27 @@ block content
                                         label Für das Fach                                 
                                         select#validationServer01.form-control.custom-select.form-control(name='fach', type=text,  required='', placeholder='Wähle eine Klasse')
                                             option(selected='') #{article.fach}
+                                            option 'Allgemein | Orga'
                                             option Mathematik
                                             option Deutsch
                                             option Englisch
                                             option Gesellschaft 
                                             option Natur
+                                            option Sport
                                             option Schach
+                                            option Informatik | ITG
                                             option Kunst
+                                            option Musik
+                                            option Darstellendes Spiel
+                                            option Kochen
+                                            option Garten
                                             option Arbeit/Beruf
-                                            option Philosophie/Religion
+                                            option Philosophie | Religion
                                             option Spanisch
-                                            option Türkisch
-                                            option Französisch
+                                            option Romanes
+                                            option Französisch 
+                                            option Türkisch 
+                                            option Sonstiges Fach 
                                     .form-group.col-md-4 
                                         label Abgabetermin (Tag / Uhrzeit)
                                         input#validationServer01.form-control(name='termin', type=text,  required='', placeholder='Abgabetermin', value=article.termin)

@@ -3,25 +3,18 @@ extends layout
 block content
     .container
       .row.h-100.d-flex.justify-content-center
-        .col-12.col-sm-8.col-md-6.col-lg-4
+        .col-12.col-sm-8.col-md-6.col-lg-6
           .card.border.bg-custom-1
-            .card-header
-              ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
-                li.nav-item
-                  a.nav-link.active.bg-custom-1.no-border(href='#', role='tab', aria-controls='history', aria-selected='true') Für SchülerInnen
             .card-body.bg-custom-1
-              h4.card-title Hier kannst du dich registrieren
+              h4.card-title Für welche Klasse ist dein neuer Auftrag? 
               .tab-content.mt-3
                 #history.tab-pane.active(role='tabpanel')
                   p.card-text
-                    form(method='POST', action='/users/register_schueler')
-                        #form-group  
-                            label Dein Vorname:
-                            input#validationServer01.form-control.is-valid.form-control(name='username', type=text, required='')
-                        br
-                        #form-group  
-                            label Deine Klasse                                  
-                            select#validationServer01.form-control.is-valid.custom-select.form-control(name='klasse', type=text,  required='', placeholder='Wähle eine Klasse')
+                    form(method='POST', action='/articles/add_bingo_edit')
+                        #form-group           
+                          .form-row
+                            input.form-control.invisible(type='text', placeholder='articleId',  name='article_id', value=id) 
+                            select#validationServer01.form-control.custom-select.form-control(name='klasse', type=text,  required='', placeholder='Wähle eine Klasse')
                                 option(selected='')
                                 option St. Pauli 5a
                                 option St. Pauli 5b 
@@ -59,12 +52,6 @@ block content
                                 option Neustadt VK 10
                                 option TestKlasse 1
                                 option TestKlasse 2
-                                option Testklasse 3
-                        br
-                        #form-group  
-                            input#validationServer01.form-control.is-valid.form-control(type=text, name='password', required='', placeholder='Passwort')
-                            br
-                        #form-group  
-                            input#validationServer01.form-control.is-valid.form-control(type=text, name='password2', required='', placeholder='Passwort wiederholen') 
+                                option Testklasse 3 
                         br
                         input.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Ok')

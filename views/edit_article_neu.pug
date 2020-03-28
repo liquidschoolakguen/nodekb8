@@ -1,0 +1,63 @@
+extends layout
+
+block content
+            form#reused_form.montform(method='POST',  action='/articles/edit/' + article._id)
+                .card.border.border-success
+                    .card-header.bg-success.text-white
+                        | Hausarbeit ändern
+                    .card-body
+                        #form-transition-group.my-margin-top
+                                .form-row
+                                    .form-group.col-md-12                                   
+                                        .container-fluid(style='margin-bottom:0px; border:none !important;')
+                                            .row(style='margin:0px; border:none !important;')
+                                                each schueler, i in schuelers
+                                                    .col-md-2.col-12(style='margin-bottom:0px; border:none !important;')
+                                                        .card.card-default(style='margin-bottom:0px; border:none !important;')
+                                                            input#defaultCheck1.form-check-input(type='checkbox', value=schueler.article_token, checked=schueler.article_token, name='schueler_'+i)
+                                                            input.form-control.invisible(type='text',  name='id_'+i, value= schueler._id)
+                                                            | #{schueler.name}                               
+                                    .form-group.col-md-12
+                                        input#validationServer01.form-control(type='text', placeholder='Titel des Auftrags',  required='',  name='title', value=article.title)
+                                        .valid-feedback
+                                .form-row.my-margin-top                                         
+                                    .form-group.col-md-8
+                                        label Für das Fach                                 
+                                        select#validationServer01.form-control.custom-select.form-control(name='fach', type=text,  required='', placeholder='Wähle eine Klasse')
+                                            option(selected='') #{article.fach}
+                                            option 'Allgemein | Orga'
+                                            option Mathematik
+                                            option Deutsch
+                                            option Englisch
+                                            option Gesellschaft 
+                                            option Natur
+                                            option Sport
+                                            option Schach
+                                            option Informatik | ITG
+                                            option Kunst
+                                            option Musik
+                                            option Darstellendes Spiel
+                                            option Kochen
+                                            option Garten
+                                            option Arbeit/Beruf
+                                            option Philosophie | Religion
+                                            option Spanisch
+                                            option Romanes
+                                            option Französisch 
+                                            option Türkisch 
+                                            option Sonstiges Fach 
+                                    .form-group.col-md-4 
+                                        label Abgabetermin (Tag / Uhrzeit)
+                                        input#validationServer01.form-control(name='termin', type=text,  required='', placeholder='Abgabetermin', value=article.termin)
+                                .form-row
+                                        label Auftrag
+                                        textarea#area2.form-control.is-valid(name='body', type=text, placeholder='Arbeitsauftrag')=article.body
+                                        input.form-control.invisible(type='text',  name='shadow_klasse', value=article.shadow_klasse)                                   
+                                input.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Ok')
+            script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+            script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+            script(src='/js/add_article.js')  
+            script(src='/js/nic_edit.js')  
+            script(type='text/javascript').
+                bkLib.onDomLoaded(nicEditors.allTextAreas) 
+                new nicEditor({buttonList : ['bold','italic','underline','left','center','right','justify','ol','ul','superscript','upload','fontFormat','fontFamily','upload','','','','','','','','','','','','','']}).panelInstance('area2');

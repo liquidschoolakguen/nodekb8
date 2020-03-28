@@ -22,7 +22,7 @@ block content
                 .card-header
                   ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                     li.nav-item
-                      a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') Alle Aufträge an der Sts am Hafen
+                      a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') Alle Hausaufgaben an der Sts am Hafren
                 .card-body.padding_null
                   .tab-content.mt-3.my-min-height
                     #description.tab-pane.active(role='tabpanel')
@@ -32,7 +32,9 @@ block content
                             input#inputFilter.form-control.my-margin-bottom-right(type='text', placeholder='suche..')
                           table#customerTable.table.row-border.hover.table-sm(cellspacing='0', width='100%')
                             thead
-                              tr          
+                              tr
+                                th.th-sm.align-middle
+                                  |                           
                                 th.th-sm.align-middle
                                   | Gruppe 
                                 th.th-sm.align-middle
@@ -42,6 +44,12 @@ block content
                             tbody
                               each article, i in articles
                                 tr
+                                  td
+                                    .montainer
+                                      if article.lehrer.logged
+                                        .led-green
+                                      else
+                                        .led-green-gone
                                   td.align-middle 
                                     .montainer
                                       | #{article.klasse} - #{article.fach}

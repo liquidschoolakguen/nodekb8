@@ -66,6 +66,25 @@ const UserSchema = mongoose.Schema({
     },
 
 
+    article_token: {
+        type:String,
+        required:false   
+    },
+
+
+    default_klasse: {
+        type:String,
+        required:false   
+    },
+
+
+
+
+
+    auftrags: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Article'
+      }]
 
 
 }
