@@ -18,7 +18,7 @@ block content
                                         .row.justify-content-start.my-margin-bottom
                                             each schueler, i in article.schuelers
                                                 .col-md-2.col-12.my-margin-bottom
-                                                    a.btn.btn-outline-success.btn-block(href='/articles/schueler/' +schueler._id, role='button')  #{schueler.name}
+                                                    a.btn.btn-outline-primary.btn-block(href='/articles/schueler/' +schueler._id, role='button')  #{schueler.name}
                                 #description.tab-pane.active(role='tabpanel')
                                     p.card-text
                                         .col-md-12

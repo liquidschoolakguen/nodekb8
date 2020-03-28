@@ -683,6 +683,7 @@ router.post('/add_bingo_edit', ensureAuthenticated, function (req, res) {
       ]
 
     }).
+    sort({name:1}).
     exec(function (err2, all_schuelers) {
       if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
@@ -890,6 +891,7 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
         ]
 
       }).
+      sort({name:1}).
       exec(function (err2, schuelers) {
         if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 

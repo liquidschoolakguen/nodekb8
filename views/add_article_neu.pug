@@ -13,11 +13,10 @@ block content
                                             .row.justify-content-start
                                                 each schueler, i in schuelers
                                                     .col-3(style='margin-bottom:0px; border:none !important;')
-                                                        .card.card-default(style='margin-bottom:0px; border:none !important;')
-                                                            input#defaultCheck1.form-check-input(type='checkbox', value='false', checked='false' name='schueler_'+i)
-                                                            input.form-control.invisible(type='text',  name='id_'+i, value= schueler._id)
-                                                            label.form-check-label(for='defaultCheck1')
-                                                            | #{schueler.name} 
+                                                        input#defaultCheck1.form-check-input(type='checkbox', value='false',  name='schueler_'+i)
+                                                        input.form-control.invisible(type='text',  name='id_'+i, value= schueler._id)
+                                                        label.form-check-label(for='defaultCheck1')
+                                                        | #{schueler.name} 
                                     .form-group.col-md-12
                                         br
                                         input#validationServer01.form-control(type='text', placeholder='Titel der Hausarbeit',  required='' name='title')
