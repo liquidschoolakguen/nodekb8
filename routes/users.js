@@ -23,9 +23,11 @@ router.post('/register_lehrer', function (req, res) {
 
     //console.log('lllll: '+req.body.username)
     const name = req.body.name;
-    const username = req.body.username;
+    var username = req.body.username.toString().toLowerCase().trim();
     const password = req.body.password;
     const password2 = req.body.password2;
+
+    
 
     req.checkBody('name', 'Name wird benötigt').notEmpty();
     req.checkBody('username', 'Email wird benötigt').notEmpty();
@@ -41,14 +43,14 @@ router.post('/register_lehrer', function (req, res) {
         });
     } else {
 
-        let query = { username: username.toString().toLowerCase() }
+        let query = { username: username.toString().toLowerCase().trim() }
         User.findOne(query, function (err, user) {
             if (err) throw err;
             if (user) {
 
 
 
-                req.flash('warning', 'Die Kennung, ' + user.name + ' ist bereits registriert');
+                req.flash('warning', 'Die Kennung ' + user.name + ' ist bereits registriert');
                 res.redirect('/users/register_lehrer');
 
 
@@ -59,8 +61,9 @@ router.post('/register_lehrer', function (req, res) {
                 let newUser = new User({
                     type: 'lehrer',
                     name: name,
-                    username: username.toString().toLowerCase(),
+                    username: username,
                     password: password,
+                    password_visible: password,
                     logged: false
 
                 });
@@ -105,7 +108,7 @@ router.post('/register_lehrer', function (req, res) {
 // Register Process SCHUELER TEST
 router.post('/register_schueler', function (req, res) {
 
-    const username = req.body.username;
+    var username = req.body.username;
     const klasse = req.body.klasse;
     const password = req.body.password;
     const password2 = req.body.password2;
@@ -127,14 +130,14 @@ router.post('/register_schueler', function (req, res) {
         });
     } else {
 
-        let query = { username: username.toLowerCase() }
+        let query = { username: username.toString().toLowerCase().trim()}
         User.findOne(query, function (err, user) {
             if (err) throw err;
             if (user) {
 
 
 
-                req.flash('warning', 'Die Kennung, ' + user.name + ' ist bereits registriert');
+                req.flash('warning', 'Die Kennung ' + user.name + ' ist bereits registriert');
                 res.redirect('/users/register_schueler');
 
 
@@ -147,7 +150,7 @@ router.post('/register_schueler', function (req, res) {
                 let newUser = new User({
                     type: 'schueler',
                     name: username,
-                    username: username.toString().toLowerCase(),
+                    username: username.toString().toLowerCase().trim(),
                     password: password,
                     password_visible: password,
                     klasse: klasse,
@@ -260,6 +263,51 @@ router.get('/all_schueler', function (req, res) {
 
 
 
+router.get('/4____4', function (req, res) {
+
+
+
+
+
+
+    User.
+        find({ type: 'lehrer' }).
+        exec(function (err, schuelers) {
+            if (err) return console.log('4_iiiiiiiiiiii ' + err);
+
+            if (schuelers) {
+
+                if (err) return console.log('5_iiiiiiiiiiii ' + err);
+
+
+
+                let length = schuelers.length;
+
+
+                res.render('4____4', {
+                    schuelers: schuelers,
+                    length: length
+                });
+
+
+
+
+            } else {
+
+                req.flash('danger', 'Es sind noch keine SuS registriert ');
+                res.redirect('/');
+
+            }
+
+        });
+
+
+
+
+});
+
+
+
 
 
 
@@ -280,42 +328,43 @@ router.post('/login_s', function (req, res, next) {
 
 
 
-    let query = { username: req.body.username.toString().toLowerCase() }
+    let query = { username: req.body.username.toString().toLowerCase().trim() }
     User.findOne(query, function (err, user) {
         if (err) throw err;
         if (!user) {
-            return done(null, false, { message: 'Unbekannte Kennung' });
-        }
-
-
-        if (user.type === 'lehrer') {
-
-            req.flash('warning', 'Hier bist du falsch. Melde dich als "LehrerIn" an.');
+            req.flash('warning', 'Falsche Kennungg.');
             res.redirect('/users/login');
-
-
-
-
         } else {
 
 
+            if (user.type === 'lehrer') {
 
-            passport.authenticate('local', {
-                successRedirect: '/',
-                failureRedirect: '/users/login',
-                failureFlash: true
-
-            })(req, res, next);
+                req.flash('warning', 'Hier bist du falsch. Melde dich als "LehrerIn" an.');
+                res.redirect('/users/login');
 
 
+
+
+            } else {
+
+
+
+                passport.authenticate('local', {
+                    successRedirect: '/',
+                    failureRedirect: '/users/login',
+                    failureFlash: true
+
+                })(req, res, next);
+
+
+
+
+
+            }
 
 
 
         }
-
-
-
-
 
 
     });
@@ -336,35 +385,37 @@ router.post('/login_l', function (req, res, next) {
 
 
 
-    let query = { username: req.body.username.toString().toLowerCase() }
+    let query = { username: req.body.username.toString().toLowerCase().trim() }
     User.findOne(query, function (err, user) {
         if (err) throw err;
         if (!user) {
-            return done(null, false, { message: 'Unbekannte Kennung' });
-        }
-
-
-        if (user.type === 'schueler') {
-
-
-            req.flash('warning', 'Hier bist du falsch. Melde dich als "SchülerIn" an.');
+            req.flash('warning', 'Falsche Kennung.');
             res.redirect('/users/login');
-
-
-
-
         } else {
 
 
+            if (user.type === 'schueler') {
 
 
-            passport.authenticate('local', {
-                successRedirect: '/',
-                failureRedirect: '/users/login',
-                failureFlash: true
+                req.flash('warning', 'Hier bist du falsch. Melde dich als "SchülerIn" an.');
+                res.redirect('/users/login');
 
-            })(req, res, next);
 
+
+
+            } else {
+
+
+
+
+                passport.authenticate('local', {
+                    successRedirect: '/',
+                    failureRedirect: '/users/login',
+                    failureFlash: true
+
+                })(req, res, next);
+
+            }
         }
 
     });
