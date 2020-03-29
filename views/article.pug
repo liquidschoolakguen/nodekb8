@@ -6,23 +6,29 @@ block content
         .container.padding_null
             .row.h-100.d-flex.justify-content-center
                 .col-12
-                    .card.border.border-success
+                    .card.border
                         .card-header
                             ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                                 li.nav-item
-                                    a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{article.klasse}  |  #{article.fach}  |  #{article.lehrer.name}
+                                    a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{article.klasse} #{article.shadow_klasse} |  #{article.fach}  |  #{article.lehrer.name}
                         .card-body.padding_null
                             .tab-content.mt-3.my-min-height
-                                if article.schuelers
-                                    .container-fluid
-                                        .row.justify-content-start.my-margin-bottom
+                                p.card-text
+                                    .col-md-12
+                                        if article.schuelers
                                             each schueler, i in article.schuelers
-                                                .col-md-2.col-12.my-margin-bottom
-                                                    a.btn.btn-outline-primary.btn-block(href='/articles/schueler/' +schueler._id, role='button')  #{schueler.name}
+                                                if i == 0
+                                                    .box
+                                                        a(href='/articles/schueler/' +schueler._id, role='button')  #{schueler.name}&nbsp;
+                                                else
+                                                    .box
+                                                        a(href='/articles/schueler/' +schueler._id, role='button') | #{schueler.name}&nbsp;
                                 #description.tab-pane.active(role='tabpanel')
                                     p.card-text
                                         .col-md-12
-                                            h5.color-red Abgabefrist: #{article.termin} 
+                                            h5.box-right.color-red Abgabefrist: #{article.termin}
+                                            div(style='clear:both;')        
+                                            br   
                                             h5#invisible #{x}
                                             h6#hier-kommt-was-rein
                             if user

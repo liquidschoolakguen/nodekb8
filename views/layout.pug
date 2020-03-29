@@ -14,11 +14,12 @@ html
             .navbar-collapse.collapse.w-100.order-1.order-md-0.dual-collapse2
                 ul.navbar-nav.mr-auto
                     if user
-                        li
-                            .led-green-main
                         if user.type == 'lehrer' 
                             li.nav-item.active
-                                a.nav-link(href='/') #{user.name}s Aufträge
+                                .box
+                                    .led-green-main
+                                .box.active   
+                                    a.nav-link(href='/') #{user.name}s Aufträge
                             li.nav-item
                                 a.nav-link(href='/index_all') Alle Aufträge
                             li.nav-item
@@ -27,10 +28,13 @@ html
                                 a.nav-link(href='/articles/add_article_klasse') | Neuer Auftrag +        
                         else
                             li.nav-item.active
-                                a.nav-link(href='/') #{user.name}                      
-                            li.nav-item
-                                p.white
-                                    | #{user.money} 
+                                .box
+                                    .led-green-main
+                                .box.active  
+                                    a.nav-link(href='/') #{user.name}                     
+                                .box 
+                                    p.white
+                                        | #{user.money} 
                     else 
                         li.nav-item
                             a.nav-link(href='/')| Home

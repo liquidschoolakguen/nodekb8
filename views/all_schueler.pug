@@ -9,10 +9,7 @@ block content
           .card-body
             blockquote.blockquote.mb-0
               p
-                | Wie Ihr längst wisst, bleibt die Schule zur Zeit wegen von Ansteckungsgefahr geschlossen. Und wir, eure Lehrerinnen und Lehrer können uns gut vorstellen, dass euch das vielleicht etwas beunruhigt aber andererseits auch ein wenig freut.  
-              p
-                | Wir haben uns überlegt, was wir tun können um euch zu zeigen, dass schon bald alles wie immer sein wird. Und wir kamen auf folgende Idee: Hausaufgaben. Schöne, lange, schwere Hausaufgaben. :)
-              footer.blockquote-footer Herr Akgün
+                |  :)
     else      
       if user.type === 'lehrer'
         .container.padding_null
@@ -48,7 +45,7 @@ block content
                                         path(fill-rule='evenodd', d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 100-6 3 3 0 000 6z', clip-rule='evenodd')                                
                                   td.align-middle 
                                     .box
-                                    | "#{schueler.name}" | "#{schueler.password_visible}"  
+                                    | "#{schueler.username}" | "#{schueler.password_visible}"  
                                   td.align-middle
                                     | #{schueler.money} $                                  
                         else

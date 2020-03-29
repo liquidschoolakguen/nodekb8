@@ -194,6 +194,7 @@ router.get('/edit/:id', ensureAuthenticated, function (req, res) {
             ]
 
           }).
+          sort({name:1}).
           exec(function (err2, all_schuelers) {
             if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 

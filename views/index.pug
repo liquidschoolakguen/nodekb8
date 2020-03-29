@@ -57,6 +57,9 @@ block content
                                       .font-weight-bold.text-white
                                         | #{my_article.ha_gruen}
                                   td.align-middle
+                                    if my_article.schuelers.length == 0 && !my_article.klasse
+                                      .box.italic
+                                        | * niemanden ausgewählt
                                     each schueler, i in my_article.schuelers
                                       if i == 0
                                         .box

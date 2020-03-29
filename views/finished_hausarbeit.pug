@@ -10,7 +10,7 @@ block content
                     .card-header
                         ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                             li.nav-item
-                                a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{hausarbeit.article.klasse} - #{hausarbeit.article.fach} - #{hausarbeit.article.created}
+                                a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{hausarbeit.article.klasse} #{hausarbeit.article.shadow_klasse}  | #{hausarbeit.article.fach} | #{hausarbeit.article.created}
                     .card-body.padding_null
                         .tab-content.mt-3.my-min-height
                             #description.tab-pane.active(role='tabpanel')
@@ -32,7 +32,6 @@ block content
                             #description.tab-pane.active(role='tabpanel')
                                 p.card-text
                                     .col-md-12
-                                        h5.color-red Bitte bis #{hausarbeit.article.termin} abgeben.
                                         h5#invisible2 #{hausarbeit.body}
                                         h6#hier-kommt-was-rein2
                                         p
@@ -55,29 +54,29 @@ block content
                                 | Du kannst zu jeder Hausarbeit einen "Lehrerkommentar", ein "ok", eine "Note" oder 0 - 5 "PauliDollar" (Leistungspunkte) bekommen. 
                             p.card-text
                                 | Was du davon bekommst, entscheidet die Lehrkraft. Wie viele Dollar du insgesammt gesammelt hast, siehst du oben links, neben deinem Namen.
+                            .card.bg-primary.text-white.my-margin-bottom-big.my-min-height
+                                .card-body.text-center
+                                    p.card-text Lehrerkommentar
+                                    if hausarbeit.ergebnis_text != ''
+                                        p.card-text.norm2 "#{hausarbeit.ergebnis_text}"
+                                    else
+                                        p.card-text.kursiv (Die Lehrkraft hat keinen Kommentar zu deiner Hausarbeit geschrieben.)
                             .card-deck
-                                .card.bg-primary.text-white
-                                    .card-body.text-center
-                                        p.card-text Lehrerkommentar
-                                        if hausarbeit.ergebnis_text != ''
-                                            p.card-text.norm2 "#{hausarbeit.ergebnis_text}"
-                                        else
-                                            p.card-text.kursiv (Die Lehrkraft hat keinen Kommentar zu deiner Hausarbeit geschrieben.)
-                                .card.bg-warning
+                                .card.bg-warning.my-min-height
                                     .card-body.text-center
                                         p.card-text Arbeit ok?
                                         if hausarbeit.ergebnis_ok != 'keine Auswahl'
                                             p.card-text.norm #{hausarbeit.ergebnis_ok}
                                         else
                                             p.card-text.kursiv (Es wurde kein "ok" oder "nicht ok" für deine Hausarbeit gegeben)
-                                .card.bg-danger.text-white
+                                .card.bg-danger.text-white.my-min-height
                                     .card-body.text-center
                                         p.card-text Note
                                         if hausarbeit.ergebnis_note != 'keine Auswahl'
                                             p.card-text.norm #{hausarbeit.ergebnis_note}
                                         else
                                             p.card-text.kursiv (Es wurde keine Note für deine Hausarbeit gegeben)
-                                .card.bg-success.text-white
+                                .card.bg-success.text-white.my-min-height
                                     .card-body.text-center
                                         p.card-text PauliDollar
                                         if hausarbeit.ergebnis_dollar != 'keine Auswahl'

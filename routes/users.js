@@ -332,7 +332,7 @@ router.post('/login_s', function (req, res, next) {
     User.findOne(query, function (err, user) {
         if (err) throw err;
         if (!user) {
-            req.flash('warning', 'Falsche Kennungg.');
+            req.flash('warning', 'Falsche Kennung');
             res.redirect('/users/login');
         } else {
 
