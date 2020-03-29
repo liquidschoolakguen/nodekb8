@@ -533,7 +533,18 @@ router.get('/finished_hausarbeit/:id', ensureAuthenticated, function (req, res) 
         { schueler: req.user._id }
       ]
     }).
-    populate('article').
+    populate({
+      path: 'article',
+      populate: {
+        path: 'lehrer',
+        model: 'User'
+
+
+      }
+
+
+    }).
+    populate('schueler').
     exec(function (err, ha) {
       if (err) return console.log('7_iiiiiiiiiiii ' + err);
 
@@ -1445,7 +1456,7 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
 
         const start = new Date();
 
-        var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '.' + ', ' + ("00" + start.getHours()).slice(-2) + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+        var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
 
         article.created = nau;
 
@@ -1723,7 +1734,7 @@ router.post("/add_hausarbeit", upload.single("file" /* name attribute of <file> 
           hausarbeit.reflexion_text = req.body.reflexion_text;
 
           const start = new Date();
-          var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '.' + ', ' + ("00" + start.getHours()).slice(-2) + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+          var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
 
           hausarbeit.created = nau;
 
@@ -1826,6 +1837,16 @@ router.post('/edit_hausarbeit/:id', function (req, res) {
   hausarbeit.reflexion_schwer = req.body.reflexion_schwer;
   hausarbeit.reflexion_zeit = req.body.reflexion_zeit;
   hausarbeit.reflexion_text = req.body.reflexion_text;
+
+
+
+  const start = new Date();
+  var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+
+  hausarbeit.created = nau;
+
+
+
 
 
 
@@ -2660,7 +2681,7 @@ router.post('/edit/:id', function (req, res) {
 
 
 
-            var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '.' + ', ' + ("00" + start.getHours()).slice(-2) + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+            var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' +  start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
 
 
             article.created = nau;
@@ -2733,7 +2754,7 @@ router.post('/edit/:id', function (req, res) {
 
 
 
-        var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '.' + ', ' + ("00" + start.getHours()).slice(-2) + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+        var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' +  start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
 
 
         article.created = nau;

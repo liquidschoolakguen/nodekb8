@@ -6,7 +6,7 @@ block content
     .container.padding_null
         .row.h-100.d-flex.justify-content-center
             .col-12
-                .card.border.border-success
+                .card.border
                     .card-header
                         ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                             li.nav-item
@@ -15,14 +15,21 @@ block content
                         .tab-content.mt-3.my-min-height
                             #description.tab-pane.active(role='tabpanel')
                                 p.card-text
-                                    .col-md-12
-                                        h5.color-red Bitte bis #{hausarbeit.article.termin} abgeben.
-                                        h5#invisible #{hausarbeit.article.body}
-                                        h6#hier-kommt-was-rein
+                                        .col-md-12
+                                            div(style='clear:both;') 
+                                            h5 #{hausarbeit.article.title}
+                                            div(style='clear:both;')                
+                                            h7.box-right.color-red Abgabefrist: #{hausarbeit.article.termin}
+                                            div(style='clear:both;')        
+                                            hr
+                                            br 
+                                            br   
+                                            h5#invisible #{hausarbeit.article.body}
+                                            h6#hier-kommt-was-rein
     .container.padding_null
         .row.h-100.d-flex.justify-content-center
             .col-12
-                .card.border.border-success
+                .card.border
                     .card-header
                         ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                             li.nav-item
@@ -32,17 +39,27 @@ block content
                             #description.tab-pane.active(role='tabpanel')
                                 p.card-text
                                     .col-md-12
-                                        h5.color-red Bitte bis #{hausarbeit.article.termin} abgeben.
                                         h5#invisible2 #{hausarbeit.body}
                                         h6#hier-kommt-was-rein2
-                                        p
-                                            | Hilfe? #{hausarbeit.reflexion_hilfe}
-                                        p    
-                                            | schwer? #{hausarbeit.reflexion_schwer}
-                                        p
-                                            | genug Zeit? #{hausarbeit.reflexion_zeit}
-                                        p
-                                            | Was noch? #{hausarbeit.reflexion_text}
+                                        hr
+                                        .card-deck
+                                            .card.btn-outline-warning.border-warning
+                                                .card-body.text-center
+                                                    p.card-text Hilfe gehabt?
+                                                    p.card-text "#{hausarbeit.reflexion_hilfe}"
+                                            .card.btn-outline-danger.my-min-height.border-danger
+                                                .card-body.text-center
+                                                    p.card-text War es schwer?
+                                                    p.card-text "#{hausarbeit.reflexion_schwer}"
+                                            .card.btn-outline-success.my-min-height.border-success
+                                                .card-body.text-center
+                                                    p.card-text Genug Zeit gehabt?
+                                                    p.card-text "#{hausarbeit.reflexion_zeit}"
+                                            if  hausarbeit.reflexion_text
+                                                .card.btn-outline-primary.my-min-height.border-primary
+                                                    .card-body.text-center
+                                                        p.card-text Kommentar:
+                                                        p.card-text "#{hausarbeit.reflexion_text}"  
     .container.padding_null
         .row.h-100.d-flex.justify-content-center
             .col-12

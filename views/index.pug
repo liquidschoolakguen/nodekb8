@@ -149,17 +149,22 @@ block content
                             tbody
                               each my_article, i in my_articles
                                 tr
-                                  td.align-middle 
-                                    .montainer
-                                      | #{my_article.klasse} - #{my_article.fach}
-                                    .montainer
-                                      .left-element
-                                        | #{my_article.lehrer.name}
-                                  td.align-middle
-                                    .montainer
-                                      | #{my_article.title}
-                                    .montainer
-                                      | #{my_article.created}                                  
+                                  td 
+                                    if my_article.klasse
+                                      .box
+                                        | #{my_article.klasse} |
+                                    else 
+                                      .box.text-primary
+                                        | Sonderaufgabe |
+                                    .box
+                                      | &nbsp;#{my_article.fach} |
+                                    .box
+                                      | &nbsp;#{my_article.lehrer.name} |
+                                  td 
+                                    .box
+                                      | #{my_article.title} |
+                                    .box
+                                        strong &nbsp;#{my_article.termin}                                  
                                   td.align-middle
                                     if (user.type == 'schueler' && my_article.schueler_token == '1')
                                       a.btn.btn-outline-warning(href="/articles/edit_hausarbeit/"+my_article._id, role='button')
