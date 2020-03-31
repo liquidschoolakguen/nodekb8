@@ -181,7 +181,10 @@ $(document).ready(function () {
 				"next": "vor"
 			  }
 		  },
-		  
+		  "paging": false,
+
+		  "bSort" : false
+	
 		
 
 	});
@@ -341,4 +344,7 @@ function open_new_window(link) {
 }
 
 
+
+// date picker
+$('.datepicker').pickadate();
 

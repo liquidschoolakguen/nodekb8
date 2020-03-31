@@ -56,7 +56,7 @@ router.get('/add', ensureAuthenticated, function (req, res) {
 
 
 
-  res.render('add_article', {
+  res.render('add_article_alt', {
     title: 'Add Articles',
     abgabe: nau
   })
@@ -1450,6 +1450,7 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
         article.lehrer = req.user._id;
         article.ha_gelb = '0';
         article.ha_gruen = '0'
+        article.created_as_date= new Date();
 
         console.log('klaas:  ' + req.body.klaas)
 
@@ -1649,7 +1650,7 @@ router.post("/add_alt", upload.single("file" /* name attribute of <file> element
         article.lehrer = req.user._id;
         article.ha_gelb = '0';
         article.ha_gruen = '0'
-
+        article.created_as_date= new Date();
 
         const start = new Date();
         var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';

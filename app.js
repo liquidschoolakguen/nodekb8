@@ -269,14 +269,14 @@ app.get('/', function (req, res) {
           find({ author: req.user._id }).
           populate('lehrer').
           populate('schuelers').
+          sort({created_as_date: -1}).
           exec(function (err2, my_articles) {
             if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
             var length = my_articles.length;
 
             res.render('index', {
-              title: 'Articles',
-              my_articles: my_articles.reverse(),
+              my_articles: my_articles,
               length: length
 
             });
@@ -296,26 +296,33 @@ app.get('/', function (req, res) {
         Article.
           find({
             $or: [
-              { klasse: user.klasse },
-              { klasse: user.klasse2 }
+
+                { $or: [{ klasse: user.klasse },{ klasse: user.klasse2 }]},
+                { schuelers: user }
+
             ]
+
+
+           
 
 
           }).
           populate('lehrer').
+          populate('schuelers').
+          sort({created_as_date: -1}).
           exec(function (err2, my_articles) {
             if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
             var length = my_articles.length;
 
 
-
+            //////////////////////7 gggg6g7
             Hausarbeit.
               find({ schueler: req.user._id }).
               populate('article').
               exec(function (err, hausarbeits) {
                 if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
-                //console.log('kkk')
+               
 
                 //console.log('-------------------------------------')
                 my_articles.forEach(function (my_article) {
@@ -345,70 +352,26 @@ app.get('/', function (req, res) {
 
 
 
+/*                     my_articles.sort(function(a,b){
+   
+                      return new Date(b.created_as_date) - new Date(a.created_as_date);
+                    });
+ */
 
 
 
+                    console.log('-------------------------------------');
+                    my_articles.forEach(function (my) {
 
+                        console.log('created:  '+my.created+ ' |  title:  '+my.title+ ' |  create_as_date  '+my.created_as_date)
 
-
-                Article.
-                find({schuelers: user}).
-                populate('lehrer').
-                exec(function (err2, my_articles_neu) {
-                  if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-      
-                  var length_neu = my_articles_neu.length;
-      
-      
-      
-                  Hausarbeit.
-                    find({ schueler: req.user._id }).
-                    populate('article').
-                    exec(function (err, hausarbeits) {
-                      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
-                      //console.log('kkk')
-      
-                      //console.log('-------------------------------------')
-                      my_articles_neu.forEach(function (my_article) {
-                        // console.log(my_article);
-      
-                        my_article.schueler_token = '0';
-      
-                        hausarbeits.forEach(function (hausarbeit) {
-                          // console.log(hausarbeit);
-      
-                          if (my_article._id.toString() === hausarbeit.article._id.toString()) {
-      
-                            // console.log('---------------'+my_article.id);
-                            // console.log('---------------'+hausarbeit.article._id);
-                            // console.log('---------------');
-                            // console.log('---------------');
-                            // console.log('---------------');
-      
-                            my_article.schueler_token = hausarbeit.status;
-      
-                          }
-                        });
-                      });
-      
-
-
-
-
-
-
-                      var my_articles_zusammen = my_articles.concat(my_articles_neu);
-
-                      var length_zusammen =length + length_neu;
-
-
-
+                    })
 
 
                       res.render('index', {
-                        title: 'Articles',
-                        my_articles: my_articles_zusammen.reverse(),
-                        length: length_zusammen
+
+                        my_articles: my_articles,
+                        length: length
       
                       });
 
@@ -419,7 +382,7 @@ app.get('/', function (req, res) {
                    
                     });
       
-                });
+               
 
 
 
@@ -439,7 +402,7 @@ app.get('/', function (req, res) {
 
 
 
-              });
+              
 
           });
 

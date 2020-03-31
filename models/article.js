@@ -47,6 +47,11 @@ let articleSchema = mongoose.Schema({
     },
 
 
+    created_as_date: {
+        type:Date,
+        required:false,
+        default: '2020-01-01'
+    },
 
     schueler_token: {
         type:String,
