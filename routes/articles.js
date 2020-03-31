@@ -884,7 +884,7 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
 
   const start = new Date();
 
-  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.'
+  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + start.getFullYear() 
 
 
   console.log('req.body.klasse: ' + req.body.klasse);
