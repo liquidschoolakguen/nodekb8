@@ -1445,6 +1445,9 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
         article.shadow_klasse = req.body.klaas;
         /////////////////////////////////////////////////////////!!!!!
         article.fach = req.body.fach;
+
+        console.log('datePicker ' + req.body.termin);
+
         article.termin = req.body.termin;
         article.body = req.body.body;
         article.lehrer = req.user._id;
