@@ -1,0 +1,18 @@
+extends layout
+
+block content
+            form#reused_form.montform(method='POST',  action='/users/edit/' + usa._id)
+                .card.border.border-success
+                    .card-header.bg-success.text-white
+                        | Username ändern
+                    .card-body
+                        #form-transition-group.my-margin-top
+                                .form-row
+                                    .form-group.col-md-12
+                                        input#validationServer01.form-control(type='text', placeholder='Username',  required='',  name='username', value=usa.username)
+                                        .valid-feedback
+                                    
+                                input.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Ok')
+            script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+            script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+            script(src='/js/add_article.js')  

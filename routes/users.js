@@ -332,7 +332,7 @@ router.post('/login_s', function (req, res, next) {
     User.findOne(query, function (err, user) {
         if (err) throw err;
         if (!user) {
-            req.flash('warning', 'Falsche Kennung');
+            req.flash('warning', 'Falsche Kennung.');
             res.redirect('/users/login');
         } else {
 
@@ -648,6 +648,120 @@ router.delete('/:id', function (req, res) {
 
 
 
+
+
+
+// Edit article form
+router.get('/edit/:id', ensureAuthenticated, function (req, res) {
+
+
+  
+    User.
+      findOne({ _id: req.params.id }).
+      exec(function (err2, usa) {
+        if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+  
+  
+          console.log('NEU');
+  
+  
+
+         
+  
+            
+  
+                res.render('edit_user', {
+                  usa: usa,
+                 
+                });
+  
+  
+           
+  
+          
+  
+       
+  
+      });
+  
+  });
+
+
+
+
+
+
+
+
+
+  router.post('/edit/:id', function (req, res) {
+
+
+
+
+
+        console.log('ALT');
+  
+  
+  
+        let query = { _id: req.params.id }
+  
+  
+     
+  
+  
+  
+          let user = {};
+          user.username = req.body.username;
+         
+  
+  
+          User.update(query, user, function (err) {
+            if (err) {
+              console.log(err);
+              return;
+            } else {
+              req.flash('success', 'User geändert');
+              res.redirect('/users/4____4');
+            }
+          })
+  
+      
+  
+  
+  
+  
+  
+  
+  
+      
+  
+  
+  
+  });
+  
+
+
+
+
+
+
+
+
+
+
+// Access Control
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    } else {
+      req.flash('danger', 'Please login');
+      res.redirect('/users/login');
+    }
+  
+  }
+  
+  
 
 
 

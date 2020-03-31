@@ -44,7 +44,7 @@ block content
                                     .box
                                     | "#{schueler.username}" | "#{schueler.name}" | "#{schueler.password_visible}"  
                                   td.align-middle
-                                    | #{schueler.type}                                  
+                                    a.btn.btn-success.text-white.button-margin(href='/users/edit/'+ schueler._id) bearbeiten                                
                         else
                           h64.my-margin-right-boy Noch hat kein SoS den Auftrag bearbeitet
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
