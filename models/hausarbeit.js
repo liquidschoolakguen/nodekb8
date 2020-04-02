@@ -84,10 +84,23 @@ let hausarbeitSchema = mongoose.Schema({
         type: String,
         required: false
 
-    }
+    },
 
 
 
+    nachbessern_text: {
+
+        type: String,
+        required: false
+
+    },
+
+    nachbessern_option: {
+
+        type: String,
+        required: false
+
+    },
 
 
 

@@ -60,27 +60,29 @@ block content
                                                     .card-body.text-center
                                                         p.card-text Kommentar:
                                                         p.card-text "#{hausarbeit.reflexion_text}"  
-    .container.padding_null
+    .container
         .row.h-100.d-flex.justify-content-center
-            .col-12
-                .card.border.border-success
+            .col-12.col-sm-12.col-md-12.col-lg-12
+                .card.border
                     .card-header
                         ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                             li.nav-item
-                                a.nav-link.active(href='#description2', role='tab', aria-controls='description2', aria-selected='true') Korrektur und Beurteilung
-                    .card-body.padding_null
-                            #description2.tab-pane.active(role='tabpanel')
-                                p.card-text
-                                    .col-md-12
+                                a.nav-link.active(href='#description_x', role='tab', aria-controls='description_x', aria-selected='true') Korrektur & Beurteilung
+                            li.nav-item
+                                a.nav-link(href='#history_x', role='tab', aria-controls='history_x', aria-selected='false') HA zum Nachbessern zurückgeben
+                    .card-body
+                            .tab-content.mt-3
+                                #description_x.tab-pane.active(role='tabpanel')
+                                    p.card-text                        
                                         form#reused_form.montform(method='POST' action='/articles/korrektur_hausarbeit/'+hausarbeit._id)
                                             #form-transition-group.my-margin-top
                                                 .form-row
                                                     input.form-control.invisible(type='text', placeholder='hausaufgabeId',  name='hausaufgabe_id', value= hausarbeit._id)
                                                 .form-row
-                                                    textarea#area3.form-control.is-valid(name='ergebnis_text', type=text, placeholder='Kommentar zur Hausaufgabe von ' + hausarbeit.schueler.name + ' \(optional\)')
-                                                .form-row.my-margin-top
+                                                    textarea#area3.form-control(name='ergebnis_text', type=text, placeholder='Kommentar zur Hausaufgabe von ' + hausarbeit.schueler.name + ' \(optional\)')
+                                                .form-row.my-margin-top-big
                                                     .form-group.col-md-4 
-                                                        label Ist die Arbeit ok?                                 
+                                                        h6  Ist die Arbeit ok?                                 
                                                         select#validationServer01.form-control.custom-select.form-control(name='ergebnis_ok', type=text,  required='', placeholder='Arbeit ok')
                                                             option(selected='') keine Auswahl
                                                             option keine Auswahl
@@ -88,7 +90,7 @@ block content
                                                             option nicht OK
                                                         .valid-feedback                                          
                                                     .form-group.col-md-4 
-                                                        label Weche Note verdient #{hausarbeit.schueler.name} (optional)?                                
+                                                        h6 Weche Note verdient #{hausarbeit.schueler.name} (optional)?                                
                                                         select#validationServer01.form-control.custom-select.form-control(name='ergebnis_note', type=text,  required='', placeholder='Weche Note verdient')
                                                             option(selected='') keine Auswahl
                                                             option keine Auswahl
@@ -109,7 +111,7 @@ block content
                                                             option 5
                                                             option 6
                                                     .form-group.col-md-4 
-                                                        label Wie viele "PauliDollar" (Leistungspunkte)?                                
+                                                        h6  Wie viele "PauliDollar" (Leistungspunkte)?                                
                                                         select#validationServer01.form-control.custom-select.form-control(name='ergebnis_dollar', type=text,  required='',  placeholder='Wie viele "PauliDollar')
                                                             option(selected='') keine Auswahl
                                                             option keine Auswahl
@@ -117,14 +119,36 @@ block content
                                                             option 2
                                                             option 3
                                                             option 4
-                                                            option 5                                             
+                                                            option 5
+                                                br                                              
                                                 input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right.my-margin-bottom(type='submit', value='Korrektur abschicken')
                                                 p.my-margin-top.bold-green
-                                                    | Wenn du die Korrektur abschickst, kannst du sie nicht mehr ändern.
+                                                    | Wenn du die Korrektur abschickst, kannst du sie nicht mehr ändern.                         
+                                #history_x.tab-pane(role='tabpanel', aria-labelledby='history_x-tab')
+                                    p.card-text
+                                        form#reused_form.montform(method='POST' action='/articles/rueckgabe_hausarbeit/'+hausarbeit._id)
+                                            #form-transition-group.my-margin-top
+                                                .form-row
+                                                    input.form-control.invisible(type='text', placeholder='hausaufgabeId',  name='hausaufgabe_id', value= hausarbeit._id)
+                                                .form-row
+                                                    textarea#area3.form-control(name='nachbessern_text', type=text, placeholder='Warum soll ' + hausarbeit.schueler.name + ' ihre Arbeit nachbessern? \(optional\)')
+                                                .form-row.my-margin-top
+                                                    .form-group.col-md-12
+                                                        h6  Warum die Arbeit nachgebessert werden soll (optional)                               
+                                                        select#validationServer01.form-control.custom-select.form-control(name='nachbessern_option', type=text,  placeholder='Arbeit ok',  required='')
+                                                            option(selected='')
+                                                            option keine Auswahl
+                                                            option Deine Arbeit hat zu viele Fehler
+                                                            option Auf deinen Fotos kann man nicht genug erkennen / 
+                                                            option Deine Arbeit ist nicht sorgfältig genug
+                                                            option Deine Arbeit ist unvollständig oder zu kurz
+                                                            option Du hast offentsichtlich abgeschrieben
+                                                            option Du hast die Anweisungen nicht befolgt
+                                                            option Deine Arbeit ist leer
 
-        script(src='/js/nic_edit.js')
-        script(type='text/javascript').
-        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
-        script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
-        script(src='/js/article.js')
-        script(src='/js/article2.js')                                                   
+                                                input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right.my-margin-bottom(type='submit', value='Nachbesserungsaufforderung abschicken')
+                                                p.my-margin-top.bold-green
+                                                    | Wenn du die Aufforderung zur Nachbesserung abschickst, kannst du sie nicht mehr ändern. 
+            script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+            script(src='/bower_components/bootstrap/dist/js/bootstrap.js')  
+            script(src='/js/log_reg.js')                                             

@@ -37,18 +37,8 @@ html
                     else
             .mx-auto.order-0
                 a.navbar-brand.mx-auto(href='/') Liquidschool
-                button.navbar-toggler(type='button', data-toggle='collapse', data-target='.dual-collapse2')
-                    span.navbar-toggler-icon
             .navbar-collapse.collapse.w-100.order-3.dual-collapse2
                 ul.navbar-nav.ml-auto
-                    if user
-                        li  
-                            a.nav-link(href='/users/logout/'  + user._id) Abmelden
-                    else
-                        li.nav-item
-                            a.nav-link.text-primary(href='/users/register_schueler') Registrierung für Schüler*innen
-                        li.nav-item
-                            a.nav-link.active(href='/users/login') Anmelden
         .container_x               
             .container
                         != messages('message', locals)

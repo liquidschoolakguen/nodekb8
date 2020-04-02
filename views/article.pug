@@ -28,8 +28,11 @@ block content
                                         .col-md-12
                                             div(style='clear:both;') 
                                             h5 #{article.title}
-                                            div(style='clear:both;')                
-                                            h7.box-right.color-red Abgabefrist: #{article.termin}
+                                            div(style='clear:both;')
+                                            if article.termin  != 'abgelaufen'         
+                                                h7.box-right.color-red #{article.termin} müssen alle Hausarbeiten abgegeben werden
+                                            else
+                                                h7.box-right.color-red #{article.termin} 
                                             div(style='clear:both;')        
                                             hr
                                             br 
@@ -41,7 +44,7 @@ block content
                                     a.btn.btn-success.text-white.button-margin(href='/articles/edit/'+ article._id) bearbeiten
                                     a.btn.btn-danger.delete-article.text-white.button-margin(href='#', data-id=article._id) löschen
         if user
-            if user.type == 'schueler'
+            if user.type == 'schueler' && article.termin  != 'abgelaufen'
                 .container.padding_null
                     .row.h-100.d-flex.justify-content-center
                         .col-12

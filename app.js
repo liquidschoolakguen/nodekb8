@@ -245,7 +245,7 @@ app.get('/', function (req, res) {
   } else {
 
 
-
+    console.log('lehrer+:::   ' + req.user._id)
 
 
 
@@ -269,17 +269,218 @@ app.get('/', function (req, res) {
           find({ author: req.user._id }).
           populate('lehrer').
           populate('schuelers').
-          sort({created_as_date: -1}).
+          sort({ created_as_date: -1 }).
           exec(function (err2, my_articles) {
             if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
             var length = my_articles.length;
 
-            res.render('index', {
-              my_articles: my_articles,
-              length: length
 
-            });
+            var jo = []
+
+
+
+
+            my_articles.forEach(function (o) {
+
+              jo.push(o._id)
+
+
+            }); // jo hält die ids der articles
+
+
+
+
+            Hausarbeit.find().where('article').in(jo).exec((err, has) => {
+
+              // Hausarbeit.
+              //   find().
+              //    exec(function (err, has) {
+
+
+
+
+
+              my_articles.forEach(function (my_article) {
+
+
+
+
+
+
+                // console.log(my_article);
+                console.log('my_article.termin:     ' + my_article.termin);
+                var tag = my_article.termin.substring(0, 2)
+                var monat = my_article.termin.substring(3, 5)
+                var jahr = my_article.termin.substring(6, 10)
+
+                console.log('tag:     ' + tag);
+                console.log('monat:   ' + monat);
+                console.log('jahr:    ' + jahr);
+
+                var termin = new Date(jahr, monat - 1, tag, 16);
+
+                console.log('termin:    ' + termin);
+                var jetzt = new Date();
+                console.log('jeks:    ' + jetzt);
+
+
+
+
+
+
+
+
+
+                // To calculate the time difference of two dates 
+                var Difference_In_Time = termin.getTime() - jetzt.getTime();
+
+                // To calculate the no. of days between two dates 
+                var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+                console.log('  ');
+                console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + my_article.title);
+
+                console.log('Total number of days between dates   ' + Difference_In_Days);
+
+
+
+
+                if (Difference_In_Days >= 0) {
+
+                  if (jetzt.getFullYear() === termin.getFullYear() &&
+                    jetzt.getMonth() === termin.getMonth() &&
+                    jetzt.getDate() === termin.getDate()) {
+
+                    my_article.termin = 'heute 16 Uhr'
+                  }
+                  if (jetzt.getFullYear() === termin.getFullYear() &&
+                    jetzt.getMonth() === termin.getMonth() &&
+                    jetzt.getDate() + 1 === termin.getDate()) {
+
+                    my_article.termin = 'morgen 16 Uhr'
+                  }
+                  if (jetzt.getFullYear() === termin.getFullYear() &&
+                    jetzt.getMonth() === termin.getMonth() &&
+                    jetzt.getDate() + 2 === termin.getDate()) {
+
+                    my_article.termin = 'übermorgen'
+                  }
+
+                  if (jetzt.getFullYear() === termin.getFullYear() &&
+                    jetzt.getMonth() === termin.getMonth() &&
+                    jetzt.getDate() + 3 === termin.getDate()) {
+
+                    my_article.termin = 'in 3 Tagen'
+                  }
+
+                  if (jetzt.getFullYear() === termin.getFullYear() &&
+                    jetzt.getMonth() === termin.getMonth() &&
+                    jetzt.getDate() + 4 === termin.getDate()) {
+
+                    my_article.termin = 'in 4 Tagen'
+                  }
+                  if (jetzt.getFullYear() === termin.getFullYear() &&
+                    jetzt.getMonth() === termin.getMonth() &&
+                    jetzt.getDate() + 5 === termin.getDate()) {
+
+                    my_article.termin = 'in 5 Tagen'
+                  }
+                  if (jetzt.getFullYear() === termin.getFullYear() &&
+                    jetzt.getMonth() === termin.getMonth() &&
+                    jetzt.getDate() + 6 === termin.getDate()) {
+
+                    my_article.termin = 'in 6 Tagen'
+                  }
+
+
+
+
+
+                } else {
+                  ///Termin vorüber
+                  my_article.termin = 'abgelaufen'
+
+                }
+
+
+
+
+
+
+
+
+
+
+
+                my_article.ha_gruen = '0'
+                my_article.ha_gelb = '0'
+                my_article.ha_grau = '0'
+                var inte_gelb = parseInt(my_article.ha_gelb)
+                var inte_gruen = parseInt(my_article.ha_gruen);
+                var inte_grau = parseInt(my_article.ha_grau);
+
+                has.forEach(function (ha) {
+
+                  if (ha.article._id.toString() === my_article._id.toString()) {
+
+                    console.log('pppp:    ' + my_article.title);
+
+                    if (ha.status === '1') {
+                      inte_gelb += 1;
+
+                    } else if (ha.status === '2') {
+                      inte_gruen += 1;
+                    } else if (ha.status === '3') {
+                      inte_grau += 1;
+                    }
+
+                  }
+
+
+
+
+                })
+
+
+                tuString_gelb = inte_gelb.toString();
+                my_article.ha_gelb = tuString_gelb
+
+                tuString_gruen = inte_gruen.toString();
+                my_article.ha_gruen = tuString_gruen
+
+                tuString_grau = inte_grau.toString();
+                my_article.ha_grau = tuString_grau
+
+
+
+
+
+
+
+              });
+
+
+
+
+              my_articles.forEach(function (my_article) {
+
+                console.log('                          ');
+                console.log('----------------------    ' + my_article.ha_gruen);
+                console.log('----------------------    ' + my_article.ha_gelb);
+                console.log('----------------------    ' + my_article.ha_grau);
+
+              })
+
+
+
+              res.render('index', {
+                my_articles: my_articles,
+                length: length
+
+              });
+
+            })
 
           });
 
@@ -297,21 +498,37 @@ app.get('/', function (req, res) {
           find({
             $or: [
 
-                { $or: [{ klasse: user.klasse },{ klasse: user.klasse2 }]},
-                { schuelers: user }
+              { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }] },
+              { schuelers: user }
 
             ]
-
-
-           
-
 
           }).
           populate('lehrer').
           populate('schuelers').
-          sort({created_as_date: -1}).
+          sort({ created_as_date: -1 }).
           exec(function (err2, my_articles) {
             if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+            if (my_articles) {
+
+
+
+              console.log('okkkkkkkkkkk');
+
+
+
+
+            } else {
+
+
+
+              console.log('neeeeeeeeeeeeeeee');
+
+
+            }
+
 
             var length = my_articles.length;
 
@@ -322,27 +539,119 @@ app.get('/', function (req, res) {
               populate('article').
               exec(function (err, hausarbeits) {
                 if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
-               
+
 
                 //console.log('-------------------------------------')
                 my_articles.forEach(function (my_article) {
                   // console.log(my_article);
+                  console.log('my_article.termin:     ' + my_article.termin);
+                  var tag = my_article.termin.substring(0, 2)
+                  var monat = my_article.termin.substring(3, 5)
+                  var jahr = my_article.termin.substring(6, 10)
+
+                  console.log('tag:     ' + tag);
+                  console.log('monat:   ' + monat);
+                  console.log('jahr:    ' + jahr);
+
+                  var termin = new Date(jahr, monat - 1, tag, 16);
+
+                  console.log('termin:    ' + termin);
+                  var jetzt = new Date();
+                  console.log('jeks:    ' + jetzt);
+
+
+
+
+
+
+
+
+
+                  // To calculate the time difference of two dates 
+                  var Difference_In_Time = termin.getTime() - jetzt.getTime();
+
+                  // To calculate the no. of days between two dates 
+                  var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+                  console.log('  ');
+                  console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + my_article.title);
+
+                  console.log('Total number of days between dates   ' + Difference_In_Days);
+
+
+
+
+                  if (Difference_In_Days >= 0) {
+
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() === termin.getDate()) {
+
+                      my_article.termin = 'heute 16 Uhr'
+                    }
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() + 1 === termin.getDate()) {
+
+                      my_article.termin = 'morgen 16 Uhr'
+                    }
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() + 2 === termin.getDate()) {
+
+                      my_article.termin = 'übermorgen'
+                    }
+
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() + 3 === termin.getDate()) {
+
+                      my_article.termin = 'in 3 Tagen'
+                    }
+
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() + 4 === termin.getDate()) {
+
+                      my_article.termin = 'in 4 Tagen'
+                    }
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() + 5 === termin.getDate()) {
+
+                      my_article.termin = 'in 5 Tagen'
+                    }
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() + 6 === termin.getDate()) {
+
+                      my_article.termin = 'in 6 Tagen'
+                    }
+
+
+
+
+
+                  } else {
+                    ///Termin vorüber
+                    my_article.termin = 'abgelaufen'
+
+                  }
+
+
+
+
+
+
+
+
+
 
                   my_article.schueler_token = '0';
-
                   hausarbeits.forEach(function (hausarbeit) {
                     // console.log(hausarbeit);
-
                     if (my_article._id.toString() === hausarbeit.article._id.toString()) {
-
-                      // console.log('---------------'+my_article.id);
-                      // console.log('---------------'+hausarbeit.article._id);
-                      // console.log('---------------');
-                      // console.log('---------------');
-                      // console.log('---------------');
-
                       my_article.schueler_token = hausarbeit.status;
-
                     }
                   });
                 });
@@ -352,37 +661,28 @@ app.get('/', function (req, res) {
 
 
 
-/*                     my_articles.sort(function(a,b){
-   
-                      return new Date(b.created_as_date) - new Date(a.created_as_date);
-                    });
- */
+
+                console.log('-------------------------------------');
+                my_articles.forEach(function (my) {
+
+                  console.log('created:  ' + my.created + ' |  title:  ' + my.title + ' |  create_as_date  ' + my.created_as_date)
+
+                })
 
 
+                res.render('index', {
 
-                    console.log('-------------------------------------');
-                    my_articles.forEach(function (my) {
+                  my_articles: my_articles,
+                  length: length
 
-                        console.log('created:  '+my.created+ ' |  title:  '+my.title+ ' |  create_as_date  '+my.created_as_date)
-
-                    })
-
-
-                      res.render('index', {
-
-                        my_articles: my_articles,
-                        length: length
-      
-                      });
+                });
 
 
 
 
-      
-                   
-                    });
-      
-               
+
+
+              });
 
 
 
@@ -402,7 +702,9 @@ app.get('/', function (req, res) {
 
 
 
-              
+
+
+
 
           });
 

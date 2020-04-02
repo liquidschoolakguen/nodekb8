@@ -65,7 +65,10 @@ $(document).ready(function () {
 				"next": "vor"
 			  }
 		  },
-		  
+		  "paging": false,
+
+		 
+	
 		
 
 	});

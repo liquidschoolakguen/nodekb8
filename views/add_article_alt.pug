@@ -39,7 +39,7 @@ block content
                                             option Sonstiges Fach 
                                     .form-group.col-md-4 
                                         label Abgabetermin (Standard: 3 Tage später)
-                                        input#validationServer01.form-control(name='termin', type=text,  required='', placeholder='Abgabetermin', value=abgabe + ' 16 Uhr')
+                                        input#datepicker.form-control(type=text, name='termin', value=abgabe+ ' 16 Uhr', required='',  readonly='readonly', style='background:white;')
                                 .form-row
                                         label Auftrag
                                         textarea#area2.form-control.is-valid(name='body', type=text, placeholder='Arbeitsauftrag')
@@ -53,3 +53,33 @@ block content
             script(type='text/javascript').
                 bkLib.onDomLoaded(nicEditors.allTextAreas) 
                 new nicEditor({buttonList : ['bold','italic','underline','left','center','right','justify','ol','ul','superscript','upload','fontFormat','fontFamily','upload','','','','','','','','','','','','','']}).panelInstance('area2');
+            link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
+            link(rel='stylesheet', href='/resources/demos/style.css')
+            script(src='https://code.jquery.com/jquery-1.12.4.js')
+            script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js') 
+            script(type='text/javascript', src='http://jquery-ui.googlecode.com/svn/tags/latest/ui/minified/i18n/jquery-ui-i18n.min.js')
+            script.
+                $( function() {
+                $( "#datepicker" ).datepicker({
+                prevText: '&#x3c;zurück', prevStatus: '',
+                prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+                nextText: 'Vor&#x3e;', nextStatus: '',
+                nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+                currentText: 'heute', currentStatus: '',
+                todayText: 'heute', todayStatus: '',
+                clearText: '-', clearStatus: '',
+                closeText: 'schließen', closeStatus: '',
+                monthNames: ['Januar','Februar','März','April','Mai','Juni',
+                'Juli','August','September','Oktober','November','Dezember'],
+                monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+                'Jul','Aug','Sep','Okt','Nov','Dez'],
+                dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+                dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                showMonthAfterYear: false,
+                buttonImage: 'media/img/calendar.png',
+                buttonImageOnly: true,
+                dateFormat:'dd.mm.yy' + ' 16 Uhr'
+                }
+                );
+                });

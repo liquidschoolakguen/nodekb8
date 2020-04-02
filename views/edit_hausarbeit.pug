@@ -6,24 +6,31 @@ block content
     .container.padding_null
         .row.h-100.d-flex.justify-content-center
             .col-12
-                .card.border.border-success
+                .card.border
                     .card-header
                         ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                             li.nav-item
-                                a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{hausarbeit.article.klasse} - #{hausarbeit.article.fach} - #{hausarbeit.article.created}
+                                a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{hausarbeit.article.klasse} | #{hausarbeit.article.fach} | #{hausarbeit.article.created}
                     .card-body.padding_null
                         .tab-content.mt-3.my-min-height
                             #description.tab-pane.active(role='tabpanel')
                                 p.card-text
                                     .col-md-12
-                                        h5.color-red Bitte bis #{hausarbeit.article.termin} abgeben.
+                                        div(style='clear:both;') 
+                                        h5 #{hausarbeit.article.title}
+                                        div(style='clear:both;')
+                                        if hausarbeit.article.termin  != 'abgelaufen'         
+                                            h7.box-right.color-red #{hausarbeit.article.termin} müssen alle Hausarbeiten abgegeben werden
+                                        else
+                                            h7.box-right.color-red #{hausarbeit.article.termin} 
+                                        div(style='clear:both;') 
                                         h5#invisible #{hausarbeit.article.body}
                                         h6#hier-kommt-was-rein
     if user.type == 'schueler'
         .container.padding_null
             .row.h-100.d-flex.justify-content-center
                 .col-12
-                    .card.border.border-success
+                    .card.border
                         .card-header
                             ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                                 li.nav-item
@@ -35,8 +42,18 @@ block content
                                         .col-md-12
                                             form#reused_form.montform(method='POST', action='/articles/edit_hausarbeit/' + hausarbeit._id)
                                                 #form-transition-group.my-margin-top
+                                                    br 
                                                     .form-row
                                                         input.form-control.invisible(type='text', placeholder='articleId',  name='article_id', value= hausarbeit.article._id)
+                                                    .form-row
+                                                        if hausarbeit.status == '3'
+                                                            .card.border-danger.col-sm-12   
+                                                                if  hausarbeit.nachbessern_option != 'keine Auswahl'                                                
+                                                                    h6.card-header  #{hausarbeit.nachbessern_option} 
+                                                                    h5.card-body.text-danger
+                                                                        .card-text
+                                                                        | #{hausarbeit.nachbessern_text}
+                                                    br 
                                                     .form-row
                                                         textarea#area2.form-control.is-valid(name='body', type=text, placeholder='Arbeitsauftrag')=hausarbeit.body
                                                     .form-row.my-margin-top
@@ -66,8 +83,8 @@ block content
                                                     .form-row
                                                         .form-group.col-md-12
                                                             input#validationServer01.form-control(type='text', placeholder='Das möchte ich der Lehrkraft noch sagen' name='reflexion_text' , value=hausarbeit.reflexion_text)                                               
-                                                    input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right.my-margin-bottom(type='submit', value='Hausarbeit abgeben')
-                                                    p.my-margin-top.bold-green
+                                                    input#geht_ab.btn.btn-warning.my-margin-top.bg-warning.text-white.float-right.my-margin-bottom(type='submit', value='Hausarbeit abgeben')
+                                                    p.my-margin-top.text-warning.bold
                                                         | Solange deine Arbeit noch nicht überprüft wurde, kannst du sie noch ändern.
             script(src='/js/article2.js')
     script(src='/js/nic_edit.js')

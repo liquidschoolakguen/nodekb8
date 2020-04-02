@@ -194,7 +194,7 @@ router.get('/edit/:id', ensureAuthenticated, function (req, res) {
             ]
 
           }).
-          sort({name:1}).
+          sort({ name: 1 }).
           exec(function (err2, all_schuelers) {
             if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
@@ -386,6 +386,130 @@ router.get('/article_schuelers/:id', function (req, res) {
 
       if (article) {
 
+
+
+
+        console.log('article.termin:     ' + article.termin);
+        var tag = article.termin.substring(0, 2)
+        var monat = article.termin.substring(3, 5)
+        var jahr = article.termin.substring(6, 10)
+
+        console.log('tag:     ' + tag);
+        console.log('monat:   ' + monat);
+        console.log('jahr:    ' + jahr);
+
+        var termin = new Date(jahr, monat - 1, tag, 16);
+
+        console.log('termin:    ' + termin);
+        var jetzt = new Date();
+        console.log('jeks:    ' + jetzt);
+
+
+
+
+
+
+
+
+
+        // To calculate the time difference of two dates 
+        var Difference_In_Time = termin.getTime() - jetzt.getTime();
+
+        // To calculate the no. of days between two dates 
+        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+        console.log('  ');
+        console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + article.title);
+
+        console.log('Total number of days between dates   ' + Difference_In_Days);
+
+
+
+
+        if (Difference_In_Days >= 0) {
+
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() === termin.getDate()) {
+
+            article.termin = 'heute 16 Uhr'
+          }
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 1 === termin.getDate()) {
+
+            article.termin = 'morgen 16 Uhr'
+          }
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 2 === termin.getDate()) {
+
+            article.termin = 'übermorgen'
+          }
+
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 3 === termin.getDate()) {
+
+            article.termin = 'in 3 Tagen'
+          }
+
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 4 === termin.getDate()) {
+
+            article.termin = 'in 4 Tagen'
+          }
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 5 === termin.getDate()) {
+
+            article.termin = 'in 5 Tagen'
+          }
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 6 === termin.getDate()) {
+
+            article.termin = 'in 6 Tagen'
+          }
+
+
+
+
+
+        } else {
+          ///Termin vorüber
+          article.termin = 'abgelaufen'
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         Hausarbeit.
           find({ article: req.params.id }).
           populate('schueler').
@@ -475,10 +599,130 @@ router.get('/edit_hausarbeit/:id', ensureAuthenticated, function (req, res) {
       if (err) return console.log('6_iiiiiiiiiiii ' + err);
 
       if (ha) {
-        //console.log('The ha is %s', ha);
 
 
-        //console.log('x nnnnn ' + ha.article.klasse);
+
+
+
+
+
+        console.log('ha.article.termin:     ' + ha.article.termin);
+        var tag = ha.article.termin.substring(0, 2)
+        var monat = ha.article.termin.substring(3, 5)
+        var jahr = ha.article.termin.substring(6, 10)
+
+        console.log('tag:     ' + tag);
+        console.log('monat:   ' + monat);
+        console.log('jahr:    ' + jahr);
+
+        var termin = new Date(jahr, monat - 1, tag, 16);
+
+        console.log('termin:    ' + termin);
+        var jetzt = new Date();
+        console.log('jeks:    ' + jetzt);
+
+
+
+
+
+
+
+
+
+        // To calculate the time difference of two dates 
+        var Difference_In_Time = termin.getTime() - jetzt.getTime();
+
+        // To calculate the no. of days between two dates 
+        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+        console.log('  ');
+        console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + ha.article.title);
+
+        console.log('Total number of days between dates   ' + Difference_In_Days);
+
+
+
+
+        if (Difference_In_Days >= 0) {
+
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() === termin.getDate()) {
+
+            ha.article.termin = 'heute 16 Uhr'
+          }
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 1 === termin.getDate()) {
+
+            ha.article.termin = 'morgen 16 Uhr'
+          }
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 2 === termin.getDate()) {
+
+            ha.article.termin = 'übermorgen'
+          }
+
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 3 === termin.getDate()) {
+
+            ha.article.termin = 'in 3 Tagen'
+          }
+
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 4 === termin.getDate()) {
+
+            ha.article.termin = 'in 4 Tagen'
+          }
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 5 === termin.getDate()) {
+
+            ha.article.termin = 'in 5 Tagen'
+          }
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 6 === termin.getDate()) {
+
+            ha.article.termin = 'in 6 Tagen'
+          }
+
+
+
+
+
+        } else {
+          ///Termin vorüber
+          ha.article.termin = 'abgelaufen'
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         res.render('edit_hausarbeit', {
@@ -695,7 +939,7 @@ router.post('/add_bingo_edit', ensureAuthenticated, function (req, res) {
       ]
 
     }).
-    sort({name:1}).
+    sort({ name: 1 }).
     exec(function (err2, all_schuelers) {
       if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
@@ -884,7 +1128,7 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
 
   const start = new Date();
 
-  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + start.getFullYear() 
+  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + start.getFullYear()
 
 
   console.log('req.body.klasse: ' + req.body.klasse);
@@ -903,7 +1147,7 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
         ]
 
       }).
-      sort({name:1}).
+      sort({ name: 1 }).
       exec(function (err2, schuelers) {
         if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
@@ -962,8 +1206,12 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
     if (!req.body.body || req.body.body.length <= 8) {
       //console.log('............... ' + req.body.body.length);
 
-      req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz.');
-      res.redirect('/articles/add');
+      req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Nochmal das Ganze.');
+      res.redirect('add_article_klasse');
+
+
+
+
 
     } else {
 
@@ -1169,7 +1417,7 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
 
 
 
-      
+
       var id00 = req.body.id_0
       var id01 = req.body.id_1
       var id02 = req.body.id_2
@@ -1453,7 +1701,7 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
         article.lehrer = req.user._id;
         article.ha_gelb = '0';
         article.ha_gruen = '0'
-        article.created_as_date= new Date();
+        article.created_as_date = new Date();
 
         console.log('klaas:  ' + req.body.klaas)
 
@@ -1463,6 +1711,95 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
         var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
 
         article.created = nau;
+
+
+
+
+
+
+
+
+
+
+        //console.log('-------------------------------------')
+
+        // console.log(my_article);
+
+        var tag = req.body.termin.substring(0, 2)
+        var monat = req.body.termin.substring(3, 5)
+        var jahr = req.body.termin.substring(6, 10)
+
+        console.log('tag:     ' + tag);
+        console.log('monat:   ' + monat);
+        console.log('jahr:    ' + jahr);
+
+        var d = new Date(jahr, monat - 1, tag, 16);
+
+        console.log('Date:    ' + d);
+        var jetzt = new Date();
+        console.log('Date:    ' + jetzt);
+
+
+
+        var today = jetzt
+        var Christmas = d
+        var diffMs = (Christmas - today); // milliseconds between now & Christmas
+        var diffDays = Math.floor(diffMs / 86400000); // days
+        var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+        var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+
+
+        if (diffMs >= 0) {
+
+
+
+
+
+          if (diffDays === 0) {//heute
+            //my_article.termin = 'heute'
+          } else if (diffDays === 1) {//morgen
+
+            //my_article.termin = 'morgen'
+
+
+          } else if (diffDays === 2) {//morgen
+
+            // my_article.termin = 'übermorgen'
+
+
+          } else {
+
+            //  my_article.termin = 'in ' + diffDays + ' Tagen'
+
+
+          }
+
+
+        } else {
+          ///zu spät
+
+
+          req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Der Auftrag wurde nicht erteilt');
+          res.redirect('add_article_klasse');
+          return;
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         article.save(function (err, art) {
 
@@ -1616,8 +1953,8 @@ router.post("/add_alt", upload.single("file" /* name attribute of <file> element
     if (!req.body.body || req.body.body.length <= 8) {
       //console.log('............... ' + req.body.body.length);
 
-      req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz.');
-      res.redirect('/articles/add');
+      req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Nochmal das Ganze.');
+      res.redirect('add_article_klasse');
 
     } else {
 
@@ -1653,7 +1990,7 @@ router.post("/add_alt", upload.single("file" /* name attribute of <file> element
         article.lehrer = req.user._id;
         article.ha_gelb = '0';
         article.ha_gruen = '0'
-        article.created_as_date= new Date();
+        article.created_as_date = new Date();
 
         const start = new Date();
         var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
@@ -1667,6 +2004,87 @@ router.post("/add_alt", upload.single("file" /* name attribute of <file> element
             console.log(err);
             return;
           } else {
+
+
+
+
+
+            //console.log('-------------------------------------')
+
+            // console.log(my_article);
+
+            var tag = req.body.termin.substring(0, 2)
+            var monat = req.body.termin.substring(3, 5)
+            var jahr = req.body.termin.substring(6, 10)
+
+            console.log('tag:     ' + tag);
+            console.log('monat:   ' + monat);
+            console.log('jahr:    ' + jahr);
+
+            var d = new Date(jahr, monat - 1, tag, 16);
+
+            console.log('Date:    ' + d);
+            var jetzt = new Date();
+            console.log('Date:    ' + jetzt);
+
+
+
+            var today = jetzt
+            var Christmas = d
+            var diffMs = (Christmas - today); // milliseconds between now & Christmas
+            var diffDays = Math.floor(diffMs / 86400000); // days
+            var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+            var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+
+
+            if (diffMs >= 0) {
+
+
+
+
+
+              if (diffDays === 0) {//heute
+                //my_article.termin = 'heute'
+              } else if (diffDays === 1) {//morgen
+
+                //my_article.termin = 'morgen'
+
+
+              } else if (diffDays === 2) {//morgen
+
+                // my_article.termin = 'übermorgen'
+
+
+              } else {
+
+                //  my_article.termin = 'in ' + diffDays + ' Tagen'
+
+
+              }
+
+
+            } else {
+              ///zu spät
+
+
+              req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Der Auftrag wurde nicht erteilt');
+              res.redirect('add_article_klasse');
+              return;
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
             //console.log('ADDED ' + article.author);
             //console.log('ADDED ' + article.lehrer);
             req.flash('success', 'Auftrag erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
@@ -1726,68 +2144,114 @@ router.post("/add_hausarbeit", upload.single("file" /* name attribute of <file> 
         } else {
 
 
+          if (article) {
 
-          let hausarbeit = new Hausarbeit();
-          hausarbeit.article = req.body.article_id;
-          hausarbeit.schueler = req.user._id;
-          hausarbeit.status = '1';
-          hausarbeit.body = req.body.body;
-          hausarbeit.reflexion_hilfe = req.body.reflexion_hilfe;
-          hausarbeit.reflexion_schwer = req.body.reflexion_schwer;
-          hausarbeit.reflexion_zeit = req.body.reflexion_zeit;
-          hausarbeit.reflexion_text = req.body.reflexion_text;
+            const start = new Date();
 
-          const start = new Date();
-          var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+            var tag = article.termin.substring(0, 2)
+            var monat = article.termin.substring(3, 5)
+            var jahr = article.termin.substring(6, 10)
 
-          hausarbeit.created = nau;
+            console.log('tag:     ' + tag);
+            console.log('monat:   ' + monat);
+            console.log('jahr:    ' + jahr);
+
+            var termin = new Date(jahr, monat - 1, tag, 16);
 
 
-          hausarbeit.save(function (err) {
 
-            if (err) {
-              console.log(err);
-              return;
+
+            console.log('wwwjjjjjjjjjjjjjjjjj s    ' + start);
+            console.log('wwwjjjjjjjjjjjjjjjjj a    ' + termin);
+
+
+
+
+
+
+            if (termin >= start) { // wenn die HA rechtzeitig abgegeben wurde
+
+              console.log('wwwERROR_______________________ok');
+
+
+
+
+
+
+              let hausarbeit = new Hausarbeit();
+              hausarbeit.article = req.body.article_id;
+              hausarbeit.schueler = req.user._id;
+              hausarbeit.status = '1';
+              hausarbeit.body = req.body.body;
+              hausarbeit.reflexion_hilfe = req.body.reflexion_hilfe;
+              hausarbeit.reflexion_schwer = req.body.reflexion_schwer;
+              hausarbeit.reflexion_zeit = req.body.reflexion_zeit;
+              hausarbeit.reflexion_text = req.body.reflexion_text;
+
+
+              var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+
+              hausarbeit.created = nau;
+
+
+              hausarbeit.save(function (err) {
+
+                if (err) {
+                  console.log(err);
+                  return;
+                } else {
+
+
+
+
+                  req.flash('success', 'Super! Du hast deine Hausarbeit abgegeben. Solange deine Arbeit nicht überprüft wurde, kannst du sie noch ändern. ');
+                  res.redirect('/');
+                }
+              })
+
+
+
+
+
+
+
+
             } else {
 
+              console.log('wwwERROR_______________________');
 
 
-
-              console.log('article.ha_gelb  ' + article.ha_gelb)
-              console.log('parseInt(article.ha_gelb) ' + parseInt(article.ha_gelb))
-
-              var inte = parseInt(article.ha_gelb);
-              inte += 1;
-
-              tuString = inte.toString();
-              console.log('tuString ergebnis ' + tuString)
-
-
-
-              var art = {}
-              art.ha_gelb = tuString
-
-
-
-              Article.findOneAndUpdate({ _id: article._id }, art, { upsert: true }, function (err, doc) {
-                if (err) return res.send(500, { error: err });
-
-                console.log('ha_gelb NEU  ' + doc.ha_gelb)
-
-
-
-
-              });
-
-
-
-
-
-
-              req.flash('success', 'Super! Du hast deine Hausarbeit abgegeben. Solange deine Arbeit nicht überprüft wurde, kannst du sie noch ändern. ');
+              req.flash('danger', 'Zu spät. Die Frist für diesen Auftrag ist abgelaufen. Nun kannst du deine Hausarbeit nicht mehr abgeben ');
               res.redirect('/');
+              return;
+
+
             }
-          })
+
+
+
+
+
+
+
+
+
+
+
+          } else {
+
+
+
+
+            req.flash('warning', 'Der Auftrag wurde gerade gelöscht. Du musst diese Hausarbeit nicht mehr abgeben');
+            res.redirect('/');
+
+
+
+          }
+
+
+
 
 
 
@@ -1831,40 +2295,182 @@ router.post('/edit_hausarbeit/:id', function (req, res) {
 
 
 
-  var query = { '_id': req.params.id };
-
-
-  let hausarbeit = {};
-
-  hausarbeit.body = req.body.body;
-  hausarbeit.reflexion_hilfe = req.body.reflexion_hilfe;
-  hausarbeit.reflexion_schwer = req.body.reflexion_schwer;
-  hausarbeit.reflexion_zeit = req.body.reflexion_zeit;
-  hausarbeit.reflexion_text = req.body.reflexion_text;
-
-
-
-  const start = new Date();
-  var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
-
-  hausarbeit.created = nau;
 
 
 
 
 
 
-  Hausarbeit.findOneAndUpdate(query, hausarbeit, { upsert: true }, function (err, doc) {
-    if (err) return res.send(500, { error: err });
+  Article.findById(req.body.article_id, function (err, article) {
+
+    if (err) {
+      //console.log('wwwERROR_______________________');
+      console.log(err);
+
+    } else {
+
+
+      if (article) {
 
 
 
-    req.flash('success', 'Hausarbeit geändert');
-    res.redirect('/');
 
+
+
+
+        const start = new Date();
+
+        var tag = article.termin.substring(0, 2)
+        var monat = article.termin.substring(3, 5)
+        var jahr = article.termin.substring(6, 10)
+
+        console.log('tag:     ' + tag);
+        console.log('monat:   ' + monat);
+        console.log('jahr:    ' + jahr);
+
+        var termin = new Date(jahr, monat - 1, tag, 16);
+
+
+
+
+        console.log('wwwjjjjjjjjjjjjjjjjj s    ' + start);
+        console.log('wwwjjjjjjjjjjjjjjjjj a    ' + termin);
+
+
+
+
+
+
+
+
+
+
+
+
+        if (termin >= start) { // wenn die HA rechtzeitig abgegeben wurde
+
+          console.log('wwwERROR_______________________ok');
+
+
+
+
+
+
+
+
+          var query = { '_id': req.params.id };
+
+
+          let hausarbeit = {};
+
+          hausarbeit.body = req.body.body;
+          hausarbeit.reflexion_hilfe = req.body.reflexion_hilfe;
+          hausarbeit.reflexion_schwer = req.body.reflexion_schwer;
+          hausarbeit.reflexion_zeit = req.body.reflexion_zeit;
+          hausarbeit.reflexion_text = req.body.reflexion_text;
+          hausarbeit.status = '1';
+
+
+
+          var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+
+          hausarbeit.created = nau;
+
+
+
+
+
+
+          Hausarbeit.findOneAndUpdate(query, hausarbeit, { upsert: true }, function (err, doc) {
+            if (err) return res.send(500, { error: err });
+
+
+
+            req.flash('success', 'Hausarbeit geändert');
+            res.redirect('/');
+
+
+
+          });
+
+
+
+
+
+
+
+
+
+
+        } else {
+
+          console.log('wwwERROR_______________________');
+
+          req.flash('danger', 'Zu spät. Die Frist für diesen Auftrag ist abgelaufen. Nun kannst du deine Hausarbeit nicht mehr ändern. Die Lehrer*in bekommt die alte Version. ');
+          res.redirect('/');
+          return;
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      } else {// kein article
+
+        req.flash('warning', 'Der Auftrag wurde gerade gelöscht. Du musst diese Hausarbeit nicht mehr abgeben');
+        res.redirect('/');
+
+
+
+      }
+
+
+    }
 
 
   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 });
@@ -1961,43 +2567,43 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
 
 
 
-
-              console.log('article.ha_gelb  ' + articleX.ha_gelb)
-              console.log('parseInt(article.ha_gelb) ' + parseInt(articleX.ha_gelb))
-
-              var inte_gelb = parseInt(articleX.ha_gelb);
-              inte_gelb -= 1;
-
-              tuString_gelb = inte_gelb.toString();
-              console.log('tuString_gelb ergebnis ' + tuString_gelb)
-
-
-
-
-              var inte_gruen = parseInt(articleX.ha_gruen);
-              inte_gruen += 1;
-
-              tuString_gruen = inte_gruen.toString();
-              console.log('tuString_gruen ergebnis ' + tuString_gruen)
-
-
-
-
-
-              var art = {}
-              art.ha_gelb = tuString_gelb
-              art.ha_gruen = tuString_gruen
-
-
-              Article.findOneAndUpdate({ _id: articleX._id }, art, { upsert: true }, function (err, docX) {
-                if (err) return res.send(500, { error: err });
-
-                console.log('docX.ha_gelb NEU  ' + docX.ha_gelb)
-                console.log('docX.ha_gruen NEU  ' + docX.ha_gruen)
-
-
-
-              });
+              /* 
+                            console.log('article.ha_gelb  ' + articleX.ha_gelb)
+                            console.log('parseInt(article.ha_gelb) ' + parseInt(articleX.ha_gelb))
+              
+                            var inte_gelb = parseInt(articleX.ha_gelb);
+                            inte_gelb -= 1;
+              
+                            tuString_gelb = inte_gelb.toString();
+                            console.log('tuString_gelb ergebnis ' + tuString_gelb)
+              
+              
+              
+              
+                            var inte_gruen = parseInt(articleX.ha_gruen);
+                            inte_gruen += 1;
+              
+                            tuString_gruen = inte_gruen.toString();
+                            console.log('tuString_gruen ergebnis ' + tuString_gruen)
+              
+              
+              
+              
+              
+                            var art = {}
+                            art.ha_gelb = tuString_gelb
+                            art.ha_gruen = tuString_gruen
+              
+              
+                            Article.findOneAndUpdate({ _id: articleX._id }, art, { upsert: true }, function (err, docX) {
+                              if (err) return res.send(500, { error: err });
+              
+                              console.log('docX.ha_gelb NEU  ' + docX.ha_gelb)
+                              console.log('docX.ha_gruen NEU  ' + docX.ha_gruen)
+              
+              
+              
+                            }); */
 
 
 
@@ -2071,6 +2677,196 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
 
 
 
+
+
+
+
+
+
+
+
+// Update submit POST route HAUSARBEIT
+router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
+
+  //console.log(req.params.id);
+  if (typeof req.user === "undefined") {
+
+    req.flash('warning', 'Du bist ausgeloggt. Bitte logge dich ein, um deine Korrektur zu senden');
+    res.redirect('/');
+    return;
+  }
+
+
+
+
+
+
+
+  Hausarbeit.findById(req.params.id, function (err, ha) {
+
+
+
+    Article.findById(ha.article, function (err, article) {
+
+
+
+//console.log('-------------------------------------')
+
+        // console.log(my_article);
+
+        var tag = article.termin.substring(0, 2)
+        var monat = article.termin.substring(3, 5)
+        var jahr = article.termin.substring(6, 10)
+
+        console.log('tag:     ' + tag);
+        console.log('monat:   ' + monat);
+        console.log('jahr:    ' + jahr);
+
+        var d = new Date(jahr, monat - 1, tag, 14);
+
+        console.log('Date:    ' + d);
+        var jetzt = new Date();
+        console.log('Date:    ' + jetzt);
+
+
+
+        var today = jetzt
+        var Christmas = d
+        var diffMs = (Christmas - today); // milliseconds between now & Christmas
+        var diffDays = Math.floor(diffMs / 86400000); // days
+        var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+        var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+
+
+        if (diffMs >= 0) {
+
+
+
+
+          var query = { '_id': req.params.id };
+
+
+          let hausarbeit = {};
+        
+          hausarbeit.nachbessern_text = req.body.nachbessern_text;
+          hausarbeit.nachbessern_option = req.body.nachbessern_option;
+        
+          hausarbeit.status = '3';
+        
+        
+          Hausarbeit.findOneAndUpdate(query, hausarbeit, { upsert: true }, function (err, doc) {
+            if (err) return res.send(500, { error: err });
+        
+        
+        
+        
+        
+        
+            User.findById(doc.schueler, function (err, user) {
+        
+              if (err) throw err;
+              if (user) {
+        
+        
+        
+        
+        
+        
+        
+                req.flash('success', 'Du hast die Hausarbeit von ' + user.name + ' zum Nachbessern zurückgesendet. Na, ob das noch mal was wird?');
+                res.redirect('/articles/article_schuelers/' + doc.article);
+        
+        
+        
+        
+        
+        
+              } else {
+        
+        
+        
+                req.flash('danger', 'fehler. Bitte Mithat Akgün kontaktieren');
+                res.redirect('/');
+        
+        
+              }
+        
+        
+        
+        
+            })
+        
+        
+   
+        
+          });
+
+
+
+          
+
+
+        } else {
+          ///zu spät
+
+
+              req.flash('danger', 'Der Schüler hat für die Nachbesserung nicht genug Zeit. Der Nachbesserungswunsch muss spätestens 2 Stunden vor Abgabefrist erfolgen. Alles andere wäre ja auch unfair.');
+              res.redirect('add_article_klasse');
+              return; 
+
+
+        }
+
+    
+    })
+
+
+  })
+
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Update submit POST route
 router.post('/edit/:id', function (req, res) {
 
@@ -2084,10 +2880,98 @@ router.post('/edit/:id', function (req, res) {
   if (!req.body.body || req.body.body.length <= 8) {
     //console.log('............... ' + req.body.body.length);
 
-    req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz.');
+    req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Wem willst du hier eigentlich ein X für ein U vormachen?');
     res.redirect('/articles/add');
 
   } else {
+
+
+
+
+
+
+
+    //console.log('-------------------------------------')
+
+    // console.log(my_article);
+
+    var tag = req.body.termin.substring(0, 2)
+    var monat = req.body.termin.substring(3, 5)
+    var jahr = req.body.termin.substring(6, 10)
+
+    console.log('tag:     ' + tag);
+    console.log('monat:   ' + monat);
+    console.log('jahr:    ' + jahr);
+
+    var d = new Date(jahr, monat - 1, tag, 16);
+
+    console.log('Date:    ' + d);
+    var jetzt = new Date();
+    console.log('Date:    ' + jetzt);
+
+
+
+    var today = jetzt
+    var Christmas = d
+    var diffMs = (Christmas - today); // milliseconds between now & Christmas
+    var diffDays = Math.floor(diffMs / 86400000); // days
+    var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+
+
+    if (diffMs >= 0) {
+
+
+
+
+
+      if (diffDays === 0) {//heute
+        //my_article.termin = 'heute'
+      } else if (diffDays === 1) {//morgen
+
+        //my_article.termin = 'morgen'
+
+
+      } else if (diffDays === 2) {//morgen
+
+        // my_article.termin = 'übermorgen'
+
+
+      } else {
+
+        //  my_article.termin = 'in ' + diffDays + ' Tagen'
+
+
+      }
+
+
+    } else {
+      ///zu spät
+
+
+      req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Der Auftrag wurde nicht geändert. Ist ja auch klar, weil nur die Wenigsten unserer SuS durch die Zeit reisen können, um ihre Hausaufgaben zu erledigen.');
+      res.redirect('/');
+      return;
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     if (req.body.shadow_klasse && !req.body.klasse) {
 
@@ -2289,7 +3173,7 @@ router.post('/edit/:id', function (req, res) {
 
 
 
-      
+
       var id00 = req.body.id_0
       var id01 = req.body.id_1
       var id02 = req.body.id_2
@@ -2512,15 +3396,15 @@ router.post('/edit/:id', function (req, res) {
           if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
-/*           console.log('-------------------------------------');
-          console.log('-------------------------------------');
-          console.log('-------------------------------------');
-          console.log('-------------------------------------');
-          console.log('ALT arti: ' + art);
-          console.log('-------------------------------------');
-          console.log('-------------------------------------');
-          console.log('-------------------------------------');
-          console.log('-------------------------------------'); */
+          /*           console.log('-------------------------------------');
+                    console.log('-------------------------------------');
+                    console.log('-------------------------------------');
+                    console.log('-------------------------------------');
+                    console.log('ALT arti: ' + art);
+                    console.log('-------------------------------------');
+                    console.log('-------------------------------------');
+                    console.log('-------------------------------------');
+                    console.log('-------------------------------------'); */
 
 
           art.schuelers.forEach(function (schueler) {
@@ -2535,20 +3419,20 @@ router.post('/edit/:id', function (req, res) {
                   console.log(err);
                 } else {
 
-/*                   console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
-                  console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
-                  console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
-                  console.log('uptdatedArticle ' + uptdatedArticle);
-                  console.log('-------------------------------------');
-                  console.log('-------------------------------------');
-                  console.log('-------------------------------------');
-                  console.log('-------------------------------------'); */
+                  /*                   console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+                                    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+                                    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+                                    console.log('uptdatedArticle ' + uptdatedArticle);
+                                    console.log('-------------------------------------');
+                                    console.log('-------------------------------------');
+                                    console.log('-------------------------------------');
+                                    console.log('-------------------------------------'); */
 
                   User.findByIdAndUpdate(schueler._id,
                     { $pull: { auftrags: art._id } },
                     { save: true, upsert: true },
                     function (err, uptdatedSchueler) {
-                      if (err) { console.log(err);} 
+                      if (err) { console.log(err); }
                     });
                 }
               });
@@ -2578,7 +3462,7 @@ router.post('/edit/:id', function (req, res) {
                       { $push: { auftrags: uptdatedArticle } },
                       { safe: true, upsert: true },
                       function (err, uptdatedSchueler) {
-                        if (err) { console.log(err)} 
+                        if (err) { console.log(err) }
                       });
                   }
                 });
@@ -2591,50 +3475,6 @@ router.post('/edit/:id', function (req, res) {
 
 
 
-
-            /// nach der loop
-
-/* 
-            Article.
-              findOne({ _id: art._id }).
-              populate('schuelers').
-              exec(function (err2, arti) {
-                if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
-                console.log('-------------------------------------');
-                console.log('-------------------------------------');
-                console.log('-------------------------------------');
-                console.log('-------------------------------------');
-                console.log('articleK: ' + arti);
-                console.log('-------------------------------------');
-                console.log('-------------------------------------');
-                console.log('-------------------------------------');
-                console.log('-------------------------------------');
-
-
-
-              });
-
-
-            schuelers.forEach(function (schueler) {
-
-
-              User.
-                findOne({ _id: schueler._id }).
-                populate('auftrags').
-                exec(function (err2, schue) {
-                  if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
-
-                  console.log('schuelersY: ' + schue);
-                  console.log('-------------------------------------');
-
-                });
-
-            });
- */
 
 
           });
@@ -2685,7 +3525,7 @@ router.post('/edit/:id', function (req, res) {
 
 
 
-            var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' +  start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+            var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
 
 
             article.created = nau;
@@ -2697,7 +3537,14 @@ router.post('/edit/:id', function (req, res) {
                 console.log(err);
                 return;
               } else {
-                req.flash('success', 'Auftrag geändert');
+
+
+
+
+
+
+
+                req.flash('success', 'Auftrag geändert. So ist er auch gleich viel hübscher anzusehen. ');
                 res.redirect('/');
               }
             })
@@ -2724,7 +3571,7 @@ router.post('/edit/:id', function (req, res) {
 
 
 
-      }else if (!req.body.shadow_klasse && req.body.klasse){
+    } else if (!req.body.shadow_klasse && req.body.klasse) {
       console.log('ALT');
 
 
@@ -2758,7 +3605,7 @@ router.post('/edit/:id', function (req, res) {
 
 
 
-        var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' +  start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+        var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
 
 
         article.created = nau;
@@ -2890,6 +3737,122 @@ router.get('/:id', function (req, res) {
 
         var x = article.body.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
         //console.log('x nnnnn ' + article.lehrer.name);
+
+
+
+
+
+
+        console.log('article.termin:     ' + article.termin);
+        var tag = article.termin.substring(0, 2)
+        var monat = article.termin.substring(3, 5)
+        var jahr = article.termin.substring(6, 10)
+
+        console.log('tag:     ' + tag);
+        console.log('monat:   ' + monat);
+        console.log('jahr:    ' + jahr);
+
+        var termin = new Date(jahr, monat - 1, tag, 16);
+
+        console.log('termin:    ' + termin);
+        var jetzt = new Date();
+        console.log('jeks:    ' + jetzt);
+
+
+
+
+
+
+
+
+
+        // To calculate the time difference of two dates 
+        var Difference_In_Time = termin.getTime() - jetzt.getTime();
+
+        // To calculate the no. of days between two dates 
+        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+        console.log('  ');
+        console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + article.title);
+
+        console.log('Total number of days between dates   ' + Difference_In_Days);
+
+
+
+
+        if (Difference_In_Days >= 0) {
+
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() === termin.getDate()) {
+
+            article.termin = 'heute 16 Uhr'
+          }
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 1 === termin.getDate()) {
+
+            article.termin = 'morgen 16 Uhr'
+          }
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 2 === termin.getDate()) {
+
+            article.termin = 'übermorgen'
+          }
+
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 3 === termin.getDate()) {
+
+            article.termin = 'in 3 Tagen'
+          }
+
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 4 === termin.getDate()) {
+
+            article.termin = 'in 4 Tagen'
+          }
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 5 === termin.getDate()) {
+
+            article.termin = 'in 5 Tagen'
+          }
+          if (jetzt.getFullYear() === termin.getFullYear() &&
+            jetzt.getMonth() === termin.getMonth() &&
+            jetzt.getDate() + 6 === termin.getDate()) {
+
+            article.termin = 'in 6 Tagen'
+          }
+
+
+
+
+
+        } else {
+          ///Termin vorüber
+          article.termin = 'abgelaufen'
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         res.render('article', {

@@ -1,30 +1,28 @@
-extends layout
+extends layout2
 
 block content
     .container
       .row.h-100.d-flex.justify-content-center
         .col-12.col-sm-8.col-md-6.col-lg-4
-          .card.border.bg-custom-green
-            .card-header
-              ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
-                li.nav-item
-                  a.nav-link.active.bg-custom-green.no-border(href='#history', role='tab', aria-controls='history', aria-selected='true') Für LehrerInnen
+          .card.border
             .card-body.bg-custom-green
+              br 
               h4.card-title Hier kannst du dich registrieren
+              br 
               .tab-content.mt-3
                 #history.tab-pane.active(role='tabpanel')
                   p.card-text
                     form(method='POST', action='/users/register_lehrer')
                         #form-group  
-                            input#validationServer01.form-control.is-valid.form-control(name='name', type=text, required='', placeholder='Sichtbarer Name ')
+                            input#validationServer01.form-control(name='name', type=text, required='', placeholder='Sichtbarer Name, z.B. "Frau Stahlberg"')
                             br
                         #form-group  
-                            input#validationServer01.form-control.is-valid.form-control(name='username', type=text, required='', placeholder='Behörden-Email')
+                            input#validationServer01.form-control(name='username', type=text, required='', placeholder='SaH-Email')
                             br
                         #form-group  
-                            input#validationServer01.form-control.is-valid.form-control(type=text, name='password', required='', placeholder='Passwort')
+                            input#validationServer01.form-control(type=text, name='password', required='', placeholder='Passwort')
                             br
                         #form-group  
-                            input#validationServer01.form-control.is-valid.form-control(type=text, name='password2', required='', placeholder='Passwort wiederholen')                             
+                            input#validationServer01.form-control(type=text, name='password2', required='', placeholder='Passwort wiederholen')                             
                         br
-                        input.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Ok')
+                        input.btn.btn-danger.bg-danger.text-white.float-right(type='submit', value='Registrieren')

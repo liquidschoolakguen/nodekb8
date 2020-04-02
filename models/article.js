@@ -74,6 +74,16 @@ let articleSchema = mongoose.Schema({
     },
 
 
+  
+
+    ha_grau:{
+        type:String,
+        required:false   
+
+
+    },
+
+
     schuelers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
