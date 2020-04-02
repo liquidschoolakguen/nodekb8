@@ -2736,7 +2736,9 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
         var diffDays = Math.floor(diffMs / 86400000); // days
         var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
         var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
-
+        
+        
+        console.log('diffMs:    ' + diffMs);
 
         if (diffMs >= 0) {
 

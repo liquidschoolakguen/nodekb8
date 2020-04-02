@@ -314,15 +314,15 @@ app.get('/', function (req, res) {
                 var monat = my_article.termin.substring(3, 5)
                 var jahr = my_article.termin.substring(6, 10)
 
-                console.log('tag:     ' + tag);
-                console.log('monat:   ' + monat);
-                console.log('jahr:    ' + jahr);
+                //console.log('tag:     ' + tag);
+               // console.log('monat:   ' + monat);
+                //console.log('jahr:    ' + jahr);
 
                 var termin = new Date(jahr, monat - 1, tag, 16);
 
-                console.log('termin:    ' + termin);
+                //console.log('termin:  ' + termin);
                 var jetzt = new Date();
-                console.log('jeks:    ' + jetzt);
+                //console.log('jeks:    ' + jetzt);
 
 
 
@@ -338,10 +338,10 @@ app.get('/', function (req, res) {
                 // To calculate the no. of days between two dates 
                 var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 
-                console.log('  ');
-                console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + my_article.title);
+                //console.log('  ');
+               // console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + my_article.title);
 
-                console.log('Total number of days between dates   ' + Difference_In_Days);
+               // console.log('Total number of days between dates   ' + Difference_In_Days);
 
 
 
@@ -463,7 +463,7 @@ app.get('/', function (req, res) {
 
 
 
-              my_articles.forEach(function (my_article) {
+            /*   my_articles.forEach(function (my_article) {
 
                 console.log('                          ');
                 console.log('----------------------    ' + my_article.ha_gruen);
@@ -471,7 +471,7 @@ app.get('/', function (req, res) {
                 console.log('----------------------    ' + my_article.ha_grau);
 
               })
-
+ */
 
 
               res.render('index', {
@@ -515,7 +515,7 @@ app.get('/', function (req, res) {
 
 
 
-              console.log('okkkkkkkkkkk');
+             // console.log('okkkkkkkkkkk');
 
 
 
@@ -524,7 +524,7 @@ app.get('/', function (req, res) {
 
 
 
-              console.log('neeeeeeeeeeeeeeee');
+             // console.log('neeeeeeeeeeeeeeee');
 
 
             }
@@ -544,20 +544,20 @@ app.get('/', function (req, res) {
                 //console.log('-------------------------------------')
                 my_articles.forEach(function (my_article) {
                   // console.log(my_article);
-                  console.log('my_article.termin:     ' + my_article.termin);
+                 // console.log('my_article.termin:     ' + my_article.termin);
                   var tag = my_article.termin.substring(0, 2)
                   var monat = my_article.termin.substring(3, 5)
                   var jahr = my_article.termin.substring(6, 10)
 
-                  console.log('tag:     ' + tag);
-                  console.log('monat:   ' + monat);
-                  console.log('jahr:    ' + jahr);
+                 // console.log('tag:     ' + tag);
+                 // console.log('monat:   ' + monat);
+                 // console.log('jahr:    ' + jahr);
 
                   var termin = new Date(jahr, monat - 1, tag, 16);
 
-                  console.log('termin:    ' + termin);
+                 // console.log('termin:    ' + termin);
                   var jetzt = new Date();
-                  console.log('jeks:    ' + jetzt);
+                // console.log('jeks:    ' + jetzt);
 
 
 
@@ -573,10 +573,10 @@ app.get('/', function (req, res) {
                   // To calculate the no. of days between two dates 
                   var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 
-                  console.log('  ');
-                  console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + my_article.title);
+                  //console.log('  ');
+                 // console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + my_article.title);
 
-                  console.log('Total number of days between dates   ' + Difference_In_Days);
+                 // console.log('Total number of days between dates   ' + Difference_In_Days);
 
 
 
@@ -661,14 +661,14 @@ app.get('/', function (req, res) {
 
 
 
-
+/* 
                 console.log('-------------------------------------');
                 my_articles.forEach(function (my) {
 
                   console.log('created:  ' + my.created + ' |  title:  ' + my.title + ' |  create_as_date  ' + my.created_as_date)
 
                 })
-
+ */
 
                 res.render('index', {
 

@@ -112,7 +112,7 @@ router.post('/register_schueler', function (req, res) {
     const klasse = req.body.klasse;
     const password = req.body.password;
     const password2 = req.body.password2;
-
+    console.log('           k k k k k k             k k k k k k k k                    k k k k k k ');
     req.checkBody('username', 'Email wird benötigt').notEmpty();
     req.checkBody('password', 'Password wird benötigt').notEmpty();
     req.checkBody('password2', 'Passwörter stimmen nicht überein').equals(req.body.password);
