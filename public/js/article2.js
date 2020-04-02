@@ -37,6 +37,19 @@ $(document).ready(function () {
 
 
 
+    $("#reused_form2").submit(function (event) {
+        //alert( "Handler for .submit() called." );
+
+
+        window.onbeforeunload = function () {
+
+        }
+    });
+    /////////////////////////////////////////////////////////7
+
+
+
+
 
 
 

@@ -126,7 +126,7 @@ block content
                                                     | Wenn du die Korrektur abschickst, kannst du sie nicht mehr ändern.                         
                                 #history_x.tab-pane(role='tabpanel', aria-labelledby='history_x-tab')
                                     p.card-text
-                                        form#reused_form.montform(method='POST' action='/articles/rueckgabe_hausarbeit/'+hausarbeit._id)
+                                        form#reused_form2.montform(method='POST' action='/articles/rueckgabe_hausarbeit/'+hausarbeit._id)
                                             #form-transition-group.my-margin-top
                                                 .form-row
                                                     input.form-control.invisible(type='text', placeholder='hausaufgabeId',  name='hausaufgabe_id', value= hausarbeit._id)
