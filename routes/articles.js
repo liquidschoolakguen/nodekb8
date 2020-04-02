@@ -2797,7 +2797,14 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
             })
         
         
-   
+        
+        
+        
+        
+        
+        
+        
+        
         
           });
 
@@ -2811,7 +2818,7 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
 
 
               req.flash('danger', 'Der Schüler hat für die Nachbesserung nicht genug Zeit. Der Nachbesserungswunsch muss spätestens 2 Stunden vor Abgabefrist erfolgen. Alles andere wäre ja auch unfair.');
-              res.redirect('/');
+              res.redirect('/articles/article_schuelers/' +  req.params.id);
               return; 
 
 
