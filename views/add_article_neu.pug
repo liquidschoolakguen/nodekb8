@@ -16,16 +16,7 @@ block content
                                                         input#defaultCheck1.form-check-input(type='checkbox', value='false',  name='schueler_'+i)
                                                         input.form-control.invisible(type='text',  name='id_'+i, value= schueler._id)
                                                         label.form-check-label(for='defaultCheck1')
-                                                        | #{schueler.name} 
-                                    .form-group.col-md-12                                   
-                                        .container-fluid(style='margin-left:10px; border:none !important;')
-                                            .row.justify-content-start
-                                                each my_schueler, i in my_schuelers
-                                                    .col-3(style='margin-bottom:0px; border:none !important;')
-                                                        input#defaultCheck1.form-check-input(type='checkbox', value='true',  name='schuelers['+i+']')
-                                                        input.form-control.invisible(type='text',  name='id['+i+']', value= my_schueler._id)
-                                                        label.form-check-label(for='defaultCheck1')
-                                                        | #{my_schueler.name}                                                         
+                                                        | #{schueler.name}                                                         
                                     .form-group.col-md-12
                                         br
                                         input#validationServer01.form-control(type='text', placeholder='Titel der Hausarbeit',  required='' name='title')

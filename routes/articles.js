@@ -1103,7 +1103,7 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
 
 
 
-
+/* 
         console.log('Willi wills wissen        :      '+req.body.schuelers);
 
         console.log('Willi wills wissen []     :      '+req.body.schuelers[0]);
@@ -1119,7 +1119,7 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
           ii++;
         });
 
-
+ */
 
 
 
