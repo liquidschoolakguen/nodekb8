@@ -365,8 +365,21 @@ min-width: 100px;
 
 .bold-green{
   font-weight: bold;
-  color: green;
+  color: #5cb85c;
  margin-top: 22px !important;
+ margin-bottom: 6px !important;
+ margin-left: 3px !important;
+}
+
+
+
+
+.bold-info{
+  font-weight: bold;
+  color: #5bc0de;
+  margin-top: 22px !important;
+  margin-bottom: 6px !important;
+  margin-left: 3px !important;
 }
 
 
@@ -375,6 +388,8 @@ min-height: 320px!important;
 
 
 }
+
+
 
 
 .color-red {

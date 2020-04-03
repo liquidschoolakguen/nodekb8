@@ -212,7 +212,7 @@ router.get('/edit/:id', ensureAuthenticated, function (req, res) {
                 arti.schuelers.forEach(function (arti_schueler) {
                   // console.log('ein all-schüler: ' + all_schueler.name + ' / ' + all_schueler._id);
                   if (all_schueler._id.toString() === arti_schueler._id.toString()) {
-                    console.log('ein arti-schüler: ' + arti_schueler.name + ' / ' + arti_schueler._id);
+                    //console.log('ein arti-schüler: ' + arti_schueler.name + ' / ' + arti_schueler._id);
                     all_schueler.article_token = true
                   }
                 });
@@ -606,122 +606,6 @@ router.get('/edit_hausarbeit/:id', ensureAuthenticated, function (req, res) {
 
 
 
-        console.log('ha.article.termin:     ' + ha.article.termin);
-        var tag = ha.article.termin.substring(0, 2)
-        var monat = ha.article.termin.substring(3, 5)
-        var jahr = ha.article.termin.substring(6, 10)
-
-        console.log('tag:     ' + tag);
-        console.log('monat:   ' + monat);
-        console.log('jahr:    ' + jahr);
-
-        var termin = new Date(jahr, monat - 1, tag, 16);
-
-        console.log('termin:    ' + termin);
-        var jetzt = new Date();
-        console.log('jeks:    ' + jetzt);
-
-
-
-
-
-
-
-
-
-        // To calculate the time difference of two dates 
-        var Difference_In_Time = termin.getTime() - jetzt.getTime();
-
-        // To calculate the no. of days between two dates 
-        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-
-        console.log('  ');
-        console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + ha.article.title);
-
-        console.log('Total number of days between dates   ' + Difference_In_Days);
-
-
-
-
-        if (Difference_In_Days >= 0) {
-
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() === termin.getDate()) {
-
-            ha.article.termin = 'heute 16 Uhr'
-          }
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 1 === termin.getDate()) {
-
-            ha.article.termin = 'morgen 16 Uhr'
-          }
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 2 === termin.getDate()) {
-
-            ha.article.termin = 'übermorgen'
-          }
-
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 3 === termin.getDate()) {
-
-            ha.article.termin = 'in 3 Tagen'
-          }
-
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 4 === termin.getDate()) {
-
-            ha.article.termin = 'in 4 Tagen'
-          }
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 5 === termin.getDate()) {
-
-            ha.article.termin = 'in 5 Tagen'
-          }
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 6 === termin.getDate()) {
-
-            ha.article.termin = 'in 6 Tagen'
-          }
-
-
-
-
-
-        } else {
-          ///Termin vorüber
-          ha.article.termin = 'abgelaufen'
-
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -985,7 +869,7 @@ router.post('/add_bingo_edit', ensureAuthenticated, function (req, res) {
 
                 all_schueler.article_token = false
 
-                console.log('schüler: ' + all_schueler.name);
+                //console.log('schüler: ' + all_schueler.name);
 
                 arti.schuelers.forEach(function (arti_schueler) {
 
@@ -1154,7 +1038,7 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
 
         schuelers.forEach(function (schueler) {
 
-          console.log('schüler: ' + schueler.name);
+          //console.log('schüler: ' + schueler.name);
 
 
         });
@@ -1162,6 +1046,7 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
 
         res.render('add_article_neu', {
           schuelers: schuelers,
+          my_schuelers: schuelers,
           abgabe: nau,
           klasse: req.body.klasse
         })
@@ -1219,7 +1104,20 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
 
 
 
+        console.log('Willi wills wissen        :      '+req.body.schuelers);
 
+        console.log('Willi wills wissen []     :      '+req.body.schuelers[0]);
+
+
+       var ii =0;
+       req.body.schuelers.forEach(function (schueler) {
+  
+          console.log('schueler        :      '  +ii+ '        '+schueler+ '      '+req.body.id[ii]);
+  
+
+
+          ii++;
+        });
 
 
 
@@ -1749,37 +1647,159 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
         var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
 
 
-        if (diffMs >= 0) {
+        if (diffMs >= 0) {// wenn termin i der Zukunft liegt und nicht in der Vergangeheit
 
 
 
 
 
-          if (diffDays === 0) {//heute
-            //my_article.termin = 'heute'
-          } else if (diffDays === 1) {//morgen
-
-            //my_article.termin = 'morgen'
 
 
-          } else if (diffDays === 2) {//morgen
-
-            // my_article.termin = 'übermorgen'
 
 
-          } else {
-
-            //  my_article.termin = 'in ' + diffDays + ' Tagen'
 
 
-          }
+
+
+          article.save(function (err, art) {
+
+            if (err) {
+              console.log(err);
+              return;
+            } else {
+              // console.log('ADDED ' + art._id);
+              //console.log('ADDED ' + article.lehrer);
+
+
+
+              User.find().where('_id').in(jo).exec((err, schuelers) => {
+
+
+
+
+
+                schuelers.forEach(function (schueler) {
+                  console.log('record :   ' + schueler.name);
+
+
+                  Article.findByIdAndUpdate(art._id,
+                    { $push: { schuelers: schueler } },
+                    { safe: true, upsert: true },
+                    function (err, uptdatedArticle) {
+                      if (err) {
+                        console.log(err);
+                      } else {
+                        User.findByIdAndUpdate(schueler._id,
+                          { $push: { auftrags: uptdatedArticle } },
+                          { safe: true, upsert: true },
+                          function (err, uptdatedSchueler) {
+                            if (err) {
+                              console.log(err);
+                            } else {
+                              /////
+                              /*   console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm ')
+                                console.log('bimmelbingo       '+uptdatedSchueler)
+                                console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm ') */
+                            }
+                          });
+                      }
+                    });
+
+
+                });//ende loop
+
+
+
+
+
+
+
+                /// nach der loop
+
+
+                Article.
+                  findOne({ _id: art._id }).
+                  populate('schuelers').
+                  exec(function (err2, arti) {
+                    if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+                    console.log('-------------------------------------');
+                    console.log('-------------------------------------');
+                    console.log('-------------------------------------');
+                    console.log('-------------------------------------');
+                    console.log('articleK: ' + arti);
+                    console.log('-------------------------------------');
+                    console.log('-------------------------------------');
+                    console.log('-------------------------------------');
+                    console.log('-------------------------------------');
+
+
+
+                  });
+
+
+                schuelers.forEach(function (schueler) {
+
+
+                  User.
+                    findOne({ _id: schueler._id }).
+                    populate('auftrags').
+                    exec(function (err2, schue) {
+                      if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+
+                      console.log('schuelersY: ' + schue);
+                      console.log('-------------------------------------');
+
+
+
+
+
+                    });
+
+
+
+
+                });
+
+
+
+
+
+              });
+
+
+
+
+
+
+              req.flash('success', 'Auftrag erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
+              res.redirect('/');
+            }
+          })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         } else {
           ///zu spät
 
 
-          req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Der Auftrag wurde nicht erteilt');
+          req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn');
           res.redirect('add_article_klasse');
           return;
 
@@ -1794,147 +1814,6 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
 
 
 
-
-
-
-
-
-
-
-        article.save(function (err, art) {
-
-          if (err) {
-            console.log(err);
-            return;
-          } else {
-            // console.log('ADDED ' + art._id);
-            //console.log('ADDED ' + article.lehrer);
-
-
-
-            User.find().where('_id').in(jo).exec((err, schuelers) => {
-
-
-
-
-
-              schuelers.forEach(function (schueler) {
-                console.log('record :   ' + schueler.name);
-
-
-                Article.findByIdAndUpdate(art._id,
-                  { $push: { schuelers: schueler } },
-                  { safe: true, upsert: true },
-                  function (err, uptdatedArticle) {
-                    if (err) {
-                      console.log(err);
-                    } else {
-                      User.findByIdAndUpdate(schueler._id,
-                        { $push: { auftrags: uptdatedArticle } },
-                        { safe: true, upsert: true },
-                        function (err, uptdatedSchueler) {
-                          if (err) {
-                            console.log(err);
-                          } else {
-                            /////
-                            /*   console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm ')
-                              console.log('bimmelbingo       '+uptdatedSchueler)
-                              console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm ') */
-                          }
-                        });
-                    }
-                  });
-
-
-              });//ende loop
-
-
-
-
-
-
-
-              /// nach der loop
-
-
-              Article.
-                findOne({ _id: art._id }).
-                populate('schuelers').
-                exec(function (err2, arti) {
-                  if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
-                  console.log('-------------------------------------');
-                  console.log('-------------------------------------');
-                  console.log('-------------------------------------');
-                  console.log('-------------------------------------');
-                  console.log('articleK: ' + arti);
-                  console.log('-------------------------------------');
-                  console.log('-------------------------------------');
-                  console.log('-------------------------------------');
-                  console.log('-------------------------------------');
-
-
-
-                });
-
-
-              schuelers.forEach(function (schueler) {
-
-
-                User.
-                  findOne({ _id: schueler._id }).
-                  populate('auftrags').
-                  exec(function (err2, schue) {
-                    if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
-
-                    console.log('schuelersY: ' + schue);
-                    console.log('-------------------------------------');
-
-
-
-
-
-                  });
-
-
-
-
-              });
-
-
-
-
-
-
-
-
-
-            });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            req.flash('success', 'Auftrag erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
-            res.redirect('/');
-          }
-        })
       }
     }
   }
@@ -1980,99 +1859,102 @@ router.post("/add_alt", upload.single("file" /* name attribute of <file> element
       } else {
 
 
-        let article = new Article();
-        article.title = req.body.title;
-        article.author = req.user._id;
-        article.klasse = req.body.klasse;
-        article.fach = req.body.fach;
-        article.termin = req.body.termin;
-        article.body = req.body.body;
-        article.lehrer = req.user._id;
-        article.ha_gelb = '0';
-        article.ha_gruen = '0'
-        article.created_as_date = new Date();
-
-        const start = new Date();
-        var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
-        var nau = start.getDate() + '.' + start.getMonth() + '. (' + start.getHours() + ':' + start.getMinutes() + ')'
-
-        article.created = nau;
-
-        article.save(function (err) {
-
-          if (err) {
-            console.log(err);
-            return;
-          } else {
 
 
 
 
+        //console.log('-------------------------------------')
 
-            //console.log('-------------------------------------')
+        // console.log(my_article);
 
-            // console.log(my_article);
+        var tag = req.body.termin.substring(0, 2)
+        var monat = req.body.termin.substring(3, 5)
+        var jahr = req.body.termin.substring(6, 10)
 
-            var tag = req.body.termin.substring(0, 2)
-            var monat = req.body.termin.substring(3, 5)
-            var jahr = req.body.termin.substring(6, 10)
+        console.log('tag:     ' + tag);
+        console.log('monat:   ' + monat);
+        console.log('jahr:    ' + jahr);
 
-            console.log('tag:     ' + tag);
-            console.log('monat:   ' + monat);
-            console.log('jahr:    ' + jahr);
+        var d = new Date(jahr, monat - 1, tag, 16);
 
-            var d = new Date(jahr, monat - 1, tag, 16);
-
-            console.log('Date:    ' + d);
-            var jetzt = new Date();
-            console.log('Date:    ' + jetzt);
-
+        console.log('Date:    ' + d);
+        var jetzt = new Date();
+        console.log('Date:    ' + jetzt);
 
 
-            var today = jetzt
-            var Christmas = d
-            var diffMs = (Christmas - today); // milliseconds between now & Christmas
-            var diffDays = Math.floor(diffMs / 86400000); // days
-            var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
-            var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+
+        var today = jetzt
+        var Christmas = d
+        var diffMs = (Christmas - today); // milliseconds between now & Christmas
 
 
-            if (diffMs >= 0) {
+        if (diffMs >= 0) {
 
 
 
 
 
-              if (diffDays === 0) {//heute
-                //my_article.termin = 'heute'
-              } else if (diffDays === 1) {//morgen
+          let article = new Article();
+          article.title = req.body.title;
+          article.author = req.user._id;
+          article.klasse = req.body.klasse;
+          article.fach = req.body.fach;
+          article.termin = req.body.termin;
+          article.body = req.body.body;
+          article.lehrer = req.user._id;
+          article.ha_gelb = '0';
+          article.ha_gruen = '0'
+          article.created_as_date = new Date();
 
-                //my_article.termin = 'morgen'
+          const start = new Date();
+          var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
+          var nau = start.getDate() + '.' + start.getMonth() + '. (' + start.getHours() + ':' + start.getMinutes() + ')'
 
+          article.created = nau;
 
-              } else if (diffDays === 2) {//morgen
+          article.save(function (err) {
 
-                // my_article.termin = 'übermorgen'
-
-
-              } else {
-
-                //  my_article.termin = 'in ' + diffDays + ' Tagen'
-
-
-              }
-
-
-            } else {
-              ///zu spät
-
-
-              req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Der Auftrag wurde nicht erteilt');
-              res.redirect('add_article_klasse');
+            if (err) {
+              console.log(err);
               return;
+            } else {
 
 
+
+
+
+
+              //console.log('ADDED ' + article.author);
+              //console.log('ADDED ' + article.lehrer);
+              req.flash('success', 'Auftrag erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
+              res.redirect('/');
             }
+          })
+
+
+
+
+
+
+
+        } else {
+          ///zu spät
+
+
+
+
+
+
+
+
+
+
+          req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn');
+          res.redirect('add_article_klasse');
+          return;
+
+
+        }
 
 
 
@@ -2085,12 +1967,7 @@ router.post("/add_alt", upload.single("file" /* name attribute of <file> element
 
 
 
-            //console.log('ADDED ' + article.author);
-            //console.log('ADDED ' + article.lehrer);
-            req.flash('success', 'Auftrag erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
-            res.redirect('/');
-          }
-        })
+
       }
     }
   }
@@ -2710,123 +2587,123 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
 
 
 
-//console.log('-------------------------------------')
+      //console.log('-------------------------------------')
 
-        // console.log(my_article);
+      // console.log(my_article);
 
-        var tag = article.termin.substring(0, 2)
-        var monat = article.termin.substring(3, 5)
-        var jahr = article.termin.substring(6, 10)
+      var tag = article.termin.substring(0, 2)
+      var monat = article.termin.substring(3, 5)
+      var jahr = article.termin.substring(6, 10)
 
-        console.log('tag:     ' + tag);
-        console.log('monat:   ' + monat);
-        console.log('jahr:    ' + jahr);
+      console.log('tag:     ' + tag);
+      console.log('monat:   ' + monat);
+      console.log('jahr:    ' + jahr);
 
-        var d = new Date(jahr, monat - 1, tag, 14);
+      var d = new Date(jahr, monat - 1, tag, 14);
 
-        console.log('Date:    ' + d);
-        var jetzt = new Date();
-        console.log('Date:    ' + jetzt);
-
-
-
-        var today = jetzt
-        var Christmas = d
-        var diffMs = (Christmas - today); // milliseconds between now & Christmas
-        var diffDays = Math.floor(diffMs / 86400000); // days
-        var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
-        var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
-        
-        
-        console.log('diffMs:    ' + diffMs);
-
-        if (diffMs >= 0) {
+      console.log('Date:    ' + d);
+      var jetzt = new Date();
+      console.log('Date:    ' + jetzt);
 
 
 
+      var today = jetzt
+      var Christmas = d
+      var diffMs = (Christmas - today); // milliseconds between now & Christmas
+      var diffDays = Math.floor(diffMs / 86400000); // days
+      var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+      var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
 
-          var query = { '_id': req.params.id };
 
+      console.log('diffMs:    ' + diffMs);
 
-          let hausarbeit = {};
-        
-          hausarbeit.nachbessern_text = req.body.nachbessern_text;
-          hausarbeit.nachbessern_option = req.body.nachbessern_option;
-        
-          hausarbeit.status = '3';
-        
-        
-          Hausarbeit.findOneAndUpdate(query, hausarbeit, { upsert: true }, function (err, doc) {
-            if (err) return res.send(500, { error: err });
-        
-        
-        
-        
-        
-        
-            User.findById(doc.schueler, function (err, user) {
-        
-              if (err) throw err;
-              if (user) {
-        
-        
-        
-        
-        
-        
-        
-                req.flash('success', 'Du hast die Hausarbeit von ' + user.name + ' zum Nachbessern zurückgesendet. Na, ob das noch mal was wird?');
-                res.redirect('/articles/article_schuelers/' + doc.article);
-        
-        
-        
-        
-        
-        
-              } else {
-        
-        
-        
-                req.flash('danger', 'fehler. Bitte Mithat Akgün kontaktieren');
-                res.redirect('/');
-        
-        
-              }
-        
-        
-        
-        
-            })
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-          });
+      if (diffMs >= 0) {
 
 
 
-          
+
+        var query = { '_id': req.params.id };
 
 
-        } else {
-          ///zu spät
+        let hausarbeit = {};
+
+        hausarbeit.nachbessern_text = req.body.nachbessern_text;
+        hausarbeit.nachbessern_option = req.body.nachbessern_option;
+
+        hausarbeit.status = '3';
 
 
-              req.flash('danger', 'Der Schüler hat für die Nachbesserung nicht genug Zeit. Der Nachbesserungswunsch muss spätestens 2 Stunden vor Abgabefrist erfolgen. Alles andere wäre ja auch unfair.');
-              res.redirect('/articles/article_schuelers/' +  req.params.id);
-              return; 
+        Hausarbeit.findOneAndUpdate(query, hausarbeit, { upsert: true }, function (err, doc) {
+          if (err) return res.send(500, { error: err });
 
 
-        }
 
-    
+
+
+
+          User.findById(doc.schueler, function (err, user) {
+
+            if (err) throw err;
+            if (user) {
+
+
+
+
+
+
+
+              req.flash('success', 'Du hast die Hausarbeit von ' + user.name + ' zum Nachbessern zurückgesendet. Na, ob das noch mal was wird?');
+              res.redirect('/articles/article_schuelers/' + doc.article);
+
+
+
+
+
+
+            } else {
+
+
+
+              req.flash('danger', 'fehler. Bitte Mithat Akgün kontaktieren');
+              res.redirect('/');
+
+
+            }
+
+
+
+
+          })
+
+
+
+
+
+
+
+
+
+
+
+        });
+
+
+
+
+
+
+      } else {
+        ///zu spät
+
+
+        req.flash('danger', 'Der Schüler hat für die Nachbesserung nicht genug Zeit. Der Nachbesserungswunsch muss spätestens 2 Stunden vor Abgabefrist erfolgen. Alles andere wäre ja auch unfair.');
+        res.redirect('/articles/article_schuelers/' + req.params.id);
+        return;
+
+
+      }
+
+
     })
 
 
@@ -2890,7 +2767,7 @@ router.post('/edit/:id', function (req, res) {
     //console.log('............... ' + req.body.body.length);
 
     req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Wem willst du hier eigentlich ein X für ein U vormachen?');
-    res.redirect('/articles/add');
+    res.redirect('/');
 
   } else {
 
@@ -2934,36 +2811,6 @@ router.post('/edit/:id', function (req, res) {
 
 
 
-      if (diffDays === 0) {//heute
-        //my_article.termin = 'heute'
-      } else if (diffDays === 1) {//morgen
-
-        //my_article.termin = 'morgen'
-
-
-      } else if (diffDays === 2) {//morgen
-
-        // my_article.termin = 'übermorgen'
-
-
-      } else {
-
-        //  my_article.termin = 'in ' + diffDays + ' Tagen'
-
-
-      }
-
-
-    } else {
-      ///zu spät
-
-
-      req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Der Auftrag wurde nicht geändert. Ist ja auch klar, weil nur die Wenigsten unserer SuS durch die Zeit reisen können, um ihre Hausaufgaben zu erledigen.');
-      res.redirect('/');
-      return;
-
-
-    }
 
 
 
@@ -2982,7 +2829,11 @@ router.post('/edit/:id', function (req, res) {
 
 
 
-    if (req.body.shadow_klasse && !req.body.klasse) {
+
+
+
+
+      if (req.body.shadow_klasse && !req.body.klasse) {
 
 
 
@@ -2990,407 +2841,407 @@ router.post('/edit/:id', function (req, res) {
 
 
 
-      var s00 = req.body.schueler_0
-      var s01 = req.body.schueler_1
-      var s02 = req.body.schueler_2
-      var s03 = req.body.schueler_3
-      var s04 = req.body.schueler_4
-      var s05 = req.body.schueler_5
-      var s06 = req.body.schueler_6
-      var s07 = req.body.schueler_7
-      var s08 = req.body.schueler_8
-      var s09 = req.body.schueler_9
-      var s10 = req.body.schueler_10
-      var s11 = req.body.schueler_11
-      var s12 = req.body.schueler_12
-      var s13 = req.body.schueler_13
-      var s14 = req.body.schueler_14
-      var s15 = req.body.schueler_15
-      var s16 = req.body.schueler_16
-      var s17 = req.body.schueler_17
-      var s18 = req.body.schueler_18
-      var s19 = req.body.schueler_19
-      var s20 = req.body.schueler_20
-      var s21 = req.body.schueler_21
-      var s22 = req.body.schueler_22
-      var s23 = req.body.schueler_23
-      var s24 = req.body.schueler_24
-      var s25 = req.body.schueler_25
-      var s26 = req.body.schueler_26
-      var s27 = req.body.schueler_27
-      var s28 = req.body.schueler_28
-      var s29 = req.body.schueler_29
-      var s30 = req.body.schueler_30
-      var s31 = req.body.schueler_31
-      var s32 = req.body.schueler_32
-      var s33 = req.body.schueler_33
-      var s34 = req.body.schueler_34
-      var s35 = req.body.schueler_35
-      var s36 = req.body.schueler_36
-      var s37 = req.body.schueler_37
-      var s38 = req.body.schueler_38
-      var s39 = req.body.schueler_39
-      var s40 = req.body.schueler_40
-      var s41 = req.body.schueler_41
-      var s42 = req.body.schueler_42
-      var s43 = req.body.schueler_43
-      var s44 = req.body.schueler_44
-      var s45 = req.body.schueler_45
-      var s46 = req.body.schueler_46
-      var s47 = req.body.schueler_47
-      var s48 = req.body.schueler_48
-      var s49 = req.body.schueler_49
-      var s50 = req.body.schueler_50
-      var s51 = req.body.schueler_51
-      var s52 = req.body.schueler_52
-      var s53 = req.body.schueler_53
-      var s54 = req.body.schueler_54
-      var s55 = req.body.schueler_55
-      var s56 = req.body.schueler_56
-      var s57 = req.body.schueler_57
-      var s58 = req.body.schueler_58
-      var s59 = req.body.schueler_59
-      var s60 = req.body.schueler_60
-      var s61 = req.body.schueler_61
-      var s62 = req.body.schueler_62
-      var s63 = req.body.schueler_63
-      var s64 = req.body.schueler_64
-      var s65 = req.body.schueler_65
-      var s66 = req.body.schueler_66
-      var s67 = req.body.schueler_67
-      var s68 = req.body.schueler_68
-      var s69 = req.body.schueler_69
-      var s70 = req.body.schueler_70
-      var s71 = req.body.schueler_71
-      var s72 = req.body.schueler_72
-      var s73 = req.body.schueler_73
-      var s74 = req.body.schueler_74
-      var s75 = req.body.schueler_75
-      var s76 = req.body.schueler_76
-      var s77 = req.body.schueler_77
-      var s78 = req.body.schueler_78
-      var s79 = req.body.schueler_79
-      var s80 = req.body.schueler_80
-      var s81 = req.body.schueler_81
-      var s82 = req.body.schueler_82
-      var s83 = req.body.schueler_83
-      var s84 = req.body.schueler_84
-      var s85 = req.body.schueler_85
-      var s86 = req.body.schueler_86
-      var s87 = req.body.schueler_87
-      var s88 = req.body.schueler_88
-      var s89 = req.body.schueler_89
-      var s90 = req.body.schueler_90
+        var s00 = req.body.schueler_0
+        var s01 = req.body.schueler_1
+        var s02 = req.body.schueler_2
+        var s03 = req.body.schueler_3
+        var s04 = req.body.schueler_4
+        var s05 = req.body.schueler_5
+        var s06 = req.body.schueler_6
+        var s07 = req.body.schueler_7
+        var s08 = req.body.schueler_8
+        var s09 = req.body.schueler_9
+        var s10 = req.body.schueler_10
+        var s11 = req.body.schueler_11
+        var s12 = req.body.schueler_12
+        var s13 = req.body.schueler_13
+        var s14 = req.body.schueler_14
+        var s15 = req.body.schueler_15
+        var s16 = req.body.schueler_16
+        var s17 = req.body.schueler_17
+        var s18 = req.body.schueler_18
+        var s19 = req.body.schueler_19
+        var s20 = req.body.schueler_20
+        var s21 = req.body.schueler_21
+        var s22 = req.body.schueler_22
+        var s23 = req.body.schueler_23
+        var s24 = req.body.schueler_24
+        var s25 = req.body.schueler_25
+        var s26 = req.body.schueler_26
+        var s27 = req.body.schueler_27
+        var s28 = req.body.schueler_28
+        var s29 = req.body.schueler_29
+        var s30 = req.body.schueler_30
+        var s31 = req.body.schueler_31
+        var s32 = req.body.schueler_32
+        var s33 = req.body.schueler_33
+        var s34 = req.body.schueler_34
+        var s35 = req.body.schueler_35
+        var s36 = req.body.schueler_36
+        var s37 = req.body.schueler_37
+        var s38 = req.body.schueler_38
+        var s39 = req.body.schueler_39
+        var s40 = req.body.schueler_40
+        var s41 = req.body.schueler_41
+        var s42 = req.body.schueler_42
+        var s43 = req.body.schueler_43
+        var s44 = req.body.schueler_44
+        var s45 = req.body.schueler_45
+        var s46 = req.body.schueler_46
+        var s47 = req.body.schueler_47
+        var s48 = req.body.schueler_48
+        var s49 = req.body.schueler_49
+        var s50 = req.body.schueler_50
+        var s51 = req.body.schueler_51
+        var s52 = req.body.schueler_52
+        var s53 = req.body.schueler_53
+        var s54 = req.body.schueler_54
+        var s55 = req.body.schueler_55
+        var s56 = req.body.schueler_56
+        var s57 = req.body.schueler_57
+        var s58 = req.body.schueler_58
+        var s59 = req.body.schueler_59
+        var s60 = req.body.schueler_60
+        var s61 = req.body.schueler_61
+        var s62 = req.body.schueler_62
+        var s63 = req.body.schueler_63
+        var s64 = req.body.schueler_64
+        var s65 = req.body.schueler_65
+        var s66 = req.body.schueler_66
+        var s67 = req.body.schueler_67
+        var s68 = req.body.schueler_68
+        var s69 = req.body.schueler_69
+        var s70 = req.body.schueler_70
+        var s71 = req.body.schueler_71
+        var s72 = req.body.schueler_72
+        var s73 = req.body.schueler_73
+        var s74 = req.body.schueler_74
+        var s75 = req.body.schueler_75
+        var s76 = req.body.schueler_76
+        var s77 = req.body.schueler_77
+        var s78 = req.body.schueler_78
+        var s79 = req.body.schueler_79
+        var s80 = req.body.schueler_80
+        var s81 = req.body.schueler_81
+        var s82 = req.body.schueler_82
+        var s83 = req.body.schueler_83
+        var s84 = req.body.schueler_84
+        var s85 = req.body.schueler_85
+        var s86 = req.body.schueler_86
+        var s87 = req.body.schueler_87
+        var s88 = req.body.schueler_88
+        var s89 = req.body.schueler_89
+        var s90 = req.body.schueler_90
 
 
 
 
 
-      var oo = []
-      oo.push(s00);
-      oo.push(s01);
-      oo.push(s02);
-      oo.push(s03);
-      oo.push(s04);
-      oo.push(s05);
-      oo.push(s06);
-      oo.push(s07);
-      oo.push(s08);
-      oo.push(s09);
-      oo.push(s10);
-      oo.push(s11);
-      oo.push(s12);
-      oo.push(s13);
-      oo.push(s14);
-      oo.push(s15);
-      oo.push(s16);
-      oo.push(s17);
-      oo.push(s18);
-      oo.push(s19);
-      oo.push(s20);
-      oo.push(s21);
-      oo.push(s22);
-      oo.push(s23);
-      oo.push(s24);
-      oo.push(s25);
-      oo.push(s26);
-      oo.push(s27);
-      oo.push(s28);
-      oo.push(s29);
-      oo.push(s30);
-      oo.push(s31);
-      oo.push(s32);
-      oo.push(s33);
-      oo.push(s34);
-      oo.push(s35);
-      oo.push(s36);
-      oo.push(s37);
-      oo.push(s38);
-      oo.push(s39);
-      oo.push(s40);
-      oo.push(s41);
-      oo.push(s42);
-      oo.push(s43);
-      oo.push(s44);
-      oo.push(s45);
-      oo.push(s46);
-      oo.push(s47);
-      oo.push(s48);
-      oo.push(s49);
-      oo.push(s50);
-      oo.push(s51);
-      oo.push(s52);
-      oo.push(s53);
-      oo.push(s54);
-      oo.push(s55);
-      oo.push(s56);
-      oo.push(s57);
-      oo.push(s58);
-      oo.push(s59);
-      oo.push(s60);
-      oo.push(s61);
-      oo.push(s62);
-      oo.push(s63);
-      oo.push(s64);
-      oo.push(s65);
-      oo.push(s66);
-      oo.push(s67);
-      oo.push(s68);
-      oo.push(s69);
-      oo.push(s70);
-      oo.push(s71);
-      oo.push(s72);
-      oo.push(s73);
-      oo.push(s74);
-      oo.push(s75);
-      oo.push(s76);
-      oo.push(s77);
-      oo.push(s78);
-      oo.push(s79);
-      oo.push(s80);
-      oo.push(s81);
-      oo.push(s82);
-      oo.push(s83);
-      oo.push(s84);
-      oo.push(s85);
-      oo.push(s86);
-      oo.push(s87);
-      oo.push(s88);
-      oo.push(s89);
-      oo.push(s90);
+        var oo = []
+        oo.push(s00);
+        oo.push(s01);
+        oo.push(s02);
+        oo.push(s03);
+        oo.push(s04);
+        oo.push(s05);
+        oo.push(s06);
+        oo.push(s07);
+        oo.push(s08);
+        oo.push(s09);
+        oo.push(s10);
+        oo.push(s11);
+        oo.push(s12);
+        oo.push(s13);
+        oo.push(s14);
+        oo.push(s15);
+        oo.push(s16);
+        oo.push(s17);
+        oo.push(s18);
+        oo.push(s19);
+        oo.push(s20);
+        oo.push(s21);
+        oo.push(s22);
+        oo.push(s23);
+        oo.push(s24);
+        oo.push(s25);
+        oo.push(s26);
+        oo.push(s27);
+        oo.push(s28);
+        oo.push(s29);
+        oo.push(s30);
+        oo.push(s31);
+        oo.push(s32);
+        oo.push(s33);
+        oo.push(s34);
+        oo.push(s35);
+        oo.push(s36);
+        oo.push(s37);
+        oo.push(s38);
+        oo.push(s39);
+        oo.push(s40);
+        oo.push(s41);
+        oo.push(s42);
+        oo.push(s43);
+        oo.push(s44);
+        oo.push(s45);
+        oo.push(s46);
+        oo.push(s47);
+        oo.push(s48);
+        oo.push(s49);
+        oo.push(s50);
+        oo.push(s51);
+        oo.push(s52);
+        oo.push(s53);
+        oo.push(s54);
+        oo.push(s55);
+        oo.push(s56);
+        oo.push(s57);
+        oo.push(s58);
+        oo.push(s59);
+        oo.push(s60);
+        oo.push(s61);
+        oo.push(s62);
+        oo.push(s63);
+        oo.push(s64);
+        oo.push(s65);
+        oo.push(s66);
+        oo.push(s67);
+        oo.push(s68);
+        oo.push(s69);
+        oo.push(s70);
+        oo.push(s71);
+        oo.push(s72);
+        oo.push(s73);
+        oo.push(s74);
+        oo.push(s75);
+        oo.push(s76);
+        oo.push(s77);
+        oo.push(s78);
+        oo.push(s79);
+        oo.push(s80);
+        oo.push(s81);
+        oo.push(s82);
+        oo.push(s83);
+        oo.push(s84);
+        oo.push(s85);
+        oo.push(s86);
+        oo.push(s87);
+        oo.push(s88);
+        oo.push(s89);
+        oo.push(s90);
 
 
 
 
 
-      var id00 = req.body.id_0
-      var id01 = req.body.id_1
-      var id02 = req.body.id_2
-      var id03 = req.body.id_3
-      var id04 = req.body.id_4
-      var id05 = req.body.id_5
-      var id06 = req.body.id_6
-      var id07 = req.body.id_7
-      var id08 = req.body.id_8
-      var id09 = req.body.id_9
-      var id10 = req.body.id_10
-      var id11 = req.body.id_11
-      var id12 = req.body.id_12
-      var id13 = req.body.id_13
-      var id14 = req.body.id_14
-      var id15 = req.body.id_15
-      var id16 = req.body.id_16
-      var id17 = req.body.id_17
-      var id18 = req.body.id_18
-      var id19 = req.body.id_19
-      var id20 = req.body.id_20
-      var id21 = req.body.id_21
-      var id22 = req.body.id_22
-      var id23 = req.body.id_23
-      var id24 = req.body.id_24
-      var id25 = req.body.id_25
-      var id26 = req.body.id_26
-      var id27 = req.body.id_27
-      var id28 = req.body.id_28
-      var id29 = req.body.id_29
-      var id30 = req.body.id_30
-      var id31 = req.body.id_31
-      var id32 = req.body.id_32
-      var id33 = req.body.id_33
-      var id34 = req.body.id_34
-      var id35 = req.body.id_35
-      var id36 = req.body.id_36
-      var id37 = req.body.id_37
-      var id38 = req.body.id_38
-      var id39 = req.body.id_39
-      var id40 = req.body.id_40
-      var id41 = req.body.id_41
-      var id42 = req.body.id_42
-      var id43 = req.body.id_43
-      var id44 = req.body.id_44
-      var id45 = req.body.id_45
-      var id46 = req.body.id_46
-      var id47 = req.body.id_47
-      var id48 = req.body.id_48
-      var id49 = req.body.id_49
-      var id50 = req.body.id_50
-      var id51 = req.body.id_51
-      var id52 = req.body.id_52
-      var id53 = req.body.id_53
-      var id54 = req.body.id_54
-      var id55 = req.body.id_55
-      var id56 = req.body.id_56
-      var id57 = req.body.id_57
-      var id58 = req.body.id_58
-      var id59 = req.body.id_59
-      var id60 = req.body.id_60
-      var id61 = req.body.id_61
-      var id62 = req.body.id_62
-      var id63 = req.body.id_63
-      var id64 = req.body.id_64
-      var id65 = req.body.id_65
-      var id66 = req.body.id_66
-      var id67 = req.body.id_67
-      var id68 = req.body.id_68
-      var id69 = req.body.id_69
-      var id70 = req.body.id_70
-      var id71 = req.body.id_71
-      var id72 = req.body.id_72
-      var id73 = req.body.id_73
-      var id74 = req.body.id_74
-      var id75 = req.body.id_75
-      var id76 = req.body.id_76
-      var id77 = req.body.id_77
-      var id78 = req.body.id_78
-      var id79 = req.body.id_79
-      var id80 = req.body.id_80
-      var id81 = req.body.id_81
-      var id82 = req.body.id_82
-      var id83 = req.body.id_83
-      var id84 = req.body.id_84
-      var id85 = req.body.id_85
-      var id86 = req.body.id_86
-      var id87 = req.body.id_87
-      var id88 = req.body.id_88
-      var id89 = req.body.id_89
-      var id90 = req.body.id_90
+        var id00 = req.body.id_0
+        var id01 = req.body.id_1
+        var id02 = req.body.id_2
+        var id03 = req.body.id_3
+        var id04 = req.body.id_4
+        var id05 = req.body.id_5
+        var id06 = req.body.id_6
+        var id07 = req.body.id_7
+        var id08 = req.body.id_8
+        var id09 = req.body.id_9
+        var id10 = req.body.id_10
+        var id11 = req.body.id_11
+        var id12 = req.body.id_12
+        var id13 = req.body.id_13
+        var id14 = req.body.id_14
+        var id15 = req.body.id_15
+        var id16 = req.body.id_16
+        var id17 = req.body.id_17
+        var id18 = req.body.id_18
+        var id19 = req.body.id_19
+        var id20 = req.body.id_20
+        var id21 = req.body.id_21
+        var id22 = req.body.id_22
+        var id23 = req.body.id_23
+        var id24 = req.body.id_24
+        var id25 = req.body.id_25
+        var id26 = req.body.id_26
+        var id27 = req.body.id_27
+        var id28 = req.body.id_28
+        var id29 = req.body.id_29
+        var id30 = req.body.id_30
+        var id31 = req.body.id_31
+        var id32 = req.body.id_32
+        var id33 = req.body.id_33
+        var id34 = req.body.id_34
+        var id35 = req.body.id_35
+        var id36 = req.body.id_36
+        var id37 = req.body.id_37
+        var id38 = req.body.id_38
+        var id39 = req.body.id_39
+        var id40 = req.body.id_40
+        var id41 = req.body.id_41
+        var id42 = req.body.id_42
+        var id43 = req.body.id_43
+        var id44 = req.body.id_44
+        var id45 = req.body.id_45
+        var id46 = req.body.id_46
+        var id47 = req.body.id_47
+        var id48 = req.body.id_48
+        var id49 = req.body.id_49
+        var id50 = req.body.id_50
+        var id51 = req.body.id_51
+        var id52 = req.body.id_52
+        var id53 = req.body.id_53
+        var id54 = req.body.id_54
+        var id55 = req.body.id_55
+        var id56 = req.body.id_56
+        var id57 = req.body.id_57
+        var id58 = req.body.id_58
+        var id59 = req.body.id_59
+        var id60 = req.body.id_60
+        var id61 = req.body.id_61
+        var id62 = req.body.id_62
+        var id63 = req.body.id_63
+        var id64 = req.body.id_64
+        var id65 = req.body.id_65
+        var id66 = req.body.id_66
+        var id67 = req.body.id_67
+        var id68 = req.body.id_68
+        var id69 = req.body.id_69
+        var id70 = req.body.id_70
+        var id71 = req.body.id_71
+        var id72 = req.body.id_72
+        var id73 = req.body.id_73
+        var id74 = req.body.id_74
+        var id75 = req.body.id_75
+        var id76 = req.body.id_76
+        var id77 = req.body.id_77
+        var id78 = req.body.id_78
+        var id79 = req.body.id_79
+        var id80 = req.body.id_80
+        var id81 = req.body.id_81
+        var id82 = req.body.id_82
+        var id83 = req.body.id_83
+        var id84 = req.body.id_84
+        var id85 = req.body.id_85
+        var id86 = req.body.id_86
+        var id87 = req.body.id_87
+        var id88 = req.body.id_88
+        var id89 = req.body.id_89
+        var id90 = req.body.id_90
 
 
 
 
 
 
-      var ooId = []
-      ooId.push(id00);
-      ooId.push(id01);
-      ooId.push(id02);
-      ooId.push(id03);
-      ooId.push(id04);
-      ooId.push(id05);
-      ooId.push(id06);
-      ooId.push(id07);
-      ooId.push(id08);
-      ooId.push(id09);
-      ooId.push(id10);
-      ooId.push(id11);
-      ooId.push(id12);
-      ooId.push(id13);
-      ooId.push(id14);
-      ooId.push(id15);
-      ooId.push(id16);
-      ooId.push(id17);
-      ooId.push(id18);
-      ooId.push(id19);
-      ooId.push(id20);
-      ooId.push(id21);
-      ooId.push(id22);
-      ooId.push(id23);
-      ooId.push(id24);
-      ooId.push(id25);
-      ooId.push(id26);
-      ooId.push(id27);
-      ooId.push(id28);
-      ooId.push(id29);
-      ooId.push(id30);
-      ooId.push(id31);
-      ooId.push(id32);
-      ooId.push(id33);
-      ooId.push(id34);
-      ooId.push(id35);
-      ooId.push(id36);
-      ooId.push(id37);
-      ooId.push(id38);
-      ooId.push(id39);
-      ooId.push(id40);
-      ooId.push(id41);
-      ooId.push(id42);
-      ooId.push(id43);
-      ooId.push(id44);
-      ooId.push(id45);
-      ooId.push(id46);
-      ooId.push(id47);
-      ooId.push(id48);
-      ooId.push(id49);
-      ooId.push(id50);
-      ooId.push(id51);
-      ooId.push(id52);
-      ooId.push(id53);
-      ooId.push(id54);
-      ooId.push(id55);
-      ooId.push(id56);
-      ooId.push(id57);
-      ooId.push(id58);
-      ooId.push(id59);
-      ooId.push(id60);
-      ooId.push(id61);
-      ooId.push(id62);
-      ooId.push(id63);
-      ooId.push(id64);
-      ooId.push(id65);
-      ooId.push(id66);
-      ooId.push(id67);
-      ooId.push(id68);
-      ooId.push(id69);
-      ooId.push(id70);
-      ooId.push(id71);
-      ooId.push(id72);
-      ooId.push(id73);
-      ooId.push(id74);
-      ooId.push(id75);
-      ooId.push(id76);
-      ooId.push(id77);
-      ooId.push(id78);
-      ooId.push(id79);
-      ooId.push(id80);
-      ooId.push(id81);
-      ooId.push(id82);
-      ooId.push(id83);
-      ooId.push(id84);
-      ooId.push(id85);
-      ooId.push(id86);
-      ooId.push(id87);
-      ooId.push(id88);
-      ooId.push(id89);
-      ooId.push(id90);
+        var ooId = []
+        ooId.push(id00);
+        ooId.push(id01);
+        ooId.push(id02);
+        ooId.push(id03);
+        ooId.push(id04);
+        ooId.push(id05);
+        ooId.push(id06);
+        ooId.push(id07);
+        ooId.push(id08);
+        ooId.push(id09);
+        ooId.push(id10);
+        ooId.push(id11);
+        ooId.push(id12);
+        ooId.push(id13);
+        ooId.push(id14);
+        ooId.push(id15);
+        ooId.push(id16);
+        ooId.push(id17);
+        ooId.push(id18);
+        ooId.push(id19);
+        ooId.push(id20);
+        ooId.push(id21);
+        ooId.push(id22);
+        ooId.push(id23);
+        ooId.push(id24);
+        ooId.push(id25);
+        ooId.push(id26);
+        ooId.push(id27);
+        ooId.push(id28);
+        ooId.push(id29);
+        ooId.push(id30);
+        ooId.push(id31);
+        ooId.push(id32);
+        ooId.push(id33);
+        ooId.push(id34);
+        ooId.push(id35);
+        ooId.push(id36);
+        ooId.push(id37);
+        ooId.push(id38);
+        ooId.push(id39);
+        ooId.push(id40);
+        ooId.push(id41);
+        ooId.push(id42);
+        ooId.push(id43);
+        ooId.push(id44);
+        ooId.push(id45);
+        ooId.push(id46);
+        ooId.push(id47);
+        ooId.push(id48);
+        ooId.push(id49);
+        ooId.push(id50);
+        ooId.push(id51);
+        ooId.push(id52);
+        ooId.push(id53);
+        ooId.push(id54);
+        ooId.push(id55);
+        ooId.push(id56);
+        ooId.push(id57);
+        ooId.push(id58);
+        ooId.push(id59);
+        ooId.push(id60);
+        ooId.push(id61);
+        ooId.push(id62);
+        ooId.push(id63);
+        ooId.push(id64);
+        ooId.push(id65);
+        ooId.push(id66);
+        ooId.push(id67);
+        ooId.push(id68);
+        ooId.push(id69);
+        ooId.push(id70);
+        ooId.push(id71);
+        ooId.push(id72);
+        ooId.push(id73);
+        ooId.push(id74);
+        ooId.push(id75);
+        ooId.push(id76);
+        ooId.push(id77);
+        ooId.push(id78);
+        ooId.push(id79);
+        ooId.push(id80);
+        ooId.push(id81);
+        ooId.push(id82);
+        ooId.push(id83);
+        ooId.push(id84);
+        ooId.push(id85);
+        ooId.push(id86);
+        ooId.push(id87);
+        ooId.push(id88);
+        ooId.push(id89);
+        ooId.push(id90);
 
 
 
 
-      var jo = []
+        var jo = []
 
 
 
-      var sss = 0;
-      oo.forEach(function (o) {
-        if (typeof o === undefined) {
-        } else {
-          if (o === undefined) {
+        var sss = 0;
+        oo.forEach(function (o) {
+          if (typeof o === undefined) {
           } else {
-            jo.push(ooId[sss])
+            if (o === undefined) {
+            } else {
+              jo.push(ooId[sss])
+            }
           }
-        }
-        sss++;
-      }); // jo hält die ids der aktivierten Checkboxes der SuS
+          sss++;
+        }); // jo hält die ids der aktivierten Checkboxes der SuS
 
 
 
@@ -3398,86 +3249,174 @@ router.post('/edit/:id', function (req, res) {
 
 
 
-      Article.
-        findOne({ _id: req.params.id }).
-        populate('schuelers').
-        exec(function (err2, art) {
-          if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+        Article.
+          findOne({ _id: req.params.id }).
+          populate('schuelers').
+          exec(function (err2, art) {
+            if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
-          /*           console.log('-------------------------------------');
-                    console.log('-------------------------------------');
-                    console.log('-------------------------------------');
-                    console.log('-------------------------------------');
-                    console.log('ALT arti: ' + art);
-                    console.log('-------------------------------------');
-                    console.log('-------------------------------------');
-                    console.log('-------------------------------------');
-                    console.log('-------------------------------------'); */
+            /*           console.log('-------------------------------------');
+                      console.log('-------------------------------------');
+                      console.log('-------------------------------------');
+                      console.log('-------------------------------------');
+                      console.log('ALT arti: ' + art);
+                      console.log('-------------------------------------');
+                      console.log('-------------------------------------');
+                      console.log('-------------------------------------');
+                      console.log('-------------------------------------'); */
 
 
-          art.schuelers.forEach(function (schueler) {
-            console.log('record :   ' + schueler.name);
+            art.schuelers.forEach(function (schueler) {
+              console.log('record :   ' + schueler.name);
 
 
-            Article.findByIdAndUpdate(art._id,
-              { $pull: { schuelers: schueler } },
-              { upsert: true, save: true },
-              function (err, uptdatedArticle) {
-                if (err) {
-                  console.log(err);
-                } else {
-
-                  /*                   console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
-                                    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
-                                    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
-                                    console.log('uptdatedArticle ' + uptdatedArticle);
-                                    console.log('-------------------------------------');
-                                    console.log('-------------------------------------');
-                                    console.log('-------------------------------------');
-                                    console.log('-------------------------------------'); */
-
-                  User.findByIdAndUpdate(schueler._id,
-                    { $pull: { auftrags: art._id } },
-                    { save: true, upsert: true },
-                    function (err, uptdatedSchueler) {
-                      if (err) { console.log(err); }
-                    });
-                }
-              });
-
-
-          });// alte Verknüpfungen werden gelöst
-
-
-
-
-
-
-
-          //neue Verknüpfungen
-          User.find().where('_id').in(jo).exec((err, schuelers) => {
-
-            schuelers.forEach(function (schueler) {
-              //console.log('record :   ' + schueler.name);
               Article.findByIdAndUpdate(art._id,
-                { $push: { schuelers: schueler } },
-                { safe: true, upsert: true },
+                { $pull: { schuelers: schueler } },
+                { upsert: true, save: true },
                 function (err, uptdatedArticle) {
                   if (err) {
                     console.log(err);
                   } else {
+
+                    /*                   console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+                                      console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+                                      console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+                                      console.log('uptdatedArticle ' + uptdatedArticle);
+                                      console.log('-------------------------------------');
+                                      console.log('-------------------------------------');
+                                      console.log('-------------------------------------');
+                                      console.log('-------------------------------------'); */
+
                     User.findByIdAndUpdate(schueler._id,
-                      { $push: { auftrags: uptdatedArticle } },
-                      { safe: true, upsert: true },
+                      { $pull: { auftrags: art._id } },
+                      { save: true, upsert: true },
                       function (err, uptdatedSchueler) {
-                        if (err) { console.log(err) }
+                        if (err) { console.log(err); }
                       });
                   }
                 });
 
 
-            });//ende loop
+            });// alte Verknüpfungen werden gelöst
+
+
+
+
+
+
+
+            //neue Verknüpfungen
+            User.find().where('_id').in(jo).exec((err, schuelers) => {
+
+              schuelers.forEach(function (schueler) {
+                //console.log('record :   ' + schueler.name);
+                Article.findByIdAndUpdate(art._id,
+                  { $push: { schuelers: schueler } },
+                  { safe: true, upsert: true },
+                  function (err, uptdatedArticle) {
+                    if (err) {
+                      console.log(err);
+                    } else {
+                      User.findByIdAndUpdate(schueler._id,
+                        { $push: { auftrags: uptdatedArticle } },
+                        { safe: true, upsert: true },
+                        function (err, uptdatedSchueler) {
+                          if (err) { console.log(err) }
+                        });
+                    }
+                  });
+
+
+              });//ende loop
+
+
+
+
+
+
+
+
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            let query = { _id: req.params.id }
+
+
+            Article.findById(req.params.id, function (err, articleX) {
+
+              if (err) {
+                //console.log('wwwwww');
+                console.log(err);
+              }
+
+
+              let article = {};
+              article.title = req.body.title;
+              article.author = articleX.author;
+
+
+
+              article.shadow_klasse = req.body.shadow_klasse;
+              article.fach = req.body.fach;
+              article.termin = req.body.termin;
+              article.body = req.body.body;
+
+
+
+              const start = new Date();
+
+
+
+
+              var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+
+
+              article.created = nau;
+
+
+
+              Article.update(query, article, function (err) {
+                if (err) {
+                  console.log(err);
+                  return;
+                } else {
+
+
+
+
+
+
+
+                  req.flash('success', 'Auftrag geändert. So ist er auch gleich viel hübscher anzusehen. ');
+                  res.redirect('/');
+                }
+              })
+
+            })
+
+
+
+
+
+
+
 
 
 
@@ -3492,159 +3431,88 @@ router.post('/edit/:id', function (req, res) {
 
 
 
+      } else if (!req.body.shadow_klasse && req.body.klasse) {
+        console.log('ALT');
+
+
+
+        let query = { _id: req.params.id }
+
+
+        Article.findById(req.params.id, function (err, articleX) {
+
+          if (err) {
+            //console.log('wwwwww');
+            console.log(err);
+          }
+
+
+          let article = {};
+          article.title = req.body.title;
+          article.author = articleX.author;
+
+
+
+          article.klasse = req.body.klasse;
+          article.fach = req.body.fach;
+          article.termin = req.body.termin;
+          article.body = req.body.body;
+
+
+
+          const start = new Date();
 
 
 
 
+          var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+
+
+          article.created = nau;
 
 
 
-
-
-
-
-
-
-          let query = { _id: req.params.id }
-
-
-          Article.findById(req.params.id, function (err, articleX) {
-
+          Article.update(query, article, function (err) {
             if (err) {
-              //console.log('wwwwww');
               console.log(err);
+              return;
+            } else {
+              req.flash('success', 'Auftrag geändert');
+              res.redirect('/');
             }
-
-
-            let article = {};
-            article.title = req.body.title;
-            article.author = articleX.author;
-
-
-
-            article.shadow_klasse = req.body.shadow_klasse;
-            article.fach = req.body.fach;
-            article.termin = req.body.termin;
-            article.body = req.body.body;
-
-
-
-            const start = new Date();
-
-
-
-
-            var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
-
-
-            article.created = nau;
-
-
-
-            Article.update(query, article, function (err) {
-              if (err) {
-                console.log(err);
-                return;
-              } else {
-
-
-
-
-
-
-
-                req.flash('success', 'Auftrag geändert. So ist er auch gleich viel hübscher anzusehen. ');
-                res.redirect('/');
-              }
-            })
-
           })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        });
-
-
-
-
-
-    } else if (!req.body.shadow_klasse && req.body.klasse) {
-      console.log('ALT');
-
-
-
-      let query = { _id: req.params.id }
-
-
-      Article.findById(req.params.id, function (err, articleX) {
-
-        if (err) {
-          //console.log('wwwwww');
-          console.log(err);
-        }
-
-
-        let article = {};
-        article.title = req.body.title;
-        article.author = articleX.author;
-
-
-
-        article.klasse = req.body.klasse;
-        article.fach = req.body.fach;
-        article.termin = req.body.termin;
-        article.body = req.body.body;
-
-
-
-        const start = new Date();
-
-
-
-
-        var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
-
-
-        article.created = nau;
-
-
-
-        Article.update(query, article, function (err) {
-          if (err) {
-            console.log(err);
-            return;
-          } else {
-            req.flash('success', 'Auftrag geändert');
-            res.redirect('/');
-          }
         })
 
-      })
 
 
 
 
 
 
+      } else {//(req.body.shadow_klasse && !req.body.klasse)
+        console.log('FEHLER Sowohl Klasse als auc shadow_klasse scheinen leer zu sein!!!');
+        console.log('arti.klasse  ' + arti.klasse);
+        console.log('arti.shadow_klasse  ') + arti.shadow_klasse;
 
-    } else {//(req.body.shadow_klasse && !req.body.klasse)
-      console.log('FEHLER');
-      console.log('arti.klasse  ' + arti.klasse);
-      console.log('arti.shadow_klasse  ') + arti.shadow_klasse;
+      }
+
+
+
+
+    } else {
+      ///zu spät
+
+
+      req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn.');
+      res.redirect('/');
+      return;
+
 
     }
+
+
+
 
 
 
@@ -3746,118 +3614,6 @@ router.get('/:id', function (req, res) {
 
         var x = article.body.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
         //console.log('x nnnnn ' + article.lehrer.name);
-
-
-
-
-
-
-        console.log('article.termin:     ' + article.termin);
-        var tag = article.termin.substring(0, 2)
-        var monat = article.termin.substring(3, 5)
-        var jahr = article.termin.substring(6, 10)
-
-        console.log('tag:     ' + tag);
-        console.log('monat:   ' + monat);
-        console.log('jahr:    ' + jahr);
-
-        var termin = new Date(jahr, monat - 1, tag, 16);
-
-        console.log('termin:    ' + termin);
-        var jetzt = new Date();
-        console.log('jeks:    ' + jetzt);
-
-
-
-
-
-
-
-
-
-        // To calculate the time difference of two dates 
-        var Difference_In_Time = termin.getTime() - jetzt.getTime();
-
-        // To calculate the no. of days between two dates 
-        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-
-        console.log('  ');
-        console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + article.title);
-
-        console.log('Total number of days between dates   ' + Difference_In_Days);
-
-
-
-
-        if (Difference_In_Days >= 0) {
-
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() === termin.getDate()) {
-
-            article.termin = 'heute 16 Uhr'
-          }
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 1 === termin.getDate()) {
-
-            article.termin = 'morgen 16 Uhr'
-          }
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 2 === termin.getDate()) {
-
-            article.termin = 'übermorgen'
-          }
-
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 3 === termin.getDate()) {
-
-            article.termin = 'in 3 Tagen'
-          }
-
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 4 === termin.getDate()) {
-
-            article.termin = 'in 4 Tagen'
-          }
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 5 === termin.getDate()) {
-
-            article.termin = 'in 5 Tagen'
-          }
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 6 === termin.getDate()) {
-
-            article.termin = 'in 6 Tagen'
-          }
-
-
-
-
-
-        } else {
-          ///Termin vorüber
-          article.termin = 'abgelaufen'
-
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

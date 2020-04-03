@@ -18,12 +18,12 @@ block content
                                     .col-md-12
                                         div(style='clear:both;') 
                                         h5 #{hausarbeit.article.title}
-                                        div(style='clear:both;')
-                                        if hausarbeit.article.termin  != 'abgelaufen'         
-                                            h7.box-right.color-red #{hausarbeit.article.termin} müssen alle Hausarbeiten abgegeben werden
-                                        else
-                                            h7.box-right.color-red #{hausarbeit.article.termin} 
-                                        div(style='clear:both;') 
+                                        div(style='clear:both;')                
+                                        h7.box-right.color-red Abgabefrist: #{hausarbeit.article.termin}
+                                        div(style='clear:both;')        
+                                        hr
+                                        br 
+                                        br     
                                         h5#invisible #{hausarbeit.article.body}
                                         h6#hier-kommt-was-rein
     if user.type == 'schueler'

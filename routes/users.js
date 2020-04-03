@@ -160,6 +160,13 @@ router.post('/register_schueler', function (req, res) {
                 });
 
 
+
+
+
+
+
+
+                
                 //console.log(klasse);
                 if (klasse.includes('St. Pauli 5') || klasse.includes('St. Pauli 6') || klasse.includes('St. Pauli 7')) {
                     newUser.klasse2 = 'St. Pauli LB/WS 5-7'

@@ -245,7 +245,7 @@ app.get('/', function (req, res) {
   } else {
 
 
-    console.log('lehrer+:::   ' + req.user._id)
+    //console.log('lehrer+:::   ' + req.user._id)
 
 
 
@@ -305,45 +305,21 @@ app.get('/', function (req, res) {
 
 
 
-
-
-
-                // console.log(my_article);
-                console.log('my_article.termin:     ' + my_article.termin);
                 var tag = my_article.termin.substring(0, 2)
                 var monat = my_article.termin.substring(3, 5)
                 var jahr = my_article.termin.substring(6, 10)
 
-                //console.log('tag:     ' + tag);
-               // console.log('monat:   ' + monat);
-                //console.log('jahr:    ' + jahr);
-
                 var termin = new Date(jahr, monat - 1, tag, 16);
-
-                //console.log('termin:  ' + termin);
                 var jetzt = new Date();
-                //console.log('jeks:    ' + jetzt);
-
-
-
-
-
-
-
-
-
+        
                 // To calculate the time difference of two dates 
                 var Difference_In_Time = termin.getTime() - jetzt.getTime();
-
-                // To calculate the no. of days between two dates 
                 var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 
-                //console.log('  ');
-               // console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + my_article.title);
-
-               // console.log('Total number of days between dates   ' + Difference_In_Days);
-
-
+                var nicht_jetzt = new Date(jetzt);
+               // console.log('iiiiiiiiiiiiiiiiiii ' + my_article.termin);
+                my_article.termin = my_article.termin.substring(0, 10)
+                //console.log('iiiiiiiiiiiiiiiiiii ' + my_article.termin);
 
 
                 if (Difference_In_Days >= 0) {
@@ -354,52 +330,123 @@ app.get('/', function (req, res) {
 
                     my_article.termin = 'heute 16 Uhr'
                   }
-                  if (jetzt.getFullYear() === termin.getFullYear() &&
-                    jetzt.getMonth() === termin.getMonth() &&
-                    jetzt.getDate() + 1 === termin.getDate()) {
 
+
+
+
+
+                  nicht_jetzt.setDate(jetzt.getDate() + 1)
+
+                  if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                  nicht_jetzt.getMonth() === termin.getMonth() &&
+                  nicht_jetzt.getDate() === termin.getDate()) {
+                    //console.log('nicht_jetzt         ' + nicht_jetzt);
+                    //console.log('termin              ' + termin);
                     my_article.termin = 'morgen 16 Uhr'
                   }
-                  if (jetzt.getFullYear() === termin.getFullYear() &&
-                    jetzt.getMonth() === termin.getMonth() &&
-                    jetzt.getDate() + 2 === termin.getDate()) {
 
+
+
+
+                  nicht_jetzt.setDate(jetzt.getDate() + 2)
+
+                  if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                  nicht_jetzt.getMonth() === termin.getMonth() &&
+                  nicht_jetzt.getDate() === termin.getDate()) {
+                    //console.log('nicht_jetzt         ' + nicht_jetzt);
+                    //console.log('termin              ' + termin);
                     my_article.termin = 'übermorgen'
                   }
 
-                  if (jetzt.getFullYear() === termin.getFullYear() &&
-                    jetzt.getMonth() === termin.getMonth() &&
-                    jetzt.getDate() + 3 === termin.getDate()) {
 
+
+
+
+                  nicht_jetzt.setDate(jetzt.getDate() + 3)
+
+                  if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                  nicht_jetzt.getMonth() === termin.getMonth() &&
+                  nicht_jetzt.getDate() === termin.getDate()) {
+                    ////console.log('nicht_jetzt         ' + nicht_jetzt);
+                    //console.log('termin              ' + termin);
                     my_article.termin = 'in 3 Tagen'
                   }
 
-                  if (jetzt.getFullYear() === termin.getFullYear() &&
-                    jetzt.getMonth() === termin.getMonth() &&
-                    jetzt.getDate() + 4 === termin.getDate()) {
 
+
+
+                  nicht_jetzt.setDate(jetzt.getDate() + 4)
+
+                  if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                  nicht_jetzt.getMonth() === termin.getMonth() &&
+                  nicht_jetzt.getDate() === termin.getDate()) {
+                    //console.log('nicht_jetzt         ' + nicht_jetzt);
+                    //console.log('termin              ' + termin);
                     my_article.termin = 'in 4 Tagen'
                   }
-                  if (jetzt.getFullYear() === termin.getFullYear() &&
-                    jetzt.getMonth() === termin.getMonth() &&
-                    jetzt.getDate() + 5 === termin.getDate()) {
 
+
+
+
+                  nicht_jetzt.setDate(jetzt.getDate() + 5)
+
+                  if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                  nicht_jetzt.getMonth() === termin.getMonth() &&
+                  nicht_jetzt.getDate() === termin.getDate()) {
+                    //console.log('nicht_jetzt         ' + nicht_jetzt);
+                    //console.log('termin              ' + termin);
                     my_article.termin = 'in 5 Tagen'
                   }
-                  if (jetzt.getFullYear() === termin.getFullYear() &&
-                    jetzt.getMonth() === termin.getMonth() &&
-                    jetzt.getDate() + 6 === termin.getDate()) {
 
+
+
+
+
+
+                  nicht_jetzt.setDate(jetzt.getDate() + 6)
+
+                  if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                  nicht_jetzt.getMonth() === termin.getMonth() &&
+                  nicht_jetzt.getDate() === termin.getDate()) {
+                    //console.log('nicht_jetzt         ' + nicht_jetzt);
+                    //console.log('termin              ' + termin);
                     my_article.termin = 'in 6 Tagen'
                   }
 
 
+
+                  
 
 
 
                 } else {
                   ///Termin vorüber
                   my_article.termin = 'abgelaufen'
+
+
+
+                  if (jetzt.getFullYear() === termin.getFullYear() &&
+                    jetzt.getMonth() === termin.getMonth() &&
+                    jetzt.getDate() === termin.getDate()) {
+
+                    my_article.termin = 'abgelaufen (heute)'
+                  }
+                  if (jetzt.getFullYear() === termin.getFullYear() &&
+                    jetzt.getMonth() === termin.getMonth() &&
+                    jetzt.getDate() - 1 === termin.getDate()) {
+
+                    my_article.termin = 'abgelaufen (gestern)'
+                  }
+                  if (jetzt.getFullYear() === termin.getFullYear() &&
+                    jetzt.getMonth() === termin.getMonth() &&
+                    jetzt.getDate() - 2 === termin.getDate()) {
+
+                    my_article.termin = 'abgelaufen (vorgestern)'
+                  }
+
+
+
+
 
                 }
 
@@ -424,7 +471,7 @@ app.get('/', function (req, res) {
 
                   if (ha.article._id.toString() === my_article._id.toString()) {
 
-                    console.log('pppp:    ' + my_article.title);
+                    // console.log('pppp:    ' + my_article.title);
 
                     if (ha.status === '1') {
                       inte_gelb += 1;
@@ -463,15 +510,15 @@ app.get('/', function (req, res) {
 
 
 
-            /*   my_articles.forEach(function (my_article) {
-
-                console.log('                          ');
-                console.log('----------------------    ' + my_article.ha_gruen);
-                console.log('----------------------    ' + my_article.ha_gelb);
-                console.log('----------------------    ' + my_article.ha_grau);
-
-              })
- */
+              /*   my_articles.forEach(function (my_article) {
+  
+                  console.log('                          ');
+                  console.log('----------------------    ' + my_article.ha_gruen);
+                  console.log('----------------------    ' + my_article.ha_gelb);
+                  console.log('----------------------    ' + my_article.ha_grau);
+  
+                })
+   */
 
 
               res.render('index', {
@@ -515,7 +562,7 @@ app.get('/', function (req, res) {
 
 
 
-             // console.log('okkkkkkkkkkk');
+              // console.log('okkkkkkkkkkk');
 
 
 
@@ -524,7 +571,7 @@ app.get('/', function (req, res) {
 
 
 
-             // console.log('neeeeeeeeeeeeeeee');
+              // console.log('neeeeeeeeeeeeeeee');
 
 
             }
@@ -543,105 +590,155 @@ app.get('/', function (req, res) {
 
                 //console.log('-------------------------------------')
                 my_articles.forEach(function (my_article) {
-                  // console.log(my_article);
-                 // console.log('my_article.termin:     ' + my_article.termin);
+
+
+
+
+
+
                   var tag = my_article.termin.substring(0, 2)
                   var monat = my_article.termin.substring(3, 5)
                   var jahr = my_article.termin.substring(6, 10)
-
-                 // console.log('tag:     ' + tag);
-                 // console.log('monat:   ' + monat);
-                 // console.log('jahr:    ' + jahr);
-
+  
                   var termin = new Date(jahr, monat - 1, tag, 16);
-
-                 // console.log('termin:    ' + termin);
                   var jetzt = new Date();
-                // console.log('jeks:    ' + jetzt);
-
-
-
-
-
-
-
-
-
+          
                   // To calculate the time difference of two dates 
                   var Difference_In_Time = termin.getTime() - jetzt.getTime();
-
-                  // To calculate the no. of days between two dates 
                   var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-
-                  //console.log('  ');
-                 // console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + my_article.title);
-
-                 // console.log('Total number of days between dates   ' + Difference_In_Days);
-
-
-
-
+  
+                  var nicht_jetzt = new Date(jetzt);
+                 
+                  my_article.termin = my_article.termin.substring(0, 10)
+  
                   if (Difference_In_Days >= 0) {
-
+  
                     if (jetzt.getFullYear() === termin.getFullYear() &&
                       jetzt.getMonth() === termin.getMonth() &&
                       jetzt.getDate() === termin.getDate()) {
-
+  
                       my_article.termin = 'heute 16 Uhr'
                     }
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() + 1 === termin.getDate()) {
-
+  
+  
+  
+  
+  
+                    nicht_jetzt.setDate(jetzt.getDate() + 1)
+  
+                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                    nicht_jetzt.getMonth() === termin.getMonth() &&
+                    nicht_jetzt.getDate() === termin.getDate()) {
+                      //console.log('nicht_jetzt         ' + nicht_jetzt);
+                      //console.log('termin              ' + termin);
                       my_article.termin = 'morgen 16 Uhr'
                     }
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() + 2 === termin.getDate()) {
-
+  
+  
+  
+  
+                    nicht_jetzt.setDate(jetzt.getDate() + 2)
+  
+                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                    nicht_jetzt.getMonth() === termin.getMonth() &&
+                    nicht_jetzt.getDate() === termin.getDate()) {
+                      //console.log('nicht_jetzt         ' + nicht_jetzt);
+                      //console.log('termin              ' + termin);
                       my_article.termin = 'übermorgen'
                     }
-
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() + 3 === termin.getDate()) {
-
+  
+  
+  
+  
+  
+                    nicht_jetzt.setDate(jetzt.getDate() + 3)
+  
+                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                    nicht_jetzt.getMonth() === termin.getMonth() &&
+                    nicht_jetzt.getDate() === termin.getDate()) {
+                      //console.log('nicht_jetzt         ' + nicht_jetzt);
+                      //console.log('termin              ' + termin);
                       my_article.termin = 'in 3 Tagen'
                     }
-
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() + 4 === termin.getDate()) {
-
+  
+  
+  
+  
+                    nicht_jetzt.setDate(jetzt.getDate() + 4)
+  
+                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                    nicht_jetzt.getMonth() === termin.getMonth() &&
+                    nicht_jetzt.getDate() === termin.getDate()) {
+                      //console.log('nicht_jetzt         ' + nicht_jetzt);
+                      //console.log('termin              ' + termin);
                       my_article.termin = 'in 4 Tagen'
                     }
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() + 5 === termin.getDate()) {
-
+  
+  
+  
+  
+                    nicht_jetzt.setDate(jetzt.getDate() + 5)
+  
+                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                    nicht_jetzt.getMonth() === termin.getMonth() &&
+                    nicht_jetzt.getDate() === termin.getDate()) {
+                      //console.log('nicht_jetzt         ' + nicht_jetzt);
+                      //console.log('termin              ' + termin);
                       my_article.termin = 'in 5 Tagen'
                     }
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() + 6 === termin.getDate()) {
-
+  
+  
+  
+  
+  
+  
+                    nicht_jetzt.setDate(jetzt.getDate() + 6)
+  
+                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                    nicht_jetzt.getMonth() === termin.getMonth() &&
+                    nicht_jetzt.getDate() === termin.getDate()) {
+                      //console.log('nicht_jetzt         ' + nicht_jetzt);
+                      //console.log('termin              ' + termin);
                       my_article.termin = 'in 6 Tagen'
                     }
-
-
-
-
-
+  
+  
+  
+                   
+  
+  
+  
                   } else {
                     ///Termin vorüber
                     my_article.termin = 'abgelaufen'
-
+  
+  
+  
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() === termin.getDate()) {
+  
+                      my_article.termin = 'abgelaufen (heute)'
+                    }
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() - 1 === termin.getDate()) {
+  
+                      my_article.termin = 'abgelaufen (gestern)'
+                    }
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() - 2 === termin.getDate()) {
+  
+                      my_article.termin = 'abgelaufen (vorgestern)'
+                    }
+  
+  
+  
+  
+  
                   }
-
-
-
-
-
+  
 
 
 
@@ -661,14 +758,14 @@ app.get('/', function (req, res) {
 
 
 
-/* 
-                console.log('-------------------------------------');
-                my_articles.forEach(function (my) {
-
-                  console.log('created:  ' + my.created + ' |  title:  ' + my.title + ' |  create_as_date  ' + my.created_as_date)
-
-                })
- */
+                /* 
+                                console.log('-------------------------------------');
+                                my_articles.forEach(function (my) {
+                
+                                  console.log('created:  ' + my.created + ' |  title:  ' + my.title + ' |  create_as_date  ' + my.created_as_date)
+                
+                                })
+                 */
 
                 res.render('index', {
 
@@ -729,7 +826,6 @@ app.get('/', function (req, res) {
 
 
 
-
 app.get('/disclaimer', function (req, res) {
 
 
@@ -747,6 +843,22 @@ app.get('/datenschutz', function (req, res) {
 })
 
 
+app.get('/haeufige_fragen', function (req, res) {
+
+
+  res.render('haeufige_fragen', {
+  });
+})
+
+
+
+
+app.get('/einfach_besser', function (req, res) {
+
+
+  res.render('einfach_besser', {
+  });
+})
 
 
 
