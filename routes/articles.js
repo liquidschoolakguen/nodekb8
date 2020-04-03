@@ -26,6 +26,19 @@ const handleError = (err, res) => {
     .end("Oops! Something went wrong!");
 };
 
+
+
+// SET STORAGE
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+
+
 const upload = multer({
   dest: "../uploads"
   // you might also want to set some limits: https://github.com/expressjs/multer#limits
