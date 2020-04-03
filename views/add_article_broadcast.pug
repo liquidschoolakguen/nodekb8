@@ -1,0 +1,22 @@
+extends layout
+
+block content
+    .container
+      .row.h-100.d-flex.justify-content-center
+        .col-12.col-sm-8.col-md-6.col-lg-6
+          .card.border.bg-custom-1
+            .card-body.bg-custom-1
+              h4.card-title Für welchen Standort ist dein Broadcast? 
+              .tab-content.mt-3
+                #history.tab-pane.active(role='tabpanel')
+                  p.card-text
+                    form(method='POST', action='/articles/add_bingo_broadcast')
+                        #form-group                              
+                            select#validationServer01.form-control.custom-select.form-control(name='broadcast', type=text,  required='', placeholder='Wähle eine Klasse')
+                                option(selected='') #{user.default_broadcast}
+                                option alle SuS von St. Pauli
+                                option alle SuS der Neustadt
+                                option alle SuS der Oberstufe                            
+                                option alle SuS der gesamten STS am Hafen 
+                            br
+                        input.btn.btn-primary.my-margin-top.bg-primary.text-white.float-right(type='submit', value='Ok')

@@ -27,7 +27,7 @@ router.post('/register_lehrer', function (req, res) {
     const password = req.body.password;
     const password2 = req.body.password2;
 
-    
+
 
     req.checkBody('name', 'Name wird benötigt').notEmpty();
     req.checkBody('username', 'Email wird benötigt').notEmpty();
@@ -130,7 +130,7 @@ router.post('/register_schueler', function (req, res) {
         });
     } else {
 
-        let query = { username: username.toString().toLowerCase().trim()}
+        let query = { username: username.toString().toLowerCase().trim() }
         User.findOne(query, function (err, user) {
             if (err) throw err;
             if (user) {
@@ -164,21 +164,51 @@ router.post('/register_schueler', function (req, res) {
 
 
 
+                if (klasse.includes('St. Pauli')) {
 
 
-                
-                //console.log(klasse);
-                if (klasse.includes('St. Pauli 5') || klasse.includes('St. Pauli 6') || klasse.includes('St. Pauli 7')) {
-                    newUser.klasse2 = 'St. Pauli LB/WS 5-7'
-                    console.log(newUser.klasse2);
-                } else if (klasse.includes('St. Pauli 8') || klasse.includes('St. Pauli 9')) {
-                    newUser.klasse2 = 'St. Pauli LB/WS 8-9'
-                    console.log(newUser.klasse2);
-                } else {
+                    if (klasse.includes('St. Pauli 5') || klasse.includes('St. Pauli 6') || klasse.includes('St. Pauli 7')) {
+                        newUser.klasse2 = 'St. Pauli LB/WS 5-7'
+                        console.log(newUser.klasse2);
+                    } else if (klasse.includes('St. Pauli 8') || klasse.includes('St. Pauli 9')) {
+                        newUser.klasse2 = 'St. Pauli LB/WS 8-9'
+                        console.log(newUser.klasse2);
+                    } else {
+                        newUser.klasse2 = ''
+                        console.log('nix');
+
+                    }
+
+                    newUser.klasse3 = 'alle SuS von St. Pauli'
+                    newUser.klasse4 = 'alle SuS der gesamten STS am Hafen'
+
+
+                } else if (klasse.includes('Neustadt')) {
+
                     newUser.klasse2 = ''
-                    console.log('nix');
+                    newUser.klasse3 = 'alle SuS der Neustadt'
+                    newUser.klasse4 = 'alle SuS der gesamten STS am Hafen'
+
+                } else if (klasse.includes('Oberstufe')) {
+
+
+                    newUser.klasse2 = ''
+                    newUser.klasse3 = 'alle SuS der Oberstufe'
+                    newUser.klasse4 = 'alle SuS der gesamten STS am Hafen'
+
+
+                } else{
+
+                    newUser.klasse2 = ''
+                    newUser.klasse3 = ''
+                    console.log('FE  HEHEHE LER');
+                    newUser.klasse4 = 'alle SuS der gesamten STS am Hafen'
 
                 }
+
+
+                //console.log(klasse);
+
 
 
                 bcrypt.genSalt(10, function (err, salt) {
@@ -388,7 +418,7 @@ router.post('/login_s', function (req, res, next) {
 
 router.post('/login_l', function (req, res, next) {
 
-
+ //console.log('wwwwww          '+req.body.username.toString().toLowerCase().trim());
 
 
 
@@ -662,36 +692,25 @@ router.delete('/:id', function (req, res) {
 router.get('/edit/:id', ensureAuthenticated, function (req, res) {
 
 
-  
+
     User.
-      findOne({ _id: req.params.id }).
-      exec(function (err2, usa) {
-        if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-  
-  
-          console.log('NEU');
-  
-  
+        findOne({ _id: req.params.id }).
+        exec(function (err2, usa) {
+            if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
-         
-  
-            
-  
-                res.render('edit_user', {
-                  usa: usa,
-                 
-                });
-  
-  
-           
-  
-          
-  
-       
-  
-      });
-  
-  });
+
+            console.log('NEU');
+
+
+
+
+
+
+
+            res.render('edit_user', {
+                usa: usa,
+
+            });
 
 
 
@@ -700,53 +719,64 @@ router.get('/edit/:id', ensureAuthenticated, function (req, res) {
 
 
 
+        });
 
-  router.post('/edit/:id', function (req, res) {
-
-
-
+});
 
 
-        console.log('ALT');
-  
-  
-  
-        let query = { _id: req.params.id }
-  
-  
-     
-  
-  
-  
-          let user = {};
-          user.username = req.body.username;
-         
-  
-  
-          User.update(query, user, function (err) {
-            if (err) {
-              console.log(err);
-              return;
-            } else {
-              req.flash('success', 'User geändert');
-              res.redirect('/users/4____4');
-            }
-          })
-  
-      
-  
-  
-  
-  
-  
-  
-  
-      
-  
-  
-  
-  });
-  
+
+
+
+
+
+
+
+router.post('/edit/:id', function (req, res) {
+
+
+
+
+
+    console.log('ALT');
+
+
+
+    let query = { _id: req.params.id }
+
+
+
+
+
+
+    let user = {};
+    user.username = req.body.username;
+
+
+
+    User.update(query, user, function (err) {
+        if (err) {
+            console.log(err);
+            return;
+        } else {
+            req.flash('success', 'User geändert');
+            res.redirect('/users/4____4');
+        }
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+});
+
 
 
 
@@ -760,15 +790,15 @@ router.get('/edit/:id', ensureAuthenticated, function (req, res) {
 // Access Control
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-      return next();
+        return next();
     } else {
-      req.flash('danger', 'Please login');
-      res.redirect('/users/login');
+        req.flash('danger', 'Please login');
+        res.redirect('/users/login');
     }
-  
-  }
-  
-  
+
+}
+
+
 
 
 

@@ -44,8 +44,19 @@ const UserSchema = mongoose.Schema({
         required: false
     },
     
-
+    klasse3: {
+        type: String,
+        required: false
+    },
     
+    klasse4: {
+        type: String,
+        required: false
+    },
+    
+
+
+
     money: {
         type: String,
         required: false
@@ -79,6 +90,13 @@ const UserSchema = mongoose.Schema({
     },
 
 
+
+
+    default_broadcast: {
+        type:String,
+        required:false   
+    },
+    
 
 
 

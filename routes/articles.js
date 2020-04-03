@@ -100,6 +100,26 @@ router.get('/add_alt', ensureAuthenticated, function (req, res) {
 
 
 
+///------1 ersg die klasse
+
+router.get('/add_article_broadcast', ensureAuthenticated, function (req, res) {
+
+
+
+
+
+
+  res.render('add_article_broadcast', {
+
+  })
+
+
+
+
+
+});
+
+
 
 
 
@@ -1000,10 +1020,6 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
 
 
 
-
-
-
-
   console.log('kkkkk')
   var today = new Date();
   var tomorrow = new Date();
@@ -1046,7 +1062,6 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
 
         res.render('add_article_neu', {
           schuelers: schuelers,
-          my_schuelers: schuelers,
           abgabe: nau,
           klasse: req.body.klasse
         })
@@ -1073,6 +1088,90 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
 
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Bingo Article
+router.post('/add_bingo_broadcast', ensureAuthenticated, function (req, res) {
+
+
+
+  User.findByIdAndUpdate(
+    req.user._id,
+    { default_broadcast: req.body.broadcast },
+    function (err, result) {
+      if (err) {
+
+      } else {
+
+      }
+    }
+
+
+
+
+
+  );
+
+
+  var today = new Date();
+  var tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 3);
+
+
+  const start = new Date();
+
+  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + start.getFullYear()
+
+
+  console.log('req.body.broadcast: ' + req.body.broadcast);
+ 
+
+
+
+  
+
+    res.render('add_article_alt', {
+
+      abgabe: nau,
+      klasse: req.body.broadcast
+    })
+
+
+
+  
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -250,6 +250,16 @@ app.get('/', function (req, res) {
 
 
 
+
+
+
+
+
+
+
+
+
+
     User.findById(req.user._id, function (err, user) {
 
       if (err) {
@@ -259,7 +269,7 @@ app.get('/', function (req, res) {
 
 
 
-      if (user.type == 'lehrer') {
+      if (user.type === 'lehrer') {
 
         //console.log('lehrer')
 
@@ -311,13 +321,13 @@ app.get('/', function (req, res) {
 
                 var termin = new Date(jahr, monat - 1, tag, 16);
                 var jetzt = new Date();
-        
+
                 // To calculate the time difference of two dates 
                 var Difference_In_Time = termin.getTime() - jetzt.getTime();
                 var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 
                 var nicht_jetzt = new Date(jetzt);
-               // console.log('iiiiiiiiiiiiiiiiiii ' + my_article.termin);
+                // console.log('iiiiiiiiiiiiiiiiiii ' + my_article.termin);
                 my_article.termin = my_article.termin.substring(0, 10)
                 //console.log('iiiiiiiiiiiiiiiiiii ' + my_article.termin);
 
@@ -338,8 +348,8 @@ app.get('/', function (req, res) {
                   nicht_jetzt.setDate(jetzt.getDate() + 1)
 
                   if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                  nicht_jetzt.getMonth() === termin.getMonth() &&
-                  nicht_jetzt.getDate() === termin.getDate()) {
+                    nicht_jetzt.getMonth() === termin.getMonth() &&
+                    nicht_jetzt.getDate() === termin.getDate()) {
                     //console.log('nicht_jetzt         ' + nicht_jetzt);
                     //console.log('termin              ' + termin);
                     my_article.termin = 'morgen 16 Uhr'
@@ -351,8 +361,8 @@ app.get('/', function (req, res) {
                   nicht_jetzt.setDate(jetzt.getDate() + 2)
 
                   if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                  nicht_jetzt.getMonth() === termin.getMonth() &&
-                  nicht_jetzt.getDate() === termin.getDate()) {
+                    nicht_jetzt.getMonth() === termin.getMonth() &&
+                    nicht_jetzt.getDate() === termin.getDate()) {
                     //console.log('nicht_jetzt         ' + nicht_jetzt);
                     //console.log('termin              ' + termin);
                     my_article.termin = 'übermorgen'
@@ -365,8 +375,8 @@ app.get('/', function (req, res) {
                   nicht_jetzt.setDate(jetzt.getDate() + 3)
 
                   if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                  nicht_jetzt.getMonth() === termin.getMonth() &&
-                  nicht_jetzt.getDate() === termin.getDate()) {
+                    nicht_jetzt.getMonth() === termin.getMonth() &&
+                    nicht_jetzt.getDate() === termin.getDate()) {
                     ////console.log('nicht_jetzt         ' + nicht_jetzt);
                     //console.log('termin              ' + termin);
                     my_article.termin = 'in 3 Tagen'
@@ -378,8 +388,8 @@ app.get('/', function (req, res) {
                   nicht_jetzt.setDate(jetzt.getDate() + 4)
 
                   if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                  nicht_jetzt.getMonth() === termin.getMonth() &&
-                  nicht_jetzt.getDate() === termin.getDate()) {
+                    nicht_jetzt.getMonth() === termin.getMonth() &&
+                    nicht_jetzt.getDate() === termin.getDate()) {
                     //console.log('nicht_jetzt         ' + nicht_jetzt);
                     //console.log('termin              ' + termin);
                     my_article.termin = 'in 4 Tagen'
@@ -391,8 +401,8 @@ app.get('/', function (req, res) {
                   nicht_jetzt.setDate(jetzt.getDate() + 5)
 
                   if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                  nicht_jetzt.getMonth() === termin.getMonth() &&
-                  nicht_jetzt.getDate() === termin.getDate()) {
+                    nicht_jetzt.getMonth() === termin.getMonth() &&
+                    nicht_jetzt.getDate() === termin.getDate()) {
                     //console.log('nicht_jetzt         ' + nicht_jetzt);
                     //console.log('termin              ' + termin);
                     my_article.termin = 'in 5 Tagen'
@@ -406,8 +416,8 @@ app.get('/', function (req, res) {
                   nicht_jetzt.setDate(jetzt.getDate() + 6)
 
                   if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                  nicht_jetzt.getMonth() === termin.getMonth() &&
-                  nicht_jetzt.getDate() === termin.getDate()) {
+                    nicht_jetzt.getMonth() === termin.getMonth() &&
+                    nicht_jetzt.getDate() === termin.getDate()) {
                     //console.log('nicht_jetzt         ' + nicht_jetzt);
                     //console.log('termin              ' + termin);
                     my_article.termin = 'in 6 Tagen'
@@ -415,7 +425,7 @@ app.get('/', function (req, res) {
 
 
 
-                  
+
 
 
 
@@ -537,15 +547,86 @@ app.get('/', function (req, res) {
 
       } else {
 
-        //console.log('schueler')
-        // console.log('ggg : ' + user.klasse)
+
+
+
+
+
+
+          //alte User vorbereiten
+        User.find({type: 'schueler'}).
+          exec(function (erro, updateUsers) {
+
+
+
+            updateUsers.forEach(function (updateUser) {
+
+
+
+
+              let op = {};
+
+              if (updateUser.klasse.includes('St. Pauli')) {
+
+                op.klasse3 = 'alle SuS von St. Pauli'
+
+              } else if (updateUser.klasse.includes('Neustadt') ) {
+
+                op.klasse2 = ''
+                op.klasse3 = 'alle SuS der Neustadt'
+
+
+              } else if (updateUser.klasse.includes('Oberstufe') ) {
+
+
+                op.klasse2 = ''
+                op.klasse3 = 'alle SuS der Oberstufe'
+
+
+              } else {
+
+                op.klasse2 = ''
+                op.klasse3 = ''
+                console.log('FE  HEHEHE LER');
+
+
+              }
+
+
+              op.klasse4 = 'alle SuS der gesamten STS am Hafen'
+
+
+              var query = { '_id': updateUser._id };
+
+
+              User.findOneAndUpdate(query, op, { upsert: true }, function (err, doc) {
+                if (err) return res.send(500, { error: err });
+                console.log('geändert:   ' + doc.name + ' (' + doc.klasse3 + ')')
+              });
+
+
+            })
+
+
+          })
+
+
+
+
+
+
+
+
+
+
+
 
 
         Article.
           find({
             $or: [
 
-              { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }] },
+              { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }, { klasse: user.klasse3 }, { klasse: user.klasse4 }] },
               { schuelers: user }
 
             ]
@@ -599,146 +680,146 @@ app.get('/', function (req, res) {
                   var tag = my_article.termin.substring(0, 2)
                   var monat = my_article.termin.substring(3, 5)
                   var jahr = my_article.termin.substring(6, 10)
-  
+
                   var termin = new Date(jahr, monat - 1, tag, 16);
                   var jetzt = new Date();
-          
+
                   // To calculate the time difference of two dates 
                   var Difference_In_Time = termin.getTime() - jetzt.getTime();
                   var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-  
+
                   var nicht_jetzt = new Date(jetzt);
-                 
+
                   my_article.termin = my_article.termin.substring(0, 10)
-  
+
                   if (Difference_In_Days >= 0) {
-  
+
                     if (jetzt.getFullYear() === termin.getFullYear() &&
                       jetzt.getMonth() === termin.getMonth() &&
                       jetzt.getDate() === termin.getDate()) {
-  
+
                       my_article.termin = 'heute 16 Uhr'
                     }
-  
-  
-  
-  
-  
+
+
+
+
+
                     nicht_jetzt.setDate(jetzt.getDate() + 1)
-  
+
                     if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                    nicht_jetzt.getMonth() === termin.getMonth() &&
-                    nicht_jetzt.getDate() === termin.getDate()) {
+                      nicht_jetzt.getMonth() === termin.getMonth() &&
+                      nicht_jetzt.getDate() === termin.getDate()) {
                       //console.log('nicht_jetzt         ' + nicht_jetzt);
                       //console.log('termin              ' + termin);
                       my_article.termin = 'morgen 16 Uhr'
                     }
-  
-  
-  
-  
+
+
+
+
                     nicht_jetzt.setDate(jetzt.getDate() + 2)
-  
+
                     if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                    nicht_jetzt.getMonth() === termin.getMonth() &&
-                    nicht_jetzt.getDate() === termin.getDate()) {
+                      nicht_jetzt.getMonth() === termin.getMonth() &&
+                      nicht_jetzt.getDate() === termin.getDate()) {
                       //console.log('nicht_jetzt         ' + nicht_jetzt);
                       //console.log('termin              ' + termin);
                       my_article.termin = 'übermorgen'
                     }
-  
-  
-  
-  
-  
+
+
+
+
+
                     nicht_jetzt.setDate(jetzt.getDate() + 3)
-  
+
                     if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                    nicht_jetzt.getMonth() === termin.getMonth() &&
-                    nicht_jetzt.getDate() === termin.getDate()) {
+                      nicht_jetzt.getMonth() === termin.getMonth() &&
+                      nicht_jetzt.getDate() === termin.getDate()) {
                       //console.log('nicht_jetzt         ' + nicht_jetzt);
                       //console.log('termin              ' + termin);
                       my_article.termin = 'in 3 Tagen'
                     }
-  
-  
-  
-  
+
+
+
+
                     nicht_jetzt.setDate(jetzt.getDate() + 4)
-  
+
                     if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                    nicht_jetzt.getMonth() === termin.getMonth() &&
-                    nicht_jetzt.getDate() === termin.getDate()) {
+                      nicht_jetzt.getMonth() === termin.getMonth() &&
+                      nicht_jetzt.getDate() === termin.getDate()) {
                       //console.log('nicht_jetzt         ' + nicht_jetzt);
                       //console.log('termin              ' + termin);
                       my_article.termin = 'in 4 Tagen'
                     }
-  
-  
-  
-  
+
+
+
+
                     nicht_jetzt.setDate(jetzt.getDate() + 5)
-  
+
                     if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                    nicht_jetzt.getMonth() === termin.getMonth() &&
-                    nicht_jetzt.getDate() === termin.getDate()) {
+                      nicht_jetzt.getMonth() === termin.getMonth() &&
+                      nicht_jetzt.getDate() === termin.getDate()) {
                       //console.log('nicht_jetzt         ' + nicht_jetzt);
                       //console.log('termin              ' + termin);
                       my_article.termin = 'in 5 Tagen'
                     }
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
                     nicht_jetzt.setDate(jetzt.getDate() + 6)
-  
+
                     if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                    nicht_jetzt.getMonth() === termin.getMonth() &&
-                    nicht_jetzt.getDate() === termin.getDate()) {
+                      nicht_jetzt.getMonth() === termin.getMonth() &&
+                      nicht_jetzt.getDate() === termin.getDate()) {
                       //console.log('nicht_jetzt         ' + nicht_jetzt);
                       //console.log('termin              ' + termin);
                       my_article.termin = 'in 6 Tagen'
                     }
-  
-  
-  
-                   
-  
-  
-  
+
+
+
+
+
+
+
                   } else {
                     ///Termin vorüber
                     my_article.termin = 'abgelaufen'
-  
-  
-  
+
+
+
                     if (jetzt.getFullYear() === termin.getFullYear() &&
                       jetzt.getMonth() === termin.getMonth() &&
                       jetzt.getDate() === termin.getDate()) {
-  
+
                       my_article.termin = 'abgelaufen (heute)'
                     }
                     if (jetzt.getFullYear() === termin.getFullYear() &&
                       jetzt.getMonth() === termin.getMonth() &&
                       jetzt.getDate() - 1 === termin.getDate()) {
-  
+
                       my_article.termin = 'abgelaufen (gestern)'
                     }
                     if (jetzt.getFullYear() === termin.getFullYear() &&
                       jetzt.getMonth() === termin.getMonth() &&
                       jetzt.getDate() - 2 === termin.getDate()) {
-  
+
                       my_article.termin = 'abgelaufen (vorgestern)'
                     }
-  
-  
-  
-  
-  
+
+
+
+
+
                   }
-  
+
 
 
 
