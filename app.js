@@ -568,19 +568,19 @@ app.get('/', function (req, res) {
 
               if (updateUser.klasse.includes('St. Pauli')) {
 
-                op.klasse3 = 'alle SuS von St. Pauli'
+                op.klasse3 = 'St. Pauli'
 
               } else if (updateUser.klasse.includes('Neustadt') ) {
 
                 op.klasse2 = ''
-                op.klasse3 = 'alle SuS der Neustadt'
+                op.klasse3 = 'Neustadt'
 
 
               } else if (updateUser.klasse.includes('Oberstufe') ) {
 
 
                 op.klasse2 = ''
-                op.klasse3 = 'alle SuS der Oberstufe'
+                op.klasse3 = 'Oberstufe'
 
 
               } else {
@@ -593,7 +593,7 @@ app.get('/', function (req, res) {
               }
 
 
-              op.klasse4 = 'alle SuS der gesamten STS am Hafen'
+              op.klasse4 = 'alle drei Standorte'
 
 
               var query = { '_id': updateUser._id };

@@ -179,22 +179,22 @@ router.post('/register_schueler', function (req, res) {
 
                     }
 
-                    newUser.klasse3 = 'alle SuS von St. Pauli'
-                    newUser.klasse4 = 'alle SuS der gesamten STS am Hafen'
+                    newUser.klasse3 = 'St. Pauli'
+                    newUser.klasse4 = 'alle drei Standorte'
 
 
                 } else if (klasse.includes('Neustadt')) {
 
                     newUser.klasse2 = ''
-                    newUser.klasse3 = 'alle SuS der Neustadt'
-                    newUser.klasse4 = 'alle SuS der gesamten STS am Hafen'
+                    newUser.klasse3 = 'Neustadt'
+                    newUser.klasse4 = 'alle drei Standorte'
 
                 } else if (klasse.includes('Oberstufe')) {
 
 
                     newUser.klasse2 = ''
-                    newUser.klasse3 = 'alle SuS der Oberstufe'
-                    newUser.klasse4 = 'alle SuS der gesamten STS am Hafen'
+                    newUser.klasse3 = 'Oberstufe'
+                    newUser.klasse4 = 'alle drei Standorte'
 
 
                 } else{
@@ -202,7 +202,7 @@ router.post('/register_schueler', function (req, res) {
                     newUser.klasse2 = ''
                     newUser.klasse3 = ''
                     console.log('FE  HEHEHE LER');
-                    newUser.klasse4 = 'alle SuS der gesamten STS am Hafen'
+                    newUser.klasse4 = 'alle drei Standorte'
 
                 }
 

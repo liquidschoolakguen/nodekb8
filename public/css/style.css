@@ -372,6 +372,13 @@ min-width: 100px;
 }
 
 
+.bold-white{
+  font-weight: bold;
+  color: #ffffff;
+ margin-top: 22px !important;
+ margin-bottom: 6px !important;
+ margin-left: 3px !important;
+}
 
 
 .bold-info{

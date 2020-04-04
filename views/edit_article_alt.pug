@@ -4,59 +4,16 @@ block content
             form#reused_form.montform(method='POST',  action='/articles/edit/' + article._id)
                 .card.border.border-success
                     .card-header.bg-success.text-white
-                        | Hausarbeit ändern
+                        | Auftrag für #{article.klasse} ändern
                     .card-body
                         #form-transition-group.my-margin-top
                                 .form-row
                                     .form-group.col-md-12
                                         input#validationServer01.form-control(type='text', placeholder='Titel der Hausarbeit',  required='',  name='title', value=article.title)
                                         .valid-feedback
-                                .form-row.my-margin-top
-                                    .form-group.col-md-4 
-                                        label Für die Klasse                                  
-                                        select#validationServer01.form-control.custom-select.form-control(name='klasse', type=text,  required='', placeholder='Wähle eine Klasse')
-                                            option(selected='') #{article.klasse}
-                                            option St. Pauli 5a
-                                            option St. Pauli 5b 
-                                            option St. Pauli 6a
-                                            option St. Pauli 6b 
-                                            option St. Pauli 7a
-                                            option St. Pauli 7b
-                                            option St. Pauli LB/WS 5-7                                            
-                                            option St. Pauli 8a
-                                            option St. Pauli 8b 
-                                            option St. Pauli 9a
-                                            option St. Pauli 9b 
-                                            option St. Pauli LB/WS 8-9                                            
-                                            option St. Pauli 10a
-                                            option St. Pauli 10b 
-                                            option Neustadt 5a
-                                            option Neustadt 5b
-                                            option Neustadt 5c
-                                            option Neustadt 6a 
-                                            option Neustadt 6b
-                                            option Neustadt 7a
-                                            option Neustadt 7b
-                                            option Neustadt 7c
-                                            option Neustadt 8a
-                                            option Neustadt 8b
-                                            option Neustadt 8c
-                                            option Neustadt 8d
-                                            option Neustadt VK 7/8
-                                            option Neustadt 9a
-                                            option Neustadt 9b
-                                            option Neustadt 9c
-                                            option Neustadt VK 9
-                                            option Neustadt 10a
-                                            option Neustadt 10b
-                                            option Neustadt 10c
-                                            option Neustadt 10d
-                                            option Neustadt VK 10
-                                            option TestKlasse 1
-                                            option TestKlasse 2
-                                            option Testklasse 3
-                                        .valid-feedback                                          
-                                    .form-group.col-md-4 
+                                .form-row.my-margin-top                                                                         
+                                    .form-group.col-md-8 
+                                        input.invisible.form-control(type='text', placeholder='Klasse',  name='klasse', value=article.klasse) 
                                         label Für das Fach                                 
                                         select#validationServer01.form-control.custom-select.form-control(name='fach', type=text,  required='', placeholder='Wähle eine Klasse')
                                             option(selected='') #{article.fach}
@@ -82,7 +39,7 @@ block content
                                             option Türkisch 
                                             option Sonstiges Fach 
                                     .form-group.col-md-4 
-                                        label Abgabetermin (Tag / Uhrzeit)
+                                        label Abgabetermin
                                         input#datepicker.form-control(type=text, name='termin', value=article.termin,  readonly='readonly', style='background:white;', required='')
                                 .form-row
                                         label Auftrag

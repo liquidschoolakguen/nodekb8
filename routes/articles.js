@@ -2312,8 +2312,8 @@ router.post('/edit_hausarbeit/:id', function (req, res) {
 
 
 
-        console.log('wwwjjjjjjjjjjjjjjjjj s    ' + start);
-        console.log('wwwjjjjjjjjjjjjjjjjj a    ' + termin);
+       // console.log('wwwjjjjjjjjjjjjjjjjj s    ' + start);
+       // console.log('wwwjjjjjjjjjjjjjjjjj a    ' + termin);
 
 
 
@@ -2328,7 +2328,78 @@ router.post('/edit_hausarbeit/:id', function (req, res) {
 
         if (termin >= start) { // wenn die HA rechtzeitig abgegeben wurde
 
-          console.log('wwwERROR_______________________ok');
+        //  console.log('wwwERROR_______________________ok');
+
+
+
+
+
+          Hausarbeit.findById(req.params.id , function (err10, haus) {
+
+            if (err10) throw err10;
+            if (haus) {
+
+              console.log('haus      haus     haus        ' + haus.body + '    |    '+haus.status);
+
+
+
+                if(haus.status === '1'){// Wenn der Status 1 ist, hat der Lehrer noch nicht korrigiert
+
+
+
+
+
+                  var query = { '_id': req.params.id };
+
+
+                  let hausarbeit = {};
+        
+                  hausarbeit.body = req.body.body;
+                  hausarbeit.reflexion_hilfe = req.body.reflexion_hilfe;
+                  hausarbeit.reflexion_schwer = req.body.reflexion_schwer;
+                  hausarbeit.reflexion_zeit = req.body.reflexion_zeit;
+                  hausarbeit.reflexion_text = req.body.reflexion_text;
+                  hausarbeit.status = '1';
+        
+        
+        
+                  var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+        
+                  hausarbeit.created = nau;
+        
+        
+        
+        
+                  Hausarbeit.findOneAndUpdate(query, hausarbeit, { upsert: true }, function (err, doc) {
+                    if (err) return res.send(500, { error: err });
+        
+        
+        
+                    req.flash('success', 'Hausarbeit geändert');
+                    res.redirect('/');
+        
+        
+        
+                  });
+        
+        
+
+
+
+
+                }else{
+
+
+
+                  // lehrer hat bereits korrigiert/
+
+
+                  req.flash('warning', 'Deine Hausarbeit kann nicht mehr geändert werden, da sie bereits von der Lehrkraft beurteilt wurde');
+                  res.redirect('/');
+      
+
+
+                }
 
 
 
@@ -2336,43 +2407,40 @@ router.post('/edit_hausarbeit/:id', function (req, res) {
 
 
 
-
-          var query = { '_id': req.params.id };
-
-
-          let hausarbeit = {};
-
-          hausarbeit.body = req.body.body;
-          hausarbeit.reflexion_hilfe = req.body.reflexion_hilfe;
-          hausarbeit.reflexion_schwer = req.body.reflexion_schwer;
-          hausarbeit.reflexion_zeit = req.body.reflexion_zeit;
-          hausarbeit.reflexion_text = req.body.reflexion_text;
-          hausarbeit.status = '1';
+            }else{
 
 
 
-          var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
 
-          hausarbeit.created = nau;
+              req.flash('warning', 'Deine Hausarbeit wurde gelöscht');
+              res.redirect('/');
+  
 
 
 
 
 
 
-          Hausarbeit.findOneAndUpdate(query, hausarbeit, { upsert: true }, function (err, doc) {
-            if (err) return res.send(500, { error: err });
+            }
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          })
 
 
 
-            req.flash('success', 'Hausarbeit geändert');
-            res.redirect('/');
 
 
 
-          });
-
-
+         
 
 
 
