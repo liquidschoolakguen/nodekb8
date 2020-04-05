@@ -555,6 +555,7 @@ router.get('/article_schuelers/:id', function (req, res) {
 
 
               res.render('article_schueler', {
+                now : new Date(),
                 article: article,
                 hausarbeits: hausarbeits.reverse(),
                 length: length
@@ -899,7 +900,7 @@ router.post('/add_bingo_edit', ensureAuthenticated, function (req, res) {
 
                   if (all_schueler._id === arti_schueler._id) {
 
-                    all_schueler.article_token = true
+                    all_schueler.article_token = all_schueler._id
                   }
 
                 });
@@ -1203,12 +1204,12 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
     } else {
 
 
+      var jo = []
 
 
-/* 
-        console.log('Willi wills wissen        :      '+req.body.schuelers);
+        //console.log('Willi wills wissen        :      '+req.body.schuelers);
 
-        console.log('Willi wills wissen []     :      '+req.body.schuelers[0]);
+        //console.log('Willi wills wissen []     :      '+req.body.schuelers[0]);
 
 
        var ii =0;
@@ -1216,454 +1217,12 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
   
           console.log('schueler        :      '  +ii+ '        '+schueler+ '      '+req.body.id[ii]);
   
-
+          jo.push(schueler);
 
           ii++;
         });
 
- */
-
-
-
-      var s00 = req.body.schueler_0
-      var s01 = req.body.schueler_1
-      var s02 = req.body.schueler_2
-      var s03 = req.body.schueler_3
-      var s04 = req.body.schueler_4
-      var s05 = req.body.schueler_5
-      var s06 = req.body.schueler_6
-      var s07 = req.body.schueler_7
-      var s08 = req.body.schueler_8
-      var s09 = req.body.schueler_9
-      var s10 = req.body.schueler_10
-      var s11 = req.body.schueler_11
-      var s12 = req.body.schueler_12
-      var s13 = req.body.schueler_13
-      var s14 = req.body.schueler_14
-      var s15 = req.body.schueler_15
-      var s16 = req.body.schueler_16
-      var s17 = req.body.schueler_17
-      var s18 = req.body.schueler_18
-      var s19 = req.body.schueler_19
-      var s20 = req.body.schueler_20
-      var s21 = req.body.schueler_21
-      var s22 = req.body.schueler_22
-      var s23 = req.body.schueler_23
-      var s24 = req.body.schueler_24
-      var s25 = req.body.schueler_25
-      var s26 = req.body.schueler_26
-      var s27 = req.body.schueler_27
-      var s28 = req.body.schueler_28
-      var s29 = req.body.schueler_29
-      var s30 = req.body.schueler_30
-      var s31 = req.body.schueler_31
-      var s32 = req.body.schueler_32
-      var s33 = req.body.schueler_33
-      var s34 = req.body.schueler_34
-      var s35 = req.body.schueler_35
-      var s36 = req.body.schueler_36
-      var s37 = req.body.schueler_37
-      var s38 = req.body.schueler_38
-      var s39 = req.body.schueler_39
-      var s40 = req.body.schueler_40
-      var s41 = req.body.schueler_41
-      var s42 = req.body.schueler_42
-      var s43 = req.body.schueler_43
-      var s44 = req.body.schueler_44
-      var s45 = req.body.schueler_45
-      var s46 = req.body.schueler_46
-      var s47 = req.body.schueler_47
-      var s48 = req.body.schueler_48
-      var s49 = req.body.schueler_49
-      var s50 = req.body.schueler_50
-      var s51 = req.body.schueler_51
-      var s52 = req.body.schueler_52
-      var s53 = req.body.schueler_53
-      var s54 = req.body.schueler_54
-      var s55 = req.body.schueler_55
-      var s56 = req.body.schueler_56
-      var s57 = req.body.schueler_57
-      var s58 = req.body.schueler_58
-      var s59 = req.body.schueler_59
-      var s60 = req.body.schueler_60
-      var s61 = req.body.schueler_61
-      var s62 = req.body.schueler_62
-      var s63 = req.body.schueler_63
-      var s64 = req.body.schueler_64
-      var s65 = req.body.schueler_65
-      var s66 = req.body.schueler_66
-      var s67 = req.body.schueler_67
-      var s68 = req.body.schueler_68
-      var s69 = req.body.schueler_69
-      var s70 = req.body.schueler_70
-      var s71 = req.body.schueler_71
-      var s72 = req.body.schueler_72
-      var s73 = req.body.schueler_73
-      var s74 = req.body.schueler_74
-      var s75 = req.body.schueler_75
-      var s76 = req.body.schueler_76
-      var s77 = req.body.schueler_77
-      var s78 = req.body.schueler_78
-      var s79 = req.body.schueler_79
-      var s80 = req.body.schueler_80
-      var s81 = req.body.schueler_81
-      var s82 = req.body.schueler_82
-      var s83 = req.body.schueler_83
-      var s84 = req.body.schueler_84
-      var s85 = req.body.schueler_85
-      var s86 = req.body.schueler_86
-      var s87 = req.body.schueler_87
-      var s88 = req.body.schueler_88
-      var s89 = req.body.schueler_89
-      var s90 = req.body.schueler_90
-
-
-
-
-
-      var oo = []
-      oo.push(s00);
-      oo.push(s01);
-      oo.push(s02);
-      oo.push(s03);
-      oo.push(s04);
-      oo.push(s05);
-      oo.push(s06);
-      oo.push(s07);
-      oo.push(s08);
-      oo.push(s09);
-      oo.push(s10);
-      oo.push(s11);
-      oo.push(s12);
-      oo.push(s13);
-      oo.push(s14);
-      oo.push(s15);
-      oo.push(s16);
-      oo.push(s17);
-      oo.push(s18);
-      oo.push(s19);
-      oo.push(s20);
-      oo.push(s21);
-      oo.push(s22);
-      oo.push(s23);
-      oo.push(s24);
-      oo.push(s25);
-      oo.push(s26);
-      oo.push(s27);
-      oo.push(s28);
-      oo.push(s29);
-      oo.push(s30);
-      oo.push(s31);
-      oo.push(s32);
-      oo.push(s33);
-      oo.push(s34);
-      oo.push(s35);
-      oo.push(s36);
-      oo.push(s37);
-      oo.push(s38);
-      oo.push(s39);
-      oo.push(s40);
-      oo.push(s41);
-      oo.push(s42);
-      oo.push(s43);
-      oo.push(s44);
-      oo.push(s45);
-      oo.push(s46);
-      oo.push(s47);
-      oo.push(s48);
-      oo.push(s49);
-      oo.push(s50);
-      oo.push(s51);
-      oo.push(s52);
-      oo.push(s53);
-      oo.push(s54);
-      oo.push(s55);
-      oo.push(s56);
-      oo.push(s57);
-      oo.push(s58);
-      oo.push(s59);
-      oo.push(s60);
-      oo.push(s61);
-      oo.push(s62);
-      oo.push(s63);
-      oo.push(s64);
-      oo.push(s65);
-      oo.push(s66);
-      oo.push(s67);
-      oo.push(s68);
-      oo.push(s69);
-      oo.push(s70);
-      oo.push(s71);
-      oo.push(s72);
-      oo.push(s73);
-      oo.push(s74);
-      oo.push(s75);
-      oo.push(s76);
-      oo.push(s77);
-      oo.push(s78);
-      oo.push(s79);
-      oo.push(s80);
-      oo.push(s81);
-      oo.push(s82);
-      oo.push(s83);
-      oo.push(s84);
-      oo.push(s85);
-      oo.push(s86);
-      oo.push(s87);
-      oo.push(s88);
-      oo.push(s89);
-      oo.push(s90);
-
-
-
-
-
-      var id00 = req.body.id_0
-      var id01 = req.body.id_1
-      var id02 = req.body.id_2
-      var id03 = req.body.id_3
-      var id04 = req.body.id_4
-      var id05 = req.body.id_5
-      var id06 = req.body.id_6
-      var id07 = req.body.id_7
-      var id08 = req.body.id_8
-      var id09 = req.body.id_9
-      var id10 = req.body.id_10
-      var id11 = req.body.id_11
-      var id12 = req.body.id_12
-      var id13 = req.body.id_13
-      var id14 = req.body.id_14
-      var id15 = req.body.id_15
-      var id16 = req.body.id_16
-      var id17 = req.body.id_17
-      var id18 = req.body.id_18
-      var id19 = req.body.id_19
-      var id20 = req.body.id_20
-      var id21 = req.body.id_21
-      var id22 = req.body.id_22
-      var id23 = req.body.id_23
-      var id24 = req.body.id_24
-      var id25 = req.body.id_25
-      var id26 = req.body.id_26
-      var id27 = req.body.id_27
-      var id28 = req.body.id_28
-      var id29 = req.body.id_29
-      var id30 = req.body.id_30
-      var id31 = req.body.id_31
-      var id32 = req.body.id_32
-      var id33 = req.body.id_33
-      var id34 = req.body.id_34
-      var id35 = req.body.id_35
-      var id36 = req.body.id_36
-      var id37 = req.body.id_37
-      var id38 = req.body.id_38
-      var id39 = req.body.id_39
-      var id40 = req.body.id_40
-      var id41 = req.body.id_41
-      var id42 = req.body.id_42
-      var id43 = req.body.id_43
-      var id44 = req.body.id_44
-      var id45 = req.body.id_45
-      var id46 = req.body.id_46
-      var id47 = req.body.id_47
-      var id48 = req.body.id_48
-      var id49 = req.body.id_49
-      var id50 = req.body.id_50
-      var id51 = req.body.id_51
-      var id52 = req.body.id_52
-      var id53 = req.body.id_53
-      var id54 = req.body.id_54
-      var id55 = req.body.id_55
-      var id56 = req.body.id_56
-      var id57 = req.body.id_57
-      var id58 = req.body.id_58
-      var id59 = req.body.id_59
-      var id60 = req.body.id_60
-      var id61 = req.body.id_61
-      var id62 = req.body.id_62
-      var id63 = req.body.id_63
-      var id64 = req.body.id_64
-      var id65 = req.body.id_65
-      var id66 = req.body.id_66
-      var id67 = req.body.id_67
-      var id68 = req.body.id_68
-      var id69 = req.body.id_69
-      var id70 = req.body.id_70
-      var id71 = req.body.id_71
-      var id72 = req.body.id_72
-      var id73 = req.body.id_73
-      var id74 = req.body.id_74
-      var id75 = req.body.id_75
-      var id76 = req.body.id_76
-      var id77 = req.body.id_77
-      var id78 = req.body.id_78
-      var id79 = req.body.id_79
-      var id80 = req.body.id_80
-      var id81 = req.body.id_81
-      var id82 = req.body.id_82
-      var id83 = req.body.id_83
-      var id84 = req.body.id_84
-      var id85 = req.body.id_85
-      var id86 = req.body.id_86
-      var id87 = req.body.id_87
-      var id88 = req.body.id_88
-      var id89 = req.body.id_89
-      var id90 = req.body.id_90
-
-
-
-
-
-
-      var ooId = []
-      ooId.push(id00);
-      ooId.push(id01);
-      ooId.push(id02);
-      ooId.push(id03);
-      ooId.push(id04);
-      ooId.push(id05);
-      ooId.push(id06);
-      ooId.push(id07);
-      ooId.push(id08);
-      ooId.push(id09);
-      ooId.push(id10);
-      ooId.push(id11);
-      ooId.push(id12);
-      ooId.push(id13);
-      ooId.push(id14);
-      ooId.push(id15);
-      ooId.push(id16);
-      ooId.push(id17);
-      ooId.push(id18);
-      ooId.push(id19);
-      ooId.push(id20);
-      ooId.push(id21);
-      ooId.push(id22);
-      ooId.push(id23);
-      ooId.push(id24);
-      ooId.push(id25);
-      ooId.push(id26);
-      ooId.push(id27);
-      ooId.push(id28);
-      ooId.push(id29);
-      ooId.push(id30);
-      ooId.push(id31);
-      ooId.push(id32);
-      ooId.push(id33);
-      ooId.push(id34);
-      ooId.push(id35);
-      ooId.push(id36);
-      ooId.push(id37);
-      ooId.push(id38);
-      ooId.push(id39);
-      ooId.push(id40);
-      ooId.push(id41);
-      ooId.push(id42);
-      ooId.push(id43);
-      ooId.push(id44);
-      ooId.push(id45);
-      ooId.push(id46);
-      ooId.push(id47);
-      ooId.push(id48);
-      ooId.push(id49);
-      ooId.push(id50);
-      ooId.push(id51);
-      ooId.push(id52);
-      ooId.push(id53);
-      ooId.push(id54);
-      ooId.push(id55);
-      ooId.push(id56);
-      ooId.push(id57);
-      ooId.push(id58);
-      ooId.push(id59);
-      ooId.push(id60);
-      ooId.push(id61);
-      ooId.push(id62);
-      ooId.push(id63);
-      ooId.push(id64);
-      ooId.push(id65);
-      ooId.push(id66);
-      ooId.push(id67);
-      ooId.push(id68);
-      ooId.push(id69);
-      ooId.push(id70);
-      ooId.push(id71);
-      ooId.push(id72);
-      ooId.push(id73);
-      ooId.push(id74);
-      ooId.push(id75);
-      ooId.push(id76);
-      ooId.push(id77);
-      ooId.push(id78);
-      ooId.push(id79);
-      ooId.push(id80);
-      ooId.push(id81);
-      ooId.push(id82);
-      ooId.push(id83);
-      ooId.push(id84);
-      ooId.push(id85);
-      ooId.push(id86);
-      ooId.push(id87);
-      ooId.push(id88);
-      ooId.push(id89);
-      ooId.push(id90);
-
-
-
-
-
-      var jo = []
-
-
-
-
-
-
-
-
-
-
-
-      var sss = 0;
-      oo.forEach(function (o) {
-
-        if (typeof o === undefined) {
-
-
-        } else {
-
-          if (o === undefined) {
-
-
-
-          } else {
-
-
-
-
-            jo.push(ooId[sss])
-
-          }
-
-
-        }
-        sss++;
-
-      });
-
-
-
-
-
-      jo.forEach(function (o) {
-
-        // console.log('jjj:   ' + o);
-
-      });
-
-
-
-
+ 
 
 
 
@@ -1826,7 +1385,7 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
                     if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
-                    console.log('-------------------------------------');
+/*                     console.log('-------------------------------------');
                     console.log('-------------------------------------');
                     console.log('-------------------------------------');
                     console.log('-------------------------------------');
@@ -1834,7 +1393,7 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
                     console.log('-------------------------------------');
                     console.log('-------------------------------------');
                     console.log('-------------------------------------');
-                    console.log('-------------------------------------');
+                    console.log('-------------------------------------'); */
 
 
 
@@ -1852,8 +1411,8 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
 
 
 
-                      console.log('schuelersY: ' + schue);
-                      console.log('-------------------------------------');
+/*                       console.log('schuelersY: ' + schue);
+                      console.log('-------------------------------------'); */
 
 
 
@@ -1973,15 +1532,15 @@ router.post("/add_alt", upload.single("file" /* name attribute of <file> element
         var monat = req.body.termin.substring(3, 5)
         var jahr = req.body.termin.substring(6, 10)
 
-        console.log('tag:     ' + tag);
+/*         console.log('tag:     ' + tag);
         console.log('monat:   ' + monat);
-        console.log('jahr:    ' + jahr);
+        console.log('jahr:    ' + jahr); */
 
         var d = new Date(jahr, monat - 1, tag, 16);
 
-        console.log('Date:    ' + d);
+       // console.log('Date:    ' + d);
         var jetzt = new Date();
-        console.log('Date:    ' + jetzt);
+       // console.log('Date:    ' + jetzt);
 
 
 
@@ -2919,12 +2478,12 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
 
 
 
-
-
-
-
 // Update submit POST route
-router.post('/edit/:id', function (req, res) {
+router.post("/edit/:id", upload.single("file" /* name attribute of <file> element in your form */),
+  (req, res) => {
+
+
+
 
 
 
@@ -3008,410 +2567,23 @@ router.post('/edit/:id', function (req, res) {
 
 
 
-
-
-
-        var s00 = req.body.schueler_0
-        var s01 = req.body.schueler_1
-        var s02 = req.body.schueler_2
-        var s03 = req.body.schueler_3
-        var s04 = req.body.schueler_4
-        var s05 = req.body.schueler_5
-        var s06 = req.body.schueler_6
-        var s07 = req.body.schueler_7
-        var s08 = req.body.schueler_8
-        var s09 = req.body.schueler_9
-        var s10 = req.body.schueler_10
-        var s11 = req.body.schueler_11
-        var s12 = req.body.schueler_12
-        var s13 = req.body.schueler_13
-        var s14 = req.body.schueler_14
-        var s15 = req.body.schueler_15
-        var s16 = req.body.schueler_16
-        var s17 = req.body.schueler_17
-        var s18 = req.body.schueler_18
-        var s19 = req.body.schueler_19
-        var s20 = req.body.schueler_20
-        var s21 = req.body.schueler_21
-        var s22 = req.body.schueler_22
-        var s23 = req.body.schueler_23
-        var s24 = req.body.schueler_24
-        var s25 = req.body.schueler_25
-        var s26 = req.body.schueler_26
-        var s27 = req.body.schueler_27
-        var s28 = req.body.schueler_28
-        var s29 = req.body.schueler_29
-        var s30 = req.body.schueler_30
-        var s31 = req.body.schueler_31
-        var s32 = req.body.schueler_32
-        var s33 = req.body.schueler_33
-        var s34 = req.body.schueler_34
-        var s35 = req.body.schueler_35
-        var s36 = req.body.schueler_36
-        var s37 = req.body.schueler_37
-        var s38 = req.body.schueler_38
-        var s39 = req.body.schueler_39
-        var s40 = req.body.schueler_40
-        var s41 = req.body.schueler_41
-        var s42 = req.body.schueler_42
-        var s43 = req.body.schueler_43
-        var s44 = req.body.schueler_44
-        var s45 = req.body.schueler_45
-        var s46 = req.body.schueler_46
-        var s47 = req.body.schueler_47
-        var s48 = req.body.schueler_48
-        var s49 = req.body.schueler_49
-        var s50 = req.body.schueler_50
-        var s51 = req.body.schueler_51
-        var s52 = req.body.schueler_52
-        var s53 = req.body.schueler_53
-        var s54 = req.body.schueler_54
-        var s55 = req.body.schueler_55
-        var s56 = req.body.schueler_56
-        var s57 = req.body.schueler_57
-        var s58 = req.body.schueler_58
-        var s59 = req.body.schueler_59
-        var s60 = req.body.schueler_60
-        var s61 = req.body.schueler_61
-        var s62 = req.body.schueler_62
-        var s63 = req.body.schueler_63
-        var s64 = req.body.schueler_64
-        var s65 = req.body.schueler_65
-        var s66 = req.body.schueler_66
-        var s67 = req.body.schueler_67
-        var s68 = req.body.schueler_68
-        var s69 = req.body.schueler_69
-        var s70 = req.body.schueler_70
-        var s71 = req.body.schueler_71
-        var s72 = req.body.schueler_72
-        var s73 = req.body.schueler_73
-        var s74 = req.body.schueler_74
-        var s75 = req.body.schueler_75
-        var s76 = req.body.schueler_76
-        var s77 = req.body.schueler_77
-        var s78 = req.body.schueler_78
-        var s79 = req.body.schueler_79
-        var s80 = req.body.schueler_80
-        var s81 = req.body.schueler_81
-        var s82 = req.body.schueler_82
-        var s83 = req.body.schueler_83
-        var s84 = req.body.schueler_84
-        var s85 = req.body.schueler_85
-        var s86 = req.body.schueler_86
-        var s87 = req.body.schueler_87
-        var s88 = req.body.schueler_88
-        var s89 = req.body.schueler_89
-        var s90 = req.body.schueler_90
-
-
-
-
-
-        var oo = []
-        oo.push(s00);
-        oo.push(s01);
-        oo.push(s02);
-        oo.push(s03);
-        oo.push(s04);
-        oo.push(s05);
-        oo.push(s06);
-        oo.push(s07);
-        oo.push(s08);
-        oo.push(s09);
-        oo.push(s10);
-        oo.push(s11);
-        oo.push(s12);
-        oo.push(s13);
-        oo.push(s14);
-        oo.push(s15);
-        oo.push(s16);
-        oo.push(s17);
-        oo.push(s18);
-        oo.push(s19);
-        oo.push(s20);
-        oo.push(s21);
-        oo.push(s22);
-        oo.push(s23);
-        oo.push(s24);
-        oo.push(s25);
-        oo.push(s26);
-        oo.push(s27);
-        oo.push(s28);
-        oo.push(s29);
-        oo.push(s30);
-        oo.push(s31);
-        oo.push(s32);
-        oo.push(s33);
-        oo.push(s34);
-        oo.push(s35);
-        oo.push(s36);
-        oo.push(s37);
-        oo.push(s38);
-        oo.push(s39);
-        oo.push(s40);
-        oo.push(s41);
-        oo.push(s42);
-        oo.push(s43);
-        oo.push(s44);
-        oo.push(s45);
-        oo.push(s46);
-        oo.push(s47);
-        oo.push(s48);
-        oo.push(s49);
-        oo.push(s50);
-        oo.push(s51);
-        oo.push(s52);
-        oo.push(s53);
-        oo.push(s54);
-        oo.push(s55);
-        oo.push(s56);
-        oo.push(s57);
-        oo.push(s58);
-        oo.push(s59);
-        oo.push(s60);
-        oo.push(s61);
-        oo.push(s62);
-        oo.push(s63);
-        oo.push(s64);
-        oo.push(s65);
-        oo.push(s66);
-        oo.push(s67);
-        oo.push(s68);
-        oo.push(s69);
-        oo.push(s70);
-        oo.push(s71);
-        oo.push(s72);
-        oo.push(s73);
-        oo.push(s74);
-        oo.push(s75);
-        oo.push(s76);
-        oo.push(s77);
-        oo.push(s78);
-        oo.push(s79);
-        oo.push(s80);
-        oo.push(s81);
-        oo.push(s82);
-        oo.push(s83);
-        oo.push(s84);
-        oo.push(s85);
-        oo.push(s86);
-        oo.push(s87);
-        oo.push(s88);
-        oo.push(s89);
-        oo.push(s90);
-
-
-
-
-
-        var id00 = req.body.id_0
-        var id01 = req.body.id_1
-        var id02 = req.body.id_2
-        var id03 = req.body.id_3
-        var id04 = req.body.id_4
-        var id05 = req.body.id_5
-        var id06 = req.body.id_6
-        var id07 = req.body.id_7
-        var id08 = req.body.id_8
-        var id09 = req.body.id_9
-        var id10 = req.body.id_10
-        var id11 = req.body.id_11
-        var id12 = req.body.id_12
-        var id13 = req.body.id_13
-        var id14 = req.body.id_14
-        var id15 = req.body.id_15
-        var id16 = req.body.id_16
-        var id17 = req.body.id_17
-        var id18 = req.body.id_18
-        var id19 = req.body.id_19
-        var id20 = req.body.id_20
-        var id21 = req.body.id_21
-        var id22 = req.body.id_22
-        var id23 = req.body.id_23
-        var id24 = req.body.id_24
-        var id25 = req.body.id_25
-        var id26 = req.body.id_26
-        var id27 = req.body.id_27
-        var id28 = req.body.id_28
-        var id29 = req.body.id_29
-        var id30 = req.body.id_30
-        var id31 = req.body.id_31
-        var id32 = req.body.id_32
-        var id33 = req.body.id_33
-        var id34 = req.body.id_34
-        var id35 = req.body.id_35
-        var id36 = req.body.id_36
-        var id37 = req.body.id_37
-        var id38 = req.body.id_38
-        var id39 = req.body.id_39
-        var id40 = req.body.id_40
-        var id41 = req.body.id_41
-        var id42 = req.body.id_42
-        var id43 = req.body.id_43
-        var id44 = req.body.id_44
-        var id45 = req.body.id_45
-        var id46 = req.body.id_46
-        var id47 = req.body.id_47
-        var id48 = req.body.id_48
-        var id49 = req.body.id_49
-        var id50 = req.body.id_50
-        var id51 = req.body.id_51
-        var id52 = req.body.id_52
-        var id53 = req.body.id_53
-        var id54 = req.body.id_54
-        var id55 = req.body.id_55
-        var id56 = req.body.id_56
-        var id57 = req.body.id_57
-        var id58 = req.body.id_58
-        var id59 = req.body.id_59
-        var id60 = req.body.id_60
-        var id61 = req.body.id_61
-        var id62 = req.body.id_62
-        var id63 = req.body.id_63
-        var id64 = req.body.id_64
-        var id65 = req.body.id_65
-        var id66 = req.body.id_66
-        var id67 = req.body.id_67
-        var id68 = req.body.id_68
-        var id69 = req.body.id_69
-        var id70 = req.body.id_70
-        var id71 = req.body.id_71
-        var id72 = req.body.id_72
-        var id73 = req.body.id_73
-        var id74 = req.body.id_74
-        var id75 = req.body.id_75
-        var id76 = req.body.id_76
-        var id77 = req.body.id_77
-        var id78 = req.body.id_78
-        var id79 = req.body.id_79
-        var id80 = req.body.id_80
-        var id81 = req.body.id_81
-        var id82 = req.body.id_82
-        var id83 = req.body.id_83
-        var id84 = req.body.id_84
-        var id85 = req.body.id_85
-        var id86 = req.body.id_86
-        var id87 = req.body.id_87
-        var id88 = req.body.id_88
-        var id89 = req.body.id_89
-        var id90 = req.body.id_90
-
-
-
-
-
-
-        var ooId = []
-        ooId.push(id00);
-        ooId.push(id01);
-        ooId.push(id02);
-        ooId.push(id03);
-        ooId.push(id04);
-        ooId.push(id05);
-        ooId.push(id06);
-        ooId.push(id07);
-        ooId.push(id08);
-        ooId.push(id09);
-        ooId.push(id10);
-        ooId.push(id11);
-        ooId.push(id12);
-        ooId.push(id13);
-        ooId.push(id14);
-        ooId.push(id15);
-        ooId.push(id16);
-        ooId.push(id17);
-        ooId.push(id18);
-        ooId.push(id19);
-        ooId.push(id20);
-        ooId.push(id21);
-        ooId.push(id22);
-        ooId.push(id23);
-        ooId.push(id24);
-        ooId.push(id25);
-        ooId.push(id26);
-        ooId.push(id27);
-        ooId.push(id28);
-        ooId.push(id29);
-        ooId.push(id30);
-        ooId.push(id31);
-        ooId.push(id32);
-        ooId.push(id33);
-        ooId.push(id34);
-        ooId.push(id35);
-        ooId.push(id36);
-        ooId.push(id37);
-        ooId.push(id38);
-        ooId.push(id39);
-        ooId.push(id40);
-        ooId.push(id41);
-        ooId.push(id42);
-        ooId.push(id43);
-        ooId.push(id44);
-        ooId.push(id45);
-        ooId.push(id46);
-        ooId.push(id47);
-        ooId.push(id48);
-        ooId.push(id49);
-        ooId.push(id50);
-        ooId.push(id51);
-        ooId.push(id52);
-        ooId.push(id53);
-        ooId.push(id54);
-        ooId.push(id55);
-        ooId.push(id56);
-        ooId.push(id57);
-        ooId.push(id58);
-        ooId.push(id59);
-        ooId.push(id60);
-        ooId.push(id61);
-        ooId.push(id62);
-        ooId.push(id63);
-        ooId.push(id64);
-        ooId.push(id65);
-        ooId.push(id66);
-        ooId.push(id67);
-        ooId.push(id68);
-        ooId.push(id69);
-        ooId.push(id70);
-        ooId.push(id71);
-        ooId.push(id72);
-        ooId.push(id73);
-        ooId.push(id74);
-        ooId.push(id75);
-        ooId.push(id76);
-        ooId.push(id77);
-        ooId.push(id78);
-        ooId.push(id79);
-        ooId.push(id80);
-        ooId.push(id81);
-        ooId.push(id82);
-        ooId.push(id83);
-        ooId.push(id84);
-        ooId.push(id85);
-        ooId.push(id86);
-        ooId.push(id87);
-        ooId.push(id88);
-        ooId.push(id89);
-        ooId.push(id90);
-
-
-
-
         var jo = []
 
 
+        //console.log('Willi wills wissen        :      '+req.body.schuelers);
 
-        var sss = 0;
-        oo.forEach(function (o) {
-          if (typeof o === undefined) {
-          } else {
-            if (o === undefined) {
-            } else {
-              jo.push(ooId[sss])
-            }
-          }
-          sss++;
-        }); // jo hält die ids der aktivierten Checkboxes der SuS
+        //console.log('Willi wills wissen []     :      '+req.body.schuelers[0]);
+
+
+       var ii =0;
+       req.body.schuelers.forEach(function (schueler) {
+  
+          console.log('schueler        :      '  +ii+ '        '+schueler+ '      ');
+  
+          jo.push(schueler);
+
+          ii++;
+        });
 
 
 
@@ -3438,7 +2610,7 @@ router.post('/edit/:id', function (req, res) {
 
 
             art.schuelers.forEach(function (schueler) {
-              console.log('record :   ' + schueler.name);
+              //console.log('record :   ' + schueler.name);
 
 
               Article.findByIdAndUpdate(art._id,

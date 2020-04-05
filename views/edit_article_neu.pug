@@ -1,7 +1,7 @@
 extends layout
 
 block content
-            form#reused_form.montform(method='POST',  action='/articles/edit/' + article._id)
+            form#reused_form.montform(method='POST', enctype='multipart/form-data'  action='/articles/edit/' + article._id)
                 .card.border.border-success
                     .card-header.bg-success.text-white
                         | Hausarbeit ändern
@@ -13,8 +13,8 @@ block content
                                             .row(style='margin:0px; border:none !important;')
                                                 each schueler, i in schuelers
                                                     .col-3(style='margin-bottom:0px; border:none !important;')
-                                                        input#defaultCheck1.form-check-input(type='checkbox', value=schueler.article_token, checked=schueler.article_token, name='schueler_'+i)
-                                                        input.form-control.invisible(type='text',  name='id_'+i, value= schueler._id)
+                                                        input#defaultCheck1.form-check-input(type='checkbox', value=schueler._id, checked=schueler.article_token, name='schuelers[]')
+                                                        input.form-control.invisible(type='text',  name='id['+i+']', value= schueler._id)
                                                         | #{schueler.name}                               
                                     .form-group.col-md-12
                                         input#validationServer01.form-control(type='text', placeholder='Titel des Auftrags',  required='',  name='title', value=article.title)

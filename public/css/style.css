@@ -28,7 +28,12 @@ background-blend-mode: screen;
   
 
   }
+  
 
+
+  .navbar {
+       border-radius: 0px !important; 
+  }
 
   .alert{
 
@@ -509,6 +514,7 @@ color:  #7c7c7c !important;
 
 
 
+
 .box {
   float: left;
 }
@@ -517,9 +523,6 @@ color:  #7c7c7c !important;
 .box-right {
   float: right;
 }
-
-
-
 
 
 

@@ -313,6 +313,8 @@ app.get('/', function (req, res) {
 
               my_articles.forEach(function (my_article) {
 
+                my_article.schuelers.sort();
+
 
 
                 var tag = my_article.termin.substring(0, 2)
@@ -530,7 +532,7 @@ app.get('/', function (req, res) {
                 })
    */
 
-
+                 
               res.render('index', {
                 my_articles: my_articles,
                 length: length
