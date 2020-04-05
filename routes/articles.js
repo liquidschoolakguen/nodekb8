@@ -568,7 +568,7 @@ router.get('/article_schuelers/:id', function (req, res) {
               let length = hausarbeits.length;
 
 
-              var there = new Date().toLocaleString("en-US", {timeZone: "Europe/Paris"})
+              var there = new Date()
              
 
               res.render('article_schueler', {
