@@ -47,7 +47,7 @@ function getMyNow(date){
 
   if(n!==-120){
 
-    yes.setHours(yes.getHours+2)
+    yes.setHours(yes.getHours()+2)
 
     console.log('bimmelbingo')
   }else{
