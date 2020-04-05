@@ -39,7 +39,24 @@ const upload = multer({
 
 
 
+function getMyNow(date){
+  var yes  = new Date();
 
+  var n = yes.getTimezoneOffset();
+ 
+
+  if(n!==-120){
+
+    yes.setHours(yes.getHours+2)
+
+    console.log('bimmelbingo')
+  }else{
+
+    console.log('server')
+  }
+
+  return yes;
+}
 
 
 
@@ -568,16 +585,15 @@ router.get('/article_schuelers/:id', function (req, res) {
               let length = hausarbeits.length;
 
 
-              var there = new Date()
-              var n = there.getTimezoneOffset();
+             
 
               res.render('article_schueler', {
-                now : there,
+                now : getMyNow(new Date()),
                 article: article,
                 hausarbeits: hausarbeits.reverse(),
                 length: length,
-                my_termin : termin,
-                n:n
+                my_termin : termin
+                
               });
             } else {
 
