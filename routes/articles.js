@@ -569,14 +569,15 @@ router.get('/article_schuelers/:id', function (req, res) {
 
 
               var there = new Date()
-             
+              var n = there.getTimezoneOffset();
 
               res.render('article_schueler', {
                 now : there,
                 article: article,
                 hausarbeits: hausarbeits.reverse(),
                 length: length,
-                my_termin : termin
+                my_termin : termin,
+                n:n
               });
             } else {
 
