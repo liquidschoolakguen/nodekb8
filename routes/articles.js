@@ -1090,14 +1090,35 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
         if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
+
+
+        var packages= [];
+
+        var package = {
+
+          klasse_name:'',
+          child : []
+
+
+        }
+        var last_klasse=''
+
         schuelers.forEach(function (schueler) {
 
-          //console.log('schüler: ' + schueler.name);
+          //console.log('schüler: VVVV' );
+          if(schueler.klasse2 === req.body.klasse){//klassenübergreifende Gruppe wurde gewählt
+            console.log('schüler: ' + schueler.name + '    '+schueler.klasse);
 
+            if(last_klasse!==schueler.klasse){
+              //last_klasse= schueler.klasse
+
+            }
+
+          }
 
         });
 
-
+        
         res.render('add_article_neu', {
           schuelers: schuelers,
           abgabe: nau,
@@ -3032,7 +3053,7 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   } else {
-    req.flash('danger', 'Please login');
+    req.flash('danger', 'Bitte anmelden');
     res.redirect('/users/login');
   }
 
