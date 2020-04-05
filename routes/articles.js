@@ -575,7 +575,8 @@ router.get('/article_schuelers/:id', function (req, res) {
                 now : there,
                 article: article,
                 hausarbeits: hausarbeits.reverse(),
-                length: length
+                length: length,
+                my_termin : termin
               });
             } else {
 
