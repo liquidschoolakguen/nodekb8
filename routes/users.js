@@ -792,7 +792,7 @@ function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     } else {
-        req.flash('danger', 'Please login');
+        req.flash('danger', 'Bitte anmelden');
         res.redirect('/users/login');
     }
 

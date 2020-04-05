@@ -39,7 +39,7 @@ const upload = multer({
 
 
 
-function getMyNow(date){
+function getMyNow(){
   var yes  = new Date();
 
   var n = yes.getTimezoneOffset();
@@ -65,12 +65,12 @@ function getMyNow(date){
 router.get('/add', ensureAuthenticated, function (req, res) {
 
 
-  var today = new Date();
-  var tomorrow = new Date();
+  var today = getMyNow();
+  var tomorrow = getMyNow();
   tomorrow.setDate(today.getDate() + 3);
 
 
-  const start = new Date();
+  
 
   var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.'
 
@@ -92,12 +92,11 @@ router.get('/add', ensureAuthenticated, function (req, res) {
 router.get('/add_alt', ensureAuthenticated, function (req, res) {
 
 
-  var today = new Date();
-  var tomorrow = new Date();
+  var today = getMyNow();
+  var tomorrow = getMyNow();
   tomorrow.setDate(today.getDate() + 3);
 
 
-  const start = new Date();
   //var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
   var nau = tomorrow.getDate() + '.' + tomorrow.getMonth() + '.' + tomorrow.getFullYear()
 
@@ -455,7 +454,7 @@ router.get('/article_schuelers/:id', function (req, res) {
         var termin = new Date(jahr, monat - 1, tag, 16);
 
         console.log('termin:    ' + termin);
-        var jetzt = new Date();
+        var jetzt = getMyNow();
         console.log('jeks:    ' + jetzt);
 
 
@@ -588,7 +587,7 @@ router.get('/article_schuelers/:id', function (req, res) {
              
 
               res.render('article_schueler', {
-                now : getMyNow(new Date()),
+                now : getMyNow(),
                 article: article,
                 hausarbeits: hausarbeits.reverse(),
                 length: length,
@@ -861,12 +860,12 @@ router.post('/add_bingo_edit', ensureAuthenticated, function (req, res) {
 
 
   console.log('kkkkk')
-  var today = new Date();
-  var tomorrow = new Date();
+  var today = getMyNow();
+  var tomorrow = getMyNow();
   tomorrow.setDate(today.getDate() + 3);
 
 
-  const start = new Date();
+
 
   var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + ','
 
@@ -1060,14 +1059,14 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
 
 
   console.log('kkkkk')
-  var today = new Date();
-  var tomorrow = new Date();
+  var today = getMyNow();
+  var tomorrow = getMyNow();
   tomorrow.setDate(today.getDate() + 3);
 
 
-  const start = new Date();
+ 
 
-  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + start.getFullYear()
+  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + tomorrow.getFullYear()
 
 
   console.log('req.body.klasse: ' + req.body.klasse);
@@ -1163,14 +1162,14 @@ router.post('/add_bingo_broadcast', ensureAuthenticated, function (req, res) {
   );
 
 
-  var today = new Date();
-  var tomorrow = new Date();
+  var today = getMyNow();
+  var tomorrow = getMyNow();
   tomorrow.setDate(today.getDate() + 3);
 
 
-  const start = new Date();
 
-  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + start.getFullYear()
+
+  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + tomorrow.getFullYear()
 
 
   console.log('req.body.broadcast: ' + req.body.broadcast);
@@ -1295,12 +1294,12 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
         article.lehrer = req.user._id;
         article.ha_gelb = '0';
         article.ha_gruen = '0'
-        article.created_as_date = new Date();
+        article.created_as_date = getMyNow();
 
         console.log('klaas:  ' + req.body.klaas)
 
 
-        const start = new Date();
+        const start = getMyNow();
 
         var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
 
@@ -1330,7 +1329,7 @@ router.post("/add_neu", upload.single("file" /* name attribute of <file> element
         var d = new Date(jahr, monat - 1, tag, 16);
 
         console.log('Date:    ' + d);
-        var jetzt = new Date();
+        var jetzt = getMyNow();
         console.log('Date:    ' + jetzt);
 
 
@@ -1574,7 +1573,7 @@ router.post("/add_alt", upload.single("file" /* name attribute of <file> element
         var d = new Date(jahr, monat - 1, tag, 16);
 
        // console.log('Date:    ' + d);
-        var jetzt = new Date();
+        var jetzt = getMyNow();
        // console.log('Date:    ' + jetzt);
 
 
@@ -1600,9 +1599,9 @@ router.post("/add_alt", upload.single("file" /* name attribute of <file> element
           article.lehrer = req.user._id;
           article.ha_gelb = '0';
           article.ha_gruen = '0'
-          article.created_as_date = new Date();
+          article.created_as_date = getMyNow();
 
-          const start = new Date();
+          const start = getMyNow();
           var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
           var nau = start.getDate() + '.' + start.getMonth() + '. (' + start.getHours() + ':' + start.getMinutes() + ')'
 
@@ -1646,7 +1645,7 @@ router.post("/add_alt", upload.single("file" /* name attribute of <file> element
 
 
           req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn');
-          res.redirect('add_article_klasse');
+          res.redirect('/');
           return;
 
 
@@ -1719,7 +1718,7 @@ router.post("/add_hausarbeit", upload.single("file" /* name attribute of <file> 
 
           if (article) {
 
-            const start = new Date();
+            const start = getMyNow();
 
             var tag = article.termin.substring(0, 2)
             var monat = article.termin.substring(3, 5)
@@ -1891,7 +1890,7 @@ router.post('/edit_hausarbeit/:id', function (req, res) {
 
 
 
-        const start = new Date();
+        const start = getMyNow();
 
         var tag = article.termin.substring(0, 2)
         var monat = article.termin.substring(3, 5)
@@ -1937,7 +1936,7 @@ router.post('/edit_hausarbeit/:id', function (req, res) {
 
 
 
-                if(haus.status === '1'){// Wenn der Status 1 ist, hat der Lehrer noch nicht korrigiert
+                if(haus.status === '1' || haus.status === '3'  ){// Wenn der Status 1 ist, hat der Lehrer noch nicht korrigiert
 
 
 
@@ -2366,7 +2365,7 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
       var d = new Date(jahr, monat - 1, tag, 14);
 
       console.log('Date:    ' + d);
-      var jetzt = new Date();
+      var jetzt = getMyNow();
       console.log('Date:    ' + jetzt);
 
 
@@ -2556,7 +2555,7 @@ router.post("/edit/:id", upload.single("file" /* name attribute of <file> elemen
     var d = new Date(jahr, monat - 1, tag, 16);
 
     console.log('Date:    ' + d);
-    var jetzt = new Date();
+    var jetzt = getMyNow();
     console.log('Date:    ' + jetzt);
 
 
@@ -2757,7 +2756,7 @@ router.post("/edit/:id", upload.single("file" /* name attribute of <file> elemen
 
 
 
-              const start = new Date();
+              const start = getMyNow();
 
 
 
@@ -2837,7 +2836,7 @@ router.post("/edit/:id", upload.single("file" /* name attribute of <file> elemen
 
 
 
-          const start = new Date();
+          const start = getMyNow();
 
 
 
