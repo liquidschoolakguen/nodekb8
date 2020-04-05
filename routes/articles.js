@@ -390,7 +390,21 @@ router.get('/schueler/:id', function (req, res) {
 
 
 
+function changeTimezone(date, ianatz) {
 
+  // suppose the date is 12:00 UTC
+  var invdate = new Date(date.toLocaleString('en-US', {
+    timeZone: ianatz
+  }));
+
+  // then invdate will be 07:00 in Toronto
+  // and the diff is 5 hours
+  var diff = date.getTime() - invdate.getTime();
+
+  // so 12:00 in Toronto is 17:00 UTC
+  return new Date(date.getTime() + diff);
+
+}
 
 
 
@@ -554,8 +568,11 @@ router.get('/article_schuelers/:id', function (req, res) {
               let length = hausarbeits.length;
 
 
+              var there = new Date().toLocaleString("en-US", {timeZone: "Europe/Paris"})
+             
+
               res.render('article_schueler', {
-                now : new Date(),
+                now : there,
                 article: article,
                 hausarbeits: hausarbeits.reverse(),
                 length: length
