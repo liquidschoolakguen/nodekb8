@@ -13,9 +13,13 @@ const passport = require('passport');
 const config = require('./config/database');
 
 mongoose.connect(config.database, {
+  useCreateIndex: true,
   useUnifiedTopology: true,
   useNewUrlParser: true,
+  useFindAndModify: false 
 });
+
+
 
 let db = mongoose.connection;
 
@@ -41,15 +45,22 @@ let Hausarbeit = require('./models/hausarbeit');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+
+
+
+
+
 // Body Parser Middleware
 //parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // parse application/json
 app.use(bodyParser.json())
 
 // Set Public Folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+
 
 // Express Session Middleware
 app.use(session({
@@ -98,137 +109,6 @@ app.get('*', function (req, res, next) {
   res.locals.user = req.user || null;
   next();
 });
-
-
-
-
-/* // Home Route
-app.get('/', function (req, res) {
-
-
-  if (typeof req.user === "undefined") {
-    res.render('index', {
-      title: 'Articles'
-    });
-  } else {
-
-
-
-
-
-
-
-    User.findById(req.user._id, function (err, user) {
-
-      if (err) {
-        //console.log('wwwwww');
-        console.log(err);
-      }
-
-
-
-      if (user.type == 'lehrer') {
-
-        //console.log('lehrer')
-
-
-
-        Article.
-          find({ author: req.user._id }).
-          populate('lehrer').
-          exec(function (err2, my_articles) {
-            if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-            var length = my_articles.length;
-
-            res.render('index', {
-              title: 'Articles',
-              my_articles: my_articles.reverse(),
-              length: length
-
-            });
-
-          });
-
-
-
-
-
-      } else {
-
-        //console.log('schueler')
-        // console.log('ggg : ' + user.klasse)
-
-
-        Article.
-          find({
-            $or: [
-              { klasse: user.klasse },
-              { klasse: user.klasse2 }
-            ]
-
-
-          }).
-          populate('lehrer').
-          exec(function (err2, my_articles) {
-            if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-            var length = my_articles.length;
-
-
-
-            Hausarbeit.
-              find({ schueler: req.user._id }).
-              populate('article').
-              exec(function (err, hausarbeits) {
-                if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
-                //console.log('kkk')
-
-                //console.log('-------------------------------------')
-                my_articles.forEach(function (my_article) {
-                  // console.log(my_article);
-
-                  my_article.schueler_token = '0';
-
-                  hausarbeits.forEach(function (hausarbeit) {
-                    // console.log(hausarbeit);
-
-                    if (my_article._id.toString() === hausarbeit.article._id.toString()) {
-
-                      // console.log('---------------'+my_article.id);
-                      // console.log('---------------'+hausarbeit.article._id);
-                      // console.log('---------------');
-                      // console.log('---------------');
-                      // console.log('---------------');
-
-                      my_article.schueler_token = hausarbeit.status;
-
-                    }
-                  });
-                });
-
-                // my_articles.forEach(function (my_article){
-                //   console.log('--------------- '+my_article.schueler_token);
-                // });
-
-                res.render('index', {
-                  title: 'Articles',
-                  my_articles: my_articles.reverse(),
-                  length: length
-
-                });
-              });
-
-          });
-
-      }
-
-    })
-
-  }
-
-}); */
-
 
 
 
@@ -1015,9 +895,29 @@ app.use('/hausarbeits/', hausarbeits);
 
 
 
+app.post('/search', (req, res) => {
+  let q = req.body.query;
+  let query = {
+    "$or": [{"name.first": {"$regex": q, "$options": "i"}}, {"name.last": {"$regex": q, "$options": "i"}}]
+  };
+  let output = [];
 
+  Users.find(query).limit(6).then( usrs => {
+      if(usrs && usrs.length && usrs.length > 0) {
+          usrs.forEach(user => {
+            let obj = {
+                id: user.name.first + ' ' + user.name.last,
+                label: user.name.first + ' ' + user.name.last
+            };
+            output.push(obj);
+          });
+      }
+      res.json(output);
+  }).catch(err => {
+    res.sendStatus(404);
+  });
 
-
+});
 
 
 

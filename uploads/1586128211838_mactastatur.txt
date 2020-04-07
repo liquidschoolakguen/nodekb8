@@ -1,0 +1,9 @@
+[] = option + 5/6
+\  = option + umschalt + 7
+
+reformat Code = Cmd + A   ctrl + I
+
+$ two-way-binding
+
+
+		

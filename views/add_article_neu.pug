@@ -51,10 +51,9 @@ block content
                                         label Abgabetermin (Standard: 3 Tage später)
                                         input#datepicker.form-control(type=text, name='termin', value=abgabe+ ' 16 Uhr', required='',  readonly='readonly', style='background:white;')
                                 .form-row
-                                        label Auftrag (zum Bild hochzuladen: erst in das Eingabefeld clicken und dann auf das Bild-Symbol)
+                                        label Auftrag (zum Bild hochzuladen: erst in das Eingabefeld klicken und dann auf das Bild-Symbol)
                                         textarea#area2.form-control.is-valid(name='body', type=text, placeholder='Arbeitsauftrag')
                                         input.form-control.invisible(type='text',  name='klaas', value=klasse)
-                                    
                                 input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Auftrag veröffentlichen')
             script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
             script(src='/bower_components/bootstrap/dist/js/bootstrap.js')

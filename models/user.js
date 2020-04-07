@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // User Schema
 const UserSchema = mongoose.Schema({
-    
+
 
     logged: {
         type: Boolean,
@@ -13,7 +13,7 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    
+
     name: {
         type: String,
         required: true
@@ -32,8 +32,8 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    
-    
+
+
     klasse: {
         type: String,
         required: false
@@ -43,17 +43,17 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    
+
     klasse3: {
         type: String,
         required: false
     },
-    
+
     klasse4: {
         type: String,
         required: false
     },
-    
+
 
 
 
@@ -79,31 +79,48 @@ const UserSchema = mongoose.Schema({
 
 
     article_token: {
-        type:String,
-        required:false   
+        type: String,
+        required: false
     },
 
 
     default_klasse: {
-        type:String,
-        required:false   
+        type: String,
+        required: false
     },
 
 
 
 
     default_broadcast: {
-        type:String,
-        required:false   
+        type: String,
+        required: false
     },
-    
+
 
 
 
     auftrags: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Article'
-      }]
+    }],
+
+
+
+
+    lerngruppes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Lerngruppe",
+        required: false
+    }],
+
+
+    school: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'School'
+    },
+
+
 
 
 }

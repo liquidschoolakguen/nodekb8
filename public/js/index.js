@@ -348,3 +348,9 @@ function open_new_window(link) {
 // date picker
 $('.datepicker').pickadate();
 
+
+
+
+$(document).ready(function() {
+    $(".dropdown-toggle").dropdown();
+});

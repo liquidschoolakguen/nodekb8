@@ -493,13 +493,16 @@ color:  #7c7c7c !important;
 .bg-custom-green {
   background-color: rgba(255, 0, 0, 0.205)!important;
 }
-
+.bg-custom-black {
+  background-color: rgba(0, 0, 0, 0.205)!important;
+}
 
 .no-border{
   border: none !important;
 
 
 }
+
 
 
 .my-margin-bottom-right{

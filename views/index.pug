@@ -96,7 +96,7 @@ block content
                           .col-md-12.col-12.float-right.padding_null
                               h4  Erstelle deinen ersten Auftrag an deine Schüler*innen
                                 a.btn.btn-success.text-white.button-margin(href='/articles/add_article_klasse') Ersten Auftrag erstellen
-      else 
+      else if user.type == 'schueler'
         .container.padding_null
           .row
             .col-12
@@ -274,8 +274,8 @@ block content
                                             path(fill-rule='evenodd', d='M11.251.068a.5.5 0 01.227.58L9.677 6.5H13a.5.5 0 01.364.843l-8 8.5a.5.5 0 01-.842-.49L6.323 9.5H3a.5.5 0 01-.364-.843l8-8.5a.5.5 0 01.615-.09z', clip-rule='evenodd')
                         else 
                           h4  Es gibt noch keine Aufträge für dich. Kommt noch...:)
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+      else
+        h1  Hallo Admin
     script(type='text/javascript', src='https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js')
     script(type='text/javascript', src='https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js')   
-    script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
     script(src='/js/index.js')

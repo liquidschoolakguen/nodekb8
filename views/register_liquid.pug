@@ -1,0 +1,40 @@
+extends layout2
+
+block content
+    .container
+      .row.h-100.d-flex.justify-content-center
+        .col-12.col-sm-8.col-md-6.col-lg-4
+          .card.border
+            .card-body.bg-custom-black
+              br 
+              h4.card-title Hier kannst du dich als Schuladministrator registrieren
+              br 
+              .tab-content.mt-3
+                #history.tab-pane.active(role='tabpanel')
+                  p.card-text
+                    form(method='POST', action='/users/register_liquid')
+                        #form-group  
+                            input#validationServer01.form-control(name='name', type=text, required='', placeholder='Sichtbarer Name, z.B. "Frau Stahlberg"')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(name='name', type=text, required='', placeholder='Sichtbarer Name, z.B. "Frau Stahlberg"')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(name='name', type=text, required='', placeholder='Sichtbarer Name, z.B. "Frau Stahlberg"')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(name='name', type=text, required='', placeholder='Sichtbarer Name, z.B. "Frau Stahlberg"')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(name='name', type=text, required='', placeholder='Sichtbarer Name, z.B. "Frau Stahlberg"')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(name='username', type=text, required='', placeholder='SaH-Email')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(type=text, name='password', required='', placeholder='Passwort')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(type=text, name='password2', required='', placeholder='Passwort wiederholen')                             
+                        br
+                        input.btn.btn-secondary.bg-secondary.text-white.float-right(type='submit', value='Registrieren als Schul-Administrator')
