@@ -33,7 +33,12 @@ html
                                     | Neuer Auftrag
                                 .dropdown-menu
                                     a.dropdown-item(href='/articles/add_article_klasse') Auftrag an Lerngruppe
-                                    a.dropdown-item(href='/articles/add_article_broadcast') Auftrag an Standort(e)                 
+                                    a.dropdown-item(href='/articles/add_article_broadcast') Auftrag an Standort(e)          
+                            li.nav-item.dropdown
+                                a#navbardrop3.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
+                                    | Einstellungen
+                                .dropdown-menu
+                                    a.dropdown-item(href='/articles/add_lerngruppe') Eigene Lerngruppen                  
                         else
                             li.nav-item.active
                                 .box
