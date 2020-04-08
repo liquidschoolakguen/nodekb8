@@ -40,7 +40,7 @@ block content
                                 #description2.tab-pane.active(role='tabpanel')
                                     p.card-text
                                         .col-md-12
-                                            form#reused_form.montform(method='POST', action='/articles/edit_hausarbeit/' + hausarbeit._id)
+                                            form#reused_form.montform(method='POST', action='/articles/edit_hausarbeit/' + hausarbeit._id , enctype='multipart/form-data')
                                                 #form-transition-group.my-margin-top
                                                     br 
                                                     .form-row
@@ -56,6 +56,14 @@ block content
                                                     br 
                                                     .form-row
                                                         textarea#area2.form-control.is-valid(name='body', type=text, placeholder='Arbeitsauftrag')=hausarbeit.body
+                                                    .form-row.my-margin-top
+                                                        .form-group.col-md-8 
+                                                            input#inputGroupFile02.custom-file-input(type='file' name='files', multiple='')
+                                                            label.custom-file-label(for='inputGroupFile02') Neue Dateien hochladen         
+                                                        .form-group.col-md-4 
+                                                            .col-12(style='margin-left:10px;')
+                                                                input.form-check-input(type='checkbox', value='ok', checked='false', name='delete')
+                                                                | vorherige Dateien löschen?                                                        
                                                     .form-row.my-margin-top
                                                         .form-group.col-md-4 
                                                             label Hattest du bei der Arbeit Hilfe?                                 

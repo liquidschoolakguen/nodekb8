@@ -156,7 +156,16 @@ block content
                                         svg.bi.bi-lightning-fill(width='1em', height='1em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
                                           path(fill-rule='evenodd', d='M11.251.068a.5.5 0 01.227.58L9.677 6.5H13a.5.5 0 01.364.843l-8 8.5a.5.5 0 01-.842-.49L6.323 9.5H3a.5.5 0 01-.364-.843l8-8.5a.5.5 0 01.615-.09z', clip-rule='evenodd')
                                 td                         
-                                  | Das Symbol mit dem Blitz bedeutet, dass du Probleme mit deiner Lehrerin/ deinem Lehrer bekommst. Denn du hast nicht rechtzeitig eine gültige Hausarbeit abgeschickt.                          
+                                  | Das Symbol mit dem Blitz bedeutet, dass du Probleme mit deiner Lehrerin/ deinem Lehrer bekommst. Denn du hast nicht rechtzeitig eine gültige Hausarbeit abgeschickt.
+                              tr
+                                td
+                                  .nav-link.active.text-primary
+                                    svg.bi.bi-card-image(width='2em', height='2em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
+                                      path(fill-rule='evenodd', d='M14.5 3h-13a.5.5 0 00-.5.5v9a.5.5 0 00.5.5h13a.5.5 0 00.5-.5v-9a.5.5 0 00-.5-.5zm-13-1A1.5 1.5 0 000 3.5v9A1.5 1.5 0 001.5 14h13a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0014.5 2h-13z', clip-rule='evenodd')
+                                      path(d='M10.648 7.646a.5.5 0 01.577-.093L15.002 9.5V13h-14v-1l2.646-2.354a.5.5 0 01.63-.062l2.66 1.773 3.71-3.71z')
+                                      path(fill-rule='evenodd', d='M4.502 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3z', clip-rule='evenodd')   
+                                td                         
+                                  | Das Symbol bedeutet, dass eine Datei an den Auftrag angehängt ist. Klicke drauf, um die Datei zu öffnen
                           br 
                           br
                           .col-md-8.col-8.float-left
@@ -228,6 +237,29 @@ block content
                                     td 
                                       .box
                                         | #{my_article.title} |
+                                      .box.nnn
+                                        if my_article.uploads.length !=0
+                                          each upload, i in my_article.uploads
+                                            a(download=upload.body, href='/articles/download/'+upload.body)
+                                              if upload.type == '1'
+                                                  svg.bi.bi-file-text(width='1em', height='1em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
+                                                      path(fill-rule='evenodd', d='M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z', clip-rule='evenodd')
+                                                      path(fill-rule='evenodd', d='M4.5 10.5A.5.5 0 015 10h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 8h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 6h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 4h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5z', clip-rule='evenodd')
+                                              else if upload.type == '2'  
+                                                  svg.bi.bi-card-image(width='1.4em', height='1.4em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
+                                                      path(fill-rule='evenodd', d='M14.5 3h-13a.5.5 0 00-.5.5v9a.5.5 0 00.5.5h13a.5.5 0 00.5-.5v-9a.5.5 0 00-.5-.5zm-13-1A1.5 1.5 0 000 3.5v9A1.5 1.5 0 001.5 14h13a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0014.5 2h-13z', clip-rule='evenodd')
+                                                      path(d='M10.648 7.646a.5.5 0 01.577-.093L15.002 9.5V13h-14v-1l2.646-2.354a.5.5 0 01.63-.062l2.66 1.773 3.71-3.71z')
+                                                      path(fill-rule='evenodd', d='M4.502 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3z', clip-rule='evenodd')
+                                              else if upload.type == '3'  
+                                                  svg.bi.bi-file-spreadsheet(width='1em', height='1em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
+                                                      path(fill-rule='evenodd', d='M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z', clip-rule='evenodd')
+                                                      path(fill-rule='evenodd', d='M13 6H3V5h10v1zm0 3H3V8h10v1zm0 3H3v-1h10v1z', clip-rule='evenodd')
+                                                      path(fill-rule='evenodd', d='M5 14V6h1v8H5zm4 0V6h1v8H9z', clip-rule='evenodd')
+                                              else if upload.type == '4'  
+                                                  svg.bi.bi-collection-play(width='1em', height='1em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
+                                                      path(fill-rule='evenodd', d='M14.5 13.5h-13A.5.5 0 011 13V6a.5.5 0 01.5-.5h13a.5.5 0 01.5.5v7a.5.5 0 01-.5.5zm-13 1A1.5 1.5 0 010 13V6a1.5 1.5 0 011.5-1.5h13A1.5 1.5 0 0116 6v7a1.5 1.5 0 01-1.5 1.5h-13zM2 3a.5.5 0 00.5.5h11a.5.5 0 000-1h-11A.5.5 0 002 3zm2-2a.5.5 0 00.5.5h7a.5.5 0 000-1h-7A.5.5 0 004 1z', clip-rule='evenodd')
+                                                      path(fill-rule='evenodd', d='M6.258 6.563a.5.5 0 01.507.013l4 2.5a.5.5 0 010 .848l-4 2.5A.5.5 0 016 12V7a.5.5 0 01.258-.437z', clip-rule='evenodd')
+                                      
                                       .box
                                         if my_article.termin == 'heute 16 Uhr'
                                           strong.text-danger &nbsp;#{my_article.termin}

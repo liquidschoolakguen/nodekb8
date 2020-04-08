@@ -30,7 +30,11 @@ background-blend-mode: screen;
   }
   
 
+.nnn{
 
+margin-top: -1px !important;
+
+}
   .navbar {
        border-radius: 0px !important; 
   }
@@ -401,13 +405,28 @@ min-height: 320px!important;
 
 }
 
+.divo_alt {
 
+  display: none;
 
+ 
+  background: #f00;
+
+}
+.divo_neu {
+ 
+  
+  display: block;
+
+  float: left;
+  background: rgb(0, 255, 170);
+
+}
 
 .color-red {
 
 
-  color: rgb(255, 80, 80);
+  color: rgb(255, 0, 0);
 }
 
 .my-margin-right-boy{

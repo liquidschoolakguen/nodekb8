@@ -483,7 +483,7 @@ app.get('/', function (req, res) {
 
               User.findOneAndUpdate(query, op, { upsert: true }, function (err, doc) {
                 if (err) return res.send(500, { error: err });
-                console.log('geändert:   ' + doc.name + ' (' + doc.klasse3 + ')')
+                //console.log('geändert:   ' + doc.name + ' (' + doc.klasse3 + ')')
               });
 
 
@@ -516,6 +516,7 @@ app.get('/', function (req, res) {
           }).
           populate('lehrer').
           populate('schuelers').
+          populate('uploads').
           sort({ created_as_date: -1 }).
           exec(function (err2, my_articles) {
             if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);

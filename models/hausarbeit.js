@@ -103,7 +103,15 @@ let hausarbeitSchema = mongoose.Schema({
     },
 
 
+    uploads: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Load',
+          
 
+        }
+
+    ],
 
 
 });

@@ -4,7 +4,7 @@ block content
             form#reused_form.montform(method='POST', enctype='multipart/form-data'  action='/articles/edit/' + article._id)
                 .card.border.border-success
                     .card-header.bg-success.text-white
-                        | Hausarbeit ändern
+                        | Auftrag ändern
                     .card-body
                         #form-transition-group.my-margin-top
                                 .form-row
@@ -51,7 +51,15 @@ block content
                                 .form-row
                                         label Auftrag
                                         textarea#area2.form-control.is-valid(name='body', type=text, placeholder='Arbeitsauftrag')=article.body
-                                        input.form-control.invisible(type='text',  name='shadow_klasse', value=article.shadow_klasse)                                   
+                                        input.form-control.invisible(type='text',  name='shadow_klasse', value=article.shadow_klasse)                             
+                                .form-row.my-margin-top
+                                    .form-group.col-md-8 
+                                        input#inputGroupFile02.custom-file-input(type='file' name='files', multiple='')
+                                        label.custom-file-label(for='inputGroupFile02') Neue Dateien hochladen         
+                                    .form-group.col-md-4 
+                                        .col-12(style='margin-left:10px;')
+                                            input.form-check-input(type='checkbox', value='ok', checked='false', name='delete')
+                                            | vorherige Dateien löschen?                     
                                 input.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Ok')
             script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
             script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
