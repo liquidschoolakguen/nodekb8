@@ -53,6 +53,18 @@ font-size: 1.2em!important;
     white-space: pre-line;
   }
 
+
+  a {
+    color: #5bc0de;
+  }
+
+  a:hover{
+
+    color: #25b5e0;
+
+  }
+
+
   .myp {
     background-color:yellow;
     margin-top: 10;
@@ -61,7 +73,9 @@ font-size: 1.2em!important;
   }
 
   .container {
-    margin-top: 50px;
+
+   
+    padding: 0px !important;
 
   }
 

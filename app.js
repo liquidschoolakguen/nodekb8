@@ -55,7 +55,7 @@ app.set('view engine', 'pug');
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // parse application/json
-app.use(bodyParser.json({limit: '50mb'}))
+app.use(bodyParser.json())
 
 // Set Public Folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -921,6 +921,24 @@ app.post('/search', (req, res) => {
 });
 
 
+/* 
+// ALLET
+app.get('/:id', function (req, res) {
+
+console.log('hi:    '+req.params.id)
+
+
+req.flash('success', 'Hier entsteht gerade eine digitale Schule');
+res.redirect('/');
+
+
+return
+
+
+
+});
+
+ */
 
 
 

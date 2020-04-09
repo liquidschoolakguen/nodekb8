@@ -1327,11 +1327,11 @@ router.post("/add_neu", upload.array("files"),
       res.redirect('login');
       return
     }
-    if (!req.body.body || req.body.body.length <= 8) {  //Wenn der Azftrag zu kurz ist, kann man nicht speichern
+/*     if (!req.body.body || req.body.body.length <= 8) {  //Wenn der Azftrag zu kurz ist, kann man nicht speichern
       req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Nochmal das Ganze.');
       res.redirect('add_article_klasse');
       return
-    }
+    } */
     if (!req.body.schuelers) { // Wenn man kein SuS auswählt kann man (hier) nicht speichern
       req.flash('warning', 'Du hast keine Schüler*innen ausgewählt. So wird das nichts mit dem Auftrag. ');
       res.redirect('/');
@@ -1639,11 +1639,11 @@ router.post("/add_neu", upload.array("files"),
         res.redirect('login');
         return
       }
-      if (!req.body.body || req.body.body.length <= 8) {  //Wenn der Azftrag zu kurz ist, kann man nicht speichern
+/*       if (!req.body.body || req.body.body.length <= 8) {  //Wenn der Azftrag zu kurz ist, kann man nicht speichern
         req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Nochmal das Ganze.');
         res.redirect('add_article_klasse');
         return
-      }
+      } */
 
 
 
@@ -2318,11 +2318,11 @@ router.post("/add_hausarbeit", upload.array("files"),
       return;
     }
 
-    if (!req.body.body || req.body.body.length <= 8) {
+/*     if (!req.body.body || req.body.body.length <= 8) {
       req.flash('danger', 'Deine Hausarbeit ist leer oder viel zu kurz. So geht das nicht.');
       res.redirect('/');
       return;
-    }
+    } */
 
 
     Article.findById(req.body.article_id, function (err, article) {
@@ -3396,12 +3396,12 @@ router.post("/edit/:id", upload.array("files" /* name attribute of <file> elemen
       res.redirect('login');
       return
     }
-    if (!req.body.body || req.body.body.length <= 8) {  //Wenn der Azftrag zu kurz ist, kann man nicht speichern
+    /* if (!req.body.body || req.body.body.length <= 8) {  //Wenn der Azftrag zu kurz ist, kann man nicht speichern
       req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Nochmal das Ganze.');
       res.redirect('add_article_klasse');
       return
     }
-
+ */
 
 
     var tag = req.body.termin.substring(0, 2)
