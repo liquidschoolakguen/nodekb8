@@ -15,7 +15,7 @@ block content
         .container.padding_null
           .row.h-100.d-flex.justify-content-center
             .col-12
-              .card.border.border-primary
+              .card.border
                 .card-header
                   ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                     li.nav-item
@@ -27,15 +27,15 @@ block content
                         if length !=0
                           .col-md-4.col-6.float-right.padding_null
                             input#inputFilter.form-control.my-margin-bottom-right(type='text', placeholder='suche..')
-                          table#customerTable.table.table-striped.table-bordered.table-sm(cellspacing='0', width='100%')
+                          table#customerTable.table.row-border.hover.table-sm.no-border(cellspacing='0', width='100%')
                             thead
                               tr 
                                 th.th-sm.align-middle
                                   | Profil
                                 th.th-sm.align-middle
-                                  | KLasse                          
+                                  | Klasse                          
                                 th.th-sm.align-middle
-                                  | Name | Passwort
+                                  | Name
                                 th.th-sm.align-middle
                                   | PauliDollar                   
                             tbody
@@ -50,7 +50,7 @@ block content
                                     | #{schueler.klasse}
                                   td.align-middle 
                                     .box
-                                    | "#{schueler.username}" | "#{schueler.password_visible}"  
+                                    | #{schueler.name}
                                   td.align-middle
                                     | #{schueler.money} $                                  
                         else
