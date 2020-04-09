@@ -34,7 +34,10 @@ block content
                         .card-header
                             ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                                 li.nav-item
-                                    a.nav-link.active(href='#description2', role='tab', aria-controls='description2', aria-selected='true') Hausarbeit ändern
+                                    if hausarbeit.status !== '3'
+                                        a.nav-link.active(href='#description2', role='tab', aria-controls='description2', aria-selected='true') Hausarbeit ändern
+                                    if hausarbeit.status === '3'
+                                        a.nav-link.active(href='#description2', role='tab', aria-controls='description2', aria-selected='true') Zurückgeschickte Hausarbeit verbessern
                         .card-body.padding_null
                             .tab-content.mt-3
                                 #description2.tab-pane.active(role='tabpanel')
@@ -47,10 +50,10 @@ block content
                                                         input.form-control.invisible(type='text', placeholder='articleId',  name='article_id', value= hausarbeit.article._id)
                                                     .form-row
                                                         if hausarbeit.status == '3'
-                                                            .card.border-danger.col-sm-12   
+                                                            .card.border-info.col-sm-12   
                                                                 if  hausarbeit.nachbessern_option != '---keine Auswahl---'                                                
-                                                                    h6.card-header  Der/die Lehrer/in hat deine Arbeit zurückgegeben: #{hausarbeit.nachbessern_option} 
-                                                                    h5.card-body.text-danger
+                                                                    h6.card-header  Die Lehrkraft hat dir deine Arbeit zurückgeschickt: #{hausarbeit.nachbessern_option} 
+                                                                    h5.card-body.text-info
                                                                         .card-text
                                                                         | #{hausarbeit.nachbessern_text}
                                                     br 
@@ -91,7 +94,11 @@ block content
                                                     .form-row
                                                         .form-group.col-md-12
                                                             input#validationServer01.form-control(type='text', placeholder='Das möchte ich der Lehrkraft noch sagen' name='reflexion_text' , value=hausarbeit.reflexion_text)                                               
-                                                    input#geht_ab.btn.btn-warning.my-margin-top.bg-warning.text-white.float-right.my-margin-bottom(type='submit', value='Hausarbeit abgeben')
+                                                    if hausarbeit.status !== '3'                                                   
+                                                        input#geht_ab.btn.btn-warning.my-margin-top.bg-warning.text-white.float-right.my-margin-bottom(type='submit', value='Hausarbeit abgeben')
+                                                    if hausarbeit.status == '3'
+                                                        input#geht_ab.btn.btn-info.my-margin-top.bg-info.text-white.float-right.my-margin-bottom(type='submit', value='Hausarbeit nochmal abgeben')
+
             script(src='/js/article2.js')
     script(src='/js/nic_edit.js')
     script(type='text/javascript').
