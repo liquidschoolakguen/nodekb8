@@ -54,7 +54,8 @@ app.set('view engine', 'pug');
 //parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
 
-
+// parse application/json
+app.use(bodyParser.json({limit: '50mb'}))
 
 // Set Public Folder
 app.use(express.static(path.join(__dirname, 'public')));
