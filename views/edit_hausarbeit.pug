@@ -49,7 +49,7 @@ block content
                                                         if hausarbeit.status == '3'
                                                             .card.border-danger.col-sm-12   
                                                                 if  hausarbeit.nachbessern_option != '---keine Auswahl---'                                                
-                                                                    h6.card-header  #{hausarbeit.nachbessern_option} 
+                                                                    h6.card-header  Der/die Lehrer/in hat deine Arbeit zurückgegeben: #{hausarbeit.nachbessern_option} 
                                                                     h5.card-body.text-danger
                                                                         .card-text
                                                                         | #{hausarbeit.nachbessern_text}
