@@ -36,50 +36,22 @@ block content
                           input#inputFilter.form-control.my-margin-bottom-right.my-margin-right(type='text', placeholder='suche..')
                         table#customerTable.table.row-border.hover.table-sm.no-border(cellspacing='0', width='100%')
                           thead
-                            tr 
+                            tr                           
                               th.th-sm.align-middle
-                                | Profil                              
-                              th.th-sm.align-middle
-                                | Name | Passwort 
+                                | Schüler*in
                               th.th-sm.align-middle
                                 | Pauli $                                                    
                               th.th-sm.align-middle
                                 | HAs 
                           tbody
                             each hausarbeit, i in hausarbeits
-                              tr
-                                td.align-middle
-                                  a.btn.btn-outline-primary.btn-circle.btn-lg(href="/articles/schueler/"+hausarbeit.schueler._id, role='button')
-                                    svg.bi.bi-person-fill(width='1em', height='1em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
-                                      path(fill-rule='evenodd', d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 100-6 3 3 0 000 6z', clip-rule='evenodd')                                
+                              tr                               
                                 td.align-middle 
                                   .montainer
-                                  | "#{hausarbeit.schueler.name}" | "#{hausarbeit.schueler.password_visible}"  
+                                    a(href='/articles/schueler/' +hausarbeit.schueler._id, role='button')  #{hausarbeit.schueler.name}&nbsp;
                                 td.align-middle
                                   | #{hausarbeit.schueler.money} $   
-                                td.align-middle
-                                  .box.nnn
-                                    if hausarbeit.uploads.length !=0
-                                      each upload, i in hausarbeit.uploads
-                                        a(download=upload.body, href='/articles/download/'+upload.body)
-                                          if upload.type == '1'
-                                              svg.bi.bi-file-text(width='1em', height='1em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
-                                                  path(fill-rule='evenodd', d='M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z', clip-rule='evenodd')
-                                                  path(fill-rule='evenodd', d='M4.5 10.5A.5.5 0 015 10h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 8h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 6h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 4h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5z', clip-rule='evenodd')
-                                          else if upload.type == '2'  
-                                              svg.bi.bi-card-image(width='1.4em', height='1.4em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
-                                                  path(fill-rule='evenodd', d='M14.5 3h-13a.5.5 0 00-.5.5v9a.5.5 0 00.5.5h13a.5.5 0 00.5-.5v-9a.5.5 0 00-.5-.5zm-13-1A1.5 1.5 0 000 3.5v9A1.5 1.5 0 001.5 14h13a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0014.5 2h-13z', clip-rule='evenodd')
-                                                  path(d='M10.648 7.646a.5.5 0 01.577-.093L15.002 9.5V13h-14v-1l2.646-2.354a.5.5 0 01.63-.062l2.66 1.773 3.71-3.71z')
-                                                  path(fill-rule='evenodd', d='M4.502 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3z', clip-rule='evenodd')
-                                          else if upload.type == '3'  
-                                              svg.bi.bi-file-spreadsheet(width='1em', height='1em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
-                                                  path(fill-rule='evenodd', d='M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z', clip-rule='evenodd')
-                                                  path(fill-rule='evenodd', d='M13 6H3V5h10v1zm0 3H3V8h10v1zm0 3H3v-1h10v1z', clip-rule='evenodd')
-                                                  path(fill-rule='evenodd', d='M5 14V6h1v8H5zm4 0V6h1v8H9z', clip-rule='evenodd')
-                                          else if upload.type == '4'  
-                                              svg.bi.bi-collection-play(width='1em', height='1em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
-                                                  path(fill-rule='evenodd', d='M14.5 13.5h-13A.5.5 0 011 13V6a.5.5 0 01.5-.5h13a.5.5 0 01.5.5v7a.5.5 0 01-.5.5zm-13 1A1.5 1.5 0 010 13V6a1.5 1.5 0 011.5-1.5h13A1.5 1.5 0 0116 6v7a1.5 1.5 0 01-1.5 1.5h-13zM2 3a.5.5 0 00.5.5h11a.5.5 0 000-1h-11A.5.5 0 002 3zm2-2a.5.5 0 00.5.5h7a.5.5 0 000-1h-7A.5.5 0 004 1z', clip-rule='evenodd')
-                                                  path(fill-rule='evenodd', d='M6.258 6.563a.5.5 0 01.507.013l4 2.5a.5.5 0 010 .848l-4 2.5A.5.5 0 016 12V7a.5.5 0 01.258-.437z', clip-rule='evenodd')
+                                td
                                   if (article.termin !== 'abgelaufen' && hausarbeit.status ==='1')
                                     a.btn.btn-outline-warning(href="/articles/hausarbeit/"+hausarbeit._id, role='button')
                                       svg.bi.bi-file-richtext(width='1em', height='1em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')

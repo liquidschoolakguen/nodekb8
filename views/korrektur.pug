@@ -49,7 +49,7 @@ block content
                                             .col-md-12
                                                 br
                                                 hr                                        
-                                                h5.box-right.text-primary Download
+                                                h5.box-right.text-info Download
                                                 div(style='clear:both;') 
                                                 each upload, i in hausarbeit.uploads
                                                     a.box-right(download=upload.body, href='/articles/download/'+upload.body)
@@ -75,15 +75,15 @@ block content
                                             br                                             
                                         hr
                                         .card-deck
-                                            .card.btn-outline-warning.border-warning
+                                            .card.alert.alert-warning
                                                 .card-body.text-center
                                                     p.card-text Hilfe gehabt?
                                                     p.card-text "#{hausarbeit.reflexion_hilfe}"
-                                            .card.btn-outline-danger.my-min-height.border-danger
+                                            .card.alert.alert-danger
                                                 .card-body.text-center
                                                     p.card-text War es schwer?
                                                     p.card-text "#{hausarbeit.reflexion_schwer}"
-                                            .card.btn-outline-success.my-min-height.border-success
+                                            .card.alert.alert-success
                                                 .card-body.text-center
                                                     p.card-text Genug Zeit gehabt?
                                                     p.card-text "#{hausarbeit.reflexion_zeit}"
@@ -182,8 +182,6 @@ block content
                                                 input#geht_ab.btn.btn-info.my-margin-top.bg-info.text-white.float-right.my-margin-bottom(type='submit', value='Nachbesserungsaufforderung abschicken')
                                                 p.my-margin-top.bold-info
                                                     | Wenn du die Aufforderung zur Nachbesserung abschickst, kannst du sie nicht mehr ändern. 
-            script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
-            script(src='/bower_components/bootstrap/dist/js/bootstrap.js')  
             script(src='/js/log_reg.js')                                             
             script(src='/js/nic_edit.js')
             script(src='/js/article.js')

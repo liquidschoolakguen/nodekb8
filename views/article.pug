@@ -39,7 +39,7 @@ block content
                                         .col-md-12
                                             br
                                             hr                                        
-                                            h5.box-right.text-primary Download
+                                            h5.box-right.text-info Download
                                             div(style='clear:both;') 
                                             each upload, i in article.uploads
                                                 a.box-right(download=upload.body, href='/articles/download/'+upload.body)
@@ -87,32 +87,14 @@ block content
                                                                 input.form-control.invisible(type='text', placeholder='articleId',  name='article_id', value= article._id)
                                                             .form-row
                                                                 .card.border-success.col-sm-12.mb-3                                               
-                                                                    h6.card-header  Wie man ein Foto mit dem Handy hochlädt
+                                                                    h6.card-header  Wie man ein Foto hochlädt
                                                                     h5.card-body.text-success
-                                                                        .card-text
-                                                                            | 1. Du musst das kleine grüne, viereckige Icon im Eingabefeld klicken (unten).
-                                                                        .card-text
-                                                                            | 2. Dann musst du auf deinem Handy ein Foto auswählen oder du musst ein Foto machen.
-                                                                        .card-text    
-                                                                            | 3. Dann drückst du auf ok und dann lädt das Foto in das weiße Feld unten.
-                                                                        .card-text 
-                                                                            br
-                                                                            | --- ACHTUNG: --- Das Laden kann bei Handys etwas länger dauern, also hab Geduld bis das Bild geladen ist.
-                                                                .card.border-success.col-sm-12.mb-3                                              
-                                                                    h6.card-header  Wie man ein Foto mit dem Computer hochlädt
-                                                                    h5.card-body.text-success
-                                                                        .card-text
-                                                                            | 1. Du musst das kleine grüne, viereckige Icon im Eingabefeld klicken (unten).
-                                                                        .card-text
-                                                                            | 2. Dann werden dir Dateien angezeigt, die auf deinem Computer gespeichert sind.
-                                                                        .card-text
-                                                                            | 3. Wähle die Datei aus, die du hochladen willst, klicke auf die Datei und schon wird das Foto geladen.                    
-                                                                        .card-text 
-                                                                            br
-                                                                            | --- ACHTUNG: --- Du kannst nur FOTOS hochladen. Die "Dateinamen" von Fotos enden immer mit ".jpeg" oder ".png" Diese Dateien kannst du hochladen. Andere Dateien sind nicht erlaubt.
-                                                                        .card-text 
-                                                                            br
-                                                                            | --- ACHTUNG: --- Du kannst keine Fotos "kopieren" und "einfügen". Du musst das Foto was du hochladen willst, vorher auf dem Computer gespeichert haben! 
+                                                                        p
+                                                                            | 1. Klicke auf das kleine grüne, viereckige Icon im Eingabefeld. Dann sieht man ein kleines Fenster wo "durchsuchen" oder "auswählen" steht oder sowas. Da drauf klicken.
+                                                                        p
+                                                                            | 2. Wähle auf deinem Handy oder Computer ein Foto aus (oder du machst ein Foto mit Handy).
+                                                                        p    
+                                                                            | 3. Dann drückst du auf ok und dann lädt das Foto  --- ACHTUNG: --- Das Laden kann bei Handys etwas länger dauern, also hab Geduld bis das Bild zu sehen ist.
                                                                 textarea#area2.form-control.is-valid(name='body', type=text, placeholder='Arbeitsauftrag')
                                                                 .custom-file.my-margin-top
                                                                     input#inputGroupFile02.custom-file-input(type='file' name='files', multiple='')

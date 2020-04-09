@@ -55,12 +55,12 @@ font-size: 1.2em!important;
 
 
   a {
-    color: #5bc0de;
+    color: #68aec0;
   }
 
   a:hover{
 
-    color: #25b5e0;
+    color: #68aec0a2;
 
   }
 
@@ -78,6 +78,12 @@ font-size: 1.2em!important;
     padding: 0px !important;
 
   }
+
+  .nicEdit-main{
+    background-color: rgba(9, 114, 0, 0.082);
+
+}
+
 
   .alert-error{
     color:#a94442;
