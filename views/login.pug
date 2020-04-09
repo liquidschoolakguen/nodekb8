@@ -3,7 +3,7 @@ extends layout
 block content
     .container
       .row.h-100.d-flex.justify-content-center
-        .col-12.col-sm-8.col-md-6.col-lg-4
+        .col-12.col-sm-8.col-md-6.col-lg-6
           .card.border
             .card-header
               ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
@@ -11,6 +11,8 @@ block content
                   a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') Für Schüler*innen
                 li.nav-item
                   a.nav-link(href='#history', role='tab', aria-controls='history', aria-selected='false') Für Lehrkräfte
+                li.nav-item
+                  a.nav-link(href='#bingo', role='tab', aria-controls='bingo', aria-selected='false') Für Schuladministratoren
             .card-body
               h4.card-title Anmelden bei Liquidschool
               .tab-content.mt-3
@@ -38,6 +40,18 @@ block content
                             input#validationServer01.form-control(type='password', name='password', required='') 
                         br
                         input.btn.btn-primary.my-margin-top.bg-primary.text-white.float-right(type='submit', value='Anmelden als Lehrkraft')
+                #bingo.tab-pane(role='tabpanel', aria-labelledby='bingo-tab')
+                  p.card-text
+                    form(method='POST', action='/users/login_l')
+                        #form-group  
+                            label Behörden-Email:
+                            input#validationServer01.form-control(name='username', type=text, required='')
+                            br
+                        #form-group  
+                            label Passwort:
+                            input#validationServer01.form-control(type='password', name='password', required='') 
+                        br
+                        input.btn.btn-primary.my-margin-top.bg-primary.text-white.float-right(type='submit', value='Anmelden als Lehrkraft')                        
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
         script(src='/bower_components/bootstrap/dist/js/bootstrap.js')  
         script(src='/js/log_reg.js')

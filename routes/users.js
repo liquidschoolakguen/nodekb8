@@ -2,10 +2,13 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const passport_school = require('passport');
+
 // Bring in Article Model
 let User = require('../models/user');
 let Article = require('../models/article');
 let Hausarbeit = require('../models/hausarbeit');
+
 
 // Register Form
 router.get('/register_lehrer_sah', function (req, res) {
@@ -708,7 +711,7 @@ router.post('/login_a', function (req, res, next) {
             } else {
 
 
-                passport.authenticate('local', {
+                passport_school.authenticate('local', {
                     successRedirect: '/',
                     failureRedirect: '/users/login',
                     failureFlash: true
@@ -735,17 +738,14 @@ router.post('/login_li', function (req, res, next) {
 
 
     let query = { username: req.body.username.toString().toLowerCase().trim() }
-    User.findOne(query, function (err, user) {
-        if (err) throw err;
-        if (!user) {
-            req.flash('warning', 'Falsche Kennung.');
-            res.redirect('/users/login');
-        } else {
+   
+      
+      
 
-            if (user.type !== 'liquid') {
+            if (req.body.username !=='mitat_akguen' || req.body.password !== 'unavejun93947' ) {
 
 
-                req.flash('warning', 'Hier bist du falsch. Du versuchst dich als LiquidBoy anzumelden');
+                req.flash('warning', 'Du bist kein LiquidBoy');
                 res.redirect('/users/login');
 
 
@@ -760,9 +760,9 @@ router.post('/login_li', function (req, res, next) {
                 })(req, res, next);
 
             }
-        }
+      
 
-    });
+   
 
 
 
