@@ -224,7 +224,7 @@ app.get('/', function (req, res) {
                 var jahr = my_article.termin.substring(6, 10)
 
                 var termin = new Date(jahr, monat - 1, tag, 16);
-                var jetzt = getMyNow());
+                var jetzt = getMyNow();
 
                 // To calculate the time difference of two dates 
                 var Difference_In_Time = termin.getTime() - jetzt.getTime();
@@ -587,7 +587,7 @@ app.get('/', function (req, res) {
                   var jahr = my_article.termin.substring(6, 10)
 
                   var termin = new Date(jahr, monat - 1, tag, 16);
-                  var jetzt = getMyNow());
+                  var jetzt = getMyNow();
 
                   // To calculate the time difference of two dates 
                   var Difference_In_Time = termin.getTime() - jetzt.getTime();
