@@ -3238,7 +3238,7 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
       console.log('monat:   ' + monat);
       console.log('jahr:    ' + jahr);
 
-      var d = new Date(jahr, monat - 1, tag, 14);
+      var d = new Date(jahr, monat - 1, tag, 14); //// Bei 14 heiß es 2 Stunden vor Abgabe ist keine Korrektur mehr möglich
 
       console.log('Date:    ' + d);
       var jetzt = getMyNow();
@@ -3335,7 +3335,7 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
         ///zu spät
 
 
-        req.flash('danger', 'Der Schüler hat für die Nachbesserung nicht genug Zeit. Der Nachbesserungswunsch muss spätestens 2 Stunden vor Abgabefrist erfolgen. Alles andere wäre ja auch unfair.');
+        req.flash('danger', 'Dein Nachbesserungswunsch wurde nicht versendet. Der/die Schüler/in sollte mindestens 2 Stunden Zeit haben, um die Arbeit nachzubessern. Alles andere wäre ja auch unfair.');
         res.redirect('/articles/article_schuelers/' + article._id);
         return;
 
