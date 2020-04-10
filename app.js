@@ -114,6 +114,28 @@ app.get('*', function (req, res, next) {
 
 
 
+function getMyNow() {
+  var yes = new Date();
+
+  var n = yes.getTimezoneOffset();
+
+
+  if (n !== -120) {
+
+    yes.setHours(yes.getHours() + 2)
+
+    console.log('bimmelbingo')
+  } else {
+
+    // console.log('server')
+  }
+
+  return yes;
+}
+
+
+
+
 // Home Route
 app.get('/', function (req, res) {
 
@@ -202,7 +224,7 @@ app.get('/', function (req, res) {
                 var jahr = my_article.termin.substring(6, 10)
 
                 var termin = new Date(jahr, monat - 1, tag, 16);
-                var jetzt = new Date();
+                var jetzt = getMyNow());
 
                 // To calculate the time difference of two dates 
                 var Difference_In_Time = termin.getTime() - jetzt.getTime();
@@ -565,7 +587,7 @@ app.get('/', function (req, res) {
                   var jahr = my_article.termin.substring(6, 10)
 
                   var termin = new Date(jahr, monat - 1, tag, 16);
-                  var jetzt = new Date();
+                  var jetzt = getMyNow());
 
                   // To calculate the time difference of two dates 
                   var Difference_In_Time = termin.getTime() - jetzt.getTime();
