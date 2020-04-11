@@ -600,18 +600,7 @@ router.get('/article_schuelers/:id', function (req, res) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+        let haus = []
 
         Hausarbeit.
           find({ article: req.params.id }).
@@ -624,27 +613,110 @@ router.get('/article_schuelers/:id', function (req, res) {
               //console.log('The hausarbeits is %s', hausarbeits);
 
 
-              let schuelers = [];
-
-              hausarbeits.forEach(function (hausarbeit) {
-                //console.log('The hausarbeit is %s', hausarbeit);
-
-                schuelers.push(hausarbeit.schueler);
-              });
-
-              let length = hausarbeits.length;
+                var nu_hauses = []
 
 
+              User.
+                find({
+
+                  $or: [
+                    { klasse: article.klasse },
+                    { klasse2: article.klasse }
+                  ]
+
+                }).
+                sort({ name: 1 }).
+                exec(function (err2, all_schuelers) {
+                  if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
-              res.render('article_schueler', {
-                now: getMyNow(),
-                article: article,
-                hausarbeits: hausarbeits.reverse(),
-                length: length,
-                my_termin: termin
+                  all_schuelers.forEach(function (sss) {
+                  console.log('all_schueler is %s', sss.username);
 
-              });
+                    var hat_arbeit = false
+                    hausarbeits.forEach(function (h) {
+                       console.log('hausarbeit is %s', h.schueler.username);
+
+                      if (sss.username === h.schueler.username) {
+                        nu_hauses.push(h)
+                        hat_arbeit = true
+                      }
+
+
+
+                    });
+
+                    if (!hat_arbeit) {
+
+
+                      let hhh = new Hausarbeit();
+                      hhh.schueler = sss;
+                      hhh.status = '0';
+
+                      nu_hauses.push(hhh)
+
+
+
+                    }
+
+
+
+
+                  });
+
+
+
+                  let schuelers = [];
+
+                  hausarbeits.forEach(function (hausarbeit) {
+                    console.log('The Fotzi is %s', hausarbeit.schueler.name +'/'+hausarbeit.status);
+    
+                    schuelers.push(hausarbeit.schueler);
+                  });
+    
+                  let length = hausarbeits.length;
+    
+    
+    
+    
+                  res.render('article_schueler', {
+                    now: getMyNow(),
+                    article: article,
+                    hausarbeits: nu_hauses,
+                    length: length,
+                    my_termin: termin
+    
+                  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                })
+
+
+
+
+
+
+
+
+
+
+
+
+
+              
             } else {
 
               req.flash('danger', 'Der User wurde gelöscht.');
@@ -1327,11 +1399,11 @@ router.post("/add_neu", upload.array("files"),
       res.redirect('login');
       return
     }
-/*     if (!req.body.body || req.body.body.length <= 8) {  //Wenn der Azftrag zu kurz ist, kann man nicht speichern
-      req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Nochmal das Ganze.');
-      res.redirect('add_article_klasse');
-      return
-    } */
+    /*     if (!req.body.body || req.body.body.length <= 8) {  //Wenn der Azftrag zu kurz ist, kann man nicht speichern
+          req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Nochmal das Ganze.');
+          res.redirect('add_article_klasse');
+          return
+        } */
     if (!req.body.schuelers) { // Wenn man kein SuS auswählt kann man (hier) nicht speichern
       req.flash('warning', 'Du hast keine Schüler*innen ausgewählt. So wird das nichts mit dem Auftrag. ');
       res.redirect('/');
@@ -1639,11 +1711,11 @@ router.post("/add_neu", upload.array("files"),
         res.redirect('login');
         return
       }
-/*       if (!req.body.body || req.body.body.length <= 8) {  //Wenn der Azftrag zu kurz ist, kann man nicht speichern
-        req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Nochmal das Ganze.');
-        res.redirect('add_article_klasse');
-        return
-      } */
+      /*       if (!req.body.body || req.body.body.length <= 8) {  //Wenn der Azftrag zu kurz ist, kann man nicht speichern
+              req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Nochmal das Ganze.');
+              res.redirect('add_article_klasse');
+              return
+            } */
 
 
 
@@ -2318,11 +2390,11 @@ router.post("/add_hausarbeit", upload.array("files"),
       return;
     }
 
-/*     if (!req.body.body || req.body.body.length <= 8) {
-      req.flash('danger', 'Deine Hausarbeit ist leer oder viel zu kurz. So geht das nicht.');
-      res.redirect('/');
-      return;
-    } */
+    /*     if (!req.body.body || req.body.body.length <= 8) {
+          req.flash('danger', 'Deine Hausarbeit ist leer oder viel zu kurz. So geht das nicht.');
+          res.redirect('/');
+          return;
+        } */
 
 
     Article.findById(req.body.article_id, function (err, article) {
@@ -2645,22 +2717,22 @@ router.post("/edit_hausarbeit/:id", upload.array("files"),
 
 
         Hausarbeit.
-        findOne({ _id: req.params.id }).
-        populate('uploads').
-        exec(function (err10, haus) {
-          if (err10) throw err10;
+          findOne({ _id: req.params.id }).
+          populate('uploads').
+          exec(function (err10, haus) {
+            if (err10) throw err10;
 
-          if (!haus) {
-            req.flash('warning', 'Deine Hausarbeit wurde gelöscht');
-            res.redirect('/');
-            return;
-          }
+            if (!haus) {
+              req.flash('warning', 'Deine Hausarbeit wurde gelöscht');
+              res.redirect('/');
+              return;
+            }
 
-          if (haus.status === '2') {
-            req.flash('warning', 'Deine Hausarbeit kann nicht mehr geändert werden, da sie bereits von der Lehrkraft beurteilt wurde');
-            res.redirect('/');
-            return
-          }
+            if (haus.status === '2') {
+              req.flash('warning', 'Deine Hausarbeit kann nicht mehr geändert werden, da sie bereits von der Lehrkraft beurteilt wurde');
+              res.redirect('/');
+              return
+            }
 
 
 
@@ -2689,12 +2761,12 @@ router.post("/edit_hausarbeit/:id", upload.array("files"),
               if (req.body.delete) {
                 /// es soll gelöscht werden
 
-                
+
 
                 haus.uploads.forEach(function (load) {
 
 
-                  console.log('load:  :  :  '+load.body)
+                  console.log('load:  :  :  ' + load.body)
 
 
 
@@ -2713,8 +2785,8 @@ router.post("/edit_hausarbeit/:id", upload.array("files"),
 
 
 
-                    
-                  }); 
+
+                  });
 
                 })
 
@@ -2875,7 +2947,7 @@ router.post("/edit_hausarbeit/:id", upload.array("files"),
                     if (err) return handleError(err, res);
 
 
-                 
+
 
 
 
@@ -2917,7 +2989,6 @@ router.post("/edit_hausarbeit/:id", upload.array("files"),
 
 
 
-         
 
 
 
@@ -2937,7 +3008,8 @@ router.post("/edit_hausarbeit/:id", upload.array("files"),
 
 
 
-        })
+
+          })
 
 
 
