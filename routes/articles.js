@@ -653,7 +653,7 @@ router.get('/article_schuelers/:id', function (req, res) {
                       hhh.schueler = sss;
                       hhh.status = '0';
 
-                      nu_hauses.push(hhh)
+                     // nu_hauses.push(hhh)
 
 
 
