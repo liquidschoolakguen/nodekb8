@@ -474,6 +474,7 @@ router.get('/article_schuelers/:id', function (req, res) {
 
   Article.
     findOne({ _id: req.params.id }).
+    populate('schuelers').
     exec(function (err, article) {
       if (err) {
 
@@ -613,110 +614,199 @@ router.get('/article_schuelers/:id', function (req, res) {
               //console.log('The hausarbeits is %s', hausarbeits);
 
 
-                var nu_hauses = []
 
 
-              User.
-                find({
-
-                  $or: [
-                    { klasse: article.klasse },
-                    { klasse2: article.klasse }
-                  ]
-
-                }).
-                sort({ name: 1 }).
-                exec(function (err2, all_schuelers) {
-                  if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+              var nu_hauses = []
 
 
-                  all_schuelers.forEach(function (sss) {
-                  console.log('all_schueler is %s', sss.username);
+              if (article.klasse) {
 
-                    var hat_arbeit = false
-                    hausarbeits.forEach(function (h) {
-                       console.log('hausarbeit is %s', h.schueler.username);
+                console.log('good type')
 
-                      if (sss.username === h.schueler.username) {
-                        nu_hauses.push(h)
-                        hat_arbeit = true
+
+
+
+
+               
+
+
+                User.
+                  find({
+                    $and: [
+                      { type: 'schueler' },
+                      { $or: [{ klasse: article.klasse }, { klasse2: article.klasse }, { klasse3: article.klasse }, { klasse4: article.klasse }] }
+                    ]
+                  }).
+                  sort({ name: 1 }).
+                  exec(function (err2, all_schuelers) {
+                    if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+                    all_schuelers.forEach(function (sss) {
+                      console.log('all_schueler is %s', sss.username);
+
+                      var hat_arbeit = false
+                      hausarbeits.forEach(function (h) {
+                        console.log('hausarbeit is %s', h.schueler.username);
+
+                        if (sss.username === h.schueler.username) {
+                          nu_hauses.push(h)
+                          hat_arbeit = true
+                        }
+
+
+
+                      });
+
+                      if (!hat_arbeit) {
+
+
+                        let hhh = new Hausarbeit();
+                        hhh.schueler = sss;
+                        hhh.status = '0';
+
+                        nu_hauses.push(hhh)
+
+
+
                       }
+
 
 
 
                     });
 
-                    if (!hat_arbeit) {
 
 
-                      let hhh = new Hausarbeit();
-                      hhh.schueler = sss;
-                      hhh.status = '0';
+                    let schuelers = [];
 
-                     // nu_hauses.push(hhh)
+                    nu_hauses.forEach(function (hausarbeit) {
+                      console.log('The Fotzi is %s', hausarbeit.schueler.name + '/' + hausarbeit.status);
+
+                      schuelers.push(hausarbeit.schueler);
+                    });
+
+                    let length = nu_hauses.length;
 
 
 
+
+                    res.render('article_schueler', {
+                      now: getMyNow(),
+                      article: article,
+                      hausarbeits: nu_hauses,
+                      length: length,
+                      my_termin: termin
+
+                    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  })
+
+
+
+
+
+              } else {
+                console.log('Fotzen type')
+
+                var all_schuelers = article.schuelers
+
+
+
+
+
+                all_schuelers.forEach(function (sss) {
+                  console.log('all_schueler is %s', sss.username);
+
+                  var hat_arbeit = false
+                  hausarbeits.forEach(function (h) {
+                    console.log('hausarbeit is %s', h.schueler.username);
+
+                    if (sss.username === h.schueler.username) {
+                      nu_hauses.push(h)
+                      hat_arbeit = true
                     }
 
 
 
-
                   });
 
+                  if (!hat_arbeit) {
 
 
-                  let schuelers = [];
+                    let hhh = new Hausarbeit();
+                    hhh.schueler = sss;
+                    hhh.status = '0';
 
-                  hausarbeits.forEach(function (hausarbeit) {
-                    console.log('The Fotzi is %s', hausarbeit.schueler.name +'/'+hausarbeit.status);
-    
-                    schuelers.push(hausarbeit.schueler);
-                  });
-    
-                  let length = hausarbeits.length;
-    
-    
-    
-    
-                  res.render('article_schueler', {
-                    now: getMyNow(),
-                    article: article,
-                    hausarbeits: nu_hauses,
-                    length: length,
-                    my_termin: termin
-    
-                  });
+                    nu_hauses.push(hhh)
+
+
+
+                  }
+
+
+
+
+                });
 
 
 
 
 
+                let schuelers = [];
+
+                nu_hauses.forEach(function (hausarbeit) {
+                  console.log('The Fotzi is %s', hausarbeit.schueler.name + '/' + hausarbeit.status);
+
+                  schuelers.push(hausarbeit.schueler);
+                });
+
+                let length = nu_hauses.length;
 
 
 
 
+                res.render('article_schueler', {
+                  now: getMyNow(),
+                  article: article,
+                  hausarbeits: nu_hauses,
+                  length: length,
+                  my_termin: termin
 
-
-
-
-
-
-                })
-
-
-
-
-
-
-
+                });
 
 
 
 
 
 
-              
+
+
+
+
+              }
+
+
+
+
+
+
+
+
             } else {
 
               req.flash('danger', 'Der User wurde gelöscht.');
