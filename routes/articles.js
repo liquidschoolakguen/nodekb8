@@ -1363,6 +1363,7 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
 
 
         res.render('add_article_neu', {
+          user: req.user,
           schuelers: schuelers,
           abgabe: nau,
           klasse: req.body.klasse
@@ -1378,7 +1379,7 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
   } else {
 
     res.render('add_article_alt', {
-
+      user: req.user,
       abgabe: nau,
       klasse: req.body.klasse
     })

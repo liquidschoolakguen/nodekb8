@@ -1,0 +1,22 @@
+extends ../layout_empty
+
+block content
+    .container
+      .row.h-100.d-flex.justify-content-center
+        .col-12.col-sm-8.col-md-6.col-lg-4
+          .card.border
+            .card-body
+              br 
+              h5.card-title Administratorregistrierung
+              .tab-content.mt-3
+                #history.tab-pane.active(role='tabpanel')
+                  p.card-text
+                    form#reused_form(method='POST', action='/users/register_admin_00')
+                        #form-group  
+                            label Adminschlüssel deiner Schule (frage den Hauptadministrator deiner Schule, falls du den Adminschlüssel nicht kennst):
+                            input#validationServer01.form-control.monospace(name='admin_schluessel', type=text, required='',  minlength='10' )
+                            br                          
+                        input.btn.btn-primary.bg-primary.text-white.float-right(type='submit', value='weiter')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+        script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+        script(src='/js/add_school.js')

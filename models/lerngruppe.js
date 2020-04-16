@@ -15,6 +15,12 @@ let lerngruppeSchema = mongoose.Schema({
     },
 
 
+    stufe:{
+        type:String,
+        required:false
+    },
+
+
     schuelers: [
         {
             type: mongoose.Schema.Types.ObjectId,

@@ -1,0 +1,25 @@
+.container.padding_null
+    .row.h-100.d-flex.justify-content-center
+        .col-12
+            h1 Willkommen bei der flüssigen #{school.name}
+            br 
+            br 
+.shadow.p-3.mb-5.bg-white.rounded.text-primary.border-primary
+    .card
+        .card-header.bold
+            |  Liebe Schülerinnen und Schüler der Stadtteilschule am Hafen.
+        .card-body
+            blockquote.blockquote.mb-0
+            p
+                | Hier findet ihr ab jetzt eure Hausaufgaben. Registriere dich und schon gehts los :) :)
+            br 
+        .col-md-12.col-12.float-right.padding_null
+            a.btn.btn-primary.text-white.button-margin(href='/users/'+school.url+'/register_schueler') Registrierung für Schüler*innen
+.shadow.p-3.mb-5.bg-white.rounded.text-danger.border-danger
+    .card
+        .card-header
+            | Liebe Lehrkräfte
+        .card-body
+            blockquote.blockquote.mb-0
+            p
+                | Die Registrierung für Lehrkräfte findet über einen speziellen Link statt, damit SuS nicht auf komische Ideen kommen. Hierfür bitte eine Nachricht an #{school.admin.name} 

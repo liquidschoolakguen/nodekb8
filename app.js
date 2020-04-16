@@ -40,6 +40,7 @@ const app = express();
 let Article = require('./models/article');
 let User = require('./models/user');
 let Hausarbeit = require('./models/hausarbeit');
+let School = require('./models/school');
 
 // Load view Engine
 app.set('views', path.join(__dirname, 'views'));
@@ -47,7 +48,7 @@ app.set('view engine', 'pug');
 
 
 
-
+//http://localhost:5000/fotzenknechtgymnasium-21107
 
 
 // Body Parser Middleware
@@ -104,6 +105,9 @@ require('./config/passport')(passport);
 // Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+app.use('/scripts', express.static(__dirname + '/node_modules/jquery-validation/dist/'));
 
 app.get('*', function (req, res, next) {
   res.locals.user = req.user || null;
@@ -449,7 +453,7 @@ app.get('/', function (req, res) {
 
 
 
-      } else {
+      } else if (user.type === 'schueler'){
 
 
 
@@ -791,7 +795,59 @@ app.get('/', function (req, res) {
 
           });
 
+      } else if (user.type === 'admin'){
+
+
+        User.findOne({ _id: req.user._id }).
+        populate('school').
+        exec(function (err, user) {
+            if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+
+
+
+          if(!user.school){
+
+            res.redirect('/schools/add');
+           return;
+
+          }
+
+
+
+          res.render('index', {
+
+            school: user.school,
+           
+
+          });
+
+
+
+
+        })
+
+
+
+
+
+
+
+
+      }else if (user.type === 'liquidboy'){
+
+
+      }else{
+
+
+
       }
+
+
+
+
+
+
+
 
     })
 
@@ -907,16 +963,16 @@ app.get('/index_all', function (req, res) {
 let articles = require('./routes/articles');
 let users = require('./routes/users');
 let hausarbeits = require('./routes/hausarbeits');
-
+let schools = require('./routes/schools');
 
 
 app.use('/articles/', articles);
 app.use('/users/', users);
 app.use('/hausarbeits/', hausarbeits);
+app.use('/schools/', schools);
 
 
-
-
+/* 
 
 app.post('/search', (req, res) => {
   let q = req.body.query;
@@ -942,7 +998,7 @@ app.post('/search', (req, res) => {
 
 });
 
-
+ */
 /* 
 // ALLET
 app.get('/:id', function (req, res) {
@@ -950,8 +1006,46 @@ app.get('/:id', function (req, res) {
 console.log('hi:    '+req.params.id)
 
 
-req.flash('success', 'Hier entsteht gerade eine digitale Schule');
-res.redirect('/');
+
+
+School.
+findOne({ url: req.params.id }).
+populate('admin').
+exec(function (err2, school) {
+  if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+if(!school){
+
+ 
+  res.redirect('/');
+
+  return
+}
+
+
+
+res.render('school_index', {
+  school: school,
+ 
+});
+
+
+
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
 
 
 return
@@ -960,7 +1054,7 @@ return
 
 });
 
- */
+  */
 
 
 

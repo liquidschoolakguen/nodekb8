@@ -410,6 +410,8 @@ min-width: 100px;
 }
 
 
+
+
 .bold-info{
   font-weight: bold;
   color: #5bc0de;
@@ -417,6 +419,16 @@ min-width: 100px;
   margin-bottom: 6px !important;
   margin-left: 3px !important;
 }
+
+
+.bold-red{
+  font-weight: bold;
+  color: #b80000;
+  margin-top: 22px !important;
+  margin-bottom: 6px !important;
+  margin-left: 3px !important;
+}
+
 
 
 .my-min-height {
@@ -533,8 +545,15 @@ color:  #7c7c7c !important;
   background-color: rgba(255, 0, 0, 0.205)!important;
 }
 .bg-custom-black {
-  background-color: rgba(0, 0, 0, 0.205)!important;
+  background-color: rgba(0, 110, 255, 0.103)!important;
 }
+
+
+.bg-custom-yellow {
+  background-color: rgba(255, 196, 0, 0.185)!important;
+}
+
+
 
 .no-border{
   border: none !important;
@@ -555,7 +574,12 @@ color:  #7c7c7c !important;
 }
 
 
+.trans{
 
+  background-color: rgba(0, 0, 0, 0)!important;
+  border: none;
+
+}
 
 .box {
   float: left;
@@ -942,5 +966,51 @@ table.dataTable td {
     text-align: center; }
   .dataTables_wrapper .dataTables_filter {
     margin-top: 0.5em; } }
+
+
+
+    
+
+  .btn-circle.btn-xl-l { 
+      width: 250px; 
+      height: 250px; 
+      padding: 10px 16px; 
+      border-radius: 155px; 
+      margin-left: 230px;
+      margin-top: 40px;
+      font-size: 22px; 
+      text-align: center; 
+  } 
+
+
+
+  .btn-circle.btn-xl-r { 
+    width: 250px; 
+    height: 250px; 
+    padding: 10px 16px; 
+    border-radius: 155px; 
+    margin-right: 230px;
+    margin-top: 40px;
+    font-size: 22px; 
+    text-align: center; 
+} 
+
+.ui-menu .ui-menu-item a{
+  color: #96f226;
+  border-radius: 0px;
+  border: 1px solid #454545;
+}
+
+
+.monospace {
+  font-family: "Lucida Console", Courier, monospace;
+  background-color: #1f66ff15;
+}
+
+.monospace:focus {
+  font-family: "Lucida Console", Courier, monospace;
+  font-weight: bold;
+  background-color: #1f66ff15;
+}
 
 

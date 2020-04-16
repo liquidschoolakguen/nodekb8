@@ -1,0 +1,27 @@
+extends ../layout_empty
+
+block content
+      .row.h-100.d-flex.justify-content-center
+        .col-12.col-sm-8.col-md-6.col-lg-4
+          .card.trans
+            .card-body.bg-custom-black
+              br 
+              h4.card-title Um Liquidschool für deine Schule nutzen zu können, braucht es einen Schuladministrator
+              br 
+              .tab-content.mt-3
+                #history.tab-pane.active(role='tabpanel')
+                  p.card-text
+                    form(method='POST', action='/users/register_admin_first')
+                        #form-group  
+                            input#validationServer01.form-control(name='name', type=text, required='', placeholder='sichtbarer Name')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(name='username', type=text, required='', placeholder='email')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(type='password', name='password', required='', placeholder='Passwort')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(type='password', name='password2', required='', placeholder='Passwort wiederholen')                             
+                        br
+                        input.btn.btn-primary.text-white.float-right(type='submit', value='Als Schuladministrator registrieren')

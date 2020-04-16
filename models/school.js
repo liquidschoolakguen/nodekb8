@@ -9,7 +9,12 @@ let schoolSchema = mongoose.Schema({
         required: true
     },
 
-    username: {
+    url: {
+        type: String,
+        required: false
+    },
+
+    make_id: {
         type: String,
         required: true
     },
@@ -19,11 +24,14 @@ let schoolSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    
 
+    ort: {
+        type: String,
+        required: false
+    },
     created: {
         type: String,
-        required: true
+        required: false
     },
 
 
@@ -33,15 +41,28 @@ let schoolSchema = mongoose.Schema({
     },
 
 
+    admin_schluessel: {
+        type: String,
+        required: false
+    },
 
+    lehrer_schluessel: {
+        type: String,
+        required: false
+    },
+    
+    schueler_schluessel: {
+        type: String,
+        required: false
+    },
 
-    lehrers: [{
+    users: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
 
 
-    
+
     lerngruppes: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -51,6 +72,22 @@ let schoolSchema = mongoose.Schema({
     ],
 
 
+
+
+
+    stamms: [
+        {
+            type: String,
+            required: false
+        }
+    ],
+
+    fachs: [
+        {
+            type: String,
+            required: false
+        }
+    ],
 
 
 });

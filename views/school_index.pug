@@ -1,0 +1,19 @@
+extend school_layout
+
+
+
+block content
+    br 
+    br
+    if !user
+      include school_includes/school_index_no_user.pug
+    else
+      if user.type == 'lehrer'
+        include school_includes/school_index_lehrer.pug
+      else if user.type == 'schueler'
+        include school_includes/school_index_schueler.pug
+      else
+        include school_includes/school_index_admin.pug
+    script(type='text/javascript', src='https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js')
+    script(type='text/javascript', src='https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js')   
+    script(src='/js/index.js')

@@ -1,0 +1,36 @@
+doctype html
+html
+    head
+        title liquidschool
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js')
+        script(src='https://code.jquery.com/jquery-1.12.4.js')
+        script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+        script(src='/scripts/jquery.validate.min.js')
+        link(rel='stylesheet' href='/css/style.css') 
+        link(rel='stylesheet', href='https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css')  
+    body
+        nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
+            .navbar-collapse.collapse.w-100.order-1.order-md-0.dual-collapse2
+            .mx-auto.order-0
+                a.navbar-brand.mx-auto(href='/') Liquidschool
+            .navbar-collapse.collapse.w-100.order-3.dual-collapse2
+                ul.navbar-nav.ml-auto
+        .container_x               
+            .container
+                        br
+                        != messages('message', locals)
+                        if errors
+                            each error, i in errors
+                                div(class="alert, alert-danger") #{error.msg}
+                        block content
+                        br
+                        br
+                        br
+                        br
+                        br

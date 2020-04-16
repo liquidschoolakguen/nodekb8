@@ -1,0 +1,29 @@
+extends layout
+
+block content
+    .container
+      .row.h-100.d-flex.justify-content-center
+        .col-12.col-sm-8.col-md-6.col-lg-6
+          .card.border
+            .card-header
+              ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
+                li.nav-item
+                  .nav-link.active(href='#bingo', role='tab', aria-controls='bingo', aria-selected='false') Die Schulschlüssel
+            .card-body
+              .tab-content.mt-3
+                #bingo.tab-pane.active(role='tabpanel', aria-labelledby='bingo-tab')
+                  p.card-text
+                    form#reused_form(method='POST', enctype='multipart/form-data' action='/schools/add_2')
+                        #form-group  
+                            input#validationServer01.form-control(type='text', value=admin_schluessel,  minlength='10' placeholder='\'Adminschlüssel\' (mind 10 Zeichen)',  title="Diesen Schlüssel brauchen deine Kollegen, die neben dir Administrator für deine Schule auf Liquidschool werden wollen. Nenne ihnen den Adminschlüssel, damit sie Administratorrechte erhalten.\n\n(optional)"  name='admin_schluessel')
+                            br 
+                        #form-group  
+                            input#validationServer01.form-control(type='text', value=lehrer_schluessel, minlength='6' placeholder='\'Lehrerschlüssel\' (mind 6 Zeichen)',  required='' title="Diesen Schlüssel brauchen deine Kollegen, die sich als Lehrkräfte an deiner Schule auf Liquidschool registrieren wollen. Ohne den Lehrerschlüssel könnte sich jedermann als Lehrkraft an deiner Schule ausgeben.\n\n(Pflichtfeld)"   name='lehrer_schluessel')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(type='text',  value=schueler_schluessel, minlength='3'  placeholder='\'Schülerschlüssel\' (mind 3 Zeichen)',  required=''  title="Diesen kurzen Schlüssel brauchen die Schülerinnen und Schüler, um sich an deiner Schule auf Liquidschool zu registrieren. Der Schülerschlüssel dient der Sicherstellung, dass sich die Kinder wirklich in ihrer eigenen Schule auf Liquidschool registrieren.\n\n(Pflichtfeld)"    name='schueler_schluessel')
+                        br
+                        input.btn.btn-primary.my-margin-top.bg-primary.text-white.float-right(type='submit', value='Schule abschließen')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+    script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+    script(src='/js/add_school.js')

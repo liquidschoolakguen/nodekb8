@@ -9,3 +9,13 @@ $('#bologna-list a').on('click', function (e) {
 
 
 
+function doSomething(el) {
+
+    //alert('kkk: ' + el);
+
+
+
+}
+
+
+$("#reused_form").validate();

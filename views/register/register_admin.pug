@@ -1,0 +1,29 @@
+extends ../layout_empty
+
+block content
+    .container
+      .row.h-100.d-flex.justify-content-center
+        .col-12.col-sm-8.col-md-6.col-lg-4
+          .card.border
+            .card-body
+              br 
+              h4.card-title Hier kannst du dich als Administrator auf #{school.name} registrieren
+              br 
+              .tab-content.mt-3
+                #history.tab-pane.active(role='tabpanel')
+                  p.card-text
+                    form(method='POST', action='/users/register_admin')
+                        #form-group  
+                            input#validationServer01.form-control(name='name', type=text, required='', placeholder='sichtbarer Name')
+                            input.form-control.invisible(type='text', placeholder='school_id',  name='school_id', value= school._id)
+                            br                         
+                        #form-group  
+                            input#validationServer01.form-control(name='username', type=text, required='', placeholder='Email (Kennung)')
+                            br        
+                        #form-group  
+                            input#validationServer01.form-control(type=text, name='password', required='', placeholder='Passwort')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(type=text, name='password2', required='', placeholder='Passwort wiederholen')                             
+                        br
+                        input.btn.btn-primary.bg-primary.text-white.float-right(type='submit', value='Registrieren als Administrator')

@@ -1,0 +1,35 @@
+.card-body
+    .col-md-12
+        br 
+        h7 Schulname | Plz | Ort          
+    .col-md-12 
+        h5.text-info #{school.name} | #{school.plz} | #{school.ort}
+        a.btn.btn-info.text-white(href='/schools/edit1/'+ school._id) Stammdaten ändern
+        br
+        br
+    .col-md-12
+        br 
+        h7 Adminschlüssel | Lehrerschlüssel | Schülerschlüssel          
+    .col-md-12 
+        h5.text-info #{school.admin_schluessel} | #{school.lehrer_schluessel}  | #{school.schueler_schluessel} 
+        a.btn.btn-info.text-white(href='/schools/edit2/'+ school._id) Schulschlüssel ändern
+        br
+        br
+    .form-group.col-md-12                                   
+        .container-fluid(style='margin-left:10px; border:none !important;')
+            .row.justify-content-start
+                each stamm, i in school.stamms
+                    .col-2(style='margin-bottom:10px; padding-left:0px !important; border:none !important;')
+                        h7.text-info #{stamm}
+        a.btn.btn-info.text-white(href='/schools/edit3/'+ school._id) Klassen ändern / hinzufügen / löschen
+        br
+        br
+    .form-group.col-md-12                                   
+        .container-fluid(style='margin-left:10px; border:none !important;')
+            .row.justify-content-start
+                each fach, i in school.fachs
+                    .col-2(style='margin-bottom:10px; padding-left:0px !important; border:none !important;')
+                        h7.text-info #{fach}
+        a.btn.btn-info.text-white(href='/schools/edit4/'+ school._id) Schulfächer ändern / hinzufügen / löschen
+        br
+        br
