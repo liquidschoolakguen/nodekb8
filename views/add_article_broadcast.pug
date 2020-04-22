@@ -14,10 +14,8 @@ block content
                         #form-group                              
                             select#validationServer01.form-control.custom-select.form-control(name='broadcast', type=text,  required='', placeholder='Wähle eine Klasse')
                                 option(selected='') #{user.default_broadcast}
-                                option St. Pauli
-                                option Neustadt
-                                option Oberstufe                            
-                                option alle drei Standorte
+                                each stammverbund, i in stammverbunds
+                                  option #{stammverbund.name}
                             br
                         input.btn.btn-primary.my-margin-top.bg-primary.text-white.float-right(type='submit', value='weiter')
                         p.my-margin-top.bold-white

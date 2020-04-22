@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    form#reused_form.montform(method='POST', enctype='multipart/form-data' action='/schools/add_single_stamm')
+        .card-body
+            #form-transition-group.my-margin-top
+                .form-row.my-margin-top         
+                    .form-group.col-md-12 
+                        input#validationServer01.form-control(type='text', placeholder='Name der Klasse',  required=''  name='name')                                       
+            br
+            input#geht_ab.btn.btn-info.my-margin-top.bg-info.text-white.float-right(type='submit', value='Klasse hinzufügen')

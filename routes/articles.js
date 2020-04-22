@@ -14,7 +14,7 @@ let User = require('../models/user');
 let Article = require('../models/article');
 let Hausarbeit = require('../models/hausarbeit');
 let Load = require('../models/load');
-
+let Stammverbund = require('../models/stammverbund');
 
 const multer = require("multer");
 
@@ -142,13 +142,30 @@ router.get('/add_alt', ensureAuthenticated, function (req, res) {
 router.get('/add_article_broadcast', ensureAuthenticated, function (req, res) {
 
 
+  User.
+    findOne({ _id: req.user._id }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 'stammverbunds'
+      }
+    }).
+    exec(function (err, user) {
 
 
+      if (!user) {
+        console.log('bennj o  is krank!')
+      } else {
+
+        //console.log('stammverbund--- : ' + user);
+
+        res.render('add_article_broadcast', {
+          stammverbunds: user.school.stammverbunds
+        })
 
 
-  res.render('add_article_broadcast', {
-
-  })
+      }
+    });
 
 
 
@@ -171,20 +188,96 @@ router.get('/add_article_broadcast', ensureAuthenticated, function (req, res) {
 
 router.get('/add_article_klasse', ensureAuthenticated, function (req, res) {
 
+  User.
+    findOne({ _id: req.user._id }).
+    populate('school').
+    exec(function (err, user) {
 
+      if (!user) {
+        console.log('bennj o  is krank!')
+      } else {
+        /* 
+              console.log('bennj:  '+user.school.name)
+              user.school.stamms.forEach(function (stamm) {
+                 console.log('stamm: ' + stamm);
+              });
+        
+         */
+        res.render('add_article_klasse', {
+          stamms: user.school.stamms
+        })
 
-
-
-
-  res.render('add_article_klasse', {
-
-  })
-
-
-
-
-
+      }
+    });
 });
+
+
+
+
+
+
+
+
+
+
+router.get('/add_article_klasse_broadcast', ensureAuthenticated, function (req, res) {
+
+
+
+   
+  User.
+    findOne({ _id: req.user._id }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 'stammverbunds'
+      }
+    }).
+    exec(function (err, user) {
+
+      if (!user) {
+        console.log('bennj o  is krank!')
+      } else {
+
+        var jo =[];
+        /* 
+              console.log('bennj:  '+user.school.name)
+              user.school.stamms.forEach(function (stamm) {
+                 console.log('stamm: ' + stamm);
+              });
+        
+         */
+
+
+
+
+        user.school.stamms.forEach(function (stamm) {
+
+          jo.push(stamm);
+
+
+        });
+        user.school.stammverbunds.forEach(function (verbund) {
+
+          jo.push(verbund.name);
+
+
+        });
+       
+
+
+        res.render('add_article_klasse_broadcast', {
+          alls: jo
+        })
+
+      }
+    });
+});
+
+
+
+
+
 
 
 
@@ -627,7 +720,7 @@ router.get('/article_schuelers/:id', function (req, res) {
 
 
 
-               
+
 
 
                 User.
@@ -1362,14 +1455,30 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
         });
 
 
-        res.render('add_article_neu', {
-          user: req.user,
-          schuelers: schuelers,
-          abgabe: nau,
-          klasse: req.body.klasse
-        })
 
 
+
+
+
+        User.
+          findOne({ _id: req.user.id }).
+          populate('school').
+          exec(function (err2, user) {
+            if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+            console.log('i------------- ' + user.name);
+            console.log('i------------- ' + user.school.name);
+
+
+            res.render('add_article_neu', {
+              user: user,
+              schuelers: schuelers,
+              abgabe: nau,
+              klasse: req.body.klasse
+            })
+
+          });
 
 
 
@@ -1378,11 +1487,33 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
 
   } else {
 
-    res.render('add_article_alt', {
-      user: req.user,
-      abgabe: nau,
-      klasse: req.body.klasse
-    })
+
+
+
+
+    User.
+      findOne({ _id: req.user.id }).
+      populate('school').
+      exec(function (err2, user) {
+        if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+        console.log('i------------- ' + user.name);
+        console.log('i------------- ' + user.school.name);
+
+
+        res.render('add_article_alt', {
+          user: user,
+          abgabe: nau,
+          klasse: req.body.klasse
+        })
+
+      });
+
+
+
+
+
 
 
 
@@ -1457,6 +1588,89 @@ router.post('/add_bingo_broadcast', ensureAuthenticated, function (req, res) {
 
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Bingo Article
+router.post('/add_bingo_klasse_broadcast', ensureAuthenticated, function (req, res) {
+
+
+
+  User.findByIdAndUpdate(
+    req.user._id,
+    { default_klasse: req.body.klasse },
+    function (err, result) {
+      if (err) {
+
+      } else {
+
+      }
+    }
+
+
+
+
+
+  );
+
+
+
+
+  var today = getMyNow();
+  var tomorrow = getMyNow();
+  tomorrow.setDate(today.getDate() + 3);
+
+  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + tomorrow.getFullYear()
+
+
+    User.
+      findOne({ _id: req.user.id }).
+      populate('school').
+      exec(function (err2, user) {
+        if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+        console.log('i------------- ' + user.name);
+        console.log('i------------- ' + user.school.name);
+
+
+        res.render('add_article_alt', {
+          user: user,
+          abgabe: nau,
+          klasse: req.body.klasse
+        })
+
+      });
+
+
+
+
+
+
+
+
+  
+
+
+
+});
+
+
 
 
 
@@ -1575,6 +1789,26 @@ router.post("/add_neu", upload.array("files"),
                       if (err) {
                         console.log(err);
                       } else {
+
+
+
+
+
+                        User.findByIdAndUpdate(req.user.id,
+                          { $push: { lehrers_auftrags: uptdatedArticle } },
+                          { safe: true, upsert: true },
+                          function (err, uptdatedSchueler) {
+                            if (err) {
+                              console.log(err);
+                            } else {
+
+                            }
+
+
+                          });
+
+
+
 
 
 
@@ -1862,6 +2096,24 @@ router.post("/add_neu", upload.array("files"),
           console.log(err);
           return;
         } else {
+
+
+
+
+
+          User.findByIdAndUpdate(req.user.id,
+            { $push: { lehrers_auftrags: art } },
+            { safe: true, upsert: true },
+            function (err, uptdatedSchueler) {
+              if (err) {
+                console.log(err);
+              } else {
+
+              }
+
+
+            });
+
 
 
 
@@ -4440,7 +4692,7 @@ function ensureAuthenticated(req, res, next) {
     return next();
   } else {
     req.flash('danger', 'Bitte anmelden');
-    res.redirect('/users/login');
+    res.redirect('/');
   }
 
 }

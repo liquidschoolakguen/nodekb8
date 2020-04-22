@@ -1,0 +1,39 @@
+extend layout
+
+
+
+block content
+        .container.padding_null
+            .row.h-100.d-flex.justify-content-center
+                .col-12
+                    .card.border
+                        .card-header
+                            ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
+                                li.nav-item
+                                    a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{stamm.school.name} | #{stamm.name}  
+                        .card-body.padding_null
+                            .tab-content.mt-3.my-min-height
+                                p.card-text
+                                    .col-md-12
+                                        if articles
+                                            each article, i in articles
+                                                .box.ml-1
+                                                    a.btn.btn-danger(href="/articles/" + article._id, role='button') 
+                                                        | #{article}
+                                    br 
+                                    br 
+                                    .col-md-12
+                                        if schuelers
+                                            each schueler, i in schuelers
+                                                .box
+                                                    a(href='/articles/schueler/' +schueler._id, role='button')  #{schueler.name}&nbsp;
+                                #description.tab-pane.active(role='tabpanel')
+                                    p.card-text
+                                        .col-md-12
+                                        | Hallo
+                script(src='/js/article2.js')
+        script(src='/js/nic_edit.js')
+        script(type='text/javascript').
+            bkLib.onDomLoaded(nicEditors.allTextAreas) 
+            new nicEditor({buttonList : ['bold','italic','underline','left','center','right','justify','ol','ul','superscript','upload','fontFormat','fontFamily','upload','','','','','','','','','','','','','']}).panelInstance('area2');
+        script(src='/js/article.js')

@@ -16,7 +16,7 @@ mongoose.connect(config.database, {
   useCreateIndex: true,
   useUnifiedTopology: true,
   useNewUrlParser: true,
-  useFindAndModify: false 
+  useFindAndModify: false
 });
 
 
@@ -41,6 +41,7 @@ let Article = require('./models/article');
 let User = require('./models/user');
 let Hausarbeit = require('./models/hausarbeit');
 let School = require('./models/school');
+let Stammverbund = require('./models/stammverbund');
 
 // Load view Engine
 app.set('views', path.join(__dirname, 'views'));
@@ -138,7 +139,12 @@ function getMyNow() {
 }
 
 
+app.get('/zz_test_index', function (req, res) {
+  res.render('zz_test_index', {
+  
+  });
 
+})
 
 // Home Route
 app.get('/', function (req, res) {
@@ -438,7 +444,7 @@ app.get('/', function (req, res) {
                 })
    */
 
-                 
+
               res.render('index', {
                 my_articles: my_articles,
                 length: length
@@ -453,79 +459,89 @@ app.get('/', function (req, res) {
 
 
 
-      } else if (user.type === 'schueler'){
+      } else if (user.type === 'schueler') {
 
 
 
 
 
 
+        /* 
+                  //alte User vorbereiten
+                User.find({type: 'schueler'}).
+                  exec(function (erro, updateUsers) {
+        
+        
+        
+                    updateUsers.forEach(function (updateUser) {
+        
+        
+        
+        
+                      let op = {};
+        
+                      if (updateUser.klasse.includes('St. Pauli')) {
+        
+                        op.klasse3 = 'St. Pauli'
+        
+                      } else if (updateUser.klasse.includes('Neustadt') ) {
+        
+                        op.klasse2 = ''
+                        op.klasse3 = 'Neustadt'
+        
+        
+                      } else if (updateUser.klasse.includes('Oberstufe') ) {
+        
+        
+                        op.klasse2 = ''
+                        op.klasse3 = 'Oberstufe'
+        
+        
+                      } else {
+        
+                        op.klasse2 = ''
+                        op.klasse3 = ''
+                        console.log('FE  HEHEHE LER');
+        
+        
+                      }
+        
+        
+                      op.klasse4 = 'alle drei Standorte'
+        
+        
+                      var query = { '_id': updateUser._id };
+        
+        
+                      User.findOneAndUpdate(query, op, { upsert: true }, function (err, doc) {
+                        if (err) return res.send(500, { error: err });
+                        //console.log('geändert:   ' + doc.name + ' (' + doc.klasse3 + ')')
+                      });
+        
+        
+                    })
+        
+        
+                  }) */
 
-          //alte User vorbereiten
-        User.find({type: 'schueler'}).
-          exec(function (erro, updateUsers) {
 
 
 
-            updateUsers.forEach(function (updateUser) {
+        Stammverbund.
+          find({ stamms: user.klasse }).
+          exec(function (err3, verbunds) {
+            if (err3) return console.log('iiiibennoiiiiii ' + err3);
 
+            var jo = []
 
-
-
-              let op = {};
-
-              if (updateUser.klasse.includes('St. Pauli')) {
-
-                op.klasse3 = 'St. Pauli'
-
-              } else if (updateUser.klasse.includes('Neustadt') ) {
-
-                op.klasse2 = ''
-                op.klasse3 = 'Neustadt'
-
-
-              } else if (updateUser.klasse.includes('Oberstufe') ) {
-
-
-                op.klasse2 = ''
-                op.klasse3 = 'Oberstufe'
-
-
-              } else {
-
-                op.klasse2 = ''
-                op.klasse3 = ''
-                console.log('FE  HEHEHE LER');
-
-
-              }
-
-
-              op.klasse4 = 'alle drei Standorte'
-
-
-              var query = { '_id': updateUser._id };
-
-
-              User.findOneAndUpdate(query, op, { upsert: true }, function (err, doc) {
-                if (err) return res.send(500, { error: err });
-                //console.log('geändert:   ' + doc.name + ' (' + doc.klasse3 + ')')
-              });
-
-
+            verbunds.forEach(function (verbund) {
+              console.log('verbund    ' + verbund.name);
+              jo.push(verbund.name);
             })
 
 
-          })
 
-
-
-
-
-
-
-
-
+        
 
 
 
@@ -533,10 +549,9 @@ app.get('/', function (req, res) {
         Article.
           find({
             $or: [
-
-              { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }, { klasse: user.klasse3 }, { klasse: user.klasse4 }] },
+              { klasse: user.klasse },
+              { klasse: {$in: jo}},
               { schuelers: user }
-
             ]
 
           }).
@@ -546,6 +561,34 @@ app.get('/', function (req, res) {
           sort({ created_as_date: -1 }).
           exec(function (err2, my_articles) {
             if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+            my_articles.forEach(function (my_article) {
+              console.log('my_article::   ' + my_article.klasse);
+
+            });
+            
+
+
+
+          
+
+            // Article.
+            //   find({
+            //     $or: [
+
+            //       { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }, { klasse: user.klasse3 }, { klasse: user.klasse4 }] },
+            //       { schuelers: user }
+
+            //     ]
+
+            //   }).
+            //   populate('lehrer').
+            //   populate('schuelers').
+            //   populate('uploads').
+            //   sort({ created_as_date: -1 }).
+            //   exec(function (err2, my_articles) {
+            //     if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
             if (my_articles) {
@@ -777,66 +820,72 @@ app.get('/', function (req, res) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            });
 
           });
 
-      } else if (user.type === 'admin'){
+      } else if (user.type === 'admin') {
+
+
 
 
         User.findOne({ _id: req.user._id }).
-        populate('school').
-        exec(function (err, user) {
+          populate('school').
+          exec(function (err, user) {
             if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
 
 
 
-          if(!user.school){
+            if (!user.school) {
 
-            res.redirect('/schools/add');
-           return;
+              res.redirect('/schools/add');
+              return;
 
-          }
-
-
-
-          res.render('index', {
-
-            school: user.school,
-           
-
-          });
+            }
 
 
+            School.findOne({ _id: user.school._id }).
+              populate('stammverbunds').
+              populate('s_stamms').
+              populate('s_disziplins').
+              exec(function (err, schoool) {
 
 
-        })
+                res.render('index', {
 
+                  school: user.school,
+                  stammverbunds: schoool.stammverbunds,
+                  stamms: schoool.s_stamms,
+                  disziplins: schoool.s_disziplins
 
-
-
-
+                });
 
 
 
-      }else if (user.type === 'liquidboy'){
 
 
-      }else{
+              })
+
+
+
+
+
+
+
+
+          })
+
+
+
+
+
+
+
+
+      } else if (user.type === 'liquidboy') {
+
+
+      } else {
 
 
 
@@ -999,62 +1048,23 @@ app.post('/search', (req, res) => {
 });
 
  */
+
 /* 
 // ALLET
-app.get('/:id', function (req, res) {
+app.get('/:id/:id2', function (req, res) {
 
 console.log('hi:    '+req.params.id)
+console.log('hi2:    '+req.params.id2)
 
 
-
-
-School.
-findOne({ url: req.params.id }).
-populate('admin').
-exec(function (err2, school) {
-  if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
-if(!school){
-
- 
   res.redirect('/');
 
-  return
-}
-
-
-
-res.render('school_index', {
-  school: school,
- 
-});
-
-
-
-
 
 
 
 
 });
-
-
-
-
-
-
-
-
-
-
-return
-
-
-
-});
-
-  */
+ */
 
 
 

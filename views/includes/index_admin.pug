@@ -11,25 +11,36 @@
         br 
         h7 Adminschlüssel | Lehrerschlüssel | Schülerschlüssel          
     .col-md-12 
-        h5.text-info #{school.admin_schluessel} | #{school.lehrer_schluessel}  | #{school.schueler_schluessel} 
+        .box
+            a.text-info(href='/schools/edit_admin_schluessel', role='button') | #{school.admin_schluessel} &nbsp;
+        .box
+            a.text-info(href='/schools/edit_lehrer_schluessel', role='button') | #{school.lehrer_schluessel} &nbsp;
+        .box
+            a.text-info(href='/schools/edit_schueler_schluessel', role='button') | #{school.schueler_schluessel} &nbsp; 
         a.btn.btn-info.text-white(href='/schools/edit2/'+ school._id) Schulschlüssel ändern
         br
         br
     .form-group.col-md-12                                   
-        .container-fluid(style='margin-left:10px; border:none !important;')
-            .row.justify-content-start
-                each stamm, i in school.stamms
-                    .col-2(style='margin-bottom:10px; padding-left:0px !important; border:none !important;')
-                        h7.text-info #{stamm}
-        a.btn.btn-info.text-white(href='/schools/edit3/'+ school._id) Klassen ändern / hinzufügen / löschen
+        each stamm, i in stamms
+            .box
+                a.text-info(href='/schools/stamms/' + stamm._id, role='button') | #{stamm.name} &nbsp;
+        div(style='clear:both;') 
+        a.btn.btn-info.text-white(href='/schools/add_single_stamm') Klassen hinzufügen 
         br
         br
     .form-group.col-md-12                                   
-        .container-fluid(style='margin-left:10px; border:none !important;')
-            .row.justify-content-start
-                each fach, i in school.fachs
-                    .col-2(style='margin-bottom:10px; padding-left:0px !important; border:none !important;')
-                        h7.text-info #{fach}
-        a.btn.btn-info.text-white(href='/schools/edit4/'+ school._id) Schulfächer ändern / hinzufügen / löschen
+        each disziplin, i in disziplins
+            .box
+                a.text-info(href='/schools/disziplins/' + disziplin._id, role='button') | #{disziplin.name} &nbsp;
+        div(style='clear:both;') 
+        a.btn.btn-info.text-white(href='/schools/add_single_disziplin') Unterrichtsfach hinzufügen
+        br
+        br
+    .form-group.col-md-12                                   
+        each stammverbund, i in stammverbunds
+            .box
+                a.text-info(href='/schools/stammverbunds/' + stammverbund._id, role='button') | #{stammverbund.name} &nbsp;
+        div(style='clear:both;') 
+        a.btn.btn-info.text-white(href='/schools/add_stammverbund') Klassenverbund hinzufügen
         br
         br

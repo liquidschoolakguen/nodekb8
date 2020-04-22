@@ -1,0 +1,20 @@
+extend layout
+
+
+
+block content
+    .container
+      .row.h-100.d-flex.justify-content-center
+        .col-12.col-sm-8.col-md-6.col-lg-4
+          .card.border
+            .card-body
+              br 
+              h5.card-title #{disziplin.name} | #{disziplin.school.name}
+              .tab-content.mt-3
+                #history.tab-pane.active(role='tabpanel')
+                  p.card-text                  
+                    if user
+                        if user.type === 'admin' && user.school._id.toString === disziplin.school._id.toString
+                            a.btn.btn-success.text-white.button-margin(href='/schools/disziplin_edit/'+ disziplin._id) bearbeiten
+                            a.btn.btn-danger.delete-disziplin.text-white.button-margin(href='#', data-id=disziplin._id) löschen
+        script(src='/js/disziplin.js')

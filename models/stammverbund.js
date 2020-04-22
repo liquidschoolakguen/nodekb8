@@ -2,32 +2,23 @@ let mongoose = require('mongoose');
 
 //lerngruppe Schema
 
-let lerngruppeSchema = mongoose.Schema({
+let stammverbundSchema = mongoose.Schema({
 
     name:{
         type:String,
         required:true
     },
 
-    type:{
-        type:String,
-        required:true
-    },
 
 
-    stufe:{
-        type:String,
-        required:false
-    },
-
-
-    schuelers: [
+    stamms: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: 'Stamm',
             required: false
         }
     ],
+
 
     school:{
         type: mongoose.Schema.Types.ObjectId,
@@ -36,6 +27,11 @@ let lerngruppeSchema = mongoose.Schema({
     },
 
 
+/* 
+    lehrer: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    }, */
+
 
 });
 
@@ -43,7 +39,7 @@ let lerngruppeSchema = mongoose.Schema({
 
 
 
-let Lerngruppe = module.exports = mongoose.model('Lerngruppe', lerngruppeSchema);
+let Stammverbund = module.exports = mongoose.model('Stammverbund', stammverbundSchema);
 
 
 

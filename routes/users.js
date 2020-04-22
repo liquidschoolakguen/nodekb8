@@ -360,7 +360,7 @@ router.post('/register_liquid', function (req, res) {
                             }
                             else {
                                 req.flash('success', 'Du bist registriert, ' + newUser.name + '. Jetzt kannst du dich einloggen.');
-                                res.redirect('/users/login');
+                                res.redirect('/');
                             }
                         });
                     });
@@ -407,7 +407,7 @@ router.post('/register_admin_first', function (req, res) {
     let errors = req.validationErrors();
 
     if (errors) {
-        res.render('register_admin', {
+        res.render('register/register_admin_first', {
             errors: errors
 
         });
@@ -421,7 +421,7 @@ router.post('/register_admin_first', function (req, res) {
 
 
                 req.flash('warning', 'Die Kennung ' + user.name + ' ist bereits registriert');
-                res.redirect('/users/register_admin_main');
+                res.redirect('/users/register_admin_first');
 
 
 
@@ -451,6 +451,10 @@ router.post('/register_admin_first', function (req, res) {
                                 return
                             }
                             else {
+
+
+
+                                
                                 req.flash('success', 'Hallo ' + newUser.name + '. Du bist jetzt registriert, jetzt nur noch schnell einloggen...');
                                 res.redirect('/users/login_admin_first');
                             }
@@ -514,7 +518,7 @@ router.post('/register_admin', function (req, res) {
 
 
             if (errors) {
-                res.render('register_lehrer', {
+                res.render('register_admin', {
                     errors: errors,
                     school: school
 
@@ -1072,24 +1076,6 @@ router.get('/4____4', function (req, res) {
 
 
 
-// Login Form
-router.get('/login', function (req, res) {
-
-
-
-
-    res.render('school_login', {
-
-
-    });
-
-
-
-
-})
-
-
-
 
 
 
@@ -1463,7 +1449,7 @@ router.post('/login_li', function (req, res, next) {
 
 
         req.flash('warning', 'Du bist kein LiquidBoy');
-        res.redirect('/users/login');
+        res.redirect('/');
 
 
     } else {
@@ -1471,7 +1457,7 @@ router.post('/login_li', function (req, res, next) {
 
         passport.authenticate('local', {
             successRedirect: '/',
-            failureRedirect: '/users/login',
+            failureRedirect: '/',
             failureFlash: true
 
         })(req, res, next);
@@ -1817,7 +1803,7 @@ function ensureAuthenticated(req, res, next) {
         return next();
     } else {
         req.flash('danger', 'Bitte anmelden');
-        res.redirect('/users/login');
+        res.redirect('/');
     }
 
 }

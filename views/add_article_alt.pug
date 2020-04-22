@@ -16,36 +16,8 @@ block content
                                         label Für das Fach                                 
                                         select#validationServer01.form-control.custom-select.form-control(name='fach', type=text,  required='', placeholder='Wähle eine Klasse')
                                             option(selected='')
-                                            option * Allgemein | Orga
-                                            option Mathematik
-                                            option Deutsch
-                                            option Englisch
-                                            option LB Gesellschaft 
-                                            option LB Natur
-                                            option Sport
-                                            option Schach
-                                            option Informatik | ITG
-                                            option Kunst
-                                            option Musik
-                                            option Darstellendes Spiel
-                                            option Kochen
-                                            option Garten
-                                            option Arbeit/Beruf
-                                            option Philosophie | Religion
-                                            option Spanisch
-                                            option Romanes
-                                            option Französisch 
-                                            option Türkisch
-                                            option Portugiesisch 
-                                            option Biologie
-                                            option Chemie
-                                            option Physik
-                                            option Geschichte
-                                            option Geographie
-                                            option PGW
-                                            option Seminar
-                                            option Glück
-                                            option Sonstiges Fach / Kurs 
+                                            each stamm, i in user.school.fachs
+                                                option #{stamm}
                                     .form-group.col-md-4 
                                         label Abgabetermin (Standard: 3 Tage später)
                                         input#datepicker.form-control(type=text, name='termin', value=abgabe+ ' 16 Uhr', required='',  readonly='readonly', style='background:white;')

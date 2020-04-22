@@ -9,17 +9,6 @@ let schoolSchema = mongoose.Schema({
         required: true
     },
 
-    url: {
-        type: String,
-        required: false
-    },
-
-    make_id: {
-        type: String,
-        required: true
-    },
-
-
     plz: {
         type: String,
         required: true
@@ -29,16 +18,10 @@ let schoolSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    created: {
-        type: String,
-        required: false
-    },
+
+ 
 
 
-    admin: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
 
 
     admin_schluessel: {
@@ -56,11 +39,14 @@ let schoolSchema = mongoose.Schema({
         required: false
     },
 
+
+
+
+
     users: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
-
 
 
     lerngruppes: [
@@ -72,15 +58,13 @@ let schoolSchema = mongoose.Schema({
     ],
 
 
-
-
-
-    stamms: [
+  /*   stamms: [
         {
             type: String,
             required: false
         }
     ],
+
 
     fachs: [
         {
@@ -88,6 +72,40 @@ let schoolSchema = mongoose.Schema({
             required: false
         }
     ],
+ */
+
+
+
+    s_stamms: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Stamm',
+            required: false
+        }
+    ],
+
+
+    s_disziplins: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Disziplin',
+            required: false
+        }
+    ],
+
+
+
+
+
+
+    stammverbunds: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Stammverbund',
+        required: false
+    }],
+
+
+
 
 
 });

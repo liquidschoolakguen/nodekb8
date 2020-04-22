@@ -1,0 +1,41 @@
+doctype html
+html
+    head
+        title liquidschool
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    script(type='text/javascript', src='https://code.jquery.com/jquery-2.1.1.min.js')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js')
+    link(rel='stylesheet' href='/css/style_material.css')
+    script.
+      $(document).ready(function() {
+      $('select').material_select();
+      });
+    body
+        ul#dropdown1.dropdown-content
+            li
+                a(href='#!') one
+            li
+                a(href='#!') two
+            li.divider
+            li
+                a(href='#!') three
+
+        script.
+            document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.dropdown-trigger');
+            var instances = M.Dropdown.init(elems, {});
+            });
+        nav
+            .nav-wrapper
+                a.brand-logo(href='#!') Logo
+                ul.right.hide-on-med-and-down
+                    li
+                        a.dropdown-trigger(href='#!', data-target='dropdown1')
+                            | Dropdown
+                            i.material-icons.right arrow_drop_down
+        block content

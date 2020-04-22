@@ -1,0 +1,95 @@
+doctype html
+html
+  head
+    link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+    link(rel='stylesheet' href='/css/ficki.sass')
+  body
+    .navbar-fixed
+      nav
+        // dropdown structure
+        ul#dropdown1.dropdown-content
+          li
+            a(href='#!') Link1
+          li
+            a(href='#!') Link2
+          li.divider
+          li
+            a(href='#!') Link3
+        ul#dropdown2.dropdown-content
+          li
+            a(href='#!') Link1
+          li
+            a(href='#!') Link2
+          li.divider
+          li
+            a(href='#!') Link3
+        ul#dropdown3.dropdown-content
+          li
+            a(href='#!') Link1
+          li
+            a(href='#!') Link2
+          li.divider
+          li
+            a(href='#!') Link3
+        .nav-wrapper
+          a.brand-logo(href='#!') Logo
+          a.button-collapse(href='#', data-activates='mobile-demo')
+            i.material-icons menu
+          ul.right.hide-on-med-and-down
+            // dropdown button
+            li
+              a.dropdown-button(href='#!', data-activates='dropdown1')
+                | Dropdown 1
+                i.material-icons.right arrow_drop_down
+            li
+              a.dropdown-button(href='#!', data-activates='dropdown2')
+                | Dropdown 2
+                i.material-icons.right arrow_drop_down
+            li
+              a.dropdown-button(href='#!', data-activates='dropdown3')
+                | Dropdown 3
+                i.material-icons.right arrow_drop_down
+            li
+              a(href='sass.html') Normal link1
+            li
+              a(href='badges.html') Normal link2
+          ul#mobile-demo.side-nav
+            li.no-padding
+              ul.collapsible.collapsible-accordion
+                li.bold
+                  a.collapsible-header.waves-effect.waves-teal Dropdown 1
+                  .collapsible-body(style='')
+                    ul
+                      li
+                        a(href='#') Link1
+                      li
+                        a(href='#') link2
+                      li
+                        a(href='#') link3
+                li.bold
+                  a.collapsible-header.waves-effect.waves-teal Dropdown 2
+                  .collapsible-body(style='')
+                    ul
+                      li
+                        a(href='#') link1
+                      li
+                        a(href='#') link2
+                      li
+                        a(href='#') link3
+                li.bold
+                  a.collapsible-header.waves-effect.waves-teal Dropdown 3
+                  .collapsible-body(style='')
+                    ul
+                      li
+                        a(href='#') link1
+                      li
+                        a(href='#') link2
+                      li
+                        a(href='#') link3
+                li.bold
+                  a.waves-effect.waves-teal(href='getting-started.html') Normal link 1
+                li.bold
+                  a.waves-effect.waves-teal(href='getting-started.html') Normal link 2
+        block content
+    script(src='//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js')
+    script(src='//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/debug.addIndicators.min.js')

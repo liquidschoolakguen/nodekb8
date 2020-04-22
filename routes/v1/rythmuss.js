@@ -5,7 +5,7 @@ const router = express.Router();
 let Rythmus = require('../models/rythmus');
 
 //User model
-let User = require('../models/user');
+let User = require('../../models/user');
 
 // Add Route
 router.get('/add', ensureAuthenticated,  function(req, res){

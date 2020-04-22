@@ -99,8 +99,17 @@ const UserSchema = mongoose.Schema({
 
 
 
-
+    //das ist für user.type = schueler
     auftrags: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Article'
+    }],
+
+
+
+
+    //das ist für user.type = lehrer; von welchem articles er author ist
+    lehrers_auftrags: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Article'
     }],
@@ -121,6 +130,11 @@ const UserSchema = mongoose.Schema({
     },
 
 
+
+    stammverbunds: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Stammverbund'
+    }],
 
 
 }

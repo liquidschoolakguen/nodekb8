@@ -1,0 +1,81 @@
+doctype html
+html
+    head
+        title liquidschool
+        script(type='text/javascript', src='https://code.jquery.com/jquery-2.1.1.min.js')
+        link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css')
+        link(rel='stylesheet' href='/css/style_material.css')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+    body
+        header.top-nav
+            ul#dropdown1.dropdown-content
+                li
+                    a(href='#!') one
+                li
+                    a(href='#!') two
+                li.divider
+                li
+                    a(href='#!') three
+            script.
+                document.addEventListener('DOMContentLoaded', function() {
+                var elems = document.querySelectorAll('.dropdown-trigger');
+                var instances = M.Dropdown.init(elems, {});
+                });
+            nav.nav-extended
+                .nav-wrapper
+                    a.brand-logo(href='#') &nbsp; Liquidschool
+                    a.button-collapse(href='#', data-activates='mobile-demo')
+                        i.material-icons menu
+                    ul#nav-mobile.right.hide-on-med-and-down
+                        li
+                            a(href='sass.html') Sass
+                        li
+                            a(href='badges.html') Components
+                        li
+                            a(href='collapsible.html') JavaScript
+                        li
+                            a.dropdown-trigger(href='#!', data-target='dropdown1')
+                                | Dropdown
+                                i.material-icons.right arrow_drop_down
+                    ul#mobile-demo.side-nav
+                        li
+                            a(href='sass.html') Sass
+                        li
+                            a(href='badges.html') Components
+                        li
+                            a(href='collapsible.html') JavaScript
+        main
+            .container
+                blockquote
+                    | Click on 
+                    label SET THEME COLOR
+                    |  to change theme of this page. The Selected 
+                    label 'Theme Color'
+                    |  will be stored in local storage, go on refresh this page.
+                .row
+                    form.col.s12
+                        .row
+                            .input-field.col.s6
+                                i.material-icons.prefix account_circle
+                                input#icon_prefix.validate(type='text')
+                                label(for='icon_prefix') First Name
+                            .input-field.col.s6
+                                i.material-icons.prefix phone
+                                input#icon_telephone.validate(type='tel')
+                                label(for='icon_telephone') Telephone
+            block content
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js')             
+        script.
+            var themeColor = '#263238' ;
+            $(".nav-wrapper").css("background-color", themeColor);
+            $(".secondary-content>.material-icons").css("color", themeColor);
+            $(".btn").css("background-color", themeColor);
+            $(".page-footer").css("background-color",themeColor);
+            $(".input-field").css("color", themeColor);
+            $(".input-field>.material-icons").css("color", themeColor);
+            $(".input-field>label").css("color",themeColor);
+            $(".dropdown-content>li>a").css("color", themeColor);
+            $(document).ready(function(){
+            $(".dropdown-trigger").dropdown();
+            });
