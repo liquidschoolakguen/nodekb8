@@ -1,13 +1,19 @@
 const express = require('express');
 const router = express.Router();
 
-
+let User = require('../models/user');
 let School = require('../models/school');
 let Stamm = require('../models/stamm');
+let Stammverbund = require('../models/stammverbund');
 
 
+const multer = require("multer");
 
 
+const upload = multer({
+  dest: "../uploads"
+  // you might also want to set some limits: https://github.com/expressjs/multer#limits
+});
 
 
 
@@ -47,10 +53,10 @@ router.post("/add_single_stamm", upload.single("file"), (req, res) => {
         return
       }
 
-      Stamm.findOne({ 
+      Stamm.findOne({
         $and: [
-          {  name: req.body.name  },
-          {  school: user.school  }
+          { name: req.body.name },
+          { school: user.school }
         ]
       }, function (err, gibbet_schon) {
         if (err) throw err;
@@ -167,13 +173,64 @@ router.delete('/stamm/:id', function (req, res) {
                   console.log(err);
                   return;
                 } else {
-                  res.send('success');
+
+
+                  Stammverbund.find({ stamms: stamm }).
+                    populate('stamms').
+                    exec(function (err2, verbunds) {
+
+
+                      verbunds.forEach(function (verbund) {
+                        console.log('record :   ' + verbund.name);
+
+
+
+                        Stammverbund.findOne({ _id: verbund._id }).
+                          populate('stamms').
+                          exec(function (err2, ver) {
+
+
+
+
+                            ver.stamms.pull(stamm);
+                            console.log('kkkkkkkk     '+ver.stamms.length);
+                            if (ver.stamms.length > 0) {
+                              ver.save(function (err, updated_ver) {
+                                if (err) {
+                                  console.log(err);
+                                  return;
+                                } else { }
+                              })
+                            } else {// wenn keine Stamms mehr im Stammverbund sind, dann lösche den Stammverbund gleich mit
+                              let query = { _id: ver._id }
+                              Stammverbund.remove(query, function (err) {
+                                if (err) {
+                                  console.log(err);
+                                }
+                              })
+                            }
+
+
+                          })
+
+                      })
+
+                      res.send('success');
+
+
+
+
+                    })
+
+
                 }
+
+
 
               })
 
+            })
 
-            });
 
           });
       }

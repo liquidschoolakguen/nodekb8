@@ -11,19 +11,14 @@ block content
                   .nav-link.active(href='#bingo', role='tab', aria-controls='bingo', aria-selected='false') Administratoranmeldung
             .card-body
               br
-              h6.float-right Schuleinstellungen konfigurieren?
-              h4.float-right Anmelden und es kann losgehen
+              h6.float-right Schule einstellen und konfigurieren.
+              h4.float-right Anmelden als Schuladministrator
               br
               .tab-content.mt-3
                 #bingo.tab-pane.active(role='tabpanel', aria-labelledby='bingo-tab')
                   p.card-text
                     br
                     form(method='POST', action='/users/login_a')
-                        #form-group  
-                            br
-                            label Adminschlüssel:
-                            input#validationServer01.form-control.monospace(name='admin_schluessel', title='Frage den Hauptadministrator deiner Schule, wenn du den Adminschlüssel nicht kennst' type=text, required=''  minlength='10')
-                            br
                         #form-group  
                             label Email:
                             input#validationServer01.form-control(name='username', type=email, required='')

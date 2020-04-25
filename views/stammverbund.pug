@@ -17,7 +17,12 @@ block content
                                     .col-md-12
                                 #description.tab-pane.active(role='tabpanel')
                                     p.card-text
-                                        .col-md-12                                
+                                        .col-md-12           
+                                            each stamm, i in stammverbund.stamms
+                                                .box
+                                                    a.text-info(href='/stamms/stamms/' + stamm._id, role='button') | #{stamm.name} &nbsp;
+                                            div(style='clear:both;') 
+
                             if user
                                 if user.type === 'admin' && user.school.toString === stammverbund.school.toString
                                     a.btn.btn-success.text-white.button-margin(href='/schools/stammverbund_edit/'+ stammverbund._id) bearbeiten

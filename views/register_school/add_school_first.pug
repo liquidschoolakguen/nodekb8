@@ -1,0 +1,24 @@
+extends ../layout_empty
+
+block content
+      .row.h-100.d-flex.justify-content-center
+        .col-12.col-sm-8.col-md-6.col-lg-4
+          .card.trans
+            .card-body.bg-custom-black
+              br 
+              h4.card-title Überprüfe, ob deine Schule bereits bei Liquidschool registriert ist
+              br 
+              .tab-content.mt-3
+                #history.tab-pane.active(role='tabpanel')
+                  p.card-text
+                    form(method='POST', action='/users/add_school_first')
+                        #form-group  
+                            input#validationServer01.form-control(name='name', type=text, required='', placeholder='Name der Schule')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(name='plz', type=text, required='', placeholder='Postleitzahl')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(type='ort', name='password', required='', placeholder='Ort')                   
+                        br
+                        input.btn.btn-primary.text-white.float-right(type='submit', value='Verfügbarkeit prüfen')

@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+    .container
+      .row.h-100.d-flex.justify-content-center
+        .col-12.col-sm-8.col-md-6.col-lg-6
+          .card.border
+            .card-header
+              ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
+                li.nav-item
+                  .nav-link.active(href='#bingo', role='tab', aria-controls='bingo', aria-selected='false') Die Schulschlüssel
+            .card-body
+              .tab-content.mt-3
+                #bingo.tab-pane.active(role='tabpanel', aria-labelledby='bingo-tab')
+                  p.card-text
+                    form#reused_form(method='POST', enctype='multipart/form-data' action='/schools/add_school_l_s')
+                        #form-group  
+                            input#validationServer01.form-control(type='text', value=lehrer_schluessel, minlength='6' placeholder='\'Lehrerschlüssel\' (mind 6 Zeichen)',  required='' title="Diesen Schlüssel brauchen deine Kollegen, die sich als Lehrkräfte an deiner Schule auf Liquidschool registrieren wollen. Ohne den Lehrerschlüssel könnte sich jedermann als Lehrkraft an deiner Schule ausgeben.\n\n(Pflichtfeld)"   name='lehrer_schluessel')
+                        br
+                        input.btn.btn-primary.my-margin-top.bg-primary.text-white.float-right(type='submit', value='Lehrerschlüssel speichern')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+    script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+    script(src='/js/add_school.js')

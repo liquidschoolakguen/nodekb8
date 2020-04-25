@@ -1,0 +1,33 @@
+extends ../layout_empty
+
+block content
+    .container
+      .row.h-100.d-flex.justify-content-center
+        .col-12.col-sm-8.col-md-5.col-lg-5
+          .card.border
+            .card-header
+              ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
+                li.nav-item
+                  .nav-link.active(href='#bingo', role='tab', aria-controls='bingo', aria-selected='false') Administratoranmeldung
+            .card-body
+              br
+              h6.float-right Schule?
+              h4 Schule? Schule?
+              br
+              .tab-content.mt-3
+                #bingo.tab-pane.active(role='tabpanel', aria-labelledby='bingo-tab')
+                  p.card-text
+                    br
+                    form(method='POST', action='/users/login_scho_first')
+                        #form-group  
+                            label Email:
+                            input#validationServer01.form-control(name='username', type=text, required='')
+                            br
+                        #form-group  
+                            label Passwort:
+                            input#validationServer01.form-control(type='password', name='password', required='') 
+                        br
+                        input.btn.btn-primary.my-margin-top.bg-primary.text-white.float-right(type='submit', value='Anmelden und loslegen')                        
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+        script(src='/bower_components/bootstrap/dist/js/bootstrap.js')  
+        script(src='/js/log_reg.js')

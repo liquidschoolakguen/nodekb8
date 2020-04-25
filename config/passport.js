@@ -7,15 +7,16 @@ module.exports = function (passport) {
 
     // Local Strategy
     passport.use(new LocalStrategy(function (username, password, done) {
-          
+        console.log('1   ')
         // Match Username
         let query = { username: username.toString().toLowerCase().trim()}
         User.findOne(query, function (err, user) {
             if (err) throw err;
             if (!user) {
+                console.log('2   ')
                 return done(null, false, { message: 'Unbekannte Kennung' });
             }
-
+            console.log('3   ')
             // Match Password
             bcrypt.compare(password, user.password, function (err, isMatch) {
                 if (err) throw err;
@@ -40,7 +41,7 @@ module.exports = function (passport) {
                             return;
                         } else {
                            
-
+                            console.log('4   ')
                             return done(null, user)
 
 
@@ -49,6 +50,7 @@ module.exports = function (passport) {
                     })
                    
                 } else {
+                    console.log('5   ')
                     return done(null, false, { message: 'Falsches Passwort. Wenn dir dein Passwort nicht mehr einfällt, musst du dich noch einmal registrieren. Schreibe dir das Passwort auf, damit du es nicht wieder vergisst.' });
                 }
             });

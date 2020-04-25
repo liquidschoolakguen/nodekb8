@@ -6,11 +6,18 @@ const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
-
-
-
-
+const nodemailer = require('nodemailer');
 const config = require('./config/database');
+
+if(process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+//var dotenv = require('dotenv').config()
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
+//console.log('stripeSecretKey: '+stripeSecretKey)
+//console.log('stripePublicKey: '+stripePublicKey)
+
 
 mongoose.connect(config.database, {
   useCreateIndex: true,
@@ -18,6 +25,40 @@ mongoose.connect(config.database, {
   useNewUrlParser: true,
   useFindAndModify: false
 });
+
+const stripe = require("stripe")("sk_test_ZiLt9XHklBjmvTbqFeLoGwFc00uGWhbTmg");
+
+(async () => {
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    mode: 'setup',
+    customer: 'cus_FOsk5sbh3ZQpAU',
+    success_url: 'https://liquidschool.de/success?session_id={CHECKOUT_SESSION_ID}',
+    cancel_url: 'https://liquidschool.de/cancel',
+  });
+})();
+
+
+
+var smtpConfig = {
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, // use SSL
+  auth: {
+      user: 'bubu000051@gmail.com',
+      pass: 'unavejun93947'
+  }
+};
+var transporter = nodemailer.createTransport(smtpConfig);
+
+var mailOptions = {
+  from: 'bruno.kamp@liquidschool.com',
+  to: 'mitat_akguen@web.de',
+  subject: 'jjj',
+  text: 'lodnbnks  s sam dsamb dsabm dmasm dsam dsamsd'
+};
+
+
 
 
 
@@ -141,7 +182,7 @@ function getMyNow() {
 
 app.get('/zz_test_index', function (req, res) {
   res.render('zz_test_index', {
-  
+
   });
 
 })
@@ -151,8 +192,19 @@ app.get('/', function (req, res) {
 
 
   if (typeof req.user === "undefined") {
+
+
+/*     transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+ */
+
     res.render('index', {
-      title: 'Articles'
+      stripePublicKey: stripePublicKey
     });
   } else {
 
@@ -541,271 +593,279 @@ app.get('/', function (req, res) {
 
 
 
-        
 
 
 
 
-        Article.
-          find({
-            $or: [
-              { klasse: user.klasse },
-              { klasse: {$in: jo}},
-              { schuelers: user }
-            ]
 
-          }).
-          populate('lehrer').
-          populate('schuelers').
-          populate('uploads').
-          sort({ created_as_date: -1 }).
-          exec(function (err2, my_articles) {
-            if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+            Article.
+              find({
+                $or: [
+                  { klasse: user.klasse },
+                  { klasse: { $in: jo } },
+                  { schuelers: user }
+                ]
 
-
-            my_articles.forEach(function (my_article) {
-              console.log('my_article::   ' + my_article.klasse);
-
-            });
-            
+              }).
+              populate('lehrer').
+              populate('schuelers').
+              populate('uploads').
+              sort({ created_as_date: -1 }).
+              exec(function (err2, my_articles) {
+                if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
-
-          
-
-            // Article.
-            //   find({
-            //     $or: [
-
-            //       { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }, { klasse: user.klasse3 }, { klasse: user.klasse4 }] },
-            //       { schuelers: user }
-
-            //     ]
-
-            //   }).
-            //   populate('lehrer').
-            //   populate('schuelers').
-            //   populate('uploads').
-            //   sort({ created_as_date: -1 }).
-            //   exec(function (err2, my_articles) {
-            //     if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
-            if (my_articles) {
-
-
-
-              // console.log('okkkkkkkkkkk');
-
-
-
-
-            } else {
-
-
-
-              // console.log('neeeeeeeeeeeeeeee');
-
-
-            }
-
-
-            var length = my_articles.length;
-
-
-            //////////////////////7 gggg6g7
-            Hausarbeit.
-              find({ schueler: req.user._id }).
-              populate('article').
-              exec(function (err, hausarbeits) {
-                if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
-
-
-                //console.log('-------------------------------------')
                 my_articles.forEach(function (my_article) {
+                  console.log('my_article::   ' + my_article.klasse);
 
+                });
 
 
 
 
 
-                  var tag = my_article.termin.substring(0, 2)
-                  var monat = my_article.termin.substring(3, 5)
-                  var jahr = my_article.termin.substring(6, 10)
 
-                  var termin = new Date(jahr, monat - 1, tag, 16);
-                  var jetzt = getMyNow();
+                // Article.
+                //   find({
+                //     $or: [
 
-                  // To calculate the time difference of two dates 
-                  var Difference_In_Time = termin.getTime() - jetzt.getTime();
-                  var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+                //       { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }, { klasse: user.klasse3 }, { klasse: user.klasse4 }] },
+                //       { schuelers: user }
 
-                  var nicht_jetzt = new Date(jetzt);
+                //     ]
 
-                  my_article.termin = my_article.termin.substring(0, 10)
+                //   }).
+                //   populate('lehrer').
+                //   populate('schuelers').
+                //   populate('uploads').
+                //   sort({ created_as_date: -1 }).
+                //   exec(function (err2, my_articles) {
+                //     if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
-                  if (Difference_In_Days >= 0) {
 
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() === termin.getDate()) {
+                if (my_articles) {
 
-                      my_article.termin = 'heute 16 Uhr'
-                    }
 
 
+                  // console.log('okkkkkkkkkkk');
 
 
 
-                    nicht_jetzt.setDate(jetzt.getDate() + 1)
 
-                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                      nicht_jetzt.getMonth() === termin.getMonth() &&
-                      nicht_jetzt.getDate() === termin.getDate()) {
-                      //console.log('nicht_jetzt         ' + nicht_jetzt);
-                      //console.log('termin              ' + termin);
-                      my_article.termin = 'morgen 16 Uhr'
-                    }
+                } else {
 
 
 
+                  // console.log('neeeeeeeeeeeeeeee');
 
-                    nicht_jetzt.setDate(jetzt.getDate() + 2)
 
-                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                      nicht_jetzt.getMonth() === termin.getMonth() &&
-                      nicht_jetzt.getDate() === termin.getDate()) {
-                      //console.log('nicht_jetzt         ' + nicht_jetzt);
-                      //console.log('termin              ' + termin);
-                      my_article.termin = 'übermorgen'
-                    }
+                }
 
 
+                var length = my_articles.length;
 
 
+                //////////////////////7 gggg6g7
+                Hausarbeit.
+                  find({ schueler: req.user._id }).
+                  populate('article').
+                  exec(function (err, hausarbeits) {
+                    if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
 
-                    nicht_jetzt.setDate(jetzt.getDate() + 3)
 
-                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                      nicht_jetzt.getMonth() === termin.getMonth() &&
-                      nicht_jetzt.getDate() === termin.getDate()) {
-                      //console.log('nicht_jetzt         ' + nicht_jetzt);
-                      //console.log('termin              ' + termin);
-                      my_article.termin = 'in 3 Tagen'
-                    }
+                    //console.log('-------------------------------------')
+                    my_articles.forEach(function (my_article) {
 
 
 
 
-                    nicht_jetzt.setDate(jetzt.getDate() + 4)
 
-                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                      nicht_jetzt.getMonth() === termin.getMonth() &&
-                      nicht_jetzt.getDate() === termin.getDate()) {
-                      //console.log('nicht_jetzt         ' + nicht_jetzt);
-                      //console.log('termin              ' + termin);
-                      my_article.termin = 'in 4 Tagen'
-                    }
 
+                      var tag = my_article.termin.substring(0, 2)
+                      var monat = my_article.termin.substring(3, 5)
+                      var jahr = my_article.termin.substring(6, 10)
 
+                      var termin = new Date(jahr, monat - 1, tag, 16);
+                      var jetzt = getMyNow();
 
+                      // To calculate the time difference of two dates 
+                      var Difference_In_Time = termin.getTime() - jetzt.getTime();
+                      var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 
-                    nicht_jetzt.setDate(jetzt.getDate() + 5)
+                      var nicht_jetzt = new Date(jetzt);
 
-                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                      nicht_jetzt.getMonth() === termin.getMonth() &&
-                      nicht_jetzt.getDate() === termin.getDate()) {
-                      //console.log('nicht_jetzt         ' + nicht_jetzt);
-                      //console.log('termin              ' + termin);
-                      my_article.termin = 'in 5 Tagen'
-                    }
+                      my_article.termin = my_article.termin.substring(0, 10)
 
+                      if (Difference_In_Days >= 0) {
 
+                        if (jetzt.getFullYear() === termin.getFullYear() &&
+                          jetzt.getMonth() === termin.getMonth() &&
+                          jetzt.getDate() === termin.getDate()) {
 
+                          my_article.termin = 'heute 16 Uhr'
+                        }
 
 
 
-                    nicht_jetzt.setDate(jetzt.getDate() + 6)
 
-                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                      nicht_jetzt.getMonth() === termin.getMonth() &&
-                      nicht_jetzt.getDate() === termin.getDate()) {
-                      //console.log('nicht_jetzt         ' + nicht_jetzt);
-                      //console.log('termin              ' + termin);
-                      my_article.termin = 'in 6 Tagen'
-                    }
 
+                        nicht_jetzt.setDate(jetzt.getDate() + 1)
 
+                        if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                          nicht_jetzt.getMonth() === termin.getMonth() &&
+                          nicht_jetzt.getDate() === termin.getDate()) {
+                          //console.log('nicht_jetzt         ' + nicht_jetzt);
+                          //console.log('termin              ' + termin);
+                          my_article.termin = 'morgen 16 Uhr'
+                        }
 
 
 
 
+                        nicht_jetzt.setDate(jetzt.getDate() + 2)
 
-                  } else {
-                    ///Termin vorüber
-                    my_article.termin = 'abgelaufen'
+                        if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                          nicht_jetzt.getMonth() === termin.getMonth() &&
+                          nicht_jetzt.getDate() === termin.getDate()) {
+                          //console.log('nicht_jetzt         ' + nicht_jetzt);
+                          //console.log('termin              ' + termin);
+                          my_article.termin = 'übermorgen'
+                        }
 
 
 
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() === termin.getDate()) {
 
-                      my_article.termin = 'abgelaufen (heute)'
-                    }
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() - 1 === termin.getDate()) {
 
-                      my_article.termin = 'abgelaufen (gestern)'
-                    }
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() - 2 === termin.getDate()) {
+                        nicht_jetzt.setDate(jetzt.getDate() + 3)
 
-                      my_article.termin = 'abgelaufen (vorgestern)'
-                    }
+                        if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                          nicht_jetzt.getMonth() === termin.getMonth() &&
+                          nicht_jetzt.getDate() === termin.getDate()) {
+                          //console.log('nicht_jetzt         ' + nicht_jetzt);
+                          //console.log('termin              ' + termin);
+                          my_article.termin = 'in 3 Tagen'
+                        }
 
 
 
 
+                        nicht_jetzt.setDate(jetzt.getDate() + 4)
 
-                  }
+                        if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                          nicht_jetzt.getMonth() === termin.getMonth() &&
+                          nicht_jetzt.getDate() === termin.getDate()) {
+                          //console.log('nicht_jetzt         ' + nicht_jetzt);
+                          //console.log('termin              ' + termin);
+                          my_article.termin = 'in 4 Tagen'
+                        }
 
 
 
 
+                        nicht_jetzt.setDate(jetzt.getDate() + 5)
 
+                        if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                          nicht_jetzt.getMonth() === termin.getMonth() &&
+                          nicht_jetzt.getDate() === termin.getDate()) {
+                          //console.log('nicht_jetzt         ' + nicht_jetzt);
+                          //console.log('termin              ' + termin);
+                          my_article.termin = 'in 5 Tagen'
+                        }
 
-                  my_article.schueler_token = '0';
-                  hausarbeits.forEach(function (hausarbeit) {
-                    // console.log(hausarbeit);
-                    if (my_article._id.toString() === hausarbeit.article._id.toString()) {
-                      my_article.schueler_token = hausarbeit.status;
-                    }
+
+
+
+
+
+                        nicht_jetzt.setDate(jetzt.getDate() + 6)
+
+                        if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                          nicht_jetzt.getMonth() === termin.getMonth() &&
+                          nicht_jetzt.getDate() === termin.getDate()) {
+                          //console.log('nicht_jetzt         ' + nicht_jetzt);
+                          //console.log('termin              ' + termin);
+                          my_article.termin = 'in 6 Tagen'
+                        }
+
+
+
+
+
+
+
+                      } else {
+                        ///Termin vorüber
+                        my_article.termin = 'abgelaufen'
+
+
+
+                        if (jetzt.getFullYear() === termin.getFullYear() &&
+                          jetzt.getMonth() === termin.getMonth() &&
+                          jetzt.getDate() === termin.getDate()) {
+
+                          my_article.termin = 'abgelaufen (heute)'
+                        }
+                        if (jetzt.getFullYear() === termin.getFullYear() &&
+                          jetzt.getMonth() === termin.getMonth() &&
+                          jetzt.getDate() - 1 === termin.getDate()) {
+
+                          my_article.termin = 'abgelaufen (gestern)'
+                        }
+                        if (jetzt.getFullYear() === termin.getFullYear() &&
+                          jetzt.getMonth() === termin.getMonth() &&
+                          jetzt.getDate() - 2 === termin.getDate()) {
+
+                          my_article.termin = 'abgelaufen (vorgestern)'
+                        }
+
+
+
+
+
+                      }
+
+
+
+
+
+
+                      my_article.schueler_token = '0';
+                      hausarbeits.forEach(function (hausarbeit) {
+                        // console.log(hausarbeit);
+                        if (my_article._id.toString() === hausarbeit.article._id.toString()) {
+                          my_article.schueler_token = hausarbeit.status;
+                        }
+                      });
+                    });
+
+
+
+
+
+
+                    /* 
+                                    console.log('-------------------------------------');
+                                    my_articles.forEach(function (my) {
+                    
+                                      console.log('created:  ' + my.created + ' |  title:  ' + my.title + ' |  create_as_date  ' + my.created_as_date)
+                    
+                                    })
+                     */
+
+                    res.render('index', {
+
+                      my_articles: my_articles,
+                      length: length
+
+                    });
+
+
+
+
+
+
                   });
-                });
 
-
-
-
-
-
-                /* 
-                                console.log('-------------------------------------');
-                                my_articles.forEach(function (my) {
-                
-                                  console.log('created:  ' + my.created + ' |  title:  ' + my.title + ' |  create_as_date  ' + my.created_as_date)
-                
-                                })
-                 */
-
-                res.render('index', {
-
-                  my_articles: my_articles,
-                  length: length
-
-                });
 
 
 
@@ -813,14 +873,6 @@ app.get('/', function (req, res) {
 
 
               });
-
-
-
-
-
-
-
-            });
 
           });
 
@@ -885,14 +937,97 @@ app.get('/', function (req, res) {
       } else if (user.type === 'liquidboy') {
 
 
-      } else {
+      } else if (user.type === 'school') {
+
+
+        User.findOne({ _id: req.user._id }).
+          populate('school').
+          exec(function (err, user) {
+            if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+
+
+        
+
+
+            if (!user.school) {
+              //FEHLER  Es kann hier keinen user ohne school geben
+              res.redirect('/');
+              return;
+
+            }
+
+            if (user.school.complete_school === '2') {//stamms stehen an
+              res.redirect('/schools/add_school_stamms');
+              return;
+
+            }
+            if (user.school.complete_school === '3') {//disziplins stehen an
+
+              res.redirect('/schools/add_school_disziplins');
+              return;
+
+            }
+
+            if (user.school.complete_school === '4') {//logo steht an
+
+              res.redirect('/schools/add_school_logo');// schullogo ausgelassen
+              return;// schullogo ausgelassen
+
+            }
+            if (user.school.complete_school === '5') {// schülerschlüssel steht an
+
+              res.redirect('/schools/add_school_s_s');
+              return;
+
+            }
+
+            if (user.school.complete_school === '6') {// lehrerschlüssel steht an
+
+              res.redirect('/schools/add_school_l_s');
+              return;
+
+            }
+
+            if (user.school.complete_school === '7') { //adminschlüssel steht an
+
+              res.redirect('/schools/add_school_a_s');
+              return;
+
+            }
+
+            if (user.school.complete_school === '8') { //adminREGISTRIERUNG steht an
+
+              res.redirect('/users/add_school_register_admin_first');
+              return;
+
+            }
+
+            if (user.school.complete_school === '1') {
+              //FEHLER  Der schoolUser dürfte garnicht mehr existieren
+              res.redirect('/');
+              return;
+
+            }
 
 
 
-      }
 
 
 
+
+
+
+
+
+
+
+
+
+
+          })
+
+
+        }
 
 
 
@@ -1013,14 +1148,17 @@ let articles = require('./routes/articles');
 let users = require('./routes/users');
 let hausarbeits = require('./routes/hausarbeits');
 let schools = require('./routes/schools');
-
+let stamms = require('./routes/stamms');
+let disziplins = require('./routes/disziplins');
+let stammverbunds = require('./routes/stammverbunds');
 
 app.use('/articles/', articles);
 app.use('/users/', users);
 app.use('/hausarbeits/', hausarbeits);
 app.use('/schools/', schools);
-
-
+app.use('/stamms/', stamms);
+app.use('/disziplins/', disziplins);
+app.use('/stammverbunds/', stammverbunds);
 /* 
 
 app.post('/search', (req, res) => {

@@ -9,10 +9,16 @@ const router = express.Router();
 //User model
 let School = require('../models/school');
 let Disziplin = require('../models/disziplin');
+let User = require('../models/user');
 
 
+const multer = require("multer");
 
 
+const upload = multer({
+  dest: "../uploads"
+  // you might also want to set some limits: https://github.com/expressjs/multer#limits
+});
 
 
 

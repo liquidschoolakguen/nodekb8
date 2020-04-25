@@ -23,24 +23,24 @@
     .form-group.col-md-12                                   
         each stamm, i in stamms
             .box
-                a.text-info(href='/schools/stamms/' + stamm._id, role='button') | #{stamm.name} &nbsp;
+                a.text-info(href='/stamms/stamms/' + stamm._id, role='button') | #{stamm.name} &nbsp;
         div(style='clear:both;') 
-        a.btn.btn-info.text-white(href='/schools/add_single_stamm') Klassen hinzufügen 
+        a.btn.btn-info.text-white(href='/stamms/add_single_stamm') Klassen hinzufügen 
         br
         br
     .form-group.col-md-12                                   
         each disziplin, i in disziplins
             .box
-                a.text-info(href='/schools/disziplins/' + disziplin._id, role='button') | #{disziplin.name} &nbsp;
+                a.text-info(href='/disziplins/disziplins/' + disziplin._id, role='button') | #{disziplin.name} &nbsp;
         div(style='clear:both;') 
-        a.btn.btn-info.text-white(href='/schools/add_single_disziplin') Unterrichtsfach hinzufügen
+        a.btn.btn-info.text-white(href='/disziplins/add_single_disziplin') Unterrichtsfach hinzufügen
         br
         br
     .form-group.col-md-12                                   
         each stammverbund, i in stammverbunds
             .box
-                a.text-info(href='/schools/stammverbunds/' + stammverbund._id, role='button') | #{stammverbund.name} &nbsp;
+                a.text-info(href='/stammverbunds/stammverbunds/' + stammverbund._id, role='button') | #{stammverbund.name} &nbsp;
         div(style='clear:both;') 
-        a.btn.btn-info.text-white(href='/schools/add_stammverbund') Klassenverbund hinzufügen
+        a.btn.btn-info.text-white(href='/stammverbunds/add_stammverbund') Klassenverbund hinzufügen
         br
         br

@@ -20,14 +20,14 @@ $(document).ready(function () {
                 const id = $target.attr('data-id');
                 $.ajax({
                     type: 'DELETE',
-                    url: '/schools/stammverbund/' + id,
+                    url: '/stammverbunds/stammverbund/' + id,
                     success: function (response) {
         
                         //alert('delete article');
                         window.location.href = '/';
                     },
                     error: function (err) {
-                        window.location = "http://localhost:5000";
+                        window.location.href = '/';
                     }
                 });
               } else {

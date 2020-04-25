@@ -4,6 +4,14 @@ let mongoose = require('mongoose');
 
 let schoolSchema = mongoose.Schema({
 
+
+
+    customer_mail: {
+        type: String,
+        required: true
+    },
+
+
     name: {
         type: String,
         required: true
@@ -19,8 +27,16 @@ let schoolSchema = mongoose.Schema({
         required: false
     },
 
- 
 
+    url: { //schul_id
+        type: String,
+        required: true
+    },
+
+    complete_school: {
+        type: String,
+        required: false
+    },
 
 
 
@@ -33,7 +49,7 @@ let schoolSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    
+
     schueler_schluessel: {
         type: String,
         required: false
@@ -58,21 +74,21 @@ let schoolSchema = mongoose.Schema({
     ],
 
 
-  /*   stamms: [
-        {
-            type: String,
-            required: false
-        }
-    ],
-
-
-    fachs: [
-        {
-            type: String,
-            required: false
-        }
-    ],
- */
+    /*   stamms: [
+          {
+              type: String,
+              required: false
+          }
+      ],
+  
+  
+      fachs: [
+          {
+              type: String,
+              required: false
+          }
+      ],
+   */
 
 
 

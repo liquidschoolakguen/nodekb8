@@ -16,6 +16,14 @@ router.get('/register_admin_first', function (req, res) {
 });
 
 
+router.get('/add_school_first', function (req, res) {
+    res.render('register_school/add_school_first');
+});
+
+
+router.get('/add_school_register_admin_first', function (req, res) {
+    res.render('register/add_school_register_admin_first');
+});
 
 
 
@@ -413,58 +421,103 @@ router.post('/register_admin_first', function (req, res) {
         });
     } else {
 
-        let query = { username: username.toString().toLowerCase().trim() }
-        User.findOne(query, function (err, user) {
-            if (err) throw err;
-            if (user) {
 
+        User.findOne({ username: username.toString().toLowerCase().trim() }).
+            populate('school').
+            exec(function (err, user) {
+                if (err) throw err;
+                if (user) {
 
+                    if (user.complete_admin === '1') {
 
-                req.flash('warning', 'Die Kennung ' + user.name + ' ist bereits registriert');
-                res.redirect('/users/register_admin_first');
+                        req.flash('warning', 'Die Kennung ' + user.name + ' ist bereits registriert');
+                        res.redirect('/users/register_admin_first');
 
+                    } else {
 
-
-
-            } else {
-
-                let newUser = new User({
-                    type: 'admin',
-                    name: name,
-                    username: username,
-                    password: password,
-                    password_visible: password,
-                    logged: false
-
-                });
-
-
-                bcrypt.genSalt(10, function (err, salt) {
-                    bcrypt.hash(newUser.password, salt, function (err, hash) {
-                        if (err) {
-                            console.log(err);
+                        if (user.school) {
+                            School.remove({ _id: user.school._id }, function (err) {
+                                if (err) return console.log('i ' + err);
+                            });
                         }
-                        newUser.password = hash;
-                        newUser.save(function (err) {
+
+
+                        User.remove({ _id: user._id }, function (err) {
+                            if (err) return console.log('i ' + err);
+
+                            let newUser = new User({
+                                type: 'admin',
+                                name: name,
+                                username: username,
+                                password: password,
+                                password_visible: password,
+                                logged: false
+
+                            });
+
+                            bcrypt.genSalt(10, function (err, salt) {
+                                bcrypt.hash(newUser.password, salt, function (err, hash) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    newUser.password = hash;
+                                    newUser.save(function (err) {
+                                        if (err) {
+                                            console.log(err);
+                                            return
+                                        }
+                                        else {
+
+                                            req.flash('success', 'Hallo ' + newUser.name + '. Du bist jetzt registriert, jetzt nur noch schnell einloggen...');
+                                            res.redirect('/users/login_admin_first');
+                                        }
+                                    });
+                                });
+                            })
+
+                        });
+
+                    }
+
+
+                } else {
+
+                    let newUser = new User({
+                        type: 'admin',
+                        name: name,
+                        username: username,
+                        password: password,
+                        password_visible: password,
+                        logged: false
+
+                    });
+
+                    bcrypt.genSalt(10, function (err, salt) {
+                        bcrypt.hash(newUser.password, salt, function (err, hash) {
                             if (err) {
                                 console.log(err);
-                                return
                             }
-                            else {
+                            newUser.password = hash;
+                            newUser.save(function (err) {
+                                if (err) {
+                                    console.log(err);
+                                    return
+                                }
+                                else {
 
 
 
-                                
-                                req.flash('success', 'Hallo ' + newUser.name + '. Du bist jetzt registriert, jetzt nur noch schnell einloggen...');
-                                res.redirect('/users/login_admin_first');
-                            }
+
+                                    req.flash('success', 'Hallo ' + newUser.name + '. Du bist jetzt registriert, jetzt nur noch schnell einloggen...');
+                                    res.redirect('/users/login_admin_first');
+                                }
+                            });
                         });
-                    });
-                })
+                    })
 
-            }
+                }
 
-        });
+            });
 
     }
 
@@ -481,6 +534,380 @@ router.post('/register_admin_first', function (req, res) {
 
 
 
+
+// Register 
+router.post('/add_school_first', function (req, res, next) {
+
+    var schulname = req.body.name.toString().toLowerCase().trim();
+    schulname = schulname.replace(/ä/g, 'ae');
+    schulname = schulname.replace(/ö/g, 'oe');
+    schulname = schulname.replace(/ü/g, 'ue');
+    schulname = schulname.replace(/ß/g, 'ss');
+    schulname = schulname.replace(/[^a-zA-Z ]/g, '');
+    schulname = schulname.split(' ').join('-');
+    var schulplz = req.body.plz.toString().toLowerCase().trim()
+    schulplz = schulplz.replace(/[^0-9]/g, '');
+    console.log('schulname:    ' + schulname + '-' + schulplz)
+    var all = schulname + '-' + schulplz
+
+    School.findOne({ url: all }).
+        exec(function (err, school) {
+            if (err) throw err;
+            if (school) {
+                if (school.complete_school === '1') {
+                    handleOldSchool(school, req, res, next);
+                } else {
+                    handleIncompleteSchool_2(school, req, res, next);
+                }
+            } else {
+                let school = new School();
+                school.name = req.body.name;
+                school.plz = req.body.plz;
+                school.ort = req.body.ort;
+                school.url = all;
+                school.complete_school = '2'
+                school.save(function (err, scho) {
+                    if (err) throw err;
+                    handleNewSchool(scho, req, res, next);
+                })
+            }
+        })
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Register Process Lehrer
+router.post('/add_school_register_admin_first', function (req, res) {
+
+    const admin_name = req.body.name;
+    var admin_username = req.body.username.toString().toLowerCase().trim();
+    const admin_password = req.body.password;
+    const admin_password2 = req.body.password2;
+    req.checkBody('name', 'Name wird benötigt').notEmpty();
+    req.checkBody('username', 'Email wird benötigt').notEmpty();
+    req.checkBody('password', 'Password wird benötigt').notEmpty();
+    req.checkBody('password2', 'Passwörter stimmen nicht überein').equals(req.body.password);
+    let errors = req.validationErrors();
+
+    if (errors) {
+        res.render('register/add_school_register_admin_first', {
+            errors: errors
+        });
+    } else {
+        User.findOne({ username: admin_username.toString().toLowerCase().trim() }).
+            populate('school').
+            exec(function (err, user) { // suche ob neuer firstAdmin bereitsexistiert
+                if (err) throw err;
+                if (user) {
+                    req.flash('warning', 'Die Kennung ' + user.name + ' ist bereits registriert');
+                    res.redirect('/users/add_school_register_admin_first');
+                    return;
+                } else {
+                    User.findOne({ _id: req.user._id }).
+                        populate('school').
+                        exec(function (err, user) { //finde den schoolUser
+                            if (err) throw err;
+
+                            let updateSchool = {};
+                            updateSchool.complete_school = '1';
+
+
+                            School.findByIdAndUpdate(user.school._id, updateSchool, function (err, freshSchool) {
+                                if (err) throw err;
+
+
+                                console.log('i ' + freshSchool.name);
+
+                                School.findOne({ _id: freshSchool._id }).
+                                    populate('users').
+                                    exec(function (err, newFreshSchool) {
+                                        if (err) throw err;
+
+
+
+                                        console.log('ii ' + newFreshSchool.name);
+
+
+                                        newFreshSchool.users.pull(user);
+                                        newFreshSchool.save(function (err, scho) {
+                                            if (err) throw err;
+
+
+                                            console.log('School wurde auf COMPLETE gestellt und der schoolUser wurde aus dem school entfernt ');
+                                            var pi_school = user.school;
+                                            var pi = user._id;
+                                            //der schoolUser wird ausgeloggt, um gleich gelöscht zu werden
+                                            req.logout();
+
+                                            User.remove({ _id: pi }, function (err) {
+                                                if (err) return console.log('i ' + err);
+                                                createAndBindRealFirstAdminUser(pi_school, admin_name, admin_username, admin_password, req, res)
+                                            });
+
+
+
+
+                                        })
+
+
+
+
+
+
+
+
+
+                                    })
+
+
+
+
+
+
+
+
+                            })
+                        });
+                }
+            });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+function handleOldSchool(school, req, res, next) {
+    req.flash('warning', school.name + ' ist bereits bei Liquidschool registriert.');
+    req.flash('warning', 'Frage den Liquidschool-Schuladministrator an deiner Schule nach dem Adminschlüssel, mit dem du dich als weiterer Admin registrieren kannst. ');
+
+    res.redirect('/users/add_school_first');
+    return;
+
+}
+
+
+//Es gibt zwei Möglichkeiten wie man mit einer unvollständigen SchoolRegistrierung umgehen kann. 
+// 1. Alles löschen und neu machen....
+function handleIncompleteSchool(school, req, res, next) {
+    User.findOne({ username: school.url }).
+        populate('school').
+        exec(function (err, user) {
+            if (err) throw err;
+            if (user) {
+                if (user.school) {
+                    School.remove({ _id: user.school._id }, function (err) {
+                        if (err) return console.log('i ' + err);
+                    });
+                }
+                User.remove({ _id: user._id }, function (err) {
+                    if (err) return console.log('i ' + err);
+                    schooli.save(function (err, scho) {
+                        if (err) throw err;
+                        console.log('deleteAndCreate:   ' + scho.url)
+                        createAndBindUser(scho, '/', req, res, next)
+                    })
+                });
+            } else {
+                console.log('fff ehler Es kan nicht sein, dass es eine School gbt aber keinen entsprechenden temporären User')
+            }
+        });
+}
+
+
+
+
+
+//2. einfach die Registrierung zur Anmeldung umfunktionieren und die SchoolRegistrierung fortsetzen
+function handleIncompleteSchool_2(school, req, res, next) {
+    req.body.username = school.url;
+    req.body.password = '12345';
+    passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/users/register_school_first',
+        failureFlash: true
+    })(req, res, next);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function handleNewSchool(school, req, res, next) {
+    createAndBindUser(school, '/', req, res, next)
+}
+
+
+
+
+
+
+function createAndBindUser(school, redirect, req, res, next) {
+    console.log('createAndBindUse ok')
+
+    let newUser = new User({
+        type: 'school',
+        school: school,
+        name: school.name,
+        username: school.url,
+        password: '12345',
+        password_visible: '12345',
+        logged: false
+
+
+    });
+
+
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(newUser.password, salt, function (err, hash) {
+            if (err) {
+                console.log(err);
+            }
+            newUser.password = hash;
+            newUser.save(function (err, us) {
+                if (err) {
+                    console.log(err);
+                    return
+                } else {
+
+                    School.findByIdAndUpdate(school._id,
+                        { $push: { users: us } },
+                        { safe: true, upsert: true },
+                        function (err, uptdatedSchool) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+
+                                /*                                 req.flash('success', 'Du bist registriert ' + newUser.name + '. Jetzt kannst du dich als Administrator auf Liquidschool anmelden.');
+                                                                //y res.redirect('/users/login_admin');
+                                                                res.redirect(redirect); */
+
+                                req.body.username = newUser.username;
+                                req.body.password = newUser.password_visible;
+
+                                passport.authenticate('local', {
+                                    successRedirect: '/',
+                                    failureRedirect: '/users/register_school_first',
+                                    failureFlash: true
+
+                                })(req, res, next);
+
+                            }
+                        })
+                }
+            });
+        });
+    })
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+function createAndBindRealFirstAdminUser(school, name, username, password, req, res) {
+    console.log('createAndBindRealFirstAdminUser ok')
+
+    let newUser = new User({
+        type: 'admin',
+        school: school,
+        name: name,
+        username: username,
+        password: password,
+        password_visible: password,
+        logged: false
+    });
+
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(newUser.password, salt, function (err, hash) {
+            if (err) {
+                console.log(err);
+            }
+            newUser.password = hash;
+            newUser.save(function (err, us) {
+                if (err) {
+                    console.log(err);
+                    return
+                } else {
+
+                    School.findByIdAndUpdate(school._id,
+                        { $push: { users: us } },
+                        { safe: true, upsert: true },
+                        function (err, uptdatedSchool) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+
+                                req.flash('success', 'Du bist registriert ' + newUser.name + '. Jetzt kannst du dich als Administrator auf Liquidschool anmelden.');
+                                res.redirect('/users/login_admin');
+                                /* 
+                                                                req.body.username = newUser.username;
+                                                                req.body.password = newUser.password_visible;
+                                
+                                                                passport.authenticate('local', {
+                                                                    successRedirect: '/',
+                                                                    failureRedirect: '/users/login_admin_first',
+                                                                    failureFlash: true
+                                
+                                                                })(req, res, next); */
+
+                            }
+                        })
+                }
+            });
+        });
+    })
+}
+
+
+
+
+
 // Register Process Lehrer
 router.post('/register_admin', function (req, res) {
 
@@ -492,7 +919,6 @@ router.post('/register_admin', function (req, res) {
         exec(function (err2, school) {
             if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
-
             if (!school) {
                 res.redirect('/');
                 return
@@ -503,7 +929,7 @@ router.post('/register_admin', function (req, res) {
             var username = req.body.username.toString().toLowerCase().trim();
             const password = req.body.password;
             const password2 = req.body.password2;
-        
+
 
 
             //console.log('  BENNO         k k k k k k             k k k k k k k k                    k k k k k k ');
@@ -518,7 +944,7 @@ router.post('/register_admin', function (req, res) {
 
 
             if (errors) {
-                res.render('register_admin', {
+                res.render('register/register_admin', {
                     errors: errors,
                     school: school
 
@@ -544,9 +970,9 @@ router.post('/register_admin', function (req, res) {
 
 
 
-                            req.flash('danger', 'Die Email' + user.name + ' ist bereits in ' + school.name + ' registriert');
+                            req.flash('danger', 'Die Kennung ' + user.name + ' ist bereits in ' + school.name + ' registriert');
                             req.flash('warning', 'Wenn du dich bereits registriert hast, musst du auf \'Administratoranmeldung\' klicken.');
-                            res.render('register_adminr', {
+                            res.render('register/register_admin', {
                                 school: school
 
                             });
@@ -566,7 +992,7 @@ router.post('/register_admin', function (req, res) {
                                 password: password,
                                 password_visible: password,
                                 logged: false
- 
+
 
                             });
 
@@ -671,7 +1097,7 @@ router.post('/register_lehrer', function (req, res) {
             var username = req.body.username.toString().toLowerCase().trim();
             const password = req.body.password;
             const password2 = req.body.password2;
-        
+
 
 
             //console.log('  BENNO         k k k k k k             k k k k k k k k                    k k k k k k ');
@@ -734,7 +1160,7 @@ router.post('/register_lehrer', function (req, res) {
                                 password: password,
                                 password_visible: password,
                                 logged: false
- 
+
 
                             });
 
@@ -793,20 +1219,6 @@ router.post('/register_lehrer', function (req, res) {
 
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1087,13 +1499,15 @@ router.get('/login_admin', function (req, res) {
 
 
 
+
+
+
+
 // Login Form
-router.get('/login_admin_first', function (req, res) {
-    res.render('anmeldung/login_admin_first', {
+router.get('/login_school_first', function (req, res) {
+    res.render('anmeldung/login_school_first', {
     });
 })
-
-
 
 
 // Login Form
@@ -1124,6 +1538,7 @@ router.get('/login_lehrer', function (req, res) {
 // Login Process Schueler
 router.post('/login_s', function (req, res, next) {
 
+
     const schueler_schluessel = req.body.schueler_schluessel.toLowerCase().trim();
     console.log('schueler_schluessel:   ' + schueler_schluessel);
 
@@ -1135,7 +1550,7 @@ router.post('/login_s', function (req, res, next) {
             if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
-           
+
             User.
                 findOne({
 
@@ -1167,7 +1582,7 @@ router.post('/login_s', function (req, res, next) {
                         } else {
 
 
-
+                            // req.body.password = '123456'
                             passport.authenticate('local', {
                                 successRedirect: '/',
                                 failureRedirect: '/users/login_schueler',
@@ -1216,7 +1631,7 @@ router.post('/login_l', function (req, res, next) {
             if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
-           
+
             User.
                 findOne({
 
@@ -1280,12 +1695,35 @@ router.post('/login_l', function (req, res, next) {
 
 
 
-router.post('/login_a_first', function (req, res, next) {
 
 
 
 
-    User.findOne({ username: req.body.username.toString().toLowerCase().trim() }).
+
+
+
+router.post('/login_scho_first', function (req, res, next) {
+
+    var schulname = req.body.username.toString().toLowerCase().trim();
+    schulname = schulname.replace(/ä/g, 'ae');
+    schulname = schulname.replace(/ö/g, 'oe');
+    schulname = schulname.replace(/ü/g, 'ue');
+    schulname = schulname.replace(/ß/g, 'ss');
+    schulname = schulname.replace(/[^a-zA-Z ]/g, '');
+    schulname = schulname.split(' ').join('-');
+
+    var schulplz = req.body.password.toString().toLowerCase().trim()
+    schulplz = schulplz.replace(/[^0-9]/g, '');
+    console.log('schulname:    ' + schulname + '-' + schulplz)
+    var all = schulname + '-' + schulplz
+
+
+
+
+
+
+
+    User.findOne({ username: all }).
         populate('school').
         exec(function (err, user) {
             if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
@@ -1293,28 +1731,22 @@ router.post('/login_a_first', function (req, res, next) {
 
             if (!user) {
                 req.flash('warning', 'Falsche Kennung.');
-                res.redirect('/users/login_admin_first');
+                res.redirect('/users/login_school_first');
             } else {
 
-                if (user.type !== 'admin') {
+                console.log('drinn:    ' + req.body.username + '-' + req.body.password)
 
+                req.body.username = all;
+                req.body.password = '12345'
 
-                    req.flash('warning', 'Hier bist du falsch. Du versuchst dich als Administrator anzumelden');
-                    res.redirect('/users/login_admin_first');
+                console.log('drinn2:    ' + req.body.username + '-' + req.body.password)
 
+                passport.authenticate('local', {
+                    successRedirect: '/',
+                    failureRedirect: '/users/login_school_first',
+                    failureFlash: true
 
-                } else {
-
-
-
-
-
-                    passport.authenticate('local', {
-                        successRedirect: '/',
-                        failureRedirect: '/users/login_admin_first',
-                        failureFlash: true
-
-                    })(req, res, next);
+                })(req, res, next);
 
 
 
@@ -1322,7 +1754,7 @@ router.post('/login_a_first', function (req, res, next) {
 
 
 
-                }
+
             }
 
         });
@@ -1341,80 +1773,29 @@ router.post('/login_a_first', function (req, res, next) {
 
 
 
+
+
+
+
+
+
 router.post('/login_a', function (req, res, next) {
-
-
-
-    const admin_schluessel = req.body.admin_schluessel.toLowerCase().trim();
-    console.log('admin_schluessel:   ' + admin_schluessel);
-
-    School.
-        findOne({ admin_schluessel: admin_schluessel }).
-        exec(function (err2, school) {
-
-
-            if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
-          
-            User.
-                findOne({
-
-                    $and: [
-                        { username: req.body.username.toString().toLowerCase().trim() },
-                        { school: school }
-                    ]
-
-                }).
-                exec(function (err, user) {
-                    if (err) throw err;
-
-
-
-                    if (!user) {
-                        req.flash('warning', 'Falscher Adminschlüssel oder falsche Kennung.');
-                        res.redirect('/users/login_admin');
-                    } else {
-
-
-                        if (user.type !== 'admin') {
-
-                            req.flash('warning', 'Hier bist du falsch. Hier können sich nur Administratoren anmelden');
-                            res.redirect('/users/login_admin');
-
-
-
-
-                        } else {
-
-
-
-                            passport.authenticate('local', {
-                                successRedirect: '/',
-                                failureRedirect: '/users/login_admin',
-                                failureFlash: true
-
-                            })(req, res, next);
-
-
-
-
-
-                        }
-
-
-
-                    }
-
-
-                });
-
+    User.findOne({ username: req.body.username.toString().toLowerCase().trim() }).
+        populate('school').
+        exec(function (err, user) {
+            if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+            if (!user) {
+                req.flash('warning', 'Falsche Kennung.');
+                res.redirect('/users/login_admin_first');
+            } else {
+                passport.authenticate('local', {
+                    successRedirect: '/',
+                    failureRedirect: '/users/login_admin_first',
+                    failureFlash: true
+                })(req, res, next);
+            }
 
         });
-
-
-
-
 });
 
 

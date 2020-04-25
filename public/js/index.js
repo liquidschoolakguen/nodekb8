@@ -137,7 +137,7 @@ $(document).ready(function () {
 
 
 
-	
+
 
 	var lastScrollTop = $.cookie('last-scroll-top');
 	if (lastScrollTop) {
@@ -173,22 +173,22 @@ $(document).ready(function () {
 	 */
 
 	oTable = $('#customerTable').DataTable({
-		
+
 		"lengthChange": false,
-		"bInfo" : false,
+		"bInfo": false,
 
 		"language": {
 			"paginate": {
-			  "previous": "zurück",
-			
-				"next": "vor"
-			  }
-		  },
-		  "paging": false,
+				"previous": "zurück",
 
-		  "bSort" : false
-	
-		
+				"next": "vor"
+			}
+		},
+		"paging": false,
+
+		"bSort": false
+
+
 
 	});
 
@@ -196,21 +196,21 @@ $(document).ready(function () {
 
 
 	oTableE = $('#customerTable_Erklaerung').DataTable({
-		
+
 		"lengthChange": false,
-		"bInfo" : false,
-		"paging":   false,
-        "ordering": false,
-        "info":     false,
-		  'columnDefs': [
+		"bInfo": false,
+		"paging": false,
+		"ordering": false,
+		"info": false,
+		'columnDefs': [
 			{
 				"targets": 0, // your case first column
 				"className": "text-center",
-		   },
-		   {
+			},
+			{
 				"targets": 1,
 				"className": "text-left",
-		   }],
+			}],
 
 
 
@@ -224,36 +224,36 @@ $(document).ready(function () {
 
 
 
-    $('.delete-article').on('click', function (e) {
+	$('.delete-article').on('click', function (e) {
 
 
 
-        var result = confirm("Wenn du diesen SoS löschst, werden auch die entsprechenden Hausarbeiten gelöscht?");
- 
-              if(result)  {
-                $target = $(e.target);
-                const id = $target.attr('data-id');
-                $.ajax({
-                    type: 'DELETE',
-                    url: '/users/' + id,
-                    success: function (response) {
-        
-                        //alert('delete article');
-                        window.location.href = '/';
-                    },
-                    error: function (err) {
-						window.location.href = '/';
-                    }
-                });
-              } else {
-                  
-              }
-        
-        
-    });
+		var result = confirm("Wenn du diesen SoS löschst, werden auch die entsprechenden Hausarbeiten gelöscht?");
+
+		if (result) {
+			$target = $(e.target);
+			const id = $target.attr('data-id');
+			$.ajax({
+				type: 'DELETE',
+				url: '/users/' + id,
+				success: function (response) {
+
+					//alert('delete article');
+					window.location.href = '/';
+				},
+				error: function (err) {
+					window.location.href = '/';
+				}
+			});
+		} else {
+
+		}
 
 
-   
+	});
+
+
+
 
 
 
@@ -262,30 +262,30 @@ $(document).ready(function () {
 
 
 
-        var result = confirm("Wenn du diesen SoS löschst, werden auch die entsprechenden Hausarbeiten gelöscht?");
- 
-              if(result)  {
-                $target = $(e.target);
-				const id = $target.attr('data-id');
-				alert('delete user '+id);
-                $.ajax({
-                    type: 'DELETE',
-                    url: '/users/' + id,
-                    success: function (response) {
-        
-                      
-                        window.location.href = '/';
-                    },
-                    error: function (err) {
-						window.location.href = '/';
-                    }
-                });
-              } else {
-                  
-              }
-        
-        
-    });
+		var result = confirm("Wenn du diesen SoS löschst, werden auch die entsprechenden Hausarbeiten gelöscht?");
+
+		if (result) {
+			$target = $(e.target);
+			const id = $target.attr('data-id');
+			alert('delete user ' + id);
+			$.ajax({
+				type: 'DELETE',
+				url: '/users/' + id,
+				success: function (response) {
+
+
+					window.location.href = '/';
+				},
+				error: function (err) {
+					window.location.href = '/';
+				}
+			});
+		} else {
+
+		}
+
+
+	});
 
 
 
@@ -304,7 +304,7 @@ $(document).ready(function () {
 
 
 
-	
+
 
 
 });
@@ -349,11 +349,36 @@ function open_new_window(link) {
 
 
 // date picker
-$('.datepicker').pickadate();
+//$('.datepicker').pickadate();
 
 
 
 
-$(document).ready(function() {
+/* $(document).ready(function() {
     $(".dropdown-toggle").dropdown();
+}); */
+
+/* 
+ var stripeHandler = StripeCheckout.configure({
+	key: stripePublicKey,
+	locale: 'en',
+	token: function(token) {
+
+
+	}
+
+}) 
+
+console.log('Clientside code running '+stripePublicKey);
+
+const button = document.getElementById('myButton');
+button.addEventListener('click', function (e) {
+	console.log('button was clicked');
+
+	var price = parseFloat('2000')
+	stripeHandler.open({
+
+		amount: price
+	})
 });
+ */

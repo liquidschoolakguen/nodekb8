@@ -7,7 +7,7 @@
             h2.float-right Mache deine Schule zur Liquidschool.
             br 
         .col-md-12.col-12.float-right.padding_null
-            a.btn.btn-primary.text-white.button-margin(href='/users/register_admin_first') Liquidschool für deine Schule einrichten
+            a.btn.btn-primary.text-white.button-margin(href='/users/add_school_first') Liquidschool für deine Schule einrichten
 .shadow.p-3.mb-5.bg-white.rounded.text-warning.border-warning   
     .card
         .card-header.bold
@@ -38,3 +38,7 @@
             br 
         .col-md-12.col-12.float-right.padding_null
             a.btn.btn-dark.text-white.button-margin(href='/users/register_schueler_00') Liquidschool-Lehrer werden
+br 
+br 
+form(action='your-server-side-code', method='POST')
+    script.stripe-button(src='https://checkout.stripe.com/checkout.js', data-key='pk_test_DVpnaycBM2IACnm0dEKWXLAH00wQZEPgF8', data-amount='999', data-name='Stripe.com', data-description='Example charge', data-image='https://stripe.com/img/documentation/checkout/marketplace.png', data-locale='auto', data-zip-code='true')
