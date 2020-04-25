@@ -5,11 +5,11 @@ let mongoose = require('mongoose');
 let schoolSchema = mongoose.Schema({
 
 
-
+/* 
     customer_mail: {
         type: String,
         required: true
-    },
+    }, */
 
 
     name: {
