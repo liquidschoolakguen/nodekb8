@@ -6,15 +6,15 @@ const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
-const nodemailer = require('nodemailer');
+//const nodemailer = require('nodemailer');
 const config = require('./config/database');
 
-if(process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
+//if(process.env.NODE_ENV !== 'production') {
+//  require('dotenv').config();
+//}
 //var dotenv = require('dotenv').config()
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
+//const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+//const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
 //console.log('stripeSecretKey: '+stripeSecretKey)
 //console.log('stripePublicKey: '+stripePublicKey)
 
@@ -26,7 +26,7 @@ mongoose.connect(config.database, {
   useFindAndModify: false
 });
 
-const stripe = require("stripe")("sk_test_ZiLt9XHklBjmvTbqFeLoGwFc00uGWhbTmg");
+/* const stripe = require("stripe")("sk_test_ZiLt9XHklBjmvTbqFeLoGwFc00uGWhbTmg");
 
 (async () => {
   const session = await stripe.checkout.sessions.create({
@@ -38,9 +38,16 @@ const stripe = require("stripe")("sk_test_ZiLt9XHklBjmvTbqFeLoGwFc00uGWhbTmg");
   });
 })();
 
+ */
+
+/////index_no_user
+/* form(action='your-server-side-code', method='POST')
+    script.stripe-button(src='https://checkout.stripe.com/checkout.js', data-key='pk_test_DVpnaycBM2IACnm0dEKWXLAH00wQZEPgF8', data-amount='999', data-name='Stripe.com', data-description='Example charge', data-image='https://stripe.com/img/documentation/checkout/marketplace.png', data-locale='auto', data-zip-code='true') */
 
 
-var smtpConfig = {
+
+
+/* var smtpConfig = {
   host: 'smtp.gmail.com',
   port: 465,
   secure: true, // use SSL
@@ -59,7 +66,7 @@ var mailOptions = {
 };
 
 
-
+ */
 
 
 let db = mongoose.connection;
@@ -204,7 +211,7 @@ app.get('/', function (req, res) {
  */
 
     res.render('index', {
-      stripePublicKey: stripePublicKey
+      //stripePublicKey: stripePublicKey
     });
   } else {
 
