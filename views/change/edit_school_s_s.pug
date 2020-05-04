@@ -1,0 +1,20 @@
+extends ../layouts/layout
+
+block content
+    form#reused_form.montform(method='POST',  action='/schools/edit_school_s_s' )
+        .card-header.bg-info.text-white
+            | Schulschlüssel ändern
+        .card-body
+            #form-transition-group.my-margin-top
+                .form-row.my-margin-top 
+                    .form-group.col-md-12
+                        br 
+                        h5.text-info Vorsicht! veränderte Zugangsschlüssel sind sofort nach Änderung wirksam.       
+                    .form-group.col-md-4 
+                        label Adminschlüssel
+                        input#validationServer01.form-control(type='text', value=school.admin_schluessel,  minlength='10' placeholder='\'Adminschlüssel\' (mind 10 Zeichen)',  title="Diesen Schlüssel brauchen deine Kollegen, die neben dir Administrator für deine Schule auf Liquidschool werden wollen. Nenne ihnen den Adminschlüssel, damit sie Administratorrechte erhalten.\n\n(optional)"  name='admin_schluessel')
+            br
+            input#geht_ab.btn.btn-info.my-margin-top.bg-info.text-white.float-right(type='submit', value='Änderungen speichern')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+    script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+    script(src='/js/add_school.js')

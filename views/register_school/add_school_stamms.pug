@@ -1,15 +1,15 @@
-extends ../layout
+extends ../layouts/layout_empty
 
 block content
     form#reused_form.montform(method='POST', enctype='multipart/form-data' action='/schools/add_school_stamms')
-        .card-header.bg-info.text-white
+        .card-header.bg-primary.text-white
             | Es braucht nicht viel, um deine Schule zu verflüssigen...
         .card-body
             #form-transition-group.my-margin-top       
                 .form-row
                     .form-group.col-md-12
                         br 
-                        h5.text-info 1/7 die Schulklassen deiner Schule...
+                        h5.text-primary 1/7 die Schulklassen deiner Schule...
                     .form-row
                         .form-group.col-md-12                                   
                             .container-fluid(style='margin-left:10px; border:none !important;')
@@ -24,7 +24,7 @@ block content
                                             .col-2(style='margin-bottom:10px; padding-left:0px !important; border:none !important;')
                                                 input#validationServer01.form-control(type='text', placeholder= z + '.', name='fstamm['+ z +']')
             br
-            input#geht_ab.btn.btn-info.my-margin-top.bg-info.text-white.float-right(type='submit', value='Schulklassen speichern')
+            input#geht_ab.btn.btn-primary.my-margin-top.bg-primary.text-white.float-right(type='submit', value='Schulklassen speichern')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
     script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
     script(src='/js/add_school.js')

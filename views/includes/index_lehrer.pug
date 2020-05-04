@@ -42,32 +42,35 @@
                                                             .font-weight-bold.text-white
                                                                 | #{my_article.ha_gruen}
                                                     td.align-middle
-                                                        if my_article.schuelers.length == 0 && !my_article.klasse
-                                                            .box.italic
-                                                                | * niemanden ausgewählt
-                                                        each schueler, i in my_article.schuelers
-                                                            if i == 0
-                                                                .box
-                                                                    a(href='/articles/schueler/' +schueler._id, role='button')  #{schueler.name}&nbsp;
-                                                            else
-                                                                .box
-                                                                    a(href='/articles/schueler/' +schueler._id, role='button') | #{schueler.name}&nbsp;
-                                                        .box
-                                                            | #{my_article.klasse} 
+                                                        if my_article.stamm
+                                                            .box
+                                                                | #{my_article.stamm.name} 
+                                                        else if my_article.stammverbund
+                                                            .box
+                                                                | #{my_article.stammverbund.name} 
+                                                        else if my_article.schuelers.length !== 0      
+                                                            each schueler, i in my_article.schuelers
+                                                                if i == 0
+                                                                    .box
+                                                                        a(href='/articles/schueler/' +schueler._id, role='button')  #{schueler.name}&nbsp;
+                                                                else
+                                                                    .box
+                                                                        a(href='/articles/schueler/' +schueler._id, role='button') | #{schueler.name}&nbsp;
+                                                        else
+                                                            | |ERROR 
                                                     td
                                                         .box
-                                                            | #{my_article.fach} |
+                                                            | #{my_article.disziplin.name} |
                                                         .box
                                                             | &nbsp;#{my_article.title} | 
                                                         .box
-                                                                strong &nbsp;#{my_article.termin}  
+                                                            strong &nbsp;#{my_article.termin} |
                                                     td.align-middle
-                                                        if user.type == 'lehrer'
-                                                            a.btn.btn-outline-secondary(href="/articles/"+my_article._id, role='button')
-                                                                svg.bi.bi-file-richtext(width='0.7em', height='0.7em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
-                                                                    path(fill-rule='evenodd', d='M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z', clip-rule='evenodd')
-                                                                    path(fill-rule='evenodd', d='M4.5 11.5A.5.5 0 015 11h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 9h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm1.639-3.708l1.33.886 1.854-1.855a.25.25 0 01.289-.047l1.888.974V7.5a.5.5 0 01-.5.5H5a.5.5 0 01-.5-.5V7s1.54-1.274 1.639-1.208zM6.25 5a.75.75 0 100-1.5.75.75 0 000 1.5z', clip-rule='evenodd')           
+                                                        a.btn.btn-outline-secondary(href="/articles/"+my_article._id, role='button')
+                                                            svg.bi.bi-file-richtext(width='0.7em', height='0.7em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
+                                                                path(fill-rule='evenodd', d='M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z', clip-rule='evenodd')
+                                                                path(fill-rule='evenodd', d='M4.5 11.5A.5.5 0 015 11h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 9h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm1.639-3.708l1.33.886 1.854-1.855a.25.25 0 01.289-.047l1.888.974V7.5a.5.5 0 01-.5.5H5a.5.5 0 01-.5-.5V7s1.54-1.274 1.639-1.208zM6.25 5a.75.75 0 100-1.5.75.75 0 000 1.5z', clip-rule='evenodd')           
                                 else
                                     .col-md-12.col-12.float-right.padding_null
                                         h4  Erstelle deinen ersten Auftrag an deine Schüler*innen
-                                            a.btn.btn-success.text-white.button-margin(href='/articles/add_article_klasse') Ersten Auftrag erstellen
+                                            a.btn.btn-success.text-white.button-margin(href='/articles/add_article_klasse_broadcast') Ersten Auftrag erstellen

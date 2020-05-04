@@ -1,0 +1,66 @@
+extend ../layouts/layout
+
+
+
+block content
+    .container
+        .row.h-100.d-flex.justify-content-center
+            .col-12.col-sm-12.col-md-9.col-lg-9
+                .card.border
+                    .card-header
+                        ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
+                            li.nav-item
+                                a.nav-link.active(href='#description_x', role='tab', aria-controls='description_x', aria-selected='true') Auftrag an Klasse(n)
+                            li.nav-item
+                                a.nav-link(href='#history_x', role='tab', aria-controls='history_x', aria-selected='false') Auftrag an ausgewählte SchülerInnen
+                    .card-body
+                            .tab-content.mt-3
+                                #description_x.tab-pane.active(role='tabpanel')
+                                    p.card-text                        
+                                        form(method='POST', action='/articles/one')
+                                            #form-group
+                                                label Klasse(n)                                
+                                                select#validationServer01.form-control.custom-select.form-control(name='klasse_n', type=text,  required='', placeholder='Wähle eine Klasse')
+                                                    option(selected='') #{user.default_klasse}
+                                                    each all, i in alls
+                                                        option(value=all._id) #{all.name} | #{all.typo} 
+                                                br
+                                                br                                            
+                                                input.text-success.float-right(type='submit', value='weiter')                  
+                                #history_x.tab-pane(role='tabpanel', aria-labelledby='history_x-tab')
+                                    p.card-text
+                                        #form-group
+                                            a.text-success.float-right(href='/groups/add_group') Auftrag mit neuer Schülergruppe erteilen                 
+                                            br
+                                            br 
+                                            br
+                                        #form-group
+                                            if length !=0
+                                                | Schülergruppen
+                                                br 
+                                                br 
+                                                table#customerTable.table.row-border.hover.table-sm.no-border(cellspacing='0', width='100%')             
+                                                    tbody
+                                                        each group, i in groups
+                                                            tr
+                                                                td.align-middle
+                                                                    .box
+                                                                    | #{group.name} &nbsp;
+                                                                    if group.school
+                                                                        | (öffentlich)
+                                                                    else
+                                                                        | (privat)
+                                                                td.align-middle 
+                                                                    each schueler, i in group.schuelers
+                                                                        if i == 0
+                                                                            .box
+                                                                                a(href='/articles/schueler/' +schueler._id, role='button')  #{schueler.name}&nbsp;
+                                                                        else
+                                                                            .box
+                                                                                a(href='/articles/schueler/' +schueler._id, role='button') | #{schueler.name}&nbsp;
+                                                                td.align-middle 
+                                                                    a.text-success(href='/articles/add_with_group/'+ group._id) als Vorlage auswählen                 
+                                            else
+                                                h4.my-margin-right-boy Es sind noch keine Schülergruppen angelegt worden
+            script(src='/bower_components/bootstrap/dist/js/bootstrap.js')  
+            script(src='/js/log_reg.js')

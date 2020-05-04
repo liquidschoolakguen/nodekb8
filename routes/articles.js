@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-
 const fs = require('fs');
 
 
@@ -15,6 +14,11 @@ let Article = require('../models/article');
 let Hausarbeit = require('../models/hausarbeit');
 let Load = require('../models/load');
 let Stammverbund = require('../models/stammverbund');
+let School = require('../models/school');
+let Stamm = require('../models/stamm');
+let Group = require('../models/group');
+let Disziplin = require('../models/disziplin');
+
 
 const multer = require("multer");
 
@@ -42,8 +46,22 @@ router.get('/download/:id', function (req, res) {
 });
 
 const upload = multer({
-  dest: "../uploads"
-  // you might also want to set some limits: https://github.com/expressjs/multer#limits
+  dest: "../uploads",
+  limits: { fieldSize: 250 * 1024 * 1024 }
+});
+
+
+
+router.get('/jjj/:id', function (req, res) {
+
+
+
+  res.render('image_test', {
+    tar: req.params.id
+
+  })
+
+
 });
 
 
@@ -52,11 +70,7 @@ const upload = multer({
 
 
 
-
-
-
-
-
+//Koorigiert die Zeitverschiebung auf dem Server
 function getMyNow() {
   var yes = new Date();
 
@@ -222,15 +236,65 @@ router.get('/add_article_klasse', ensureAuthenticated, function (req, res) {
 
 router.get('/add_article_klasse_broadcast', ensureAuthenticated, function (req, res) {
 
+  User.
+    findOne({ _id: req.user._id }).
+    populate('school').
+    exec(function (err, user) {
+
+      if (!user) {
+        console.log('bennj o  is krank!')
+      } else {
+        School.
+          findOne({ _id: user.school._id }).
+          populate('stammverbunds').
+          populate('s_stamms').
+          exec(function (err, scho) {
+            if (!scho) {
+              console.log('bennj o  is krank!')
+            } else {
+
+              var jo = [];
+              scho.s_stamms.forEach(function (stamm) {
+                jo.push(stamm.name);
+              });
+              scho.stammverbunds.forEach(function (verbund) {
+                jo.push(verbund.name);
+              });
+              res.render('change/add_article_klasse_broadcast', {
+                alls: jo
+              })
+            }
+          });
+      }
+    });
+});
 
 
-   
+
+
+
+
+
+
+router.get('/n_auftrag', ensureAuthenticated, function (req, res) {
+
+
   User.
     findOne({ _id: req.user._id }).
     populate({
       path: 'school',
       populate: {
-        path: 'stammverbunds'
+        path: 'groups',
+        populate: {
+          path: 'schuelers',
+        }
+
+      }
+    }).
+    populate({
+      path: 'lehrers_groups',
+      populate: {
+        path: 'schuelers'
       }
     }).
     exec(function (err, user) {
@@ -238,38 +302,48 @@ router.get('/add_article_klasse_broadcast', ensureAuthenticated, function (req, 
       if (!user) {
         console.log('bennj o  is krank!')
       } else {
+        School.
+          findOne({ _id: user.school._id }).
+          populate('stammverbunds').
+          populate('s_stamms').
+          exec(function (err, scho) {
+            if (!scho) {
+              console.log('bennj o  is krank!')
+            } else {
 
-        var jo =[];
-        /* 
-              console.log('bennj:  '+user.school.name)
-              user.school.stamms.forEach(function (stamm) {
-                 console.log('stamm: ' + stamm);
+              var jo = [];
+              scho.s_stamms.forEach(function (stamm) {
+                var bingo = new Object();
+                bingo.name = stamm.name;
+                bingo._id = stamm._id;
+                bingo.typo = 'stamm'
+                jo.push(bingo);
               });
-        
-         */
+              scho.stammverbunds.forEach(function (verbund) {
+                var bingo = new Object();
+                bingo.name = verbund.name;
+                bingo._id = verbund._id;
+                bingo.typo = 'verbund'
+                jo.push(bingo);
+              });
+
+
+
+              var benno = user.school.groups;
+              benno.push(...user.lehrers_groups);
 
 
 
 
-        user.school.stamms.forEach(function (stamm) {
-
-          jo.push(stamm);
 
 
-        });
-        user.school.stammverbunds.forEach(function (verbund) {
+              res.render('change/n_auftrag', {
+                alls: jo,
+                groups: benno
 
-          jo.push(verbund.name);
-
-
-        });
-       
-
-
-        res.render('add_article_klasse_broadcast', {
-          alls: jo
-        })
-
+              })
+            }
+          });
       }
     });
 });
@@ -283,12 +357,7 @@ router.get('/add_article_klasse_broadcast', ensureAuthenticated, function (req, 
 
 
 
-
-
-
-
-
-
+/* 
 
 
 // Edit article form
@@ -394,6 +463,202 @@ router.get('/edit/:id', ensureAuthenticated, function (req, res) {
     });
 
 });
+
+
+
+
+ */
+
+
+
+
+/* 
+User.
+findOne({ _id: req.user._id }).
+populate({
+  path: 'school',
+  populate: {
+    path: 's_disziplins'
+  }
+}).
+exec(function (err, user) { */
+
+
+
+
+// Edit article form
+router.get('/edit/:id', ensureAuthenticated, function (req, res) {
+
+
+
+  User.
+    findOne({ _id: req.user._id }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 's_disziplins'
+      }
+    }).
+    exec(function (err, user) {
+
+
+
+
+      Article.
+        findOne({ _id: req.params.id }).
+        populate('schuelers').
+        populate('uploads').
+        populate('disziplin').
+        populate('stamm').
+        populate('stammverbund').
+        exec(function (err2, arti) {
+          if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+          if (arti.schuelers.length === 0) { // keine schuelers // "alt"
+
+
+            console.log('keine schüler');
+
+
+
+
+            School.
+              findOne({ _id: user.school._id }).
+              populate('stammverbunds').
+              populate('s_stamms').
+              exec(function (err, scho) {
+                if (!scho) {
+                  console.log('bennj o  is krank!')
+                } else {
+
+                  var jo = [];
+                  scho.s_stamms.forEach(function (stamm) {
+                    var bingo = new Object();
+                    bingo.name = stamm.name;
+                    bingo._id = stamm._id;
+                    bingo.typo = 'stamm'
+                    jo.push(bingo);
+                  });
+                  scho.stammverbunds.forEach(function (verbund) {
+                    var bingo = new Object();
+                    bingo.name = verbund.name;
+                    bingo._id = verbund._id;
+                    bingo.typo = 'verbund'
+                    jo.push(bingo);
+                  });
+
+
+
+
+
+                  //console.log('article.body: '+ arti.body);
+                  res.render('change/edit_article_complete', {
+                    user: user,
+                    article: arti,
+                    schuelers: [],
+                    stamms_and_verbunds: jo,
+                  });
+                }
+              });
+
+
+
+
+
+
+
+          } else {
+            console.log('.... schüler ' + arti.schuelers.length);
+
+
+            User.
+              findOne({ _id: req.user.id }).
+              populate({
+                path: 'school',
+                populate: {
+                  path: 's_stamms',
+                  populate: {
+                    path: 'schuelers',
+                  }
+                }
+              }).
+              exec(function (err2, userx) {
+                if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+
+
+
+
+                var all_stamms = userx.school.s_stamms;
+                var his = arti.schuelers;
+
+
+                all_stamms.forEach(function (stamm) {
+                  console.log(' ---all_stammr: ' + stamm.name);
+
+                  stamm.schuelers.forEach(function (user) {
+                    console.log(' -schueler: ' + user.name);
+
+                    his.forEach(function (his_user) {
+                      // console.log('ein all-schüler: ' + all_schueler.name + ' / ' + all_schueler._id);
+                      if (user._id.toString() === his_user._id.toString()) {
+                        //console.log('ein arti-schüler: ' + arti_schueler.name + ' / ' + arti_schueler._id);
+                        user.article_token = true
+                      }
+                    });
+
+                  });
+                });
+
+
+
+
+                res.render('change/edit_article_complete', {
+                  user: user,
+                  article: arti,
+                  s_stamms: all_stamms
+                });
+
+
+
+
+
+              })
+
+
+
+
+
+
+          }
+
+        });
+
+
+
+
+
+
+
+
+
+    });
+
+
+
+
+
+
+
+
+});
+
+
+
+
+
+
 
 
 
@@ -1608,63 +1873,110 @@ router.post('/add_bingo_broadcast', ensureAuthenticated, function (req, res) {
 
 // Bingo Article
 router.post('/add_bingo_klasse_broadcast', ensureAuthenticated, function (req, res) {
-
-
-
   User.findByIdAndUpdate(
     req.user._id,
     { default_klasse: req.body.klasse },
     function (err, result) {
       if (err) {
-
       } else {
-
       }
-    }
 
-
-
-
-
-  );
-
-
-
+    });
 
   var today = getMyNow();
   var tomorrow = getMyNow();
   tomorrow.setDate(today.getDate() + 3);
 
   var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + tomorrow.getFullYear()
+  User.
+    findOne({ _id: req.user._id }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 's_disziplins'
+      }
+    }).
+    exec(function (err, user) {
 
+      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+      console.log('i------------- ' + user.name);
+      console.log('i------------- ' + user.school.name);
 
-    User.
-      findOne({ _id: req.user.id }).
-      populate('school').
-      exec(function (err2, user) {
-        if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+      res.render('change/add_article_alt', {
+        user: user,
+        abgabe: nau,
+        klasse: req.body.klasse_n
+      })
 
-
-        console.log('i------------- ' + user.name);
-        console.log('i------------- ' + user.school.name);
-
-
-        res.render('add_article_alt', {
-          user: user,
-          abgabe: nau,
-          klasse: req.body.klasse
-        })
-
-      });
-
-
-
-
-
+    });
+});
 
 
 
-  
+
+
+
+
+
+router.get('/add_with_group/:id', ensureAuthenticated, function (req, res) {
+
+
+
+  var today = getMyNow();
+  var tomorrow = getMyNow();
+  tomorrow.setDate(today.getDate() + 3);
+  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + tomorrow.getFullYear()
+
+  User.
+    findOne({ _id: req.user._id }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 's_disziplins'
+      }
+    }).
+    exec(function (err, user) {
+
+      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+      //console.log('i------------- ' + user.name);
+      //console.log('i------------- ' + user.school.name);
+
+
+
+
+      Group.findOne({ _id: req.params.id }, function (err, gefunden_group) {
+        if (err) throw err;
+        if (gefunden_group) {
+
+          //console.log('gefunden_group: ' + gefunden_group.name);
+
+
+
+          var bingo = new Object();
+          bingo.name = gefunden_group.name;
+          bingo._id = gefunden_group._id;
+          bingo.typ = 'group';
+
+          res.render('change/add_article_alt', {
+            user: user,
+            abgabe: nau,
+            bingo: bingo
+          })
+
+
+
+
+        } else {
+
+          console.log('FEHLER RR: ');
+
+        }
+      })
+
+
+
+    });
+
 
 
 
@@ -1677,6 +1989,98 @@ router.post('/add_bingo_klasse_broadcast', ensureAuthenticated, function (req, r
 
 
 
+
+
+
+
+
+
+// Bingo Article
+router.post('/one', ensureAuthenticated, function (req, res) {
+  User.findByIdAndUpdate(
+    req.user._id,
+    { default_klasse: req.body.klasse },
+    function (err, result) {
+      if (err) {
+      } else {
+      }
+
+    });
+
+  var today = getMyNow();
+  var tomorrow = getMyNow();
+  tomorrow.setDate(today.getDate() + 3);
+  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + tomorrow.getFullYear()
+
+  User.
+    findOne({ _id: req.user._id }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 's_disziplins'
+      }
+    }).
+    exec(function (err, user) {
+
+      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+      console.log('i------------- ' + user.name);
+      console.log('i------------- ' + user.school.name);
+
+
+
+
+      Stamm.findOne({ _id: req.body.klasse_n }, function (err, gefunden_stamm) {
+        if (err) throw err;
+        if (gefunden_stamm) {
+
+          console.log('gefunden_stamm: ' + gefunden_stamm.name);
+
+
+
+          var bingo = new Object();
+          bingo.name = gefunden_stamm.name;
+          bingo._id = gefunden_stamm._id;
+          bingo.typ = 'stamm';
+
+          res.render('change/add_article_alt', {
+            user: user,
+            abgabe: nau,
+            bingo: bingo
+          })
+
+
+
+
+        } else {
+          Stammverbund.findOne({ _id: req.body.klasse_n }, function (err, gefunden_stammverbund) {
+
+            if (gefunden_stammverbund) {
+              console.log('gefunden_stammverbund: ' + gefunden_stammverbund.name);
+
+              var bingo = new Object();
+              bingo.name = gefunden_stammverbund.name;
+              bingo._id = gefunden_stammverbund._id;
+              bingo.typ = 'stammverbund';
+
+              res.render('change/add_article_alt', {
+                user: user,
+                abgabe: nau,
+                bingo: bingo
+              })
+
+
+
+            } else {
+              console.log('FEHLER RR: ');
+            }
+          })
+        }
+      })
+
+
+
+    });
+});
 
 
 
@@ -1989,20 +2393,10 @@ router.post("/add_neu", upload.array("files"),
 
 
 
-
-
-
-
           req.flash('success', 'Auftrag mit upload erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
           res.redirect('/');
 
           return
-
-
-
-
-
-
 
 
 
@@ -2028,91 +2422,51 @@ router.post("/add_neu", upload.array("files"),
 
 
 
-  /
-  router.post("/add_alt", upload.array("files" /* name attribute of <file> element in your form */),
-    (req, res) => {
-      if (!req.user) {  //wer nicht angemeldet ist, kann nicht speichern
-        req.flash('warning', 'Du bist nicht angemeldet');
-        res.redirect('login');
-        return
-      }
-      /*       if (!req.body.body || req.body.body.length <= 8) {  //Wenn der Azftrag zu kurz ist, kann man nicht speichern
-              req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Nochmal das Ganze.');
-              res.redirect('add_article_klasse');
-              return
-            } */
+
+
+/* 
 
 
 
 
+router.post("/add_alt", upload.array("files"), (req, res) => {
+  if (!req.user) {  //wer nicht angemeldet ist, kann nicht speichern
+    req.flash('warning', 'Du bist nicht angemeldet');
+    res.redirect('login');
+    return
+  }
 
 
+  let article = new Article();
 
 
-
-      let article = new Article();
-      article.title = req.body.title;
-      article.author = req.user._id;
-      article.klasse = req.body.klasse;
-      article.fach = req.body.fach;
-      article.termin = req.body.termin;
-      article.body = req.body.body;
-      article.lehrer = req.user._id;
-      article.ha_gelb = '0';
-      article.ha_gruen = '0'
-      article.created_as_date = getMyNow();
-
-      const start = getMyNow();
-      var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
-      var nau = start.getDate() + '.' + start.getMonth() + '. (' + start.getHours() + ':' + start.getMinutes() + ')'
-
-      article.created = nau;
-
-
-
-
-
-      var tag = req.body.termin.substring(0, 2)
-      var monat = req.body.termin.substring(3, 5)
-      var jahr = req.body.termin.substring(6, 10)
-
-      var d = new Date(jahr, monat - 1, tag, 16);
-      var jetzt = getMyNow();
-      var diffMs = (d - jetzt); // milliseconds between now & Christmas
-
-      if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
-        req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn');
-        res.redirect('add_article_klasse');
-        return;
+  if (req.body.bingo_typ === 'stamm') {
+    Stamm.findOne({ _id: req.body.bingo_id }, function (err, gefunden_stamm) {
+      if (err) throw err;
+      if (!gefunden_stamm) {
+        console.log('fehler: ');
       }
 
+      console.log('gefunden_stamm: '+gefunden_stamm.name);
+      article.stamm = gefunden_stamm;
 
+    })
+  } else if (req.body.bingo_typ === 'stammverbund') {
+    Stammverbund.findOne({ _id: req.body.bingo_id }, function (err, gefunden_stammverbund) {
+      if (err) throw err;
+      if (!gefunden_stammverbund) {
+        console.log('fehler: ');
+      }
 
+      console.log('gefunden_stammverbund: '+gefunden_stammverbund.name);
+      article.stammverbund = gefunden_stammverbund;
 
-
-      article.save(function (err, art) {
-
-        if (err) {
-          console.log(err);
-          return;
-        } else {
-
-
-
-
-
-          User.findByIdAndUpdate(req.user.id,
-            { $push: { lehrers_auftrags: art } },
-            { safe: true, upsert: true },
-            function (err, uptdatedSchueler) {
-              if (err) {
-                console.log(err);
-              } else {
-
-              }
-
-
-            });
+    })
+  } else {
+    console.log('FEHLER');
+    //fehler
+    return;
+  }
 
 
 
@@ -2121,220 +2475,663 @@ router.post("/add_neu", upload.array("files"),
 
 
 
-          if (req.files.length === 0) {
 
 
-            req.flash('success', 'Auftrag wurde erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
-            res.redirect('/');
 
-            return
+  
+  article.title = req.body.title;
+  article.author = req.user._id;
+  //article.klasse = req.body.klasse;
+  article.fach = req.body.fach;
+  article.termin = req.body.termin;
+  article.body = req.body.body;
+  article.lehrer = req.user._id;
+  article.ha_gelb = '0';
+  article.ha_gruen = '0'
+  article.created_as_date = getMyNow();
 
+  const start = getMyNow();
+  var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
+  var nau = start.getDate() + '.' + start.getMonth() + '. (' + start.getHours() + ':' + start.getMinutes() + ')'
+
+  article.created = nau;
+
+
+  var tag = req.body.termin.substring(0, 2)
+  var monat = req.body.termin.substring(3, 5)
+  var jahr = req.body.termin.substring(6, 10)
+
+  var d = new Date(jahr, monat - 1, tag, 16);
+  var jetzt = getMyNow();
+  var diffMs = (d - jetzt); // milliseconds between now & Christmas
+
+  if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
+    req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn');
+    res.redirect('add_article_klasse');
+    return;
+  }
+
+  //console.log('hier: ' + article.body);
+  article.save(function (err, art) {
+
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+
+      User.findByIdAndUpdate(req.user.id,
+        { $push: { lehrers_auftrags: art } },
+        { safe: true, upsert: true },
+        function (err, uptdatedSchueler) {
+          if (err) {
+            console.log(err);
           } else {
 
-
-
-
-
-
-            var ii = 0
-            req.files.forEach(function (file) {
-
-              console.log('______________________-' + ii);
-
-              ii++;
-
-
-
-
-
-
-
-              const tempPath = file.path;
-              const gigi = getMyNow().getTime() + "_" + file.originalname.toLowerCase();
-              const gigi_sauber = gigi.split(' ').join('-');
-              const targetPath = path.join(__dirname, "../uploads/" + gigi_sauber);
-              //const targetPath = path.join(__dirname, "../uploads/" + req.user._id + "_" +path.extname(file.originalname).toLowerCase());
-              console.log('bennoYYY ' + targetPath);
-
-              const pipi = path.extname(file.originalname).toLowerCase()
-              if (
-                pipi == ".doc" ||
-                pipi == ".docx" ||
-                pipi == ".odt" ||
-                pipi == ".pdf" ||
-                pipi == ".rtf" ||
-                pipi == ".tex" ||
-                pipi == ".txt" ||
-                pipi == ".wpd" ||
-                pipi == ".ai" ||
-                pipi == ".gif" ||
-                pipi == ".ico" ||
-                pipi == ".jpeg" ||
-                pipi == ".jpg" ||
-                pipi == ".png" ||
-                pipi == ".ps" ||
-                pipi == ".psd" ||
-                pipi == ".svg" ||
-                pipi == ".tif" ||
-                pipi == ".tiff" ||
-                pipi == ".ods" ||
-                pipi == ".xls" ||
-                pipi == ".xlsm" ||
-                pipi == ".xlsx" ||
-                pipi == ".key" ||
-                pipi == ".odp" ||
-                pipi == ".pps" ||
-                pipi == ".ppt" ||
-                pipi == ".pptx"
-              ) {
-
-
-
-                fs.rename(tempPath, targetPath, err => {
-                  if (err) return handleError(err, res);
-
-
-
-
-                  let load = new Load();
-                  load.body = gigi_sauber;
-                  load.extension = path.extname(gigi_sauber);
-                  load.name = file.originalname;
-
-
-                  if (
-                    pipi == ".doc" ||
-                    pipi == ".docx" ||
-                    pipi == ".odt" ||
-                    pipi == ".pdf" ||
-                    pipi == ".rtf" ||
-                    pipi == ".tex" ||
-                    pipi == ".txt" ||
-                    pipi == ".wpd"
-
-                  ) {
-                    load.type = '1'
-                  } else if (
-
-                    pipi == ".ai" ||
-                    pipi == ".gif" ||
-                    pipi == ".ico" ||
-                    pipi == ".jpeg" ||
-                    pipi == ".jpg" ||
-                    pipi == ".png" ||
-                    pipi == ".ps" ||
-                    pipi == ".psd" ||
-                    pipi == ".svg" ||
-                    pipi == ".tif" ||
-                    pipi == ".tiff"
-
-                  ) {
-
-                    load.type = '2'
-
-                  } else if (
-
-                    pipi == ".ods" ||
-                    pipi == ".xls" ||
-                    pipi == ".xlsm" ||
-                    pipi == ".xlsx"
-
-                  ) {
-
-                    load.type = '3'
-
-                  } else if (
-
-                    pipi == ".key" ||
-                    pipi == ".odp" ||
-                    pipi == ".pps" ||
-                    pipi == ".ppt" ||
-                    pipi == ".pptx"
-
-                  ) {
-
-                    load.type = '4'
-                  }
-
-
-
-                  load.save().then(function (loaded) {
-
-                    Article.findByIdAndUpdate(art._id,
-                      { $push: { uploads: loaded } },
-                      { safe: true, upsert: true },
-                      function (err, uptdatedArticle) {
-                        if (err) {
-                          console.log(err);
-                        } else {
-
-                        }
-                      });
-                  })
-
-
-
-
-                })
-
-              } else {
-                fs.unlink(tempPath, err => {
-                  if (err) return handleError(err, res);
-
-
-                  req.flash('danger', 'Ein Dateityp wird nicht unterstützt.');
-
-
-
-
-                });
-              }
-
-
-            })
-
-
-
-
-
-
-
-
-            req.flash('success', 'Auftrag mit upload erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
-            res.redirect('/');
-
-            return
-
-
+          
           }
 
 
+        });
+
+      if (req.files.length === 0) {
+        req.flash('success', 'Auftrag wurde erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
+        res.redirect('/');
+        return
+
+      } else {
+        var ii = 0
+        req.files.forEach(function (file) {
+          console.log('______________________-' + ii);
+
+          ii++;
+          const tempPath = file.path;
+          const gigi = getMyNow().getTime() + "_" + file.originalname.toLowerCase();
+          const gigi_sauber = gigi.split(' ').join('-');
+          const targetPath = path.join(__dirname, "../uploads/" + gigi_sauber);
+          //const targetPath = path.join(__dirname, "../uploads/" + req.user._id + "_" +path.extname(file.originalname).toLowerCase());
+          console.log('bennoYYY ' + targetPath);
+
+          const pipi = path.extname(file.originalname).toLowerCase()
+          if (
+            pipi == ".doc" || pipi == ".docx" || pipi == ".odt" || pipi == ".pdf" || pipi == ".rtf" || pipi == ".tex" ||
+            pipi == ".txt" || pipi == ".wpd" || pipi == ".ai" || pipi == ".gif" || pipi == ".ico" || pipi == ".jpeg" ||
+            pipi == ".jpg" || pipi == ".png" || pipi == ".ps" || pipi == ".psd" || pipi == ".svg" || pipi == ".tif" ||
+            pipi == ".tiff" || pipi == ".ods" || pipi == ".xls" || pipi == ".xlsm" || pipi == ".xlsx" || pipi == ".key" ||
+            pipi == ".odp" || pipi == ".pps" || pipi == ".ppt" || pipi == ".pptx"
+          ) {
+            fs.rename(tempPath, targetPath, err => {
+              if (err) return handleError(err, res);
+
+              let load = new Load();
+              load.body = gigi_sauber;
+              load.extension = path.extname(gigi_sauber);
+              load.name = file.originalname;
+              if (
+                pipi == ".doc" || pipi == ".docx" || pipi == ".odt" || pipi == ".pdf" || pipi == ".rtf" ||
+                pipi == ".tex" || pipi == ".txt" || pipi == ".wpd"
+              ) {
+                load.type = '1'
+              } else if (
+                pipi == ".ai" || pipi == ".gif" || pipi == ".ico" || pipi == ".jpeg" || pipi == ".jpg" ||
+                pipi == ".png" || pipi == ".ps" || pipi == ".psd" || pipi == ".svg" || pipi == ".tif" || pipi == ".tiff"
+              ) {
+                load.type = '2'
+              } else if (
+                pipi == ".ods" || pipi == ".xls" || pipi == ".xlsm" || pipi == ".xlsx"
+              ) {
+                load.type = '3'
+              } else if (
+                pipi == ".key" || pipi == ".odp" || pipi == ".pps" || pipi == ".ppt" || pipi == ".pptx"
+              ) {
+
+                load.type = '4'
+              }
+
+              load.save().then(function (loaded) {
+
+                Article.findByIdAndUpdate(art._id,
+                  { $push: { uploads: loaded } },
+                  { safe: true, upsert: true },
+                  function (err, uptdatedArticle) {
+                    if (err) {
+                      console.log(err);
+                    } else {
+
+                    }
+                  });
+              })
+            })
+          } else {
+            fs.unlink(tempPath, err => {
+              if (err) return handleError(err, res);
+              req.flash('danger', 'Ein Dateityp wird nicht unterstützt.');
+            });
+          }
+        })
+        req.flash('success', 'Auftrag mit upload erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
+        res.redirect('/');
+        return
+      }
+    }
+  })
+}
+)
+
+
+ */
+
+
+
+
+
+function byteCount(s) {
+  return encodeURI(s).split(/%..|./).length - 1;
+}
 
 
 
 
 
 
+router.post("/add_alt", upload.array("files"), (req, res) => {
+  if (!req.user) {  //wer nicht angemeldet ist, kann nicht speichern
+    req.flash('warning', 'Du bist nicht angemeldet');
+    res.redirect('/');
+    return
+  }
 
+  //console.log(' req.body.body.length '+req.body.body.length)
+  // console.log(' in Byte '+byteCount(req.body.body.length))
+
+  //console.log(' req.body.body: '+req.body.body)
+  if (req.body.body.length>15700000) {  //wer nicht angemeldet ist, kann nicht speichern
+    req.flash('warning', 'Der Auftrag hat einen zu großen Speicherbedarf. Binde weniger Bilder ein.');
+    res.redirect('/');
+    return
+  }
+
+  let article = new Article();
+
+  if (req.body.bingo_typ === 'stamm') {
+    Stamm.findOne({ _id: req.body.bingo_id }, function (err, gefunden_stamm) {
+      if (err) throw err;
+      if (!gefunden_stamm) {
+        console.log('fehler: ');
+      }
+
+      console.log('gefunden_stamm: ' + gefunden_stamm.name);
+      article.stamm = gefunden_stamm;
+
+      handleSave(article, req, res);
+
+    })
+  } else if (req.body.bingo_typ === 'stammverbund') {
+    Stammverbund.findOne({ _id: req.body.bingo_id }, function (err, gefunden_stammverbund) {
+      if (err) throw err;
+      if (!gefunden_stammverbund) {
+        console.log('fehler: ');
+      }
+
+      console.log('gefunden_stammverbund: ' + gefunden_stammverbund.name);
+      article.stammverbund = gefunden_stammverbund;
+
+      handleSave(article, req, res);
+
+
+    })
+  } else if (req.body.bingo_typ === 'group') {
+    Group.
+      findOne({ _id: req.body.bingo_id }).
+      populate('schuelers').
+      exec(function (err, gefunden_group) {
+        if (err) throw err;
+        if (!gefunden_group) {
+          console.log('fehler: ');
         }
 
+        //console.log('gefunden_group: ' + gefunden_group.name);
+        // article.group = gefunden_group;
 
+
+        handleSaveWithGroup(article, gefunden_group, req, res);
 
 
 
 
 
       })
+  } else {
+    console.log('FEHLER');
+    //fehler
+    return;
+  }
 
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function handleSave(article, req, res) {
+
+
+
+  Disziplin.findOne({ _id: req.body.disziplin }, function (err, gefunden_disziplin) {
+    if (err) throw err;
+    if (!gefunden_disziplin) {
+      console.log('fehler: ');
     }
 
-  )
+    console.log('gefunden_disziplin: ' + gefunden_disziplin.name);
+    article.disziplin = gefunden_disziplin;
+
+
+
+
+
+    article.title = req.body.title;
+    article.author = req.user._id;
+    //article.klasse = req.body.klasse;
+    article.fach = req.body.fach;
+    article.termin = req.body.termin;
+    article.body = req.body.body;
+    article.lehrer = req.user._id;
+    article.ha_gelb = '0';
+    article.ha_gruen = '0'
+    article.created_as_date = getMyNow();
+
+    const start = getMyNow();
+    var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
+    var nau = start.getDate() + '.' + start.getMonth() + '. (' + start.getHours() + ':' + start.getMinutes() + ')'
+
+    article.created = nau;
+
+
+    var tag = req.body.termin.substring(0, 2)
+    var monat = req.body.termin.substring(3, 5)
+    var jahr = req.body.termin.substring(6, 10)
+
+    var d = new Date(jahr, monat - 1, tag, 16);
+    var jetzt = getMyNow();
+    var diffMs = (d - jetzt); // milliseconds between now & Christmas
+
+    if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
+      req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn');
+      res.redirect('add_article_klasse');
+      return;
+    }
+
+    //console.log('hier: ' + article.body);
+    article.save(function (err, art) {
+
+      if (err) {
+        console.log(err);
+        return;
+      } else {
+
+        User.findByIdAndUpdate(req.user.id,
+          { $push: { lehrers_auftrags: art } },
+          { safe: true, upsert: true },
+          function (err, uptdatedSchueler) {
+            if (err) throw err;
+
+            Disziplin.findByIdAndUpdate(art.disziplin._id,
+              { $push: { articles: art } },
+              { safe: true, upsert: true },
+              function (err, uptdatedStamm) {
+                if (err) throw err;
+
+
+
+                if (art.stamm) {
+                  console.log('bereit stamm');
+                  Stamm.findByIdAndUpdate(art.stamm._id,
+                    { $push: { articles: art } },
+                    { safe: true, upsert: true },
+                    function (err, uptdatedStamm) {
+                      if (err) throw err;
+
+                    })
+
+
+
+                } else if (art.stammverbund) {
+                  console.log('bereit stammverbund');
+                  Stammverbund.findByIdAndUpdate(art.stammverbund._id,
+                    { $push: { articles: art } },
+                    { safe: true, upsert: true },
+                    function (err, uptdatedStammverbund) {
+                      if (err) throw err;
+
+                    })
+
+
+                } else if (art.group) {
+                  console.log('bereit group');
+                  Group.findByIdAndUpdate(art.group._id,
+                    { $push: { articles: art } },
+                    { safe: true, upsert: true },
+                    function (err, uptdatedGroup) {
+                      if (err) throw err;
+
+                    })
+
+
+                } else {
+                  console.log('fefe  fehler');
+
+
+                }
+
+
+
+              })
+
+          });
+
+
+
+        handleUpload(art, req, res)
+
+
+      }
+    })
+  })
+
+
+}
 
 
 
 
 
 
+
+
+
+function handleSaveWithGroup(article, group, req, res) {
+
+
+  Disziplin.findOne({ _id: req.body.disziplin }, function (err, gefunden_disziplin) {
+    if (err) throw err;
+    if (!gefunden_disziplin) {
+      console.log('fehler: ');
+    }
+
+    console.log('gefunden_disziplin: ' + gefunden_disziplin.name);
+    article.disziplin = gefunden_disziplin;
+
+
+
+
+
+    article.title = req.body.title;
+    article.author = req.user._id;
+    //article.klasse = req.body.klasse;
+    article.fach = req.body.fach;
+    article.termin = req.body.termin;
+    article.body = req.body.body;
+    article.lehrer = req.user._id;
+    article.ha_gelb = '0';
+    article.ha_gruen = '0'
+    article.created_as_date = getMyNow();
+
+    const start = getMyNow();
+    var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
+    var nau = start.getDate() + '.' + start.getMonth() + '. (' + start.getHours() + ':' + start.getMinutes() + ')'
+
+    article.created = nau;
+
+
+    var tag = req.body.termin.substring(0, 2)
+    var monat = req.body.termin.substring(3, 5)
+    var jahr = req.body.termin.substring(6, 10)
+
+    var d = new Date(jahr, monat - 1, tag, 16);
+    var jetzt = getMyNow();
+    var diffMs = (d - jetzt); // milliseconds between now & Christmas
+
+    if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
+      req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn');
+      res.redirect('add_article_klasse');
+      return;
+    }
+
+    //console.log('hier: ' + article.body);
+    article.save(function (err, art) {
+
+      if (err) {
+        console.log(err);
+        return;
+      } else {
+
+        User.findByIdAndUpdate(req.user.id,
+          { $push: { lehrers_auftrags: art } },
+          { safe: true, upsert: true },
+          function (err, uptdatedSchueler) {
+            if (err) throw err;
+
+            Disziplin.findByIdAndUpdate(art.disziplin._id,
+              { $push: { articles: art } },
+              { safe: true, upsert: true },
+              function (err, uptdatedStamm) {
+                if (err) throw err;
+
+
+
+
+                console.log('bereit group');
+                Group.findByIdAndUpdate(group._id,
+                  { $push: { articles: art } },
+                  { safe: true, upsert: true },
+                  function (err, uptdatedGroup) {
+                    if (err) throw err;
+
+
+
+
+                    Group.
+                      findOne({ _id: uptdatedGroup._id }).
+                      populate('schuelers').
+                      exec(function (err, gefunden_group) {
+
+                        gefunden_group.schuelers.forEach(function (schueler) {
+                          console.log('record :   ' + schueler.name);
+
+
+                          Article.findByIdAndUpdate(art._id,
+                            { $push: { schuelers: schueler } },
+                            { safe: true, upsert: true },
+                            function (err, uptdatedArticle) {
+                              if (err) {
+                                console.log(err);
+                              } else {
+                                User.findByIdAndUpdate(schueler._id,
+                                  { $push: { auftrags: uptdatedArticle } },
+                                  { safe: true, upsert: true },
+                                  function (err, uptdatedSchueler) {
+                                    if (err) {
+                                      console.log(err);
+                                    } else {
+
+
+
+                                    }
+                                  })
+                              }
+                            }
+                          )
+                        })
+                      })
+
+
+
+                    if (group.school) {
+                      console.log('öffentliche Group');
+
+                    } else if (group.lehrer) {
+
+                      console.log('private Group');
+                    } else {
+
+                      console.log('junk Group');
+
+                      Group.remove({ _id: group._id }, function (err) {
+                        if (err) {
+                          console.log(err);
+                        }
+
+
+                      });
+
+
+
+
+
+
+
+
+
+                    }
+
+
+
+
+                  })
+              })
+          });
+
+
+        setTimeout(function () {// das hier verzögert die Weiterleitung auf index, da vorher die $push Verknüpfung der schuelers Zeit zu brauchen scheint
+          console.log('hhhaaalllooo')
+          handleUpload(art, req, res)
+        }, 300);
+
+
+      }
+    })
+  })
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function handleUpload(art, req, res) {
+
+
+  if (req.files.length === 0) {
+    req.flash('success', 'Auftrag wurde erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
+    res.redirect('/');
+
+
+  } else {
+    var ii = 0
+    req.files.forEach(function (file) {
+      console.log('______________________-' + ii);
+
+      ii++;
+      const tempPath = file.path;
+      const gigi = getMyNow().getTime() + "_" + file.originalname.toLowerCase();
+      const gigi_sauber = gigi.split(' ').join('-');
+      const targetPath = path.join(__dirname, "../uploads/" + gigi_sauber);
+      //const targetPath = path.join(__dirname, "../uploads/" + req.user._id + "_" +path.extname(file.originalname).toLowerCase());
+      console.log('bennoYYY ' + targetPath);
+
+      const pipi = path.extname(file.originalname).toLowerCase()
+      if (
+        pipi == ".doc" || pipi == ".docx" || pipi == ".odt" || pipi == ".pdf" || pipi == ".rtf" || pipi == ".tex" ||
+        pipi == ".txt" || pipi == ".wpd" || pipi == ".ai" || pipi == ".gif" || pipi == ".ico" || pipi == ".jpeg" ||
+        pipi == ".jpg" || pipi == ".png" || pipi == ".ps" || pipi == ".psd" || pipi == ".svg" || pipi == ".tif" ||
+        pipi == ".tiff" || pipi == ".ods" || pipi == ".xls" || pipi == ".xlsm" || pipi == ".xlsx" || pipi == ".key" ||
+        pipi == ".odp" || pipi == ".pps" || pipi == ".ppt" || pipi == ".pptx"
+      ) {
+        fs.rename(tempPath, targetPath, err => {
+          if (err) return handleError(err, res);
+
+          let load = new Load();
+          load.body = gigi_sauber;
+          load.extension = path.extname(gigi_sauber);
+          load.name = file.originalname;
+          if (
+            pipi == ".doc" || pipi == ".docx" || pipi == ".odt" || pipi == ".pdf" || pipi == ".rtf" ||
+            pipi == ".tex" || pipi == ".txt" || pipi == ".wpd"
+          ) {
+            load.type = '1'
+          } else if (
+            pipi == ".ai" || pipi == ".gif" || pipi == ".ico" || pipi == ".jpeg" || pipi == ".jpg" ||
+            pipi == ".png" || pipi == ".ps" || pipi == ".psd" || pipi == ".svg" || pipi == ".tif" || pipi == ".tiff"
+          ) {
+            load.type = '2'
+          } else if (
+            pipi == ".ods" || pipi == ".xls" || pipi == ".xlsm" || pipi == ".xlsx"
+          ) {
+            load.type = '3'
+          } else if (
+            pipi == ".key" || pipi == ".odp" || pipi == ".pps" || pipi == ".ppt" || pipi == ".pptx"
+          ) {
+
+            load.type = '4'
+          }
+
+          load.save().then(function (loaded) {
+
+            Article.findByIdAndUpdate(art._id,
+              { $push: { uploads: loaded } },
+              { safe: true, upsert: true },
+              function (err, uptdatedArticle) {
+                if (err) {
+                  console.log(err);
+                } else {
+
+                }
+              });
+          })
+        })
+      } else {
+        fs.unlink(tempPath, err => {
+          if (err) return handleError(err, res);
+          req.flash('danger', 'Ein Dateityp wird nicht unterstützt.');
+        });
+      }
+    })
+    req.flash('success', 'Auftrag mit upload erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
+
+    res.redirect('/');
+
+
+    return
+  }
+
+
+
+}
 
 
 
@@ -4550,6 +5347,45 @@ router.delete('/:id', function (req, res) {
       } else {
 
 
+
+
+        if (article.stamm) {
+
+          console.log('hat nen stamm');
+
+
+          Stamm.findByIdAndUpdate(article.stamm._id,
+            { $pull: { articles: article._id } },
+            { save: true, upsert: true },
+            function (err, uptdatedStamm) {
+              if (err) { console.log(err); }
+            });
+
+
+
+
+        } else if (article.stammverbund) {
+
+          console.log('hat nen stammverbund');
+
+          Stammverbund.findByIdAndUpdate(article.stammverbund._id,
+            { $pull: { articles: article._id } },
+            { save: true, upsert: true },
+            function (err, uptdatedStammverbund) {
+              if (err) { console.log(err); }
+            });
+
+
+        } else {
+          console.log('da stimmt was nicht');
+
+        }
+
+
+
+
+
+
         article.uploads.forEach(function (load) {
           const targetPath = path.join(__dirname, "../uploads/" + load.body);
 
@@ -4573,7 +5409,7 @@ router.delete('/:id', function (req, res) {
 
             hausarbeits.forEach(function (hausarbeit) {
 
-              Hausarbeit.remove({ _id: hausarbeit._id }, function (err) {
+              Hausarbeit.deleteOne({ _id: hausarbeit._id }, function (err) {
                 if (err) {
                   console.log(err);
                 }
@@ -4588,7 +5424,7 @@ router.delete('/:id', function (req, res) {
 
         let query = { _id: req.params.id }
 
-        Article.remove(query, function (err) {
+        Article.deleteOne(query, function (err) {
           if (err) {
             console.log(err);
           }
@@ -4647,15 +5483,15 @@ router.get('/:id', function (req, res) {
       if (article) {
         //console.log('The author is %s', article);
 
-        var x = article.body.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+        var x = article.body
         //console.log('x nnnnn ' + article.lehrer.name);
 
 
 
 
 
-
-        res.render('article', {
+        //console.log('x  ' + article.body);
+        res.render('change/article', {
           article: article,
           x: x
         });

@@ -1,0 +1,28 @@
+extend ../layouts/layout
+
+
+
+block content
+    form#reused_form.montform(method='POST', action='/groups/edit/' + group._id)
+        .card
+            .card-header.bg-success.text-white
+                | Schülergruppe ändern
+            .card-body
+                #form-transition-group.my-margin-top
+                    .form-group.col-md-12
+                        br
+                        input#validationServer01.form-control(type='text', placeholder='Name der Schülergruppe', value= group.name, required='' name='name')
+                    each stamm, i in s_stamms
+                        .form-group.col-md-12
+                            h4 #{stamm.name}
+                            .container-fluid(style='margin-left:10px; border:none !important;')
+                                .row.justify-content-start
+                                    each schueler, i in stamm.schuelers
+                                        .col-2(style='margin-bottom:0px; border:none !important;')
+                                            input#defaultCheck1.form-check-input(type='checkbox', value= schueler._id, checked=schueler.article_token,  name='schuelers[]')
+                                            input.form-control.invisible(type='text',  name='id['+i+']', value= schueler.id)
+                                            label.form-check-label(for='defaultCheck1')
+                                            | #{schueler.name}
+                        hr 
+                        br
+                input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Schülergruppe veröffentlichen')

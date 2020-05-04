@@ -1,4 +1,4 @@
-extends ../layout_empty
+extends ../layouts/layout_empty
 
 block content
     .container
@@ -21,8 +21,8 @@ block content
                             label  Wähle deine Klasse                                  
                             select#validationServer01.form-control(name='klasse', type=text,  required='', placeholder='Wähle eine Klasse')
                                 option(selected='')
-                                each stamm, i in school.stamms
-                                  option #{stamm}
+                                each stamm, i in school.s_stamms
+                                  option(value=stamm._id) #{stamm.name}
                             br                            
                         #form-group  
                             input#validationServer01.form-control(type=text, name='password', required='', placeholder='Passwort')

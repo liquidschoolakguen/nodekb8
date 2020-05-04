@@ -1,0 +1,33 @@
+extends ../layout_empty
+
+block content
+    .container
+      .row.h-100.d-flex.justify-content-center
+        .col-12.col-sm-8.col-md-6.col-lg-4
+          .card.border
+            .card-body
+              br 
+              h4.card-title Hier kannst du dich als DummySchüler*in registrieren
+              br 
+              .tab-content.mt-3
+                #history.tab-pane.active(role='tabpanel')
+                  p.card-text
+                    form(method='POST', action='/users/register_schueler_dummy')
+                        #form-group  
+                            input#validationServer01.form-control(name='username', type=text, required='', placeholder='Dein Vorname')
+                            br
+                        #form-group  
+                            label  Wähle deine Klasse                                  
+                            select#validationServer01.form-control(name='klasse', type=text,  required='', placeholder='Wähle eine Klasse')
+                                option(selected='')
+                                option 8x
+                                option 8y
+                                option 8z
+                            br                            
+                        #form-group  
+                            input#validationServer01.form-control(type=text, name='password', required='', placeholder='Passwort')
+                            br
+                        #form-group  
+                            input#validationServer01.form-control(type=text, name='password2', required='', placeholder='Passwort wiederholen')                             
+                        br
+                        input.btn.btn-primary.bg-primary.text-white.float-right(type='submit', value='Registrieren als Schüler*in')

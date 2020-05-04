@@ -16,10 +16,39 @@ let stammSchema = mongoose.Schema({
 
 
 
-
+    verbund_token: {
+        type: String,
+        required: false
+    },
 
 
     
+
+
+
+    articles: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Article',
+            required: false
+        }
+    ],
+
+
+
+    //die SchülerInnen, die sich in dieser Klasse angemeldet haben
+    schuelers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: false
+        }
+    ],
+
+
+
+
+
 
 
 //für image

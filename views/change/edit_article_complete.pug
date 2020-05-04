@@ -1,0 +1,149 @@
+extends ../layouts/layout
+
+block content
+    link(href='https://cdn.quilljs.com/1.3.6/quill.snow.css', rel='stylesheet')
+    form#reused_form.montform(method='POST',  action='/articles/edit_complete/' + article._id , enctype='multipart/form-data' )
+        .card.border.border-success
+            .card-header.bg-success.text-white
+                | Auftrag für #{article.klasse} ändern
+            .card-body
+                #form-transition-group.my-margin-top
+                        .form-row
+                            .form-group.col-md-12
+                                input#validationServer01.form-control(type='text', placeholder='Titel der Hausarbeit',  required='',  name='title', value=article.title)
+                                .valid-feedback
+                        .form-row.my-margin-top 
+                            .form-group.col-md-4 
+                                if article.schuelers.length === 0
+                                    label Klasse/n                                 
+                                    select#validationServer01.form-control.custom-select.form-control(name='disziplin', type=text,  required='', placeholder='Wähle eine Schulfach')
+                                        if article.stamm
+                                            option(selected='', value=article.stamm._id) #{article.stamm.name}
+                                        else
+                                            option(selected='', value=article.stammverbund._id) #{article.stammverbund.name}
+                                        each suv, i in stamms_and_verbunds
+                                            option(value=suv._id) #{suv.name}     
+                                else 
+                                    label Schülergruppe 
+                                    br 
+                                    button.btn.btn-outline-success(type='button', data-toggle='modal', data-target='#exampleModalCenter' style='width: 100%') Adressaten ändern
+                                    #exampleModalCenter.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true')
+                                        .modal-dialog.modal-dialog-centered(role='document')
+                                            .modal-content
+                                                .modal-header
+                                                    h5#exampleModalLongTitle.modal-title Schülergruppe ändern
+                                                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                        span(aria-hidden='true') &times;
+                                                .modal-body
+                                                    each stamm, i in s_stamms
+                                                        .form-group.col-md-12
+                                                            h4 #{stamm.name}
+                                                            .container-fluid(style='margin-left:10px; border:none !important;')
+                                                                .row.justify-content-start
+                                                                    each schueler, i in stamm.schuelers
+                                                                        .col-2(style='margin-bottom:0px; border:none !important;')
+                                                                            input#defaultCheck1.form-check-input(type='checkbox', value= schueler._id, checked=schueler.article_token,  name='schuelers[]')
+                                                                            input.form-control.invisible(type='text',  name='id['+i+']', value= schueler.id)
+                                                                            label.form-check-label(for='defaultCheck1')
+                                                                            | #{schueler.name}
+                                                .modal-footer
+                                                    button.btn.btn-secondary(type='button', data-dismiss='modal') ok
+                            .form-group.col-md-4 
+                                label Unterrichtsfach                                 
+                                select#validationServer01.form-control.custom-select.form-control(name='disziplin', type=text,  required='', placeholder='Wähle eine Schulfach')
+                                    option(selected='', value=article.disziplin._id) #{article.disziplin.name}
+                                    each disziplin, i in user.school.s_disziplins
+                                        option(value=disziplin._id) #{disziplin.name}                                                       
+                            .form-group.col-md-4 
+                                label Abgabetermin
+                                input#datepicker.form-control(type=text, name='termin', value=article.termin,  readonly='readonly', style='background:white;', required='')
+                        #editor_update
+                        .form-row
+                            textarea#dada.invisible(name='body', type=text)                             
+                        .form-row.my-margin-top
+                            .form-group.col-md-8 
+                                input#inputGroupFile02.custom-file-input(type='file' name='files', multiple='')
+                                label.custom-file-label(for='inputGroupFile02') Neue Dateien hochladen         
+                            .form-group.col-md-4 
+                                .col-12(style='margin-left:10px;')
+                                    input.form-check-input(type='checkbox', value='ok',  name='delete')
+                                    | vorherige Dateien löschen?             
+                        input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Ok')
+            script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+            script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+            script(src='https://cdn.quilljs.com/1.3.6/quill.js')
+            script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+            script(src='/js/edit_article.js')  
+            link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
+            script(src='https://code.jquery.com/jquery-1.12.4.js')
+            script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js') 
+            script.
+                $( function() {
+                $( "#datepicker" ).datepicker({
+                prevText: '&#x3c;zurück', prevStatus: '',
+                prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+                nextText: 'Vor&#x3e;', nextStatus: '',
+                nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+                currentText: 'heute', currentStatus: '',
+                todayText: 'heute', todayStatus: '',
+                clearText: '-', clearStatus: '',
+                closeText: 'schließen', closeStatus: '',
+                monthNames: ['Januar','Februar','März','April','Mai','Juni',
+                'Juli','August','September','Oktober','November','Dezember'],
+                monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+                'Jul','Aug','Sep','Okt','Nov','Dez'],
+                dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+                dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                showMonthAfterYear: false,
+                buttonImage: 'media/img/calendar.png',
+                buttonImageOnly: true,
+                dateFormat:'dd.mm.yy' + ' 16 Uhr'
+                }
+                );
+                });
+            script.
+                var toolbarOptions = [
+                    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                    ['blockquote', 'code-block'],
+                    [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+                    [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+                    [{ 'direction': 'rtl' }],                         // text direction
+                    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+                    [{ 'font': [] }],
+                    [{ 'align': [] }],
+                    ['clean'],
+                    ['image']                                        // remove formatting button
+                ];
+                var quill_update = new Quill('#editor_update', {
+                    modules: {
+                        toolbar: toolbarOptions
+                    },
+                    theme: 'snow'
+                });
+                $('#geht_ab').click(function () {
+                    var delta = quill_update.getContents();
+                    console.log(JSON.stringify(delta));
+                    $("#dada").val(JSON.stringify(delta));
+                    return true
+                });
+                //{"ops":[{"insert":"ttt\n"}]}
+                var jeks = "#{article.body}"
+                jeks = jeks.replace(/\\n/g, "\\n")  
+                .replace(/\\'/g, "\\'")
+                .replace(/\\"/g, '\\"')
+                .replace(/\\&/g, "\\&")
+                .replace(/\\r/g, "\\r")
+                .replace(/\\t/g, "\\t")
+                .replace(/\\b/g, "\\b")
+                .replace(/\\f/g, "\\f")
+                .replace(/&quot;/g, '\"');
+                jeks = jeks.replace(/[\u0009-\u0010]+/g,"\\n"); 
+                //console.log(jeks);
+                var geparst = JSON.parse(jeks)
+                //console.log(geparst);
+                quill_update.setContents(geparst);

@@ -1,0 +1,37 @@
+extends ../layouts/layout
+
+block content
+    form#reused_form.montform(method='POST', action='/groups/add_group')
+        .card
+            .card-header.bg-success.text-white
+                | Neue Schülergruppe erstellen 
+            .card-body
+                #form-transition-group.my-margin-top
+                    each stamm, i in user.school.s_stamms
+                        .form-group.col-md-12
+                            h4 #{stamm.name}
+                            .container-fluid(style='margin-left:10px; border:none !important;')
+                                .row.justify-content-start
+                                    each schueler, i in stamm.schuelers
+                                        .col-2(style='margin-bottom:0px; border:none !important;')
+                                            input#defaultCheck1.form-check-input(type='checkbox', value= schueler._id,  name='schuelers[]')
+                                            input.form-control.invisible(type='text',  name='id[]', value= schueler._id)
+                                            label.form-check-label(for='defaultCheck1')
+                                            | #{schueler.name}
+                        hr 
+                        br                     
+                    .col-12
+                        .form-check
+                            input#exampleRadios1.form-check-input(type='radio', name='for_all', value='1')
+                            label.form-check-label(for='exampleRadios1')
+                                | als öffentliche Vorlage speichern
+                        .form-check
+                            input#exampleRadios2.form-check-input(type='radio', name='for_all', value='2')
+                            label.form-check-label(for='exampleRadios2')
+                                | als private Vorlage speichern
+                        .form-check.disabled
+                            input#exampleRadios3.form-check-input(type='radio', name='for_all', value='0', checked='')
+                            label.form-check-label(for='exampleRadios3')
+                                | nicht speichern         
+                input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='weiter')
+                  

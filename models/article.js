@@ -12,14 +12,47 @@ let articleSchema = mongoose.Schema({
         type: String,
         required: true
     },
+
+
+
+
+    //veraltet
     klasse: {
         type: String,
         required: false
     },
+
+
+
+    stamm: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Stamm'
+    },
+
+    stammverbund: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Stammverbund'
+    },
+
+    group: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Group'
+    },
+ 
+
+
+
+    //veraltet
     fach: {
         type: String,
-        required: true
+        required: false
     },
+
+    disziplin: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Disziplin'
+    },
+
+
+
+
+
     termin: {
         type: String,
         required: true
@@ -77,14 +110,17 @@ let articleSchema = mongoose.Schema({
     },
 
 
-
-
     ha_grau: {
         type: String,
         required: false
 
 
     },
+
+
+
+
+
 
 
     schuelers: [{
@@ -105,7 +141,7 @@ let articleSchema = mongoose.Schema({
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Load',
-          
+
 
         }
 
@@ -118,7 +154,8 @@ let articleSchema = mongoose.Schema({
 });
 
 
-
+articleSchema.set('autoIndex', false);
+articleSchema.index({ created_as_date: -1 }); 
 
 
 let Article = module.exports = mongoose.model('Article', articleSchema);

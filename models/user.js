@@ -34,6 +34,8 @@ const UserSchema = mongoose.Schema({
     },
 
 
+
+    //veraltet
     klasse: {
         type: String,
         required: false
@@ -54,6 +56,10 @@ const UserSchema = mongoose.Schema({
         required: false
     },
 
+
+    schueler_stamm: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Stamm'
+    },
 
 
 
@@ -130,11 +136,22 @@ const UserSchema = mongoose.Schema({
     },
 
 
-
+    //ich weiß nicht mehr wofür diese Verknüpfung gut ist. Vielleicht private, also lehrerbezogene Verbunds. Ergibt aber keinen Sinn
     stammverbunds: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Stammverbund'
     }],
+
+
+
+
+
+    lehrers_groups: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Group",
+        required: false
+    }],
+
 
 
 

@@ -1,0 +1,141 @@
+doctype html
+html
+    head
+        title liquidschool
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js')
+        script(src='https://code.jquery.com/jquery-1.12.4.js')
+        script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+        script(src='/scripts/jquery.validate.min.js')
+        link(rel='stylesheet' href='/css/style.css') 
+        link(rel='stylesheet', href='https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css')
+        link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+        link(rel='stylesheet', href='https://code.getmdl.io/1.3.0/material.indigo-pink.min.css')
+        script(defer='', src='https://code.getmdl.io/1.3.0/material.min.js')           
+    body
+        nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+            .navbar-collapse.collapse.w-100.order-1.order-md-0.dual-collapse2
+                ul.navbar-nav.mr-auto
+                    if user
+                        if user.type == 'lehrer' 
+                            li.nav-item.active
+                                .box
+                                    .led-green-main
+                                .box.active   
+                                    a.nav-link(href='/') #{user.name}s Aufträge 
+                            li.nav-item.dropdown
+                                a#navbardrop1.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
+                                    | Überblick
+                                .dropdown-menu
+                                    a.dropdown-item(href='/index_all') Alle Aufträge
+                                    a.dropdown-item(href='/users/all_schueler') Alle SuS 
+                                    a.dropdown-item(href='/groups/all_groups_l') Alle Schülergruppen 
+                            li.nav-item.dropdown
+                                a#navbardrop2.nav-link.dropdown-toggle.active(href='#', data-toggle='dropdown')
+                                    | Neuer Auftrag
+                                .dropdown-menu
+                                    a.dropdown-item(href='/articles/add_article_klasse_broadcast') Auftrag an Klasse(n)
+                                    a.dropdown-item(href='/articles/add_article_ausgewaehlte') Auftrag an Schülergruppe 
+                                    a.dropdown-item(href='/articles/n_auftrag') Neuer Auftrag 
+                            li.nav-item.active
+                                a.nav-link(href='/groups/add_group') Neuer Schülergruppe                   
+                        else
+                            li.nav-item.active
+                                .box
+                                    .led-green-main
+                                .box.active  
+                                    a.nav-link(href='/') #{user.name}                     
+                                .box 
+                                    p.white
+                                        | #{user.money} 
+                    else
+            .mx-auto.order-0
+                a.navbar-brand.mx-auto(href='/') Liquidschool
+                button.navbar-toggler(type='button', data-toggle='collapse', data-target='.dual-collapse2')
+                    span.navbar-toggler-icon
+            .navbar-collapse.collapse.w-100.order-3.dual-collapse2
+                ul.navbar-nav.ml-auto
+                    if user
+                        li  
+                            a.nav-link(href='/users/logout/'  + user._id) Abmelden
+                    else
+                        li.nav-item.dropdown.text-white
+                            #navbarDropdownMenuLink.dropdown-toggle.durchsichtiger_background(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') Anmeldung
+                            .dropdown-menu.dropdown-menu-right(aria-labelledby='navbarDropdownMenuLink')
+                                a.dropdown-item(href='/users/login_schueler') Schüleranmeldung
+                                a.dropdown-item(href='/users/login_lehrer') Lehreranmeldung
+                                a.dropdown-item(href='/users/login_admin') Adminanmeldung
+              
+        .container
+                        != messages('message', locals)
+                        if errors
+                            each error, i in errors
+                                div(class="alert, alert-danger") #{error.msg}
+                        block content
+                        br
+                        br
+                        br
+                        br
+                        br
+    if !user
+        footer.page-footer.font-small.mdb-color.pt-4
+            .container.text-center.text-md-left
+                .row.text-center.text-md-left.mt-3.pb-3
+                    .col-md-3.col-lg-3.col-xl-3.mx-auto.mt-3
+                        h6.text-uppercase.mb-4.font-weight-bold LiquidSchool
+                        p
+                            | Hier entsteht eine barrierefreie Schulsoftware, die auch für jüngere SchülerInnen ideal geeignet ist. 
+                            | Alles unkompliziert.
+                    hr.w-100.clearfix.d-md-none
+                    .col-md-2.col-lg-2.col-xl-2.mx-auto.mt-3
+                        h6.text-uppercase.mb-4.font-weight-bold Plattform
+                        p
+                            a(href='/einfach_besser') Einfach ist besser
+                        p
+                            a(href='/haeufige_fragen') Häufige Fragen
+                    hr.w-100.clearfix.d-md-none
+                    .col-md-3.col-lg-2.col-xl-2.mx-auto.mt-3
+                        h6.text-uppercase.mb-4.font-weight-bold Rechtliches
+                        p
+                            a(href='/disclaimer') Disclaimer
+                        p
+                            a(href='/datenschutz') Datenschutz
+                    hr.w-100.clearfix.d-md-none
+                    .col-md-4.col-lg-3.col-xl-3.mx-auto.mt-3
+                        h6.text-uppercase.mb-4.font-weight-bold Kontakt
+                        p
+                            i.fas.fa-home.mr-3
+                            |  Hamburg, 21107, DE
+                        p
+                            i.fas.fa-envelope.mr-3
+                            |  Akgüns SaH-Adresse
+                        p
+                            i.fas.fa-phone.mr-3
+                            |  
+                    hr
+                    .row.d-flex.align-items-center
+                        .col-md-7.col-lg-8
+                            p.text-center.text-md-left
+                                | © 2020 Copyright:
+                                a(href='https://liquidschool.de/')
+                                    strong  liquidschool.de
+                        .col-md-5.col-lg-4.ml-lg-0
+                            .text-center.text-md-right
+                                ul.list-unstyled.list-inline
+                                    li.list-inline-item
+                                        a.btn-floating.btn-sm.rgba-white-slight.mx-1
+                                            i.fab.fa-facebook-f
+                                    li.list-inline-item
+                                        a.btn-floating.btn-sm.rgba-white-slight.mx-1
+                                            i.fab.fa-twitter
+                                    li.list-inline-item
+                                        a.btn-floating.btn-sm.rgba-white-slight.mx-1
+                                            i.fab.fa-google-plus-g
+                                    li.list-inline-item
+                                        a.btn-floating.btn-sm.rgba-white-slight.mx-1
+                                            i.fab.fa-linkedin-in

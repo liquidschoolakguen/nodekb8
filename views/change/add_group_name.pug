@@ -1,0 +1,15 @@
+extends ../layouts/layout
+
+block content
+    form#reused_form.montform(method='POST', action='/groups/add_group_name')
+        .card
+            .card-header.bg-success.text-white
+                | Neue Schülergruppe erstellen 
+            .card-body
+                #form-transition-group.my-margin-top
+                    .form-group.col-md-12
+                        br
+                        input#validationServer01.form-control(type='text', placeholder='Name der Schülergruppe',  required='' name='name')
+                        input.form-control.invisible(type='text',  name='group_id', value= group_id)
+                input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Schülergruppe speichern und zum Auftrag')
+                  

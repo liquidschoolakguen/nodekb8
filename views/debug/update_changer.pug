@@ -1,0 +1,11 @@
+extends ../layouts/layout
+
+block content
+    h1 #{title}
+    form#1(method='POST', action='/update_changer')
+        input.btn.btn-primary(type='submit', value='update changer')
+    br
+    br    
+    h1 #{title}
+    form#2(method='POST', action='/update_changer_2')
+        input.btn.btn-primary(type='submit', value='update changer 2')

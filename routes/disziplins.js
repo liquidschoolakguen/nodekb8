@@ -26,12 +26,36 @@ const upload = multer({
 // Add single_stamm
 router.get('/add_single_disziplin', ensureAuthenticated, function (req, res) {
 
-  res.render('add_single_disziplin', {
+  res.render('change/add_single_disziplin', {
     title: 'Add Disziplin',
   })
 
 });
 
+
+
+
+
+
+
+
+
+
+
+// Edit article form
+router.get('/edit/:id', ensureAuthenticated, function (req, res) {
+  console.log('drin!')
+  Disziplin.
+    findOne({ _id: req.params.id }).
+    exec(function (err2, disziplin) {
+      if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+      res.render('change/edit_disziplin', {
+        disziplin: disziplin
+      });
+
+    });
+
+});
 
 
 
@@ -55,7 +79,9 @@ router.get('/add_single_disziplin', ensureAuthenticated, function (req, res) {
 
 
 // 
-router.post("/add_single_disziplin", upload.single("file"), (req, res) => {
+router.post("/add_single_disziplin",  (req, res) => {
+
+  var name = req.body.name.trim();
   User.findOne({ _id: req.user._id }).
     populate('school').
     exec(function (err, user) {
@@ -64,7 +90,12 @@ router.post("/add_single_disziplin", upload.single("file"), (req, res) => {
         return
       }
 
-      Disziplin.findOne({ name: req.body.name }, function (err, gibbet_schon) {
+      Disziplin.findOne({
+        $and: [
+          { name: name },
+          { school: user.school }
+        ]
+      }, function (err, gibbet_schon) {
         if (err) throw err;
         if (gibbet_schon) {
           req.flash('danger', 'Deine Schule hat bereits ein Unterrichtsfach mit diesem Namen');
@@ -73,7 +104,7 @@ router.post("/add_single_disziplin", upload.single("file"), (req, res) => {
         }
 
         let disziplin = new Disziplin();
-        disziplin.name = req.body.name;
+        disziplin.name = name;
         disziplin.school = user.school;
         disziplin.save(function (err, disziplini) {
           user.school.s_disziplins.push(disziplin)
@@ -95,7 +126,7 @@ router.post("/add_single_disziplin", upload.single("file"), (req, res) => {
 
 
 
-router.get('/disziplins/:id', function (req, res) {
+router.get('/:id', ensureAuthenticated, function (req, res) {
   Disziplin.
     findOne({ _id: req.params.id }).
     populate({
@@ -115,11 +146,78 @@ router.get('/disziplins/:id', function (req, res) {
 
       });
 
-      res.render('disziplin', {
+      res.render('show/disziplin', {
         disziplin: disziplin
       })
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+// Update submit POST route
+router.post("/edit/:id", ensureAuthenticated, (req, res) => {
+  var name = req.body.name.trim();
+  if (!req.user) {  //wer nicht angemeldet ist, kann nicht speichern
+    req.flash('warning', 'Du bist nicht angemeldet');
+    res.redirect('login');
+    return
+  }
+
+  User.findOne({ _id: req.user._id }).
+    populate('school').
+    exec(function (err, user) {
+      if (err) throw err;
+      if (!user) {
+        return
+      }
+
+      Disziplin.findOne({
+        $and: [
+          { name: name },
+          { school: user.school }
+        ]
+      }, function (err, gibbet_schon) {
+        if (err) throw err;
+        if (gibbet_schon) {
+          if(gibbet_schon._id.toString()!==req.params.id.toString() ){
+            req.flash('danger', 'Deine Schule hat bereits eine Unterrichtsfach mit diesem Namen');
+            res.redirect('/');
+            return
+          }else{
+            res.redirect('/');
+            return
+          }
+        }
+
+          let disziplin = {};
+          disziplin.name = name;
+          Disziplin.update({ _id: req.params.id }, disziplin, function (err, disziplini) {
+            if (err) throw err;
+            req.flash('success', 'Unterrichtsfach wurde umbenannt ');
+            res.redirect('/');
+            return
+          })
+       
+      });
+    })
+});
+
+
+
+
+
+
+
+
 
 
 

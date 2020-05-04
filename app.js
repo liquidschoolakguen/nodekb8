@@ -9,14 +9,14 @@ const passport = require('passport');
 //const nodemailer = require('nodemailer');
 const config = require('./config/database');
 
-//if(process.env.NODE_ENV !== 'production') {
-//  require('dotenv').config();
-//}
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 //var dotenv = require('dotenv').config()
-//const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-//const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
-//console.log('stripeSecretKey: '+stripeSecretKey)
-//console.log('stripePublicKey: '+stripePublicKey)
+// const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+// const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
+// console.log('stripeSecretKey: ' + stripeSecretKey)
+// console.log('stripePublicKey: ' + stripePublicKey)
 
 
 mongoose.connect(config.database, {
@@ -26,7 +26,9 @@ mongoose.connect(config.database, {
   useFindAndModify: false
 });
 
-/* const stripe = require("stripe")("sk_test_ZiLt9XHklBjmvTbqFeLoGwFc00uGWhbTmg");
+
+/* 
+const stripe = require("stripe")("sk_test_ZiLt9XHklBjmvTbqFeLoGwFc00uGWhbTmg");
 
 (async () => {
   const session = await stripe.checkout.sessions.create({
@@ -37,8 +39,8 @@ mongoose.connect(config.database, {
     cancel_url: 'https://liquidschool.de/cancel',
   });
 })();
-
  */
+
 
 /////index_no_user
 /* form(action='your-server-side-code', method='POST')
@@ -69,6 +71,7 @@ var mailOptions = {
  */
 
 
+
 let db = mongoose.connection;
 
 // check connection
@@ -90,6 +93,9 @@ let User = require('./models/user');
 let Hausarbeit = require('./models/hausarbeit');
 let School = require('./models/school');
 let Stammverbund = require('./models/stammverbund');
+let Stamm= require('./models/stamm');
+let Group= require('./models/group');
+
 
 // Load view Engine
 app.set('views', path.join(__dirname, 'views'));
@@ -166,33 +172,210 @@ app.get('*', function (req, res, next) {
 
 
 
-
 function getMyNow() {
   var yes = new Date();
-
   var n = yes.getTimezoneOffset();
-
-
   if (n !== -120) {
-
     yes.setHours(yes.getHours() + 2)
-
     console.log('bimmelbingo')
   } else {
-
     // console.log('server')
   }
-
   return yes;
 }
 
 
-app.get('/zz_test_index', function (req, res) {
-  res.render('zz_test_index', {
 
-  });
 
-})
+
+var benno = 3000;
+
+function intervalFunc() {
+  var nu2 = getMyNow();
+  console.log('Cant stop meee now! ' + nu2.getHours() + ':' + nu2.getMinutes() + ':' + nu2.getSeconds());
+
+}
+
+var nu = getMyNow();
+
+console.log(nu.getHours() + ':' + nu.getMinutes() + ':' + nu.getSeconds())
+console.log('Start in ' + (24 - nu.getHours() - 1) + ' Std ' + (60 - nu.getMinutes() - 1) + ' Minuten und ' + (60 - nu.getSeconds() - 1) + ' Sekunden und ' + (1000 - nu.getMilliseconds()) + ' ms. ');
+benno = ((24 - nu.getHours() - 1) * 24 * 60 * 1000) + ((60 - nu.getMinutes() - 1) * 60 * 1000) + ((60 - nu.getSeconds() - 1) * 1000) + ((1000 - nu.getSeconds()))
+console.log('Verzögerung ms: ' + benno)
+
+
+
+setTimeout(function () {
+  intervalFunc();
+  setInterval(intervalFunc, 24 * 60 * 60000);
+}, benno);
+
+// dieser ganze Scheiß hier müsste dafür sorgen, dass alle 24Std um 0 Uhr eine Methode aufgerufen wird
+
+
+
+
+
+app.get('/update_changer', function (req, res) {
+  res.render('debug/update_changer', {
+  })
+
+});
+
+app.post('/update_changer', function (req, res) {
+  createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse();
+  changeArticlesKlassesAndFachs();
+  console.log('update_changer complete');
+  res.render('debug/update_changer', {
+  })
+
+});
+
+app.post('/update_changer_2', function (req, res) {
+
+  console.log('update_changer 2 complete');
+  res.render('debug/update_changer', {
+  })
+
+});
+
+
+
+
+
+function createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse() {
+  User.
+    find().
+    exec(function (err, all_users) {
+
+      School.
+        findOne({ plz: '20355' }).
+        exec(function (err, school) {
+
+          all_users.forEach(function (user) {
+
+            console.log('. ' + user.name + ' . ' + user.klasse);
+            user.school = school;
+
+              Stamm.
+              findOne({ name: user.klasse }).
+              exec(function (err, stamm) {
+
+                if(user.type === 'schueler'){
+
+                user.klasse = undefined;
+                user.klasse2= undefined;
+                user.klasse3= undefined;
+                user.klasse4= undefined;
+  
+                user.schueler_stamm = stamm
+
+                }
+
+
+
+
+
+
+                user.save(function (err, us) {
+                  if (err) throw err;
+    
+                  School.findByIdAndUpdate(school._id,
+                    { $push: { users: us } },
+                    { safe: true, upsert: true },
+                    function (err, uptdatedSchool) {
+                      if (err) throw err;
+    
+                        if(stamm){
+
+                          Stamm.findByIdAndUpdate(stamm._id,
+                            { $push: { schuelers: us } },
+                            { safe: true, upsert: true },
+                            function (err, uptdatedStamm) {
+                              if (err) throw err;
+                                    
+                            })
+
+
+                        }
+                     
+    
+    
+    
+    
+    
+                    })
+                });
+
+
+
+
+
+
+
+
+
+
+
+
+              });
+
+
+
+
+
+           
+
+
+
+
+          });
+        });
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+function changeSchuelersKlasses() {
+  User.
+    find({ type: 'schueler' }).
+    exec(function (err, all_schulers) {
+
+
+      all_schulers.forEach(function (schueler) {
+
+        console.log('. ' + schueler.name);
+
+
+      });
+
+
+
+    });
+
+}
+
+
+function changeArticlesKlassesAndFachs() {
+
+
+}
+
+
+
+
+
+
 
 // Home Route
 app.get('/', function (req, res) {
@@ -201,14 +384,39 @@ app.get('/', function (req, res) {
   if (typeof req.user === "undefined") {
 
 
-/*     transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('Email sent: ' + info.response);
-      }
-    });
- */
+    /*     transporter.sendMail(mailOptions, function(error, info){
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
+     */
+
+
+
+
+    const d = new Date(Date.now());
+
+    d.setMonth(d.getMonth() + 7)
+    d.setDate(d.getDate() + 4)
+    console.log(d.getMonth() + ' 1.');
+    console.log(d.toLocaleDateString());
+    const month = d.getMonth();
+
+    d.setMonth(d.getMonth() + 3);
+    console.log(d.getMonth() + ' 2.');
+    while (d.getMonth() === month + 4 || d.getMonth() === month - 8) {
+      console.log(d.getMonth() + '.' + month);
+      d.setDate(d.getDate() - 1);
+      console.log('-- ' + d.getMonth() + '.' + month);
+
+    }
+    console.log(d.toLocaleDateString());
+
+
+
+
 
     res.render('index', {
       //stripePublicKey: stripePublicKey
@@ -247,8 +455,17 @@ app.get('/', function (req, res) {
 
 
         Article.
-          find({ author: req.user._id }).
+          find({ author: req.user._id }, 'title termin').
           populate('lehrer').
+          populate('stamm').
+          populate('stammverbund').
+          populate('disziplin').
+          populate({
+            path: 'group',
+            populate: {
+              path: 'schuelers'
+            }
+          }).
           populate('schuelers').
           sort({ created_as_date: -1 }).
           exec(function (err2, my_articles) {
@@ -602,13 +819,25 @@ app.get('/', function (req, res) {
 
 
 
+            /* // So würde die Abfrage aussehen, wenn es auf der serverdatenbank nicht bereits articles geben würde, die anders gespeichert wurden
+                        Article.
+                          find({
+                            $or: [
+                              { klasse: user.klasse },
+                              { klasse: { $in: jo } },
+                              { schuelers: user }
+                            ]
+            
+                          }). */
+
+
 
 
 
             Article.
               find({
                 $or: [
-                  { klasse: user.klasse },
+                  { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }, { klasse: user.klasse3 }, { klasse: user.klasse4 }] },
                   { klasse: { $in: jo } },
                   { schuelers: user }
                 ]
@@ -907,6 +1136,7 @@ app.get('/', function (req, res) {
               populate('stammverbunds').
               populate('s_stamms').
               populate('s_disziplins').
+              populate('groups').
               exec(function (err, schoool) {
 
 
@@ -915,7 +1145,8 @@ app.get('/', function (req, res) {
                   school: user.school,
                   stammverbunds: schoool.stammverbunds,
                   stamms: schoool.s_stamms,
-                  disziplins: schoool.s_disziplins
+                  disziplins: schoool.s_disziplins,
+                  groups: schoool.groups,
 
                 });
 
@@ -953,7 +1184,7 @@ app.get('/', function (req, res) {
             if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
 
 
-        
+
 
 
             if (!user.school) {
@@ -1034,7 +1265,7 @@ app.get('/', function (req, res) {
           })
 
 
-        }
+      }
 
 
 
@@ -1062,7 +1293,7 @@ app.get('/', function (req, res) {
 app.get('/disclaimer', function (req, res) {
 
 
-  res.render('disclaimer', {
+  res.render('footer/disclaimer', {
   });
 })
 
@@ -1071,7 +1302,7 @@ app.get('/disclaimer', function (req, res) {
 app.get('/datenschutz', function (req, res) {
 
 
-  res.render('datenschutz', {
+  res.render('footer/datenschutz', {
   });
 })
 
@@ -1079,7 +1310,7 @@ app.get('/datenschutz', function (req, res) {
 app.get('/haeufige_fragen', function (req, res) {
 
 
-  res.render('haeufige_fragen', {
+  res.render('footer/haeufige_fragen', {
   });
 })
 
@@ -1089,7 +1320,7 @@ app.get('/haeufige_fragen', function (req, res) {
 app.get('/einfach_besser', function (req, res) {
 
 
-  res.render('einfach_besser', {
+  res.render('footer/einfach_besser', {
   });
 })
 
@@ -1109,7 +1340,7 @@ app.get('/index_all', function (req, res) {
       if (typeof req.user === "undefined") {
 
 
-        res.render('index_all', {
+        res.render('show/index_all', {
           title: 'Articles'
 
 
@@ -1123,7 +1354,7 @@ app.get('/index_all', function (req, res) {
 
         //all_articles.forEach(article => console.log(article.title));
 
-        res.render('index_all', {
+        res.render('show/index_all', {
           title: 'Articles',
           articles: all_articles.reverse(),
           length: length
@@ -1158,6 +1389,8 @@ let schools = require('./routes/schools');
 let stamms = require('./routes/stamms');
 let disziplins = require('./routes/disziplins');
 let stammverbunds = require('./routes/stammverbunds');
+let groups = require('./routes/groups');
+
 
 app.use('/articles/', articles);
 app.use('/users/', users);
@@ -1166,6 +1399,8 @@ app.use('/schools/', schools);
 app.use('/stamms/', stamms);
 app.use('/disziplins/', disziplins);
 app.use('/stammverbunds/', stammverbunds);
+app.use('/groups/', groups);
+
 /* 
 
 app.post('/search', (req, res) => {
@@ -1216,7 +1451,7 @@ console.log('hi2:    '+req.params.id2)
 
 
 // Start server
-app.listen(5000, () => console.log(`Example app listening on port 3000!`));
+app.listen(5000, () => console.log(`Example app listening on port 5000!`));
 
 
 

@@ -1,0 +1,20 @@
+extends ../layouts/layout
+
+block content
+    .container
+      .row.h-100.d-flex.justify-content-center
+        .col-12.col-sm-8.col-md-8.col-lg-8
+          .card.border.bg-custom-1
+            .card-body.bg-custom-1
+              h4.card-title Für welche Klasse(n) ist dein neuer Auftrag? 
+              .tab-content.mt-3
+                #history.tab-pane.active(role='tabpanel')
+                  p.card-text
+                    form(method='POST', action='/articles/add_bingo_klasse_broadcast')
+                        #form-group
+                            label Für die Lerngruppe                                 
+                            select#validationServer01.form-control.custom-select.form-control(name='klasse_n', type=text,  required='', placeholder='Wähle eine Klasse')
+                                option(selected='') #{user.default_klasse}
+                                each all, i in alls
+                                  option #{all}
+                        input.btn.btn-primary.my-margin-top.bg-primary.text-white.float-right(type='submit', value='weiter')

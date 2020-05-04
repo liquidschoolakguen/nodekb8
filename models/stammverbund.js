@@ -27,10 +27,15 @@ let stammverbundSchema = mongoose.Schema({
     },
 
 
-/* 
-    lehrer: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'User'
-    }, */
+
+    articles: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Article',
+            required: false
+        }
+    ],
+
 
 
 });

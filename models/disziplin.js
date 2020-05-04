@@ -41,7 +41,17 @@ let disziplinSchema = mongoose.Schema({
     type:{
         type:String,
         required:false   
-    }
+    },
+
+
+
+    articles: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Article',
+            required: false
+        }
+    ],
 
 
 

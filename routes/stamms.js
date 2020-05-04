@@ -21,7 +21,7 @@ const upload = multer({
 // Add single_stamm
 router.get('/add_single_stamm', ensureAuthenticated, function (req, res) {
 
-  res.render('add_single_stamm', {
+  res.render('change/add_single_stamm', {
     title: 'Add Klasse',
   })
 
@@ -44,7 +44,9 @@ router.get('/add_single_stamm', ensureAuthenticated, function (req, res) {
 
 
 // 
-router.post("/add_single_stamm", upload.single("file"), (req, res) => {
+router.post("/add_single_stamm", (req, res) => {
+  var name = req.body.name.trim();
+
   User.findOne({ _id: req.user._id }).
     populate('school').
     exec(function (err, user) {
@@ -55,7 +57,7 @@ router.post("/add_single_stamm", upload.single("file"), (req, res) => {
 
       Stamm.findOne({
         $and: [
-          { name: req.body.name },
+          { name: name },
           { school: user.school }
         ]
       }, function (err, gibbet_schon) {
@@ -66,16 +68,35 @@ router.post("/add_single_stamm", upload.single("file"), (req, res) => {
           return
         }
 
-        let stamm = new Stamm();
-        stamm.name = req.body.name;
-        stamm.school = user.school;
-        stamm.save(function (err, stammi) {
-          user.school.s_stamms.push(stamm)
-          user.school.save(function (err, updated_school) { })
-        })
 
-        req.flash('success', 'Klasse hinzugefügt');
-        res.redirect('/');
+        Stammverbund.findOne({
+          $and: [
+            { name: name },
+            { school: user.school }
+          ]
+        }, function (err, gibbet_schon) {
+          if (err) throw err;
+          if (gibbet_schon) {
+            req.flash('danger', 'Deine Schule hat bereits einen Klassenverbund mit diesem Namen');
+            res.redirect('/');
+            return
+          }
+
+
+
+
+          let stamm = new Stamm();
+          stamm.name = name;
+          stamm.school = user.school;
+          stamm.save(function (err, stammi) {
+            user.school.s_stamms.push(stamm)
+            user.school.save(function (err, updated_school) { })
+          })
+
+          req.flash('success', 'Klasse hinzugefügt');
+          res.redirect('/');
+        });
+
       });
     })
 })
@@ -88,7 +109,7 @@ router.post("/add_single_stamm", upload.single("file"), (req, res) => {
 
 
 
-router.get('/stamms/:id', function (req, res) {
+router.get('/:id', function (req, res) {
   Stamm.
     findOne({ _id: req.params.id }).
     populate({
@@ -108,11 +129,129 @@ router.get('/stamms/:id', function (req, res) {
 
       });
 
-      res.render('stamm', {
+      res.render('show/stamm', {
         stamm: stamm
       })
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Edit article form
+router.get('/edit/:id', ensureAuthenticated, function (req, res) {
+  console.log('drin!')
+  Stamm.
+    findOne({ _id: req.params.id }).
+    exec(function (err2, stamm) {
+      if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+      res.render('change/edit_stamm', {
+        stamm: stamm
+      });
+
+    });
+
+});
+
+
+
+
+
+
+
+
+
+// Update submit POST route
+router.post("/edit/:id", (req, res) => {
+  var name = req.body.name.trim();
+  if (!req.user) {  //wer nicht angemeldet ist, kann nicht speichern
+    req.flash('warning', 'Du bist nicht angemeldet');
+    res.redirect('login');
+    return
+  }
+
+  User.findOne({ _id: req.user._id }).
+    populate('school').
+    exec(function (err, user) {
+      if (err) throw err;
+      if (!user) {
+        return
+      }
+
+      Stamm.findOne({
+        $and: [
+          { name: name },
+          { school: user.school }
+        ]
+      }, function (err, gibbet_schon) {
+        if (err) throw err;
+        if (gibbet_schon) {
+          if(gibbet_schon._id.toString()!==req.params.id.toString() ){
+            req.flash('danger', 'Deine Schule hat bereits eine Klasse mit diesem Namen');
+            res.redirect('/');
+            return
+          }else{
+            res.redirect('/');
+            return
+          }
+         
+        }
+
+        Stammverbund.findOne({
+          $and: [
+            { name: name },
+            { school: user.school }
+          ]
+        }, function (err, gibbet_schon) {
+          if (err) throw err;
+          if (gibbet_schon) {
+            req.flash('danger', 'Deine Schule hat bereits einen Klassenverbund mit diesem Namen');
+            res.redirect('/');
+            return
+          }
+
+          let stamm = {};
+          stamm.name = name;
+          Stamm.update({ _id: req.params.id }, stamm, function (err, stammi) {
+            if (err) throw err;
+            req.flash('success', 'Klasse wurde umbenannt ');
+            res.redirect('/');
+            return
+          })
+        });
+      });
+    })
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -193,7 +332,7 @@ router.delete('/stamm/:id', function (req, res) {
 
 
                             ver.stamms.pull(stamm);
-                            console.log('kkkkkkkk     '+ver.stamms.length);
+                            console.log('kkkkkkkk     ' + ver.stamms.length);
                             if (ver.stamms.length > 0) {
                               ver.save(function (err, updated_ver) {
                                 if (err) {

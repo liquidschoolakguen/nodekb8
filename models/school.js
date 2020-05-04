@@ -5,11 +5,11 @@ let mongoose = require('mongoose');
 let schoolSchema = mongoose.Schema({
 
 
-/* 
-    customer_mail: {
-        type: String,
-        required: true
-    }, */
+    /* 
+        customer_mail: {
+            type: String,
+            required: true
+        }, */
 
 
     name: {
@@ -40,6 +40,16 @@ let schoolSchema = mongoose.Schema({
 
 
 
+
+
+    created: {
+        type: Date,
+        required: false
+    },
+
+
+
+
     admin_schluessel: {
         type: String,
         required: false
@@ -65,30 +75,21 @@ let schoolSchema = mongoose.Schema({
     }],
 
 
-    lerngruppes: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Lerngruppe",
-            required: false
-        }
-    ],
+    admins: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
 
+    lehrers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
 
-    /*   stamms: [
-          {
-              type: String,
-              required: false
-          }
-      ],
-  
-  
-      fachs: [
-          {
-              type: String,
-              required: false
-          }
-      ],
-   */
+    schuelers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+
 
 
 
@@ -119,6 +120,17 @@ let schoolSchema = mongoose.Schema({
         ref: 'Stammverbund',
         required: false
     }],
+
+
+
+
+    groups: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Group",
+        required: false
+    }],
+
+
 
 
 

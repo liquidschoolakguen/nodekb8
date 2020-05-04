@@ -1,0 +1,20 @@
+extends ../layouts/layout
+
+block content
+    form#reused_form.montform(method='POST',  action='/schools/edit_school_l_s' )
+        .card-header.bg-info.text-white
+            | Schulschlüssel ändern
+        .card-body
+            #form-transition-group.my-margin-top
+                .form-row.my-margin-top 
+                    .form-group.col-md-12
+                        br 
+                        h5.text-info Vorsicht! veränderte Zugangsschlüssel sind sofort nach Änderung wirksam.       
+                    .form-group.col-md-4 
+                        label Lehrerschlüssel
+                        input#validationServer01.form-control(type='text', value=school.lehrer_schluessel, minlength='6' placeholder='\'Lehrerschlüssel\' (mind 6 Zeichen)',  required='' title="Diesen Schlüssel brauchen deine Kollegen, die sich als Lehrkräfte an deiner Schule auf Liquidschool registrieren wollen. Ohne den Lehrerschlüssel könnte sich jedermann als Lehrkraft an deiner Schule ausgeben.\n\n(Pflichtfeld)"   name='lehrer_schluessel')
+            br
+            input#geht_ab.btn.btn-info.my-margin-top.bg-info.text-white.float-right(type='submit', value='Änderungen speichern')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+    script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+    script(src='/js/add_school.js')

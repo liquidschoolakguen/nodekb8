@@ -29,10 +29,16 @@ const upload = multer({
 
 
 
+
+
 router.get('/add_school_a_s', ensureAuthenticated, function (req, res) {
   res.render('register_school/add_school_a_s', {
   })
 })
+
+
+
+
 
 
 router.get('/add_school_l_s', ensureAuthenticated, function (req, res) {
@@ -107,7 +113,7 @@ router.get('/edit1/:id', ensureAuthenticated, function (req, res) {
       if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
-      res.render('edit_school_stammdaten', {
+      res.render('change/edit_school_stammdaten', {
         school: school
 
       });
@@ -118,7 +124,7 @@ router.get('/edit1/:id', ensureAuthenticated, function (req, res) {
 
 
 
-
+/* 
 
 
 // Edit article form
@@ -197,7 +203,87 @@ router.get('/edit4/:id', ensureAuthenticated, function (req, res) {
 
 });
 
+ */
 
+
+
+
+
+
+
+
+
+
+
+// Edit article form
+router.get('/edit_school_a_s/:id', ensureAuthenticated, function (req, res) {
+
+  console.log('drin! edit 2')
+
+  School.
+    findOne({ _id: req.params.id }).
+    populate('admin').
+    populate('users').
+    exec(function (err2, school) {
+      if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+      res.render('change/edit_school_a_s', {
+        school: school
+
+      });
+
+    });
+
+});
+
+
+
+// Edit article form
+router.get('/edit_school_l_s/:id', ensureAuthenticated, function (req, res) {
+
+  console.log('drin! edit 2')
+
+  School.
+    findOne({ _id: req.params.id }).
+    populate('admin').
+    populate('users').
+    exec(function (err2, school) {
+      if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+      res.render('change/edit_school_l_s', {
+        school: school
+
+      });
+
+    });
+
+});
+
+
+
+// Edit article form
+router.get('/edit_school_s_s/:id', ensureAuthenticated, function (req, res) {
+
+  console.log('drin! edit 2')
+
+  School.
+    findOne({ _id: req.params.id }).
+    populate('admin').
+    populate('users').
+    exec(function (err2, school) {
+      if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+      res.render('change/edit_school_s_s', {
+        school: school
+
+      });
+
+    });
+
+});
 
 
 
@@ -757,7 +843,50 @@ router.post("/add_school_register_admin_first", upload.single("file" ), (req, re
 
 
 // Update submit POST route
-router.post("/edit1/:id", upload.single("file" /* name attribute of <file> element in your form */), (req, res) => {
+router.post("/edit1/:id", (req, res) => {
+
+
+
+
+
+
+  School.findOne({ url: all }).
+  exec(function (err, school) {
+      if (err) throw err;
+      if (school) {
+          if (school.complete_school === '1') {
+              handleOldSchool(school, req, res, next);
+          } else {
+              handleIncompleteSchool_2(school, req, res, next);
+          }
+      } else {
+          let school = new School();
+          school.name = req.body.name;
+          school.plz = req.body.plz;
+          school.ort = req.body.ort;
+          school.url = all;
+          school.complete_school = '2'
+          school.save(function (err, scho) {
+              if (err) throw err;
+              handleNewSchool(scho, req, res, next);
+          })
+      }
+  })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   let query = { _id: req.params.id }
 
@@ -937,6 +1066,142 @@ router.post("/edit4/:id", upload.single("file" /* name attribute of <file> eleme
 
 
 
+
+
+
+
+
+
+
+
+
+
+// 
+router.post("/edit_school_a_s", (req, res) => {
+  User.findOne({ _id: req.user._id }).
+    populate('school').
+    exec(function (err, user) {
+      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+      if (!user) {
+        return
+      }
+      School.findOne({ admin_schluessel: req.body.admin_schluessel.toLowerCase().trim() }).
+        exec(function (err, sch) {
+          if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+          if (sch) {
+            req.flash('warning', 'Dieser Adminschlüssel ist bereits vergeben. Wähle einen anderen.');
+            
+            res.render('change/edit_school_a_s', {
+              school: user.school
+      
+            });
+           
+            return
+          }
+          let updateSchool = {};
+          updateSchool.admin_schluessel = req.body.admin_schluessel.toLowerCase().trim();
+
+          School.update({ _id: user.school._id }, updateSchool, function (err) {
+            if (err) {
+              console.log(err);
+              return;
+            } else {
+              req.flash('success', 'Adminschlüssel wurde geändert.');
+              res.redirect('/');
+            }
+          })
+        });
+
+    })
+
+});
+
+
+
+
+router.post("/edit_school_l_s", (req, res) => {
+  User.findOne({ _id: req.user._id }).
+    populate('school').
+    exec(function (err, user) {
+      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+      if (!user) {
+        return
+      }
+      School.findOne({ lehrer_schluessel: req.body.lehrer_schluessel.toLowerCase().trim() }).
+        exec(function (err, sch) {
+          if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+          if (sch) {
+            req.flash('warning', 'Dieser Lehrerschlüssel ist bereits vergeben. Wähle einen anderen.');
+            
+            res.render('change/edit_school_l_s', {
+              school: user.school
+      
+            });
+           
+            return
+          }
+          let updateSchool = {};
+          updateSchool.lehrer_schluessel = req.body.lehrer_schluessel.toLowerCase().trim();
+
+          School.update({ _id: user.school._id }, updateSchool, function (err) {
+            if (err) {
+              console.log(err);
+              return;
+            } else {
+              req.flash('success', 'Lehrerschlüssel wurde geändert.');
+              res.redirect('/');
+            }
+          })
+        });
+
+    })
+
+});
+
+
+
+
+
+
+
+router.post("/edit_school_s_s", (req, res) => {
+  User.findOne({ _id: req.user._id }).
+    populate('school').
+    exec(function (err, user) {
+      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+      if (!user) {
+        return
+      }
+      School.findOne({ schueler_schluessel: req.body.schueler_schluessel.toLowerCase().trim() }).
+        exec(function (err, sch) {
+          if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+          if (sch) {
+            req.flash('warning', 'Dieser Schuelerschlüssel ist bereits vergeben. Wähle einen anderen.');
+            
+            res.render('change/edit_school_s_s', {
+              school: user.school
+      
+            });
+           
+            return
+          }
+          let updateSchool = {};
+          updateSchool.schueler_schluessel = req.body.schueler_schluessel.toLowerCase().trim();
+
+          School.update({ _id: user.school._id }, updateSchool, function (err) {
+            if (err) {
+              console.log(err);
+              return;
+            } else {
+              req.flash('success', 'Schülerschlüssel wurde geändert.');
+              res.redirect('/');
+            }
+          })
+        });
+
+    })
+
+});
 
 
 

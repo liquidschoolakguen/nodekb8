@@ -9,6 +9,7 @@ let User = require('../models/user');
 let Article = require('../models/article');
 let Hausarbeit = require('../models/hausarbeit');
 let School = require('../models/school');
+let Stamm = require('../models/stamm');
 
 
 router.get('/register_admin_first', function (req, res) {
@@ -65,6 +66,17 @@ router.get('/register_schueler_0', function (req, res) {
 router.get('/register_schueler_00', function (req, res) {
 
     res.render('register/register_schueler_00', {
+
+    });
+
+});
+
+
+
+//das brauche ich nur, um veraltete SchülerUser zu generieren. Mit diesen teste ich dann die Upgrade-Methoden, die später auf sem Server zum Einsatz kommen
+router.get('/register_schueler_dummy', function (req, res) {
+
+    res.render('register/register_schueler_dummy', {
 
     });
 
@@ -157,12 +169,13 @@ router.post('/register_schueler_00', function (req, res) {
 
     School.
         findOne({ schueler_schluessel: schueler_schluessel }).
+        populate('s_stamms').
         exec(function (err2, school) {
             if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
             if (!school) {
 
-                req.flash('warning', 'Das ist nicht der Schulschlüssel. Frag deine Lehrerin nach dem Schlüssel.');
+                req.flash('warning', 'Das ist kein gültiger Schulschlüssel. Frag deine Lehrerin nach dem Schlüssel.');
                 res.render('register/register_schueler_00');
                 return
             }
@@ -620,7 +633,7 @@ router.post('/add_school_register_admin_first', function (req, res) {
 
                             let updateSchool = {};
                             updateSchool.complete_school = '1';
-
+                            updateSchool.created = Date.now();
 
                             School.findByIdAndUpdate(user.school._id, updateSchool, function (err, freshSchool) {
                                 if (err) throw err;
@@ -638,7 +651,7 @@ router.post('/add_school_register_admin_first', function (req, res) {
                                         console.log('ii ' + newFreshSchool.name);
 
 
-                                        newFreshSchool.users.pull(user);
+                                        newFreshSchool.admins.pull(user);
                                         newFreshSchool.save(function (err, scho) {
                                             if (err) throw err;
 
@@ -654,26 +667,8 @@ router.post('/add_school_register_admin_first', function (req, res) {
                                                 createAndBindRealFirstAdminUser(pi_school, admin_name, admin_username, admin_password, req, res)
                                             });
 
-
-
-
                                         })
-
-
-
-
-
-
-
-
-
                                     })
-
-
-
-
-
-
 
 
                             })
@@ -802,7 +797,7 @@ function createAndBindUser(school, redirect, req, res, next) {
                 } else {
 
                     School.findByIdAndUpdate(school._id,
-                        { $push: { users: us } },
+                        { $push: { admins: us } },
                         { safe: true, upsert: true },
                         function (err, uptdatedSchool) {
                             if (err) {
@@ -876,7 +871,7 @@ function createAndBindRealFirstAdminUser(school, name, username, password, req, 
                 } else {
 
                     School.findByIdAndUpdate(school._id,
-                        { $push: { users: us } },
+                        { $push: { admins: us } },
                         { safe: true, upsert: true },
                         function (err, uptdatedSchool) {
                             if (err) {
@@ -1016,7 +1011,7 @@ router.post('/register_admin', function (req, res) {
 
 
                                             School.findByIdAndUpdate(school._id,
-                                                { $push: { users: us } },
+                                                { $push: { admins: us } },
                                                 { safe: true, upsert: true },
                                                 function (err, uptdatedSchool) {
                                                     if (err) {
@@ -1091,67 +1086,42 @@ router.post('/register_lehrer', function (req, res) {
                 res.redirect('/');
                 return
             }
-
-
             const name = req.body.name;
             var username = req.body.username.toString().toLowerCase().trim();
             const password = req.body.password;
             const password2 = req.body.password2;
-
-
-
             //console.log('  BENNO         k k k k k k             k k k k k k k k                    k k k k k k ');
             req.checkBody('username', 'Email wird benötigt').notEmpty();
             req.checkBody('password', 'Password wird benötigt').notEmpty();
             req.checkBody('password2', 'Passwörter stimmen nicht überein').equals(req.body.password);
 
-
             let errors = req.validationErrors();
 
-
-
-
             if (errors) {
-                res.render('register_lehrer', {
+                res.render('register/register_lehrer', {
                     errors: errors,
                     school: school
 
                 });
             } else {
 
-
                 User.
                     findOne({
-
                         $and: [
                             { username: username.toString().toLowerCase().trim() },
                             { school: school }
                         ]
-
                     }).
                     exec(function (err, user) {
-
-
                         if (err) throw err;
-
                         if (user) {
-
-
-
                             req.flash('danger', 'Die Email' + user.name + ' ist bereits in ' + school.name + ' registriert');
                             req.flash('warning', 'Wenn du dich bereits registriert hast, musst du auf \'Lehreranmeldung\' klicken.');
-                            res.render('register_lehrer', {
+                            res.render('register/register_lehrer', {
                                 school: school
 
                             });
-
-
-
-
                         } else {
-
-                            console.log('ok')
-
                             let newUser = new User({
                                 type: 'lehrer',
                                 school: school,
@@ -1160,14 +1130,7 @@ router.post('/register_lehrer', function (req, res) {
                                 password: password,
                                 password_visible: password,
                                 logged: false
-
-
                             });
-
-
-
-
-
 
                             bcrypt.genSalt(10, function (err, salt) {
                                 bcrypt.hash(newUser.password, salt, function (err, hash) {
@@ -1180,44 +1143,25 @@ router.post('/register_lehrer', function (req, res) {
                                             console.log(err);
                                             return
                                         } else {
-
-
-
                                             School.findByIdAndUpdate(school._id,
-                                                { $push: { users: us } },
+                                                { $push: { lehrers: us } },
                                                 { safe: true, upsert: true },
                                                 function (err, uptdatedSchool) {
                                                     if (err) {
                                                         console.log(err);
                                                     } else {
-
-
-
                                                         req.flash('success', 'Du bist registriert ' + newUser.name + '. Jetzt kannst du dich als Lehrkraft auf Liquidschool anmelden.');
                                                         res.redirect('/users/login_lehrer');
-
-
                                                     }
                                                 })
-
-
-
                                         }
                                     });
                                 });
                             })
-
                         }
-
                     });
-
             }
-
-
-
         });
-
-
 });
 
 
@@ -1237,79 +1181,59 @@ router.post('/register_lehrer', function (req, res) {
 
 // Register Process SCHUELER TEST
 router.post('/register_schueler', function (req, res) {
-
-
     School.
         findOne({ _id: req.body.school_id }).
-        populate('admin').
+        populate('s_stamms').
         exec(function (err2, school) {
             if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
             if (!school) {
                 res.redirect('/');
                 return
             }
 
+            Stamm.
+                findOne({ _id: req.body.klasse }).
+                exec(function (err2, stamm) {
 
+                    if (!stamm) {
+                        res.redirect('/');
+                        return
+                    }
 
+                    var username = req.body.username;
+                    const password = req.body.password;
+                    const password2 = req.body.password2;
+                    req.checkBody('username', 'Email wird benötigt').notEmpty();
+                    req.checkBody('password', 'Password wird benötigt').notEmpty();
+                    req.checkBody('password2', 'Passwörter stimmen nicht überein').equals(req.body.password);
 
-            var username = req.body.username;
-            const klasse = req.body.klasse;
-            const password = req.body.password;
-            const password2 = req.body.password2;
-            //console.log('  BENNO         k k k k k k             k k k k k k k k                    k k k k k k ');
-            req.checkBody('username', 'Email wird benötigt').notEmpty();
-            req.checkBody('password', 'Password wird benötigt').notEmpty();
-            req.checkBody('password2', 'Passwörter stimmen nicht überein').equals(req.body.password);
+                    let errors = req.validationErrors();
+                    if (errors) {
+                        res.render('register/register_schueler', {
+                            errors: errors,
+                            school: school
+                        });
+                        return;
+                    }
 
-
-            let errors = req.validationErrors();
-
-
-
-
-            if (errors) {
-                res.render('register_schueler', {
-                    errors: errors,
-                    school: school
-
-                });
-            } else {
-
-
-                User.
-                    findOne({
-
-                        $and: [
-                            { username: username.toString().toLowerCase().trim() },
-                            { school: school }
-                        ]
-
-                    }).
-                    exec(function (err, user) {
-
-
-                        if (err) throw err;
-
-                        if (user) {
-
-
-
-                            req.flash('danger', 'Der Name' + user.name + ' ist bereits in ' + school.name + ' registriert');
-                            req.flash('warning', 'Registrieren muss man sich nur einmal ganz zu Beginn. Wenn du dich bereits registriert hast, musst du auf \'Schüleranmeldung\' klicken.');
-                            res.render('register_schueler', {
-                                school: school
-
-                            });
-
-
-
-
-                        } else {
-
-                            console.log('ok')
-
+                    User.
+                        findOne({
+                            $and: [
+                                { username: username.toString().toLowerCase().trim() },
+                                { school: school }
+                            ]
+                        }).
+                        exec(function (err, user) {
+                            if (err) throw err;
+                            if (user) {
+                                req.flash('danger', 'Der Name \'' + user.name + '\' ist bereits in ' + school.name + ' registriert');
+                                req.flash('warning', 'Registrieren muss man sich nur einmal ganz zu Beginn. Wenn du dich bereits registriert hast, musst du auf \'Schüleranmeldung\' klicken.');
+                                res.render('register/register_schueler', {
+                                    school: school
+                                });
+                                return;
+                            }
+                            //console.log('ok')
                             let newUser = new User({
                                 type: 'schueler',
                                 school: school,
@@ -1317,16 +1241,11 @@ router.post('/register_schueler', function (req, res) {
                                 username: username.toString().toLowerCase().trim(),
                                 password: password,
                                 password_visible: password,
-                                klasse: klasse,
+                                schuelers_stamm: stamm,
                                 logged: false,
                                 money: '0'
 
                             });
-
-
-
-
-
 
                             bcrypt.genSalt(10, function (err, salt) {
                                 bcrypt.hash(newUser.password, salt, function (err, hash) {
@@ -1339,41 +1258,114 @@ router.post('/register_schueler', function (req, res) {
                                             console.log(err);
                                             return
                                         } else {
-
-
-
                                             School.findByIdAndUpdate(school._id,
-                                                { $push: { users: us } },
+                                                { $push: { schuelers: us } },
                                                 { safe: true, upsert: true },
                                                 function (err, uptdatedSchool) {
                                                     if (err) {
                                                         console.log(err);
                                                     } else {
 
-
-
-                                                        req.flash('success', 'Du bist registriert ' + newUser.name + '. Jetzt kannst du dich auf Liquidschool anmelden.');
-                                                        res.redirect('/users/login_schueler');
-
+                                                        Stamm.findByIdAndUpdate(stamm._id,
+                                                            { $push: { schuelers: us } },
+                                                            { safe: true, upsert: true },
+                                                            function (err, uptdatedStamm) {
+                                                                if (err) {
+                                                                    console.log(err);
+                                                                } else {
+                                                                    req.flash('success', 'Du bist registriert ' + newUser.name + '. Jetzt kannst du dich auf Liquidschool anmelden.');
+                                                                    res.redirect('/users/login_schueler');
+                                                                }
+                                                            })
 
                                                     }
                                                 })
-
-
 
                                         }
                                     });
                                 });
                             })
+                        });
+                });
+        });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Register Process SCHUELER TEST
+router.post('/register_schueler_dummy', function (req, res) {
+
+
+    var klasse = req.body.klasse;
+    var username = req.body.username;
+    const password = req.body.password;
+    const password2 = req.body.password2;
+    req.checkBody('username', 'Email wird benötigt').notEmpty();
+    req.checkBody('password', 'Password wird benötigt').notEmpty();
+    req.checkBody('password2', 'Passwörter stimmen nicht überein').equals(req.body.password);
+
+    let errors = req.validationErrors();
+    if (errors) {
+        res.render('register_schueler_dummy', {
+            errors: errors
+        });
+        return;
+    }
+
+    User.
+        findOne({ username: username.toString().toLowerCase().trim() }).
+        exec(function (err, user) {
+            if (err) throw err;
+            if (user) {
+                req.flash('danger', 'Der Name' + user.name + ' ist bereits registriert');
+                res.render('register_schueler_dummy', {
+                });
+                return;
+            }
+            //console.log('ok')
+            let newUser = new User({
+                type: 'schueler',
+                name: username,
+                username: username.toString().toLowerCase().trim(),
+                password: password,
+                password_visible: password,
+                klasse: klasse,
+                logged: false,
+                money: '0'
+
+            });
+
+            bcrypt.genSalt(10, function (err, salt) {
+                bcrypt.hash(newUser.password, salt, function (err, hash) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    newUser.password = hash;
+                    newUser.save(function (err, us) {
+                        if (err) {
+                            console.log(err);
+                            return
+                        } else {
 
                         }
-
                     });
-
-            }
-
-
-
+                });
+            })
         });
 
 
@@ -1392,47 +1384,24 @@ router.post('/register_schueler', function (req, res) {
 
 
 
+
 router.get('/all_schueler', function (req, res) {
-
-
-
-
-
-
     User.
         find({ type: 'schueler' }).
         exec(function (err, schuelers) {
             if (err) return console.log('4_iiiiiiiiiiii ' + err);
-
             if (schuelers) {
-
                 if (err) return console.log('5_iiiiiiiiiiii ' + err);
-
-
-
                 let length = schuelers.length;
-
-
-                res.render('all_schueler', {
+                res.render('show/all_schueler', {
                     schuelers: schuelers,
                     length: length
                 });
-
-
-
-
             } else {
-
                 req.flash('danger', 'Es sind noch keine SuS registriert ');
                 res.redirect('/');
-
             }
-
         });
-
-
-
-
 });
 
 

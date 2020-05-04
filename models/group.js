@@ -30,6 +30,23 @@ let groupSchema = mongoose.Schema({
     },
 
 
+    for_all:{
+        type:String,
+        required:false
+    },
+
+
+    articles: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Article',
+            required: false
+        }
+    ],
+
+
+
+
 
 });
 

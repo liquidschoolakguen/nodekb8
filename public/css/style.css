@@ -1020,3 +1020,19 @@ table.dataTable td {
 }
 
 
+#editor {
+  min-height: 275px;
+}
+#editor_update {
+  min-height: 275px;
+}
+
+#editor_show.ql-container.ql-snow{
+
+  border:none!important;
+}
+
+#editor_show.ql-editor{
+  
+  padding: 0px!important;
+}

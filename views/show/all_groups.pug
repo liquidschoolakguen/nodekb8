@@ -1,0 +1,71 @@
+extends ../layouts/layout
+
+block content
+    if !user
+      .shadow.p-3.mb-5.bg-white.rounded
+        .card
+          .card-header
+            | Hallo liebe Schülerinnen und Schüler
+          .card-body
+            blockquote.blockquote.mb-0
+              p
+                |  :)
+    else      
+      if user.type === 'lehrer'
+        .container.padding_null
+          .row.h-100.d-flex.justify-content-center
+            .col-12
+              .card.border
+                .card-header
+                  ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
+                    li.nav-item
+                      a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') Schülergruppen
+                .card-body.padding_null
+                  .tab-content.mt-3.my-min-height
+                    #description.tab-pane.active(role='tabpanel')
+                      p.card-text
+                        if length !=0
+                          .col-md-4.col-6.float-right.padding_null
+                            input#inputFilter.form-control.my-margin-bottom-right(type='text', placeholder='suche..')
+                          table#customerTable.table.row-border.hover.table-sm.no-border(cellspacing='0', width='100%')
+                            thead
+                              tr 
+                                th.th-sm.align-middle
+                                  | Name
+                                th.th-sm.align-middle
+                                  | SuS                          
+                                th.th-sm.align-middle
+                                  | Typ
+                                th.th-sm.align-middle
+                                  | i/o                 
+                            tbody
+                              each group, i in groups
+                                tr
+                                  td.align-middle
+                                    .box
+                                    | #{group.name}
+                                  td.align-middle 
+                                    each schueler, i in group.schuelers
+                                        if i == 0
+                                            .box
+                                                a(href='/articles/schueler/' +schueler._id, role='button')  #{schueler.name}&nbsp;
+                                        else
+                                            .box
+                                                a(href='/articles/schueler/' +schueler._id, role='button') | #{schueler.name}&nbsp;
+                                  td.align-middle 
+                                    if group.lehrer
+                                      .box
+                                        | privat
+                                    else
+                                      .box
+                                        | öffentlich  
+                                  td.align-middle 
+                                    if user
+                                      if group.lehrer
+                                        if group.lehrer._id.toString === user._id.toString
+                                          //- a.btn.btn-danger.delete-group.text-white.button-margin(href='#', data-id=group._id) löschen
+                                      a.btn.btn-success.text-white.button-margin(href='/groups/edit/'+ group._id) bearbeiten                 
+                        else
+                          h4.my-margin-right-boy Es sind noch keine Schülergruppen angelegt worden
+    script(type='text/javascript', src='https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.js')
+    script(src='/js/all_groups.js')

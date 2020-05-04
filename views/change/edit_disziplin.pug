@@ -1,0 +1,9 @@
+extends ../layouts/layout
+
+block content
+    form(method='POST', action='/disziplins/edit/' + disziplin._id)
+        #form-transition-group  
+            label Name:
+            input.form-control(name='name', type=text, value=disziplin.name)
+        br
+        input.btn.btn-primary(type='submit', value='Submit')
