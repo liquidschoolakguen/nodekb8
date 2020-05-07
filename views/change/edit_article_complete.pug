@@ -98,263 +98,263 @@ block content
             input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Auftrag veröffentlichen')
   else
     h3 Diesen Auftrag kannst du nicht mehr ändern
-        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
-        script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
-        script(src='https://cdn.quilljs.com/1.3.6/quill.js')
-        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
-        script(src='/js/edit_article.js')  
-        link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
-        script(src='https://code.jquery.com/jquery-1.12.4.js')
-        script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js') 
-        script.
-          $( function() {
-          $( "#datepicker" ).datepicker({
-          prevText: '&#x3c;zurück', prevStatus: '',
-          prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
-          nextText: 'Vor&#x3e;', nextStatus: '',
-          nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
-          currentText: 'heute', currentStatus: '',
-          todayText: 'heute', todayStatus: '',
-          clearText: '-', clearStatus: '',
-          closeText: 'schließen', closeStatus: '',
-          monthNames: ['Januar','Februar','März','April','Mai','Juni',
-          'Juli','August','September','Oktober','November','Dezember'],
-          monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
-          'Jul','Aug','Sep','Okt','Nov','Dez'],
-          dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
-          dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-          dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-          showMonthAfterYear: false,
-          buttonImage: 'media/img/calendar.png',
-          buttonImageOnly: true,
-          dateFormat:'Frist: '+ 'dd.mm.yy' + ' 16 Uhr'
-          }
-          );
-          });
+      script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+      script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+      script(src='https://cdn.quilljs.com/1.3.6/quill.js')
+      script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+      script(src='/js/edit_article.js')  
+      link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
+      script(src='https://code.jquery.com/jquery-1.12.4.js')
+      script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js') 
+      script.
+        $( function() {
+        $( "#datepicker" ).datepicker({
+        prevText: '&#x3c;zurück', prevStatus: '',
+        prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+        nextText: 'Vor&#x3e;', nextStatus: '',
+        nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+        currentText: 'heute', currentStatus: '',
+        todayText: 'heute', todayStatus: '',
+        clearText: '-', clearStatus: '',
+        closeText: 'schließen', closeStatus: '',
+        monthNames: ['Januar','Februar','März','April','Mai','Juni',
+        'Juli','August','September','Oktober','November','Dezember'],
+        monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+        'Jul','Aug','Sep','Okt','Nov','Dez'],
+        dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+        dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+        dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+        showMonthAfterYear: false,
+        buttonImage: 'media/img/calendar.png',
+        buttonImageOnly: true,
+        dateFormat:'Frist: '+ 'dd.mm.yy' + ' 16 Uhr'
+        }
+        );
+        });
 
-          var toolbarOptions = [
-              ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-              ['blockquote', 'code-block'],
-              [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-              [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-              [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-              [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-              [{ 'direction': 'rtl' }],                         // text direction
-              [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-              [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-              [{ 'font': [] }],
-              [{ 'align': [] }],
-              ['clean'],
-              ['image']                                        // remove formatting button
-          ];
-          var quill = new Quill('#editor', {
-              modules: {
-                  toolbar: toolbarOptions
-              },
-              theme: 'snow',
-              placeholder: 'Formuliere einen Auftrag...'
-          });
-          //alert('hallo: ' +  document.getElementById("dada").value);
-          //$("#dada").val();
-          quill.setContents(JSON.parse(document.getElementById("dada").value))
+        var toolbarOptions = [
+            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+            ['blockquote', 'code-block'],
+            [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+            [{ 'direction': 'rtl' }],                         // text direction
+            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+            ['clean'],
+            ['image']                                        // remove formatting button
+        ];
+        var quill = new Quill('#editor', {
+            modules: {
+                toolbar: toolbarOptions
+            },
+            theme: 'snow',
+            placeholder: 'Formuliere einen Auftrag...'
+        });
+        //alert('hallo: ' +  document.getElementById("dada").value);
+        //$("#dada").val();
+        quill.setContents(JSON.parse(document.getElementById("dada").value))
 
-          $('#geht_ab').click(function () {
-              var delta = quill.getContents();
-              //console.log(JSON.stringify(delta));
-              var control_delta = JSON.stringify(delta).replace(/\s/g, '') ;
-            // console.log(control_delta);
+        $('#geht_ab').click(function () {
+            var delta = quill.getContents();
+            //console.log(JSON.stringify(delta));
+            var control_delta = JSON.stringify(delta).replace(/\s/g, '') ;
+          // console.log(control_delta);
 
-              var uploadField = document.getElementById("inputGroupFile02");
-              var allet =0;
-              for (var i = 0, f; f = uploadField.files[i]; i++) {
-              //hier werden die dateigrößen der dateien addiert.
-              allet = allet + f.size
-              }
+            var uploadField = document.getElementById("inputGroupFile02");
+            var allet =0;
+            for (var i = 0, f; f = uploadField.files[i]; i++) {
+            //hier werden die dateigrößen der dateien addiert.
+            allet = allet + f.size
+            }
 
-              if(control_delta.length === 25 && uploadField.files.length === 0){
-                  alert("Du hast weder einen Aufrag formuliert noch eine Datei hochgeladen. Irgend etwas solltest du den SchülerInnen schon zu tun geben. ");
-                  //var uploadField = document.getElementById("#to_clear");
-                  return false
-              }else{
+            if(control_delta.length === 25 && uploadField.files.length === 0){
+                alert("Du hast weder einen Aufrag formuliert noch eine Datei hochgeladen. Irgend etwas solltest du den SchülerInnen schon zu tun geben. ");
+                //var uploadField = document.getElementById("#to_clear");
+                return false
+            }else{
 
-                  $("#dada").val(JSON.stringify(delta));
-                  $("#my-spinner").removeClass('d-none');
-                  return true
-              }
-          });
-          $(document).ready(function () {
-          var adressat_field = document.getElementById("adressat_field")
-            //alert('hallo: ' + adressat_field.value)
-          if(adressat_field.value=='An Klasse'){
+                $("#dada").val(JSON.stringify(delta));
+                $("#my-spinner").removeClass('d-none');
+                return true
+            }
+        });
+        $(document).ready(function () {
+        var adressat_field = document.getElementById("adressat_field")
+          //alert('hallo: ' + adressat_field.value)
+        if(adressat_field.value=='An Klasse'){
 
-          document.getElementById("stamm_field").style.display = "inline";
-          document.getElementById("stammverbund_field").style.display = "none";
-          document.getElementById("group_field").style.display = "none";
-          document.getElementById("new_group_field").style.display = "none";
+        document.getElementById("stamm_field").style.display = "inline";
+        document.getElementById("stammverbund_field").style.display = "none";
+        document.getElementById("group_field").style.display = "none";
+        document.getElementById("new_group_field").style.display = "none";
 
-          } if(adressat_field.value=='An mehrere Klassen'){
+        } if(adressat_field.value=='An mehrere Klassen'){
+  
+        document.getElementById("stamm_field").style.display = "none";
+        document.getElementById("stammverbund_field").style.display = "inline";
+        document.getElementById("group_field").style.display = "none";
+        document.getElementById("new_group_field").style.display = "none";
+
+        } if(adressat_field.value=='An Schülergruppe (Vorlage)'){
+
+        document.getElementById("stamm_field").style.display = "none";
+        document.getElementById("stammverbund_field").style.display = "none";
+        document.getElementById("group_field").style.display = "inline";
+        document.getElementById("new_group_field").style.display = "none";
+
+        } if(adressat_field.value=='An neue Schülergruppe'){
+        document.getElementById("stamm_field").style.display = "none";
+        document.getElementById("stammverbund_field").style.display = "none";
+        document.getElementById("group_field").style.display = "none";
+        document.getElementById("new_group_field").style.display = "inline";
+        }
+        });
+        function changer(val){
+        // alert('title:  '+val);
+
+        if(val=='An Klasse'){
+        reset();
+        document.getElementById("stamm_field").style.display = "inline";
+        document.getElementById("stammverbund_field").style.display = "none";
+        document.getElementById("group_field").style.display = "none";
+        document.getElementById("new_group_field").style.display = "none";
+
+        }else if(val=='An mehrere Klassen'){
+        reset();
+        document.getElementById("stamm_field").style.display = "none";
+        document.getElementById("stammverbund_field").style.display = "inline";
+        document.getElementById("group_field").style.display = "none";
+        document.getElementById("new_group_field").style.display = "none";
+
+        }if(val=='An Schülergruppe (Vorlage)'){
+        reset();
+        document.getElementById("stamm_field").style.display = "none";
+        document.getElementById("stammverbund_field").style.display = "none";
+        document.getElementById("group_field").style.display = "inline";
+        document.getElementById("new_group_field").style.display = "none";
+
+        }if(val=='An neue Schülergruppe'){
+        reset();
+        document.getElementById("stamm_field").style.display = "none";
+        document.getElementById("stammverbund_field").style.display = "none";
+        document.getElementById("group_field").style.display = "none";
+        document.getElementById("new_group_field").style.display = "inline";
+        }
+        vali(val);
+        }
+
+        function vali(val){
+        //alert('title:  '+val);
+
+        var adressatOk =1
+
+        var titleCheck =0
+      
+        var uploadCheck =1
+
+        var stammCheck =0
+        var stammverbundCheck = 0
+        var groupCheck=0
+        var checkButtonsCheck =0
+
     
-          document.getElementById("stamm_field").style.display = "none";
-          document.getElementById("stammverbund_field").style.display = "inline";
-          document.getElementById("group_field").style.display = "none";
-          document.getElementById("new_group_field").style.display = "none";
 
-          } if(adressat_field.value=='An Schülergruppe (Vorlage)'){
 
-          document.getElementById("stamm_field").style.display = "none";
-          document.getElementById("stammverbund_field").style.display = "none";
-          document.getElementById("group_field").style.display = "inline";
-          document.getElementById("new_group_field").style.display = "none";
-
-          } if(adressat_field.value=='An neue Schülergruppe'){
-          document.getElementById("stamm_field").style.display = "none";
-          document.getElementById("stammverbund_field").style.display = "none";
-          document.getElementById("group_field").style.display = "none";
-          document.getElementById("new_group_field").style.display = "inline";
-          }
-          });
-          function changer(val){
-          // alert('title:  '+val);
-
-          if(val=='An Klasse'){
-          reset();
-          document.getElementById("stamm_field").style.display = "inline";
-          document.getElementById("stammverbund_field").style.display = "none";
-          document.getElementById("group_field").style.display = "none";
-          document.getElementById("new_group_field").style.display = "none";
-
-          }else if(val=='An mehrere Klassen'){
-          reset();
-          document.getElementById("stamm_field").style.display = "none";
-          document.getElementById("stammverbund_field").style.display = "inline";
-          document.getElementById("group_field").style.display = "none";
-          document.getElementById("new_group_field").style.display = "none";
-
-          }if(val=='An Schülergruppe (Vorlage)'){
-          reset();
-          document.getElementById("stamm_field").style.display = "none";
-          document.getElementById("stammverbund_field").style.display = "none";
-          document.getElementById("group_field").style.display = "inline";
-          document.getElementById("new_group_field").style.display = "none";
-
-          }if(val=='An neue Schülergruppe'){
-          reset();
-          document.getElementById("stamm_field").style.display = "none";
-          document.getElementById("stammverbund_field").style.display = "none";
-          document.getElementById("group_field").style.display = "none";
-          document.getElementById("new_group_field").style.display = "inline";
-          }
-          vali(val);
-          }
-
-          function vali(val){
-          //alert('title:  '+val);
-
-          var adressatOk =1
-
-          var titleCheck =0
-        
-          var uploadCheck =1
-
-          var stammCheck =0
-          var stammverbundCheck = 0
-          var groupCheck=0
-          var checkButtonsCheck =0
-
+        var title_field = document.getElementById("title_field");
+        if(title_field.value !==''){
+          titleCheck = 1
+        }
       
 
+        var stamm_field = document.getElementById("stamm_field");
+        if(stamm_field.value !=='Klasse (Pflichtfeld)'){
+          stammCheck = 1
+        }
 
-          var title_field = document.getElementById("title_field");
-          if(title_field.value !==''){
-            titleCheck = 1
-          }
-        
-
-          var stamm_field = document.getElementById("stamm_field");
-          if(stamm_field.value !=='Klasse (Pflichtfeld)'){
-            stammCheck = 1
-          }
-
-          var stammverbund_field = document.getElementById("stammverbund_field");
-          if(stammverbund_field.value !=='Mehrere Klassen (Pflichtfeld)'){
-            stammverbundCheck = 1
-          }
+        var stammverbund_field = document.getElementById("stammverbund_field");
+        if(stammverbund_field.value !=='Mehrere Klassen (Pflichtfeld)'){
+          stammverbundCheck = 1
+        }
 
 
-          var group_field = document.getElementById("group_field");
-          if(group_field.value !=='Schülergruppe (Pflichtfeld)'){
-            groupCheck = 1
-          }
+        var group_field = document.getElementById("group_field");
+        if(group_field.value !=='Schülergruppe (Pflichtfeld)'){
+          groupCheck = 1
+        }
 
 
 
 
-        
-          var aa = document.querySelectorAll("input[type=checkbox]");
-          for (var i = 0; i < aa.length; i++){
-            
+      
+        var aa = document.querySelectorAll("input[type=checkbox]");
+        for (var i = 0; i < aa.length; i++){
+          
 
-              if(aa[i].checked){
-              checkButtonsCheck = 1
-              }
-          }
+            if(aa[i].checked){
+            checkButtonsCheck = 1
+            }
+        }
 
-          var modalOk = checkButtonsCheck 
+        var modalOk = checkButtonsCheck 
 
-          var adressat_field = document.getElementById("adressat_field")
-          if(adressat_field.value == 'An Klasse' && stammCheck ==0){
-            adressatOk =0
-          }
-          if(adressat_field.value == 'An mehrere Klassen' && stammverbundCheck ==0){
-            adressatOk =0
-          }
-          if(adressat_field.value == 'An Schülergruppe (Vorlage)' && groupCheck ==0){
-            adressatOk =0
-          }
-          if(adressat_field.value == 'An neue Schülergruppe' &&  modalOk ==0){
-            adressatOk =0
-          }        
-
-
-
-          var uploadField = document.getElementById("inputGroupFile02");
-          var allet =0;
-          for (var i = 0, f; f = uploadField.files[i]; i++) {
-          //alert("F: "+f.size);
-          allet = allet + f.size
-          }
-          //alert("Gesamt: "+allet);
-          if(allet > 2097152){
-            uploadCheck =0 
-          alert("Der Anhang ist zu groß! (maximal 2MB Anhang)");
-            $("#geht_ab").val('Der Anhang ist zu groß! (maximal 2MB Anhang)');
-          }else{
-            $("#geht_ab").val('Auftrag veröffentlichen');
-          };
-
-          //alert('titleCheck:'+titleCheck + ';   disziCheck: '+disziCheck+ ';   stammCheck: '+stammCheck+ ';   stammverbundCheck: '+stammverbundCheck+ ';   groupCheck: '+groupCheck + '   '+(titleCheck*disziCheck*uploadCheck * (stammCheck+stammverbundCheck+groupCheck)));
-
-          if(titleCheck*uploadCheck * adressatOk  === 0){
-          document.getElementById("geht_ab").disabled = true;
-          }else{
-          document.getElementById("geht_ab").disabled = false;
-          }
-
-          if(modalOk){
-            $("#new_group_field").text('Schülergruppe ausgewählt');
-            document.getElementById("modal_button1").disabled = false;
-            document.getElementById("modal_button2").disabled = false;
-          }else{
-            $("#new_group_field").text('keine Auswahl');
-            document.getElementById("modal_button1").disabled = true;
-            document.getElementById("modal_button2").disabled = true;
-          }
+        var adressat_field = document.getElementById("adressat_field")
+        if(adressat_field.value == 'An Klasse' && stammCheck ==0){
+          adressatOk =0
+        }
+        if(adressat_field.value == 'An mehrere Klassen' && stammverbundCheck ==0){
+          adressatOk =0
+        }
+        if(adressat_field.value == 'An Schülergruppe (Vorlage)' && groupCheck ==0){
+          adressatOk =0
+        }
+        if(adressat_field.value == 'An neue Schülergruppe' &&  modalOk ==0){
+          adressatOk =0
+        }        
 
 
-          //alert('title:'+title_field.value +'  '+ 'disziplin: '+disziplin_field.options[disziplin_field.selectedIndex].text +'  ');
-          //alert('title:'+title_field.value +'  '+ 'disziplin: '+disziplin_field.value +'  ');
-          }
-          function reset(){
 
-          }
+        var uploadField = document.getElementById("inputGroupFile02");
+        var allet =0;
+        for (var i = 0, f; f = uploadField.files[i]; i++) {
+        //alert("F: "+f.size);
+        allet = allet + f.size
+        }
+        //alert("Gesamt: "+allet);
+        if(allet > 2097152){
+          uploadCheck =0 
+        alert("Der Anhang ist zu groß! (maximal 2MB Anhang)");
+          $("#geht_ab").val('Der Anhang ist zu groß! (maximal 2MB Anhang)');
+        }else{
+          $("#geht_ab").val('Auftrag veröffentlichen');
+        };
+
+        //alert('titleCheck:'+titleCheck + ';   disziCheck: '+disziCheck+ ';   stammCheck: '+stammCheck+ ';   stammverbundCheck: '+stammverbundCheck+ ';   groupCheck: '+groupCheck + '   '+(titleCheck*disziCheck*uploadCheck * (stammCheck+stammverbundCheck+groupCheck)));
+
+        if(titleCheck*uploadCheck * adressatOk  === 0){
+        document.getElementById("geht_ab").disabled = true;
+        }else{
+        document.getElementById("geht_ab").disabled = false;
+        }
+
+        if(modalOk){
+          $("#new_group_field").text('Schülergruppe ausgewählt');
+          document.getElementById("modal_button1").disabled = false;
+          document.getElementById("modal_button2").disabled = false;
+        }else{
+          $("#new_group_field").text('keine Auswahl');
+          document.getElementById("modal_button1").disabled = true;
+          document.getElementById("modal_button2").disabled = true;
+        }
+
+
+        //alert('title:'+title_field.value +'  '+ 'disziplin: '+disziplin_field.options[disziplin_field.selectedIndex].text +'  ');
+        //alert('title:'+title_field.value +'  '+ 'disziplin: '+disziplin_field.value +'  ');
+        }
+        function reset(){
+
+        }
