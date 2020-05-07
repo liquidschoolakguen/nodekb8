@@ -237,7 +237,7 @@ app.post('/update_changer', function (req, res) {
 
 app.post('/update_changer_2', function (req, res) {
 
-
+  changeArticleTermin()
 
   console.log('update_changer 2 complete');
   res.render('debug/update_changer', {
@@ -274,6 +274,31 @@ function deleteUserVerknüpfung() {
         });
     });
 }
+
+
+
+
+function changeArticleTermin() {
+  Article.
+    find().
+    exec(function (err, allArticles) {
+
+      allArticles.forEach(function (art) {
+
+        art.termin = 'Frist: ' + art.termin
+        art.save(function (err, us) {
+          if (err) throw err;
+
+        });
+      });
+
+    })
+}
+
+
+
+
+
 
 
 
@@ -729,9 +754,9 @@ app.get('/', function (req, res) {
                       my_article.termin = getTimeStringFuture(my_article.termin)
                     } else {
                       my_article.termin = getTimeStringPast(my_article.termin)
-  
+
                     }
-  
+
 
                     my_article.schueler_token = '0';
                     hausarbeits.forEach(function (hausarbeit) {
