@@ -60,7 +60,10 @@
                                                             | |ERROR 
                                                     td
                                                         .box
-                                                            | #{my_article.disziplin.name} |
+                                                            if my_article.disziplin
+                                                                | #{my_article.disziplin.name} |
+                                                            else
+                                                                | #{my_article.fach} |
                                                         .box
                                                             | &nbsp;#{my_article.title} | 
                                                         .box
