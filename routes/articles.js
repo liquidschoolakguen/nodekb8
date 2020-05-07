@@ -41,8 +41,21 @@ router.get('/download/:id', function (req, res) {
   const targetPath = path.join(__dirname, "../uploads/" + req.params.id);
 
 
+  Load.
+    findOne({ body: req.params.id }).
+    exec(function (err, load) {
+
+      res.download(targetPath, load.name);
+      return;
+
+    })
+
+
+
+
+
   //const file = `${__dirname}/uploads/image.png`;
-  res.download(targetPath);
+
 });
 
 const upload = multer({
@@ -147,10 +160,6 @@ router.get('/add_alt', ensureAuthenticated, function (req, res) {
 
 
 
-
-
-
-
 ///------1 ersg die klasse
 
 router.get('/add_article_broadcast', ensureAuthenticated, function (req, res) {
@@ -193,11 +202,6 @@ router.get('/add_article_broadcast', ensureAuthenticated, function (req, res) {
 
 
 
-
-
-
-
-
 ///------1 ersg die klasse
 
 router.get('/add_article_klasse', ensureAuthenticated, function (req, res) {
@@ -224,8 +228,6 @@ router.get('/add_article_klasse', ensureAuthenticated, function (req, res) {
       }
     });
 });
-
-
 
 
 
@@ -355,139 +357,22 @@ router.get('/n_auftrag', ensureAuthenticated, function (req, res) {
 
 
 
+router.get('/n_auftrag_', ensureAuthenticated, function (req, res) {
 
-
-/* 
-
-
-// Edit article form
-router.get('/edit/:id', ensureAuthenticated, function (req, res) {
-
-
-
-
-
-
-
-  console.log('drin!')
-
-
-
-
-
-  Article.
-    findOne({ _id: req.params.id }).
-    populate('schuelers').
-    populate('uploads').
-    exec(function (err2, arti) {
-      if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-      if (arti.klasse && !arti.shadow_klasse) {
-
-
-        console.log('ALT');
-        res.render('edit_article_alt', {
-          article: arti,
-          schuelers: []
-        });
-
-
-
-
-      } else if (arti.shadow_klasse && !arti.klasse) {
-
-        console.log('NEU');
-
-        arti.schuelers.forEach(function (arti_schueler) {
-
-          // console.log('ein arti-schüler: ' + arti_schueler.name + ' / '+arti_schueler._id);
-
-
-        });
-        console.log('- - - - - - - - - - - - - - - ');
-        User.
-          find({
-
-            $or: [
-              { klasse: arti.shadow_klasse },
-              { klasse2: arti.shadow_klasse }
-            ]
-
-          }).
-          sort({ name: 1 }).
-          exec(function (err2, all_schuelers) {
-            if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
-            if (arti.author != req.user._id) {
-              req.flash('danger', 'nicht autorisiert');
-              res.redirect('/');
-              return;
-
-            } else {
-
-              all_schuelers.forEach(function (all_schueler) {
-                //all_schueler.article_token = false
-                //console.log('ein all-schüler: ' + all_schueler.name + ' / '+all_schueler._id);
-                arti.schuelers.forEach(function (arti_schueler) {
-                  // console.log('ein all-schüler: ' + all_schueler.name + ' / ' + all_schueler._id);
-                  if (all_schueler._id.toString() === arti_schueler._id.toString()) {
-                    //console.log('ein arti-schüler: ' + arti_schueler.name + ' / ' + arti_schueler._id);
-                    all_schueler.article_token = true
-                  }
-                });
-              });
-
-
-
-              res.render('edit_article_neu', {
-                article: arti,
-                schuelers: all_schuelers
-              });
-
-
-            }
-
-          });
-
-
-
-
+  User.findByIdAndUpdate(
+    req.user._id,
+    { default_klasse: req.body.klasse },
+    function (err, result) {
+      if (err) {
       } else {
-        console.log('FEHLER');
-        console.log('arti.klasse  ' + arti.klasse);
-        console.log('arti.shadow_klasse  ') + arti.shadow_klasse;
-
       }
 
     });
 
-});
-
-
-
-
- */
-
-
-
-
-/* 
-User.
-findOne({ _id: req.user._id }).
-populate({
-  path: 'school',
-  populate: {
-    path: 's_disziplins'
-  }
-}).
-exec(function (err, user) { */
-
-
-
-
-// Edit article form
-router.get('/edit/:id', ensureAuthenticated, function (req, res) {
+  var today = getMyNow();
+  var tomorrow = getMyNow();
+  tomorrow.setDate(today.getDate() + 3);
+  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + tomorrow.getFullYear()
 
 
 
@@ -499,8 +384,110 @@ router.get('/edit/:id', ensureAuthenticated, function (req, res) {
         path: 's_disziplins'
       }
     }).
-    exec(function (err, user) {
+    populate({
+      path: 'school',
+      populate: {
+        path: 's_stamms',
+        populate: {
+          path: 'schuelers',
+        }
+      }
+    }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 'stammverbunds'
+      }
+    }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 'groups',
+        populate: {
+          path: 'schuelers',
+        }
 
+      }
+    }).
+    populate({
+      path: 'lehrers_groups',
+      populate: {
+        path: 'schuelers'
+      }
+    }).
+    exec(function (err, user) {
+      if (err) throw err;
+
+
+      //das hier ist besonders. der push in "benno" bewirkt auch einen push in user.school.groups. Verrückt
+      var benno = user.school.groups;
+      benno.push(...user.lehrers_groups);
+
+
+      res.render('change/add_article_alt', {
+        user: user,
+        abgabe: nau,
+        // groups: benno, //daher brauche ich benno garnicht, um die arrays zusammengeführt zu übergeben
+      })
+    });
+});
+
+
+
+
+
+
+
+
+// Edit article form
+router.get('/edit/:id', ensureAuthenticated, function (req, res) {
+
+  User.
+    findOne({ _id: req.user._id }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 's_disziplins'
+      }
+    }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 's_stamms',
+        populate: {
+          path: 'schuelers',
+        }
+      }
+    }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 'stammverbunds'
+      }
+    }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 'groups',
+        populate: {
+          path: 'schuelers',
+        }
+
+      }
+    }).
+    populate({
+      path: 'lehrers_groups',
+      populate: {
+        path: 'schuelers'
+      }
+    }).
+    exec(function (err, user) {
+      if (err) throw err;
+
+
+      //das hier ist besonders. der push in "benno" bewirkt auch einen push in user.school.groups. Verrückt
+      var benno = user.school.groups;
+      benno.push(...user.lehrers_groups);
 
 
 
@@ -517,133 +504,45 @@ router.get('/edit/:id', ensureAuthenticated, function (req, res) {
           if (arti.schuelers.length === 0) { // keine schuelers // "alt"
 
 
-            console.log('keine schüler');
-
-
-
-
-            School.
-              findOne({ _id: user.school._id }).
-              populate('stammverbunds').
-              populate('s_stamms').
-              exec(function (err, scho) {
-                if (!scho) {
-                  console.log('bennj o  is krank!')
-                } else {
-
-                  var jo = [];
-                  scho.s_stamms.forEach(function (stamm) {
-                    var bingo = new Object();
-                    bingo.name = stamm.name;
-                    bingo._id = stamm._id;
-                    bingo.typo = 'stamm'
-                    jo.push(bingo);
-                  });
-                  scho.stammverbunds.forEach(function (verbund) {
-                    var bingo = new Object();
-                    bingo.name = verbund.name;
-                    bingo._id = verbund._id;
-                    bingo.typo = 'verbund'
-                    jo.push(bingo);
-                  });
-
-
-
-
-
-                  //console.log('article.body: '+ arti.body);
-                  res.render('change/edit_article_complete', {
-                    user: user,
-                    article: arti,
-                    schuelers: [],
-                    stamms_and_verbunds: jo,
-                  });
-                }
-              });
-
-
-
-
-
+            res.render('change/edit_article_complete', {
+              user: user,
+              article: arti,
+              s_stamms: user.school.s_stamms
+            });
 
 
           } else {
-            console.log('.... schüler ' + arti.schuelers.length);
 
-
-            User.
-              findOne({ _id: req.user.id }).
-              populate({
-                path: 'school',
-                populate: {
-                  path: 's_stamms',
-                  populate: {
-                    path: 'schuelers',
+            var all_stamms = user.school.s_stamms;
+            var his = arti.schuelers;
+            all_stamms.forEach(function (stamm) {
+              stamm.schuelers.forEach(function (user) {
+                his.forEach(function (his_user) {
+                  // console.log('ein all-schüler: ' + all_schueler.name + ' / ' + all_schueler._id);
+                  if (user._id.toString() === his_user._id.toString()) {
+                    //console.log('ein arti-schüler: ' + arti_schueler.name + ' / ' + arti_schueler._id);
+                    user.article_token = true
                   }
-                }
-              }).
-              exec(function (err2, userx) {
-                if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
-
-
-
-
-                var all_stamms = userx.school.s_stamms;
-                var his = arti.schuelers;
-
-
-                all_stamms.forEach(function (stamm) {
-                  console.log(' ---all_stammr: ' + stamm.name);
-
-                  stamm.schuelers.forEach(function (user) {
-                    console.log(' -schueler: ' + user.name);
-
-                    his.forEach(function (his_user) {
-                      // console.log('ein all-schüler: ' + all_schueler.name + ' / ' + all_schueler._id);
-                      if (user._id.toString() === his_user._id.toString()) {
-                        //console.log('ein arti-schüler: ' + arti_schueler.name + ' / ' + arti_schueler._id);
-                        user.article_token = true
-                      }
-                    });
-
-                  });
                 });
 
+              });
+            });
 
 
 
-                res.render('change/edit_article_complete', {
-                  user: user,
-                  article: arti,
-                  s_stamms: all_stamms
-                });
-
-
-
-
-
-              })
-
-
-
-
+            res.render('change/edit_article_complete', {
+              user: user,
+              article: arti,
+              s_stamms: all_stamms
+            });
 
 
           }
 
         });
 
-
-
-
-
-
-
-
-
     });
+
 
 
 
@@ -661,24 +560,31 @@ router.get('/edit/:id', ensureAuthenticated, function (req, res) {
 
 
 
-
-
-
-
-
-
-
-
-
-
 // Get Single hausarbeit
 router.get('/hausarbeit/:id', function (req, res) {
 
   Hausarbeit.
     findOne({ _id: req.params.id }).
-    populate('article').
     populate('schueler').
     populate('uploads').
+    populate({
+      path: 'article',
+      populate: {
+        path: 'stamm',
+      }
+    }).
+    populate({
+      path: 'article',
+      populate: {
+        path: 'stammverbund',
+      }
+    }).
+    populate({
+      path: 'article',
+      populate: {
+        path: 'disziplin',
+      }
+    }).
     exec(function (err, hausarbeit) {
       if (err) {
 
@@ -698,7 +604,7 @@ router.get('/hausarbeit/:id', function (req, res) {
 
 
 
-        res.render('korrektur', {
+        res.render('change/korrektur', {
           hausarbeit: hausarbeit,
 
         });
@@ -716,8 +622,6 @@ router.get('/hausarbeit/:id', function (req, res) {
 
 
 });
-
-
 
 
 
@@ -771,7 +675,7 @@ router.get('/schueler/:id', function (req, res) {
             //console.log('The lengthD is %s', lengthD);
             //console.log('The articles.length is %s', hausarbeits.length);
 
-            res.render('schueler', {
+            res.render('show/schueler', {
               schueler: user,
               hausarbeits: hausarbeits,
               length: lengthD
@@ -800,25 +704,78 @@ router.get('/schueler/:id', function (req, res) {
 
 
 
+function myStringToDate(termin_string) {
 
-
-
-
-function changeTimezone(date, ianatz) {
-
-  // suppose the date is 12:00 UTC
-  var invdate = new Date(date.toLocaleString('en-US', {
-    timeZone: ianatz
-  }));
-
-  // then invdate will be 07:00 in Toronto
-  // and the diff is 5 hours
-  var diff = date.getTime() - invdate.getTime();
-
-  // so 12:00 in Toronto is 17:00 UTC
-  return new Date(date.getTime() + diff);
+  var tag = termin_string.substring(7, 9)
+  var monat = termin_string.substring(10, 12)
+  var jahr = termin_string.substring(13, 17)
+  //console.log('tag   ' + tag);
+  //console.log('monat   ' + monat);
+  //console.log('jahr   ' + jahr);
+  return new Date(jahr, monat - 1, tag, 16);
 
 }
+
+
+function getTimeString(termin_string) {
+  var jetzt = getMyNow();
+
+
+  var termin = myStringToDate(termin_string);
+
+
+
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() === termin.getDate()) {
+
+    return 'heute 16 Uhr'
+  }
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() + 1 === termin.getDate()) {
+
+    return 'morgen 16 Uhr'
+  }
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() + 2 === termin.getDate()) {
+
+    return 'übermorgen'
+  }
+
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() + 3 === termin.getDate()) {
+
+    return 'in 3 Tagen'
+  }
+
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() + 4 === termin.getDate()) {
+
+    return 'in 4 Tagen'
+  }
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() + 5 === termin.getDate()) {
+
+    return 'in 5 Tagen'
+  }
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() + 6 === termin.getDate()) {
+
+    return 'in 6 Tagen'
+  }
+
+
+
+
+
+}
+
 
 
 
@@ -833,6 +790,13 @@ router.get('/article_schuelers/:id', function (req, res) {
   Article.
     findOne({ _id: req.params.id }).
     populate('schuelers').
+    populate('stamm').
+    populate({
+      path: 'stammverbund',
+      populate: {
+        path: 'stamms'
+      }
+    }).
     exec(function (err, article) {
       if (err) {
 
@@ -849,109 +813,11 @@ router.get('/article_schuelers/:id', function (req, res) {
       if (article) {
 
 
-
-
-        console.log('article.termin:     ' + article.termin);
-        var tag = article.termin.substring(0, 2)
-        var monat = article.termin.substring(3, 5)
-        var jahr = article.termin.substring(6, 10)
-
-        console.log('tag:     ' + tag);
-        console.log('monat:   ' + monat);
-        console.log('jahr:    ' + jahr);
-
-        var termin = new Date(jahr, monat - 1, tag, 16);
-
-        console.log('termin:    ' + termin);
-        var jetzt = getMyNow();
-        console.log('jeks:    ' + jetzt);
-
-
-
-
-
-
-
-
-
-        // To calculate the time difference of two dates 
-        var Difference_In_Time = termin.getTime() - jetzt.getTime();
-
-        // To calculate the no. of days between two dates 
-        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-
-        console.log('  ');
-        console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu    ' + article.title);
-
-        console.log('Total number of days between dates   ' + Difference_In_Days);
-
-
-
-
-        if (Difference_In_Days >= 0) {
-
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() === termin.getDate()) {
-
-            article.termin = 'heute 16 Uhr'
-          }
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 1 === termin.getDate()) {
-
-            article.termin = 'morgen 16 Uhr'
-          }
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 2 === termin.getDate()) {
-
-            article.termin = 'übermorgen'
-          }
-
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 3 === termin.getDate()) {
-
-            article.termin = 'in 3 Tagen'
-          }
-
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 4 === termin.getDate()) {
-
-            article.termin = 'in 4 Tagen'
-          }
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 5 === termin.getDate()) {
-
-            article.termin = 'in 5 Tagen'
-          }
-          if (jetzt.getFullYear() === termin.getFullYear() &&
-            jetzt.getMonth() === termin.getMonth() &&
-            jetzt.getDate() + 6 === termin.getDate()) {
-
-            article.termin = 'in 6 Tagen'
-          }
-
-
-
-
-
+        if (isPossibleFrist(article.termin)) {
+          article.termin = getTimeString(article.termin)
         } else {
-          ///Termin vorüber
           article.termin = 'abgelaufen'
-
         }
-
-
-
-
-
-
-
-
 
 
 
@@ -973,26 +839,16 @@ router.get('/article_schuelers/:id', function (req, res) {
 
 
 
-
               var nu_hauses = []
 
 
-              if (article.klasse) {
-
-                console.log('good type')
-
-
-
-
-
-
-
+              if (article.stamm) {
 
                 User.
                   find({
                     $and: [
                       { type: 'schueler' },
-                      { $or: [{ klasse: article.klasse }, { klasse2: article.klasse }, { klasse3: article.klasse }, { klasse4: article.klasse }] }
+                      { schueler_stamm: article.stamm}
                     ]
                   }).
                   sort({ name: 1 }).
@@ -1011,68 +867,111 @@ router.get('/article_schuelers/:id', function (req, res) {
                           nu_hauses.push(h)
                           hat_arbeit = true
                         }
-
-
-
                       });
 
                       if (!hat_arbeit) {
-
-
                         let hhh = new Hausarbeit();
                         hhh.schueler = sss;
                         hhh.status = '0';
-
                         nu_hauses.push(hhh)
 
-
-
                       }
-
-
-
-
                     });
 
 
-
                     let schuelers = [];
-
                     nu_hauses.forEach(function (hausarbeit) {
                       console.log('The Fotzi is %s', hausarbeit.schueler.name + '/' + hausarbeit.status);
-
                       schuelers.push(hausarbeit.schueler);
                     });
 
                     let length = nu_hauses.length;
 
-
-
-
-                    res.render('article_schueler', {
+                    res.render('change/article_schueler', {
                       now: getMyNow(),
                       article: article,
                       hausarbeits: nu_hauses,
                       length: length,
-                      my_termin: termin
+                      my_termin: myStringToDate(article.termin)
 
+                    });
+                  })
+
+
+
+
+
+
+              } else if (article.stammverbund) {
+
+                var jo2 = []
+
+                article.stammverbund.stamms.forEach(function (stamm) {
+                  console.log('verbund    ' + stamm.name);
+                  jo2.push(stamm);
+                })
+
+
+
+                User.
+                  find({
+                    $and: [
+                      { type: 'schueler' },
+                      { schueler_stamm: { $in: jo2 }}
+                    ]
+                  }).
+                  sort({ name: 1 }).
+                  exec(function (err2, all_schuelers) {
+                    if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+                    all_schuelers.forEach(function (sss) {
+                      console.log('all_schueler is %s', sss.username);
+
+                      var hat_arbeit = false
+                      hausarbeits.forEach(function (h) {
+                        console.log('hausarbeit is %s', h.schueler.username);
+
+                        if (sss.username === h.schueler.username) {
+                          nu_hauses.push(h)
+                          hat_arbeit = true
+                        }
+                      });
+
+                      if (!hat_arbeit) {
+                        let hhh = new Hausarbeit();
+                        hhh.schueler = sss;
+                        hhh.status = '0';
+                        nu_hauses.push(hhh)
+
+                      }
                     });
 
 
+                    let schuelers = [];
+                    nu_hauses.forEach(function (hausarbeit) {
+                      console.log('The Fotzi is %s', hausarbeit.schueler.name + '/' + hausarbeit.status);
+                      schuelers.push(hausarbeit.schueler);
+                    });
 
+                    let length = nu_hauses.length;
 
+                    res.render('change/article_schueler', {
+                      now: getMyNow(),
+                      article: article,
+                      hausarbeits: nu_hauses,
+                      length: length,
+                      my_termin: myStringToDate(article.termin)
 
-
-
-
-
-
-
-
-
-
-
+                    });
                   })
+
+
+
+
+
+
+
 
 
 
@@ -1138,12 +1037,13 @@ router.get('/article_schuelers/:id', function (req, res) {
 
 
 
-                res.render('article_schueler', {
+                res.render('change/article_schueler', {
                   now: getMyNow(),
                   article: article,
                   hausarbeits: nu_hauses,
                   length: length,
-                  my_termin: termin
+                  my_termin: myStringToDate(article.termin)
+
 
                 });
 
@@ -1202,10 +1102,6 @@ router.get('/article_schuelers/:id', function (req, res) {
 
 
 
-
-
-
-
 // Load edit_hausarbeit form
 router.get('/edit_hausarbeit/:id', ensureAuthenticated, function (req, res) {
   //console.log('x ' + req.params.id);
@@ -1223,7 +1119,24 @@ router.get('/edit_hausarbeit/:id', ensureAuthenticated, function (req, res) {
         { schueler: req.user._id }
       ]
     }).
-    populate('article').
+    populate({
+      path: 'article',
+      populate: {
+        path: 'stamm',
+      }
+    }).
+    populate({
+      path: 'article',
+      populate: {
+        path: 'stammverbund',
+      }
+    }).
+    populate({
+      path: 'article',
+      populate: {
+        path: 'disziplin',
+      }
+    }).
     exec(function (err, ha) {
       if (err) {
 
@@ -1248,7 +1161,7 @@ router.get('/edit_hausarbeit/:id', ensureAuthenticated, function (req, res) {
 
 
 
-        res.render('edit_hausarbeit', {
+        res.render('change/edit_hausarbeit', {
           hausarbeit: ha,
 
         });
@@ -1268,13 +1181,6 @@ router.get('/edit_hausarbeit/:id', ensureAuthenticated, function (req, res) {
 
 
 });
-
-
-
-
-
-
-
 
 
 
@@ -1308,10 +1214,26 @@ router.get('/finished_hausarbeit/:id', ensureAuthenticated, function (req, res) 
 
 
       }
-
-
     }).
     populate('schueler').
+    populate({
+      path: 'article',
+      populate: {
+        path: 'stamm',
+      }
+    }).
+    populate({
+      path: 'article',
+      populate: {
+        path: 'stammverbund',
+      }
+    }).
+    populate({
+      path: 'article',
+      populate: {
+        path: 'disziplin',
+      }
+    }).
     exec(function (err, ha) {
       if (err) {
 
@@ -1332,7 +1254,7 @@ router.get('/finished_hausarbeit/:id', ensureAuthenticated, function (req, res) 
         //console.log('x nnnnn ' + ha.article.klasse);
 
 
-        res.render('finished_hausarbeit', {
+        res.render('show/finished_hausarbeit', {
           hausarbeit: ha,
 
         });
@@ -1360,9 +1282,6 @@ router.get('/finished_hausarbeit/:id', ensureAuthenticated, function (req, res) 
 
 
 
-
-
-
 // Load edit_hausarbeit form
 router.get('/hausarbeit_for_lehrer/:id', ensureAuthenticated, function (req, res) {
   //console.log('x ' + req.params.id);
@@ -1375,7 +1294,24 @@ router.get('/hausarbeit_for_lehrer/:id', ensureAuthenticated, function (req, res
 
   Hausarbeit.
     findOne({ _id: req.params.id }).
-    populate('article').
+    populate({
+      path: 'article',
+      populate: {
+        path: 'stamm',
+      }
+    }).
+    populate({
+      path: 'article',
+      populate: {
+        path: 'stammverbund',
+      }
+    }).
+    populate({
+      path: 'article',
+      populate: {
+        path: 'disziplin',
+      }
+    }).
     populate('schueler').
     exec(function (err, ha) {
       if (err) {
@@ -1397,7 +1333,7 @@ router.get('/hausarbeit_for_lehrer/:id', ensureAuthenticated, function (req, res
         //console.log('x nnnnn ' + ha.article.klasse);
 
 
-        res.render('finished_hausarbeit', {
+        res.render('show/finished_hausarbeit', {
           hausarbeit: ha,
 
         });
@@ -1423,26 +1359,11 @@ router.get('/hausarbeit_for_lehrer/:id', ensureAuthenticated, function (req, res
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // get
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // post
-
-
 
 
 
@@ -1623,16 +1544,6 @@ router.post('/add_bingo_edit', ensureAuthenticated, function (req, res) {
 
 
 
-
-
-
-
-
-
-
-
-
-
 // Bingo Article
 router.post('/add_bingo', ensureAuthenticated, function (req, res) {
 
@@ -1794,12 +1705,6 @@ router.post('/add_bingo', ensureAuthenticated, function (req, res) {
 
 
 
-
-
-
-
-
-
 // Bingo Article
 router.post('/add_bingo_broadcast', ensureAuthenticated, function (req, res) {
 
@@ -1853,16 +1758,6 @@ router.post('/add_bingo_broadcast', ensureAuthenticated, function (req, res) {
 
 
 });
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1989,97 +1884,9 @@ router.get('/add_with_group/:id', ensureAuthenticated, function (req, res) {
 
 
 
-
-
-
-
-
-
 // Bingo Article
 router.post('/one', ensureAuthenticated, function (req, res) {
-  User.findByIdAndUpdate(
-    req.user._id,
-    { default_klasse: req.body.klasse },
-    function (err, result) {
-      if (err) {
-      } else {
-      }
 
-    });
-
-  var today = getMyNow();
-  var tomorrow = getMyNow();
-  tomorrow.setDate(today.getDate() + 3);
-  var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + tomorrow.getFullYear()
-
-  User.
-    findOne({ _id: req.user._id }).
-    populate({
-      path: 'school',
-      populate: {
-        path: 's_disziplins'
-      }
-    }).
-    exec(function (err, user) {
-
-      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-      console.log('i------------- ' + user.name);
-      console.log('i------------- ' + user.school.name);
-
-
-
-
-      Stamm.findOne({ _id: req.body.klasse_n }, function (err, gefunden_stamm) {
-        if (err) throw err;
-        if (gefunden_stamm) {
-
-          console.log('gefunden_stamm: ' + gefunden_stamm.name);
-
-
-
-          var bingo = new Object();
-          bingo.name = gefunden_stamm.name;
-          bingo._id = gefunden_stamm._id;
-          bingo.typ = 'stamm';
-
-          res.render('change/add_article_alt', {
-            user: user,
-            abgabe: nau,
-            bingo: bingo
-          })
-
-
-
-
-        } else {
-          Stammverbund.findOne({ _id: req.body.klasse_n }, function (err, gefunden_stammverbund) {
-
-            if (gefunden_stammverbund) {
-              console.log('gefunden_stammverbund: ' + gefunden_stammverbund.name);
-
-              var bingo = new Object();
-              bingo.name = gefunden_stammverbund.name;
-              bingo._id = gefunden_stammverbund._id;
-              bingo.typ = 'stammverbund';
-
-              res.render('change/add_article_alt', {
-                user: user,
-                abgabe: nau,
-                bingo: bingo
-              })
-
-
-
-            } else {
-              console.log('FEHLER RR: ');
-            }
-          })
-        }
-      })
-
-
-
-    });
 });
 
 
@@ -2088,6 +1895,341 @@ router.post('/one', ensureAuthenticated, function (req, res) {
 
 
 
+
+
+
+function isPossibleFrist(termin) {
+
+  var tag = termin.substring(7, 9)
+  var monat = termin.substring(10, 12)
+  var jahr = termin.substring(13, 17)
+  //console.log('tag   ' + tag);
+  //console.log('monat   ' + monat);
+  //console.log('jahr   ' + jahr);
+  var d = new Date(jahr, monat - 1, tag, 16);
+  var jetzt = getMyNow();
+  var diffMs = (d - jetzt); // milliseconds between now & Christmas
+
+
+  if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
+
+    return false;
+  } else {
+
+    return true;
+
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+function addGroup(article, req, res) {
+
+
+
+  var jo = []
+  var ii = 0;
+  req.body.schuelers.forEach(function (user_id) {//alle adressaten werden in einen Array gesteckt
+    console.log('fifi___:   ' + user_id);
+    jo.push(user_id);
+    ii++;
+  });
+
+
+  User.
+    findOne({ _id: req.user.id }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 'schuelers'
+      }
+    }).
+    exec(function (err, user) {
+      if (err) throw err;
+      if (!user) {
+        return
+      }
+
+
+      let group = new Group();
+      console.log('req.body.for_all :   ' + req.body.for_all);
+
+      group.name = 'einmalige Schülergruppe'; //anscheinend kann man eine leere group nur mit bezug zu anderen objekten nicht speichern 
+      if (req.body.for_all === '1') {
+        group.school = user.school;
+        group.name = req.body.vorlage_name.trim()
+      } else if (req.body.for_all === '2') {
+        group.lehrer = user;
+        group.name = req.body.vorlage_name.trim()
+      } else {
+        //nix
+      }
+
+
+
+
+
+      group.save(function (err, saved_group) {//es kann sein, dass hier bei for_all = 0 ein "lleren" group speichert, ist aber alles soweit richtig
+
+
+
+        User.find().where('_id').in(jo).exec((err, users) => {
+
+          users.forEach(function (user) {
+            console.log('schülerName :   ' + user.name);
+
+            Group.findByIdAndUpdate(saved_group._id,
+              { $push: { schuelers: user } },
+              { safe: true, upsert: true },
+              function (err, uptdatedGroup) {
+                if (err) {
+                  console.log(err);
+                } else {
+
+                }
+              }
+            )
+          })
+
+
+          if (req.body.for_all === '1') {
+            School.findByIdAndUpdate(user.school._id,
+              { $push: { groups: saved_group } },
+              { safe: true, upsert: true },
+              function (err, updated_school) {
+                if (err) {
+                  console.log(err);
+                } else {
+
+                  handleSaveWithGroup(article, saved_group, req, res);
+
+                }
+
+
+
+              })
+
+
+          } else if (req.body.for_all === '2') {
+
+            User.findByIdAndUpdate(user._id,
+              { $push: { lehrers_groups: saved_group } },
+              { safe: true, upsert: true },
+              function (err, updated_lehrer) {
+                if (err) {
+                  console.log(err);
+                } else {
+
+                  handleSaveWithGroup(article, saved_group, req, res);
+                  return;
+
+                }
+
+
+              })
+
+
+
+
+
+
+          } else {
+            console.log('saved_group :   ' + saved_group.name);
+
+            handleSaveWithGroup(article, saved_group, req, res);
+            return;
+
+
+
+
+
+          }
+
+
+        });
+
+
+
+
+      })
+
+    })
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+// 
+router.post("/add_group", (req, res) => {
+
+
+  if (!req.user) {  //wer nicht angemeldet ist, kann nicht speichern
+    req.flash('warning', 'Du bist nicht angemeldet');
+    res.redirect('/');
+    return
+  }
+
+  if (!req.body.schuelers) { // Wenn man kein Users auswählt kann man (hier) nicht speichern
+    req.flash('warning', 'Du hast keine SchülerInnen ausgewählt. ');
+    res.redirect('/');
+    return
+  }
+
+
+  var jo = []
+  var ii = 0;
+  req.body.schuelers.forEach(function (user_id) {//alle adressaten werden in einen Array gesteckt
+    console.log('fifi___:   ' + user_id);
+    jo.push(user_id);
+    ii++;
+  });
+
+
+
+  User.
+    findOne({ _id: req.user.id }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 'schuelers'
+      }
+    }).
+    exec(function (err, user) {
+      if (err) throw err;
+      if (!user) {
+        return
+      }
+
+
+
+
+
+
+      let group = new Group();
+
+
+
+      group.name = 'einmalige Schülergruppe'; //anscheinend kann man eine leere group nur mit bezug zu anderen objekten nicht speichern 
+      if (req.body.for_all === '1') {
+        group.school = user.school;
+      } else if (req.body.for_all === '2') {
+        group.lehrer = user;
+
+      } else {
+        // console.log('req.body.for_all :   ' + req.body.for_all);  nix
+      }
+
+
+
+
+
+      group.save(function (err, saved_group) {//es kann sein, dass hier bei for_all = 0 ein "lleren" group speichert, ist aber alles soweit richtig
+
+
+
+        User.find().where('_id').in(jo).exec((err, users) => {
+
+          users.forEach(function (user) {
+            console.log('schülerName :   ' + user.name);
+
+            Group.findByIdAndUpdate(saved_group._id,
+              { $push: { schuelers: user } },
+              { safe: true, upsert: true },
+              function (err, uptdatedGroup) {
+                if (err) {
+                  console.log(err);
+                } else {
+
+                }
+              }
+            )
+          })
+
+
+          if (req.body.for_all === '1') {
+            School.findByIdAndUpdate(user.school._id,
+              { $push: { groups: saved_group } },
+              { safe: true, upsert: true },
+              function (err, updated_school) {
+                if (err) {
+                  console.log(err);
+                } else {
+
+
+                }
+
+                res.render('change/add_group_name', {
+                  group_id: saved_group._id,
+                })
+
+                return
+              })
+
+
+          } else if (req.body.for_all === '2') {
+
+            User.findByIdAndUpdate(user._id,
+              { $push: { lehrers_groups: saved_group } },
+              { safe: true, upsert: true },
+              function (err, updated_lehrer) {
+                if (err) {
+                  console.log(err);
+                } else {
+
+
+                }
+
+                res.render('change/add_group_name', {
+                  group_id: saved_group._id,
+                })
+                return
+              })
+
+
+
+
+
+
+          } else {
+            res.redirect('/articles/add_with_group/' + saved_group._id);
+            return
+
+
+
+          }
+
+
+        });
+
+
+
+
+      })
+
+
+
+
+    })
+})
 
 
 
@@ -2101,612 +2243,70 @@ router.post('/one', ensureAuthenticated, function (req, res) {
 
 
 // 
-router.post("/add_neu", upload.array("files"),
-  (req, res) => {
-    if (!req.user) {  //wer nicht angemeldet ist, kann nicht speichern
-      req.flash('warning', 'Du bist nicht angemeldet');
-      res.redirect('login');
-      return
-    }
-    /*     if (!req.body.body || req.body.body.length <= 8) {  //Wenn der Azftrag zu kurz ist, kann man nicht speichern
-          req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Nochmal das Ganze.');
-          res.redirect('add_article_klasse');
-          return
-        } */
-    if (!req.body.schuelers) { // Wenn man kein SuS auswählt kann man (hier) nicht speichern
-      req.flash('warning', 'Du hast keine Schüler*innen ausgewählt. So wird das nichts mit dem Auftrag. ');
-      res.redirect('/');
-      return
-    }
+router.post("/add_group_name", (req, res) => {
+  var name = req.body.name.trim();
+  var group_id = req.body.group_id;
 
-    var jo = []
-    var ii = 0;
-    req.body.schuelers.forEach(function (schueler) {//alle adressaten werden in einen Array gesteckt
-      jo.push(schueler);
-      ii++;
-    });
 
-
-
-    let article = new Article();
-    article.title = req.body.title;
-    article.author = req.user._id
-    article.shadow_klasse = req.body.klaas;
-    article.fach = req.body.fach;
-    article.termin = req.body.termin;
-    article.body = req.body.body;
-    article.lehrer = req.user._id;
-    article.ha_gelb = '0';
-    article.ha_gruen = '0'
-    article.created_as_date = getMyNow();
-
-
-
-    const start = getMyNow();
-    var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
-    article.created = nau;
-
-    var tag = req.body.termin.substring(0, 2)
-    var monat = req.body.termin.substring(3, 5)
-    var jahr = req.body.termin.substring(6, 10)
-
-    var d = new Date(jahr, monat - 1, tag, 16);
-    var jetzt = getMyNow();
-    var diffMs = (d - jetzt); // milliseconds between now & Christmas
-
-    if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
-      req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn');
-      res.redirect('add_article_klasse');
-      return;
-    }
-
-
-
-
-
-    article.save(function (err, art) {
-
-      if (err) {
-        console.log(err);
-        return;
-      } else {
-
-
-        User.find().where('_id').in(jo).exec((err, schuelers) => {
-
-
-          schuelers.forEach(function (schueler) {
-            console.log('record :   ' + schueler.name);
-
-
-            Article.findByIdAndUpdate(art._id,
-              { $push: { schuelers: schueler } },
-              { safe: true, upsert: true },
-              function (err, uptdatedArticle) {
-                if (err) {
-                  console.log(err);
-                } else {
-                  User.findByIdAndUpdate(schueler._id,
-                    { $push: { auftrags: uptdatedArticle } },
-                    { safe: true, upsert: true },
-                    function (err, uptdatedSchueler) {
-                      if (err) {
-                        console.log(err);
-                      } else {
-
-
-
-
-
-                        User.findByIdAndUpdate(req.user.id,
-                          { $push: { lehrers_auftrags: uptdatedArticle } },
-                          { safe: true, upsert: true },
-                          function (err, uptdatedSchueler) {
-                            if (err) {
-                              console.log(err);
-                            } else {
-
-                            }
-
-
-                          });
-
-
-
-
-
-
-
-                      }
-
-                    })
-
-
-                }
-              }
-            )
-          })
-
-
-          if (req.files.length === 0) {
-
-
-            req.flash('success', 'Auftrag wurde erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
-            res.redirect('/');
-
-            return
-
-          }
-
-          var ii = 0
-          req.files.forEach(function (file) {
-
-            console.log('______________________-' + ii);
-
-            ii++;
-
-
-            const tempPath = file.path;
-            const gigi = getMyNow().getTime() + "_" + file.originalname.toLowerCase();
-            const gigi_sauber = gigi.split(' ').join('-');
-            const targetPath = path.join(__dirname, "../uploads/" + gigi_sauber);
-            //const targetPath = path.join(__dirname, "../uploads/" + req.user._id + "_" +path.extname(file.originalname).toLowerCase());
-            console.log('bennoYYY ' + targetPath);
-
-            const pipi = path.extname(file.originalname).toLowerCase()
-            if (
-              pipi == ".doc" ||
-              pipi == ".docx" ||
-              pipi == ".odt" ||
-              pipi == ".pdf" ||
-              pipi == ".rtf" ||
-              pipi == ".tex" ||
-              pipi == ".txt" ||
-              pipi == ".wpd" ||
-              pipi == ".ai" ||
-              pipi == ".gif" ||
-              pipi == ".ico" ||
-              pipi == ".jpeg" ||
-              pipi == ".jpg" ||
-              pipi == ".png" ||
-              pipi == ".ps" ||
-              pipi == ".psd" ||
-              pipi == ".svg" ||
-              pipi == ".tif" ||
-              pipi == ".tiff" ||
-              pipi == ".ods" ||
-              pipi == ".xls" ||
-              pipi == ".xlsm" ||
-              pipi == ".xlsx" ||
-              pipi == ".key" ||
-              pipi == ".odp" ||
-              pipi == ".pps" ||
-              pipi == ".ppt" ||
-              pipi == ".pptx"
-            ) {
-
-
-
-              fs.rename(tempPath, targetPath, err => {
-                if (err) return handleError(err, res);
-
-
-
-
-                let load = new Load();
-                load.body = gigi_sauber;
-                load.extension = path.extname(gigi_sauber);
-                load.name = file.originalname;
-
-
-                if (
-                  pipi == ".doc" ||
-                  pipi == ".docx" ||
-                  pipi == ".odt" ||
-                  pipi == ".pdf" ||
-                  pipi == ".rtf" ||
-                  pipi == ".tex" ||
-                  pipi == ".txt" ||
-                  pipi == ".wpd"
-
-                ) {
-                  load.type = '1'
-                } else if (
-
-                  pipi == ".ai" ||
-                  pipi == ".gif" ||
-                  pipi == ".ico" ||
-                  pipi == ".jpeg" ||
-                  pipi == ".jpg" ||
-                  pipi == ".png" ||
-                  pipi == ".ps" ||
-                  pipi == ".psd" ||
-                  pipi == ".svg" ||
-                  pipi == ".tif" ||
-                  pipi == ".tiff"
-
-                ) {
-
-                  load.type = '2'
-
-                } else if (
-
-                  pipi == ".ods" ||
-                  pipi == ".xls" ||
-                  pipi == ".xlsm" ||
-                  pipi == ".xlsx"
-
-                ) {
-
-                  load.type = '3'
-
-                } else if (
-
-                  pipi == ".key" ||
-                  pipi == ".odp" ||
-                  pipi == ".pps" ||
-                  pipi == ".ppt" ||
-                  pipi == ".pptx"
-
-                ) {
-
-                  load.type = '4'
-                }
-
-
-
-                load.save().then(function (loaded) {
-
-                  Article.findByIdAndUpdate(art._id,
-                    { $push: { uploads: loaded } },
-                    { safe: true, upsert: true },
-                    function (err, uptdatedArticle) {
-                      if (err) {
-                        console.log(err);
-                      } else {
-
-                      }
-                    });
-                })
-
-
-
-
-              })
-
-            } else {
-              fs.unlink(tempPath, err => {
-                if (err) return handleError(err, res);
-
-
-                req.flash('danger', 'Ein Dateityp wird nicht unterstützt.');
-
-
-
-
-              });
-            }
-
-
-          })
-
-
-
-
-          req.flash('success', 'Auftrag mit upload erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
-          res.redirect('/');
-
-          return
-
-
-
-
-
-        })
-
-
-
-
-
-
-      }
-    })
-
-  }
-
-)
-
-
-
-
-
-
-
-
-
-/* 
-
-
-
-
-router.post("/add_alt", upload.array("files"), (req, res) => {
-  if (!req.user) {  //wer nicht angemeldet ist, kann nicht speichern
-    req.flash('warning', 'Du bist nicht angemeldet');
-    res.redirect('login');
-    return
-  }
-
-
-  let article = new Article();
-
-
-  if (req.body.bingo_typ === 'stamm') {
-    Stamm.findOne({ _id: req.body.bingo_id }, function (err, gefunden_stamm) {
-      if (err) throw err;
-      if (!gefunden_stamm) {
-        console.log('fehler: ');
-      }
-
-      console.log('gefunden_stamm: '+gefunden_stamm.name);
-      article.stamm = gefunden_stamm;
-
-    })
-  } else if (req.body.bingo_typ === 'stammverbund') {
-    Stammverbund.findOne({ _id: req.body.bingo_id }, function (err, gefunden_stammverbund) {
-      if (err) throw err;
-      if (!gefunden_stammverbund) {
-        console.log('fehler: ');
-      }
-
-      console.log('gefunden_stammverbund: '+gefunden_stammverbund.name);
-      article.stammverbund = gefunden_stammverbund;
-
-    })
-  } else {
-    console.log('FEHLER');
-    //fehler
-    return;
-  }
-
-
-
-
-
-
-
-
-
-
-
-  
-  article.title = req.body.title;
-  article.author = req.user._id;
-  //article.klasse = req.body.klasse;
-  article.fach = req.body.fach;
-  article.termin = req.body.termin;
-  article.body = req.body.body;
-  article.lehrer = req.user._id;
-  article.ha_gelb = '0';
-  article.ha_gruen = '0'
-  article.created_as_date = getMyNow();
-
-  const start = getMyNow();
-  var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
-  var nau = start.getDate() + '.' + start.getMonth() + '. (' + start.getHours() + ':' + start.getMinutes() + ')'
-
-  article.created = nau;
-
-
-  var tag = req.body.termin.substring(0, 2)
-  var monat = req.body.termin.substring(3, 5)
-  var jahr = req.body.termin.substring(6, 10)
-
-  var d = new Date(jahr, monat - 1, tag, 16);
-  var jetzt = getMyNow();
-  var diffMs = (d - jetzt); // milliseconds between now & Christmas
-
-  if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
-    req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn');
-    res.redirect('add_article_klasse');
-    return;
-  }
-
-  //console.log('hier: ' + article.body);
-  article.save(function (err, art) {
-
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-
-      User.findByIdAndUpdate(req.user.id,
-        { $push: { lehrers_auftrags: art } },
-        { safe: true, upsert: true },
-        function (err, uptdatedSchueler) {
-          if (err) {
-            console.log(err);
-          } else {
-
-          
-          }
-
-
-        });
-
-      if (req.files.length === 0) {
-        req.flash('success', 'Auftrag wurde erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
-        res.redirect('/');
-        return
-
-      } else {
-        var ii = 0
-        req.files.forEach(function (file) {
-          console.log('______________________-' + ii);
-
-          ii++;
-          const tempPath = file.path;
-          const gigi = getMyNow().getTime() + "_" + file.originalname.toLowerCase();
-          const gigi_sauber = gigi.split(' ').join('-');
-          const targetPath = path.join(__dirname, "../uploads/" + gigi_sauber);
-          //const targetPath = path.join(__dirname, "../uploads/" + req.user._id + "_" +path.extname(file.originalname).toLowerCase());
-          console.log('bennoYYY ' + targetPath);
-
-          const pipi = path.extname(file.originalname).toLowerCase()
-          if (
-            pipi == ".doc" || pipi == ".docx" || pipi == ".odt" || pipi == ".pdf" || pipi == ".rtf" || pipi == ".tex" ||
-            pipi == ".txt" || pipi == ".wpd" || pipi == ".ai" || pipi == ".gif" || pipi == ".ico" || pipi == ".jpeg" ||
-            pipi == ".jpg" || pipi == ".png" || pipi == ".ps" || pipi == ".psd" || pipi == ".svg" || pipi == ".tif" ||
-            pipi == ".tiff" || pipi == ".ods" || pipi == ".xls" || pipi == ".xlsm" || pipi == ".xlsx" || pipi == ".key" ||
-            pipi == ".odp" || pipi == ".pps" || pipi == ".ppt" || pipi == ".pptx"
-          ) {
-            fs.rename(tempPath, targetPath, err => {
-              if (err) return handleError(err, res);
-
-              let load = new Load();
-              load.body = gigi_sauber;
-              load.extension = path.extname(gigi_sauber);
-              load.name = file.originalname;
-              if (
-                pipi == ".doc" || pipi == ".docx" || pipi == ".odt" || pipi == ".pdf" || pipi == ".rtf" ||
-                pipi == ".tex" || pipi == ".txt" || pipi == ".wpd"
-              ) {
-                load.type = '1'
-              } else if (
-                pipi == ".ai" || pipi == ".gif" || pipi == ".ico" || pipi == ".jpeg" || pipi == ".jpg" ||
-                pipi == ".png" || pipi == ".ps" || pipi == ".psd" || pipi == ".svg" || pipi == ".tif" || pipi == ".tiff"
-              ) {
-                load.type = '2'
-              } else if (
-                pipi == ".ods" || pipi == ".xls" || pipi == ".xlsm" || pipi == ".xlsx"
-              ) {
-                load.type = '3'
-              } else if (
-                pipi == ".key" || pipi == ".odp" || pipi == ".pps" || pipi == ".ppt" || pipi == ".pptx"
-              ) {
-
-                load.type = '4'
-              }
-
-              load.save().then(function (loaded) {
-
-                Article.findByIdAndUpdate(art._id,
-                  { $push: { uploads: loaded } },
-                  { safe: true, upsert: true },
-                  function (err, uptdatedArticle) {
-                    if (err) {
-                      console.log(err);
-                    } else {
-
-                    }
-                  });
-              })
-            })
-          } else {
-            fs.unlink(tempPath, err => {
-              if (err) return handleError(err, res);
-              req.flash('danger', 'Ein Dateityp wird nicht unterstützt.');
-            });
-          }
-        })
-        req.flash('success', 'Auftrag mit upload erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
-        res.redirect('/');
-        return
-      }
-    }
-  })
-}
-)
-
-
- */
-
-
-
-
-
-function byteCount(s) {
-  return encodeURI(s).split(/%..|./).length - 1;
-}
-
-
-
-
-
-
-router.post("/add_alt", upload.array("files"), (req, res) => {
   if (!req.user) {  //wer nicht angemeldet ist, kann nicht speichern
     req.flash('warning', 'Du bist nicht angemeldet');
     res.redirect('/');
     return
   }
 
-  //console.log(' req.body.body.length '+req.body.body.length)
-  // console.log(' in Byte '+byteCount(req.body.body.length))
 
-  //console.log(' req.body.body: '+req.body.body)
-  if (req.body.body.length>15700000) {  //wer nicht angemeldet ist, kann nicht speichern
-    req.flash('warning', 'Der Auftrag hat einen zu großen Speicherbedarf. Binde weniger Bilder ein.');
-    res.redirect('/');
-    return
-  }
 
-  let article = new Article();
-
-  if (req.body.bingo_typ === 'stamm') {
-    Stamm.findOne({ _id: req.body.bingo_id }, function (err, gefunden_stamm) {
+  User.
+    findOne({ _id: req.user.id }).
+    populate({
+      path: 'school',
+      populate: {
+        path: 'schuelers'
+      }
+    }).
+    exec(function (err, user) {
       if (err) throw err;
-      if (!gefunden_stamm) {
-        console.log('fehler: ');
+      if (!user) {
+        return
       }
 
-      console.log('gefunden_stamm: ' + gefunden_stamm.name);
-      article.stamm = gefunden_stamm;
-
-      handleSave(article, req, res);
-
-    })
-  } else if (req.body.bingo_typ === 'stammverbund') {
-    Stammverbund.findOne({ _id: req.body.bingo_id }, function (err, gefunden_stammverbund) {
-      if (err) throw err;
-      if (!gefunden_stammverbund) {
-        console.log('fehler: ');
-      }
-
-      console.log('gefunden_stammverbund: ' + gefunden_stammverbund.name);
-      article.stammverbund = gefunden_stammverbund;
-
-      handleSave(article, req, res);
 
 
-    })
-  } else if (req.body.bingo_typ === 'group') {
-    Group.
-      findOne({ _id: req.body.bingo_id }).
-      populate('schuelers').
-      exec(function (err, gefunden_group) {
+
+      Group.findOne({
+        $or: [
+          { $and: [{ name: name }, { school: user.school }] },
+          { $and: [{ name: name }, { lehrer: user }] }
+        ]
+      }, function (err, gibbet_schon) {
         if (err) throw err;
-        if (!gefunden_group) {
-          console.log('fehler: ');
+        if (gibbet_schon) {
+          req.flash('danger', 'Deine Schule hat bereits eine Schülergruppe mit diesem Namen');
+          res.render('change/add_group_name', {
+            group_id: group_id
+          })
+          return
         }
 
-        //console.log('gefunden_group: ' + gefunden_group.name);
-        // article.group = gefunden_group;
+
+        console.log('lll :   ' + group_id)
 
 
-        handleSaveWithGroup(article, gefunden_group, req, res);
+        let groupi = {};
+        groupi.name = name;
 
+        Group.update({ _id: group_id }, groupi, function (err, groupiiii) {
+          if (err) throw err;
+          //console.log('lll :   ' + groupiiii._id)
+          res.redirect('/articles/add_with_group/' + group_id);
+          return
 
-
+        })
 
 
       })
-  } else {
-    console.log('FEHLER');
-    //fehler
-    return;
-  }
 
-
+    })
 })
 
 
@@ -2723,9 +2323,124 @@ router.post("/add_alt", upload.array("files"), (req, res) => {
 
 
 
+
+
+
+
+
+router.post("/add_alt", upload.array("files"), (req, res) => {
+  if (!req.user) {  //wer nicht angemeldet ist, kann nicht speichern
+    req.flash('warning', 'Du bist nicht angemeldet');
+    res.redirect('/');
+    return
+  }
+
+  if (!isPossibleFrist(req.body.termin)) {
+    req.flash('danger', 'Die Abgabefrist liegt in der Vergangenheit. Der Auftrag wurde nicht erteilt');
+    res.redirect('/');
+    return;
+  }
+
+
+
+  //console.log(' req.body.body.length '+req.body.body.length)
+  // console.log(' in Byte '+byteCount(req.body.body.length))
+
+  //console.log(' req.body.body: '+req.body.body)
+  if (req.body.body.length > 15700000) {  //wer nicht angemeldet ist, kann nicht speichern
+    req.flash('danger', 'Der Auftrag hat einen zu großen Speicherbedarf. Binde weniger Bilder ein.');
+    res.redirect('/');
+    return
+  }
+
+  let article = new Article();
+
+  if (req.body.adressat === 'An Klasse') {
+    console.log('hier: Adressat: Klasse');
+    Stamm.findOne({ _id: req.body.stamm }, function (err, gefunden_stamm) {
+      if (err) throw err;
+      if (!gefunden_stamm) {
+        console.log('fehler: ');
+      }
+
+      console.log('gefunden_stamm: ' + gefunden_stamm.name);
+      article.stamm = gefunden_stamm;
+
+      handleSave(article, req, res);
+
+    })
+
+  } else if (req.body.adressat === 'An mehrere Klassen') {
+    console.log('hier: Mehrere Klassen');
+    Stammverbund.findOne({ _id: req.body.stammverbund }, function (err, gefunden_stammverbund) {
+      if (err) throw err;
+      if (!gefunden_stammverbund) {
+        console.log('fehler: ');
+      }
+
+      console.log('gefunden_stammverbund: ' + gefunden_stammverbund.name);
+      article.stammverbund = gefunden_stammverbund;
+
+      handleSave(article, req, res);
+
+
+    })
+
+  } else if (req.body.adressat === 'An Schülergruppe (Vorlage)') {
+    console.log('hier: Schülergruppe (Vorlage)');
+
+
+    Group.
+      findOne({ _id: req.body.group }).
+      populate('schuelers').
+      exec(function (err, gefunden_group) {
+        if (err) throw err;
+        if (!gefunden_group) {
+          console.log('fehler: ');
+        }
+
+        //console.log('gefunden_group: ' + gefunden_group.name);
+        // article.group = gefunden_group;
+
+
+        handleSaveWithGroup(article, gefunden_group, req, res);
+
+      })
+
+
+  } else if (req.body.adressat === 'An neue Schülergruppe') {
+    console.log('hier: Neue Schülergruppe');
+
+
+    addGroup(article, req, res);
+    // article.group = gefunden_group;
+
+
+
+
+
+
+
+
+
+
+  } else {
+    console.log('FEHLER');
+    //fehler
+    return;
+  }
+
+
+})
+
+
+
+
+
+
+
+
 function handleSave(article, req, res) {
-
-
 
   Disziplin.findOne({ _id: req.body.disziplin }, function (err, gefunden_disziplin) {
     if (err) throw err;
@@ -2735,10 +2450,6 @@ function handleSave(article, req, res) {
 
     console.log('gefunden_disziplin: ' + gefunden_disziplin.name);
     article.disziplin = gefunden_disziplin;
-
-
-
-
 
     article.title = req.body.title;
     article.author = req.user._id;
@@ -2758,21 +2469,10 @@ function handleSave(article, req, res) {
     article.created = nau;
 
 
-    var tag = req.body.termin.substring(0, 2)
-    var monat = req.body.termin.substring(3, 5)
-    var jahr = req.body.termin.substring(6, 10)
 
-    var d = new Date(jahr, monat - 1, tag, 16);
-    var jetzt = getMyNow();
-    var diffMs = (d - jetzt); // milliseconds between now & Christmas
 
-    if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
-      req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn');
-      res.redirect('add_article_klasse');
-      return;
-    }
 
-    //console.log('hier: ' + article.body);
+    console.log('hier: ----------------------------------------------');
     article.save(function (err, art) {
 
       if (err) {
@@ -2842,7 +2542,7 @@ function handleSave(article, req, res) {
 
 
 
-        handleUpload(art, req, res)
+        handleUploadAndExit(art, req, res)
 
 
       }
@@ -2859,9 +2559,7 @@ function handleSave(article, req, res) {
 
 
 
-
 function handleSaveWithGroup(article, group, req, res) {
-
 
   Disziplin.findOne({ _id: req.body.disziplin }, function (err, gefunden_disziplin) {
     if (err) throw err;
@@ -2871,10 +2569,6 @@ function handleSaveWithGroup(article, group, req, res) {
 
     console.log('gefunden_disziplin: ' + gefunden_disziplin.name);
     article.disziplin = gefunden_disziplin;
-
-
-
-
 
     article.title = req.body.title;
     article.author = req.user._id;
@@ -2894,19 +2588,6 @@ function handleSaveWithGroup(article, group, req, res) {
     article.created = nau;
 
 
-    var tag = req.body.termin.substring(0, 2)
-    var monat = req.body.termin.substring(3, 5)
-    var jahr = req.body.termin.substring(6, 10)
-
-    var d = new Date(jahr, monat - 1, tag, 16);
-    var jetzt = getMyNow();
-    var diffMs = (d - jetzt); // milliseconds between now & Christmas
-
-    if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
-      req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn');
-      res.redirect('add_article_klasse');
-      return;
-    }
 
     //console.log('hier: ' + article.body);
     article.save(function (err, art) {
@@ -2929,17 +2610,12 @@ function handleSaveWithGroup(article, group, req, res) {
                 if (err) throw err;
 
 
-
-
                 console.log('bereit group');
                 Group.findByIdAndUpdate(group._id,
                   { $push: { articles: art } },
                   { safe: true, upsert: true },
                   function (err, uptdatedGroup) {
                     if (err) throw err;
-
-
-
 
                     Group.
                       findOne({ _id: uptdatedGroup._id }).
@@ -2965,8 +2641,6 @@ function handleSaveWithGroup(article, group, req, res) {
                                       console.log(err);
                                     } else {
 
-
-
                                     }
                                   })
                               }
@@ -2975,47 +2649,26 @@ function handleSaveWithGroup(article, group, req, res) {
                         })
                       })
 
-
-
                     if (group.school) {
                       console.log('öffentliche Group');
-
                     } else if (group.lehrer) {
-
                       console.log('private Group');
                     } else {
-
                       console.log('junk Group');
-
                       Group.remove({ _id: group._id }, function (err) {
                         if (err) {
                           console.log(err);
                         }
-
-
                       });
-
-
-
-
-
-
-
-
-
                     }
-
-
-
-
                   })
               })
           });
 
 
         setTimeout(function () {// das hier verzögert die Weiterleitung auf index, da vorher die $push Verknüpfung der schuelers Zeit zu brauchen scheint
-          console.log('hhhaaalllooo')
-          handleUpload(art, req, res)
+          //console.log('hhhaaalllooo')
+          handleUploadAndExit(art, req, res)
         }, 300);
 
 
@@ -3032,6 +2685,21 @@ function handleSaveWithGroup(article, group, req, res) {
 
 
 
+//brauche ich für article edit_complete
+function handleDeleteUpload(art, req, res) {
+  /// es soll gelöscht werden
+  art.uploads.forEach(function (load) {
+    Load.remove({ _id: load._id }, function (err) { //löschen der LoadObjekte
+      if (err) {
+        console.log(err);
+      }
+    });
+    const targetPath = path.join(__dirname, "../uploads/" + load.body); //Löschen aus dem filesystem
+    fs.unlink(targetPath, err => {
+      if (err) return handleError(err, res);
+    });
+  })
+}
 
 
 
@@ -3039,30 +2707,20 @@ function handleSaveWithGroup(article, group, req, res) {
 
 
 
-
-
-
-
-function handleUpload(art, req, res) {
-
+function handleUploadAndExit(art, req, res) {
 
   if (req.files.length === 0) {
-    req.flash('success', 'Auftrag wurde erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
+    req.flash('success', 'Auftrag wurde erteilt. Er wird jetzt den SuS angezeigt.');
     res.redirect('/');
-
-
   } else {
     var ii = 0
     req.files.forEach(function (file) {
-      console.log('______________________-' + ii);
 
-      ii++;
       const tempPath = file.path;
       const gigi = getMyNow().getTime() + "_" + file.originalname.toLowerCase();
       const gigi_sauber = gigi.split(' ').join('-');
       const targetPath = path.join(__dirname, "../uploads/" + gigi_sauber);
       //const targetPath = path.join(__dirname, "../uploads/" + req.user._id + "_" +path.extname(file.originalname).toLowerCase());
-      console.log('bennoYYY ' + targetPath);
 
       const pipi = path.extname(file.originalname).toLowerCase()
       if (
@@ -3072,13 +2730,19 @@ function handleUpload(art, req, res) {
         pipi == ".tiff" || pipi == ".ods" || pipi == ".xls" || pipi == ".xlsm" || pipi == ".xlsx" || pipi == ".key" ||
         pipi == ".odp" || pipi == ".pps" || pipi == ".ppt" || pipi == ".pptx"
       ) {
+
+        console.log('klappt 0' + targetPath);
         fs.rename(tempPath, targetPath, err => {
           if (err) return handleError(err, res);
+
+          console.log('klappt ' + targetPath);
 
           let load = new Load();
           load.body = gigi_sauber;
           load.extension = path.extname(gigi_sauber);
           load.name = file.originalname;
+          console.log('klahhppt ' + load.body);
+
           if (
             pipi == ".doc" || pipi == ".docx" || pipi == ".odt" || pipi == ".pdf" || pipi == ".rtf" ||
             pipi == ".tex" || pipi == ".txt" || pipi == ".wpd"
@@ -3114,408 +2778,24 @@ function handleUpload(art, req, res) {
               });
           })
         })
+
       } else {
+        console.log('klappt nicht 0 ' + targetPath);
         fs.unlink(tempPath, err => {
           if (err) return handleError(err, res);
-          req.flash('danger', 'Ein Dateityp wird nicht unterstützt.');
+          console.log('klappt nicht' + targetPath);
+          //weil dieser prozess so lange dauert, kann ma ihn nicht abfangen
+
         });
       }
+      ii++;
     })
-    req.flash('success', 'Auftrag mit upload erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
 
+    req.flash('success', 'Auftrag erteilt. Er wird jetzt den SuS angezeigt.');
     res.redirect('/');
-
-
     return
   }
-
-
-
 }
-
-
-
-
-
-// post add (article)
-router.post("/add_alt_alt", upload.single("file" /* name attribute of <file> element in your form */),
-  (req, res) => {
-
-
-    if (!req.user) {
-
-      req.flash('warning', 'Du bist nicht angemeldet');
-      res.redirect('/');
-
-      return
-
-
-    }
-
-    if (!req.body.body || req.body.body.length <= 8) {
-      //console.log('............... ' + req.body.body.length);
-
-      req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Nochmal das Ganze.');
-      res.redirect('add_article_klasse');
-
-    } else {
-
-
-
-
-      //console.log('da is was');
-
-      req.checkBody('title', 'Deine Hausaufgabe braucht einen Titel').notEmpty();
-      req.checkBody('klasse', 'Gebe eine Klasse ein').not().equals('Wähle')
-      req.checkBody('fach', 'Gebe eine Schulfach ein').not().equals('Wähle')
-      req.checkBody('termin', 'Gebe einen Abgabetermin ein').notEmpty();
-      req.checkBody('body', 'Du hast keinen AUftrag erteilt').notEmpty();
-
-      // get Errrors
-      let errors = req.validationErrors();
-
-      if (errors) {
-        res.render('add_article_alt', {
-          title: 'Add Article',
-          errors: errors
-        });
-      } else {
-
-
-
-
-
-
-        //console.log('-------------------------------------')
-
-        // console.log(my_article);
-
-        var tag = req.body.termin.substring(0, 2)
-        var monat = req.body.termin.substring(3, 5)
-        var jahr = req.body.termin.substring(6, 10)
-
-        /*         console.log('tag:     ' + tag);
-                console.log('monat:   ' + monat);
-                console.log('jahr:    ' + jahr); */
-
-        var d = new Date(jahr, monat - 1, tag, 16);
-
-        // console.log('Date:    ' + d);
-        var jetzt = getMyNow();
-        // console.log('Date:    ' + jetzt);
-
-
-
-        var today = jetzt
-        var Christmas = d
-        var diffMs = (Christmas - today); // milliseconds between now & Christmas
-
-
-        if (diffMs >= 0) {
-
-
-
-
-
-          let article = new Article();
-          article.title = req.body.title;
-          article.author = req.user._id;
-          article.klasse = req.body.klasse;
-          article.fach = req.body.fach;
-          article.termin = req.body.termin;
-          article.body = req.body.body;
-          article.lehrer = req.user._id;
-          article.ha_gelb = '0';
-          article.ha_gruen = '0'
-          article.created_as_date = getMyNow();
-
-          const start = getMyNow();
-          var nau = start.getDate() + '.' + start.getMonth() + '.' + start.getFullYear() + ', ' + start.getHours() + '.' + start.getMinutes() + ' Uhr';
-          var nau = start.getDate() + '.' + start.getMonth() + '. (' + start.getHours() + ':' + start.getMinutes() + ')'
-
-          article.created = nau;
-
-
-
-
-
-
-
-
-
-          if (req.file) {
-
-
-            const tempPath = req.file.path;
-            const gigi = getMyNow().getTime() + "_" + req.file.originalname.toLowerCase();
-            const gigi_sauber = gigi.split(' ').join('-');
-            const targetPath = path.join(__dirname, "../uploads/" + gigi_sauber);
-            console.log('bennoYYY ' + targetPath);
-
-            const pipi = path.extname(req.file.originalname).toLowerCase()
-            if (
-              pipi == ".doc" ||
-              pipi == ".docx" ||
-              pipi == ".odt" ||
-              pipi == ".pdf" ||
-              pipi == ".rtf" ||
-              pipi == ".tex" ||
-              pipi == ".txt" ||
-              pipi == ".wpd" ||
-              pipi == ".ai" ||
-              pipi == ".gif" ||
-              pipi == ".ico" ||
-              pipi == ".jpeg" ||
-              pipi == ".jpg" ||
-              pipi == ".png" ||
-              pipi == ".ps" ||
-              pipi == ".psd" ||
-              pipi == ".svg" ||
-              pipi == ".tif" ||
-              pipi == ".tiff" ||
-              pipi == ".ods" ||
-              pipi == ".xls" ||
-              pipi == ".xlsm" ||
-              pipi == ".xlsx" ||
-              pipi == ".key" ||
-              pipi == ".odp" ||
-              pipi == ".pps" ||
-              pipi == ".ppt" ||
-              pipi == ".pptx"
-            ) {
-              fs.rename(tempPath, targetPath, err => {
-                if (err) return handleError(err, res);
-
-
-
-
-
-                article.save(function (err, art) {
-
-                  if (err) {
-                    console.log(err);
-                    return;
-                  } else {
-
-
-
-                    let load = new Load();
-                    load.body = gigi_sauber;
-                    load.extension = path.extname(gigi_sauber);
-                    load.name = req.file.originalname;
-
-
-                    if (
-                      pipi == ".doc" ||
-                      pipi == ".docx" ||
-                      pipi == ".odt" ||
-                      pipi == ".pdf" ||
-                      pipi == ".rtf" ||
-                      pipi == ".tex" ||
-                      pipi == ".txt" ||
-                      pipi == ".wpd"
-
-                    ) {
-                      load.type = '1'
-                    } else if (
-
-                      pipi == ".ai" ||
-                      pipi == ".gif" ||
-                      pipi == ".ico" ||
-                      pipi == ".jpeg" ||
-                      pipi == ".jpg" ||
-                      pipi == ".png" ||
-                      pipi == ".ps" ||
-                      pipi == ".psd" ||
-                      pipi == ".svg" ||
-                      pipi == ".tif" ||
-                      pipi == ".tiff"
-
-                    ) {
-
-                      load.type = '2'
-
-                    } else if (
-
-                      pipi == ".ods" ||
-                      pipi == ".xls" ||
-                      pipi == ".xlsm" ||
-                      pipi == ".xlsx"
-
-                    ) {
-
-                      load.type = '3'
-
-                    } else if (
-
-                      pipi == ".key" ||
-                      pipi == ".odp" ||
-                      pipi == ".pps" ||
-                      pipi == ".ppt" ||
-                      pipi == ".pptx"
-
-                    ) {
-
-                      load.type = '4'
-                    }
-
-
-
-
-
-
-
-
-
-                    load.save(function (err, loaded) {
-
-                      if (err) {
-                        console.log(err);
-                        return;
-                      } else {
-
-
-
-
-                        Article.findByIdAndUpdate(art._id,
-                          { $push: { uploads: loaded } },
-                          { safe: true, upsert: true },
-                          function (err, uptdatedArticle) {
-                            if (err) {
-                              console.log(err);
-                            } else {
-
-
-
-
-                              req.flash('success', 'Auftrag mit Upload erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
-                              res.redirect('/');
-
-
-
-                            }
-                          });
-
-
-
-
-                      }
-                    })
-
-
-
-
-
-                  }
-                })
-
-
-
-
-
-
-
-
-
-
-
-
-              });
-            } else {
-              fs.unlink(tempPath, err => {
-                if (err) return handleError(err, res);
-
-
-                req.flash('danger', 'Dieser Dateityp wird nicht unterstützt.');
-                res.redirect('/');
-
-
-
-              });
-            }
-
-
-
-          } else {
-
-            article.save(function (err) {
-
-              if (err) {
-                console.log(err);
-                return;
-              } else {
-
-
-
-
-
-
-                //console.log('ADDED ' + article.author);
-                //console.log('ADDED ' + article.lehrer);
-                req.flash('success', 'Auftrag erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
-                res.redirect('/');
-              }
-            })
-
-
-
-
-
-
-
-          }
-
-
-
-
-
-
-
-
-
-
-
-
-        } else {
-          ///zu spät
-
-
-
-
-
-
-
-
-
-
-          req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn');
-          res.redirect('/');
-          return;
-
-
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-      }
-    }
-  }
-);
-
-
-
-
-
 
 
 
@@ -3807,11 +3087,11 @@ router.post("/add_hausarbeit", upload.array("files"),
 
 
 
-  }
+  });
 
 
 
-);
+
 
 // Update submit POST route HAUSARBEIT
 router.post("/edit_hausarbeit/:id", upload.array("files"),
@@ -4209,7 +3489,6 @@ router.post("/edit_hausarbeit/:id", upload.array("files"),
 
 
 
-
 // Update submit POST route HAUSARBEIT
 router.post('/korrektur_hausarbeit/:id', function (req, res) {
 
@@ -4404,15 +3683,6 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
 
 
 
-
-
-
-
-
-
-
-
-
 // Update submit POST route HAUSARBEIT
 router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
 
@@ -4573,6 +3843,65 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
 
 
 
+function neuVerknüpfungStamm(req, res, main) {
+
+  //alte article-stamm verknüpfung wird gelöscht
+  Article.findByIdAndUpdate(req.params.id,
+    { $unset: { stamm: 1 } },
+    function (err, uptdatedArticle) {
+      if (err) throw err;
+
+      Stamm.findOne({ _id: main.stamm._id }).
+        populate('articles').
+        exec(function (err, oldStamm) {
+          if (err) throw err;
+          if (oldStamm) {
+            console.log('alter Stamm   ' + oldStamm.name);
+            oldStamm.articles.pull(main);
+            oldStamm.save(function (err, scho) {
+              if (err) throw err;
+
+
+              //neue article-stamm verknüpfung wird erstellt
+              Stamm.findOne({ _id: req.body.suv }, function (err, newStamm) {
+                if (err) throw err;
+                if (newStamm) {
+                  console.log('neuer Stamm   ' + newStamm.name);
+                  main.stamm = newStamm;
+                  main.save(function (err, maino) {
+                    if (err) throw err;
+                    newStamm.articles.push(maino);
+                    newStamm.save(function (err, scho) {
+                      if (err) throw err;
+
+                    });
+                  })
+
+                } else {
+                  //ODER: neue article-stammverbund verknüpfung wird erstellt
+                  Stammverbund.findOne({ _id: req.body.suv }, function (err, newStammverbund) {
+                    if (err) throw err;
+                    if (newStammverbund) {
+                      console.log('neuer Stammverbund   ' + newStammverbund.name);
+                      main.stammverbund = newStammverbund;
+                      main.save(function (err, maino) {
+                        if (err) throw err;
+                        newStammverbund.articles.push(maino);
+                        newStammverbund.save(function (err, scho) {
+                          if (err) throw err;
+                        });
+                      })
+                    } else {
+                      //fehler: es gibt weder einen neuen stamm noch einen neuen stammverbund
+                    }
+                  })
+                }
+              })
+            })
+          }
+        })
+    })
+}
 
 
 
@@ -4581,6 +3910,99 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
 
 
 
+function neuVerknüpfungStammverbund(req, res, main) {
+
+  //alte article-stamm verknüpfung wird gelöscht
+  Article.findByIdAndUpdate(req.params.id,
+    { $unset: { stamm: 1 } },
+    function (err, uptdatedArticle) {
+      if (err) throw err;
+
+      Stammverbund.findOne({ _id: main.stammverbund._id }).
+        populate('articles').
+        exec(function (err, oldStammverbund) {
+          if (err) throw err;
+          if (oldStammverbund) {
+            console.log('alter Stammverbund   ' + oldStammverbund.name);
+            oldStammverbund.articles.pull(main);
+            oldStammverbund.save(function (err, scho) {
+              if (err) throw err;
+
+
+              //neue article-stamm verknüpfung wird erstellt
+              Stammverbund.findOne({ _id: req.body.suv }, function (err, newStammverbund) {
+                if (err) throw err;
+                if (newStammverbund) {
+                  console.log('neuer Stammverbund   ' + newStammverbund.name);
+                  main.stammverbund = newStammverbund;
+                  main.save(function (err, maino) {
+                    if (err) throw err;
+                    newStammverbund.articles.push(maino);
+                    newStammverbund.save(function (err, scho) {
+                      if (err) throw err;
+
+
+
+
+
+                      if (main.disziplin) {
+                        if (req.body.disziplin.toString() === main.disziplin._id.toString()) {
+                          console.log('disziplin ist gleich geblieben   ');
+                        } else {
+                          neuVerknüpfungDisziplin(req, res, main)
+                        }
+                      } else {
+                        console.log('ups ist neu   ');
+                      }
+
+
+
+
+                    });
+                  })
+
+                } else {
+                  //ODER: neue article-stammverbund verknüpfung wird erstellt
+                  Stamm.findOne({ _id: req.body.suv }, function (err, newStamm) {
+                    if (err) throw err;
+                    if (newStamm) {
+                      console.log('neuer Stamm   ' + newStamm.name);
+                      main.stamm = newStamm;
+                      main.save(function (err, maino) {
+                        if (err) throw err;
+                        newStamm.articles.push(maino);
+                        newStamm.save(function (err, scho) {
+                          if (err) throw err;
+
+
+
+                          if (main.disziplin) {
+                            if (req.body.disziplin.toString() === main.disziplin._id.toString()) {
+                              console.log('disziplin ist gleich geblieben   ');
+                            } else {
+                              neuVerknüpfungDisziplin(req, res, main)
+                            }
+                          } else {
+                            console.log('ups ist neu   ');
+                          }
+
+
+
+
+
+                        });
+                      })
+                    } else {
+                      //fehler: es gibt weder einen neuen stamm noch einen neuen stammverbund
+                    }
+                  })
+                }
+              })
+            })
+          }
+        })
+    })
+}
 
 
 
@@ -4589,9 +4011,50 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
 
 
 
+function neuVerknüpfungDisziplin(req, res, main) {
+
+  //alte article-disziplin verknüpfung wird gelöscht
+  Article.findByIdAndUpdate(req.params.id,
+    { $unset: { disziplin: 1 } },
+    function (err, uptdatedArticle) {
+      if (err) throw err;
+
+      Disziplin.findOne({ _id: main.disziplin._id }).
+        populate('articles').
+        exec(function (err, oldDisziplin) {
+          if (err) throw err;
+          if (oldDisziplin) {
+            console.log('alter Disziplin   ' + oldDisziplin.name);
+            oldDisziplin.articles.pull(main);
+            oldDisziplin.save(function (err, scho) {
+              if (err) throw err;
 
 
+              //neue article-disziplin verknüpfung wird erstellt
+              Disziplin.findOne({ _id: req.body.disziplin }, function (err, newDisziplin) {
+                if (err) throw err;
+                if (newDisziplin) {
+                  console.log('neuer Disziplin   ' + newDisziplin.name);
+                  main.disziplin = newDisziplin;
+                  main.save(function (err, maino) {
+                    if (err) throw err;
+                    newDisziplin.articles.push(maino);
+                    newDisziplin.save(function (err, scho) {
+                      if (err) throw err;
 
+                    });
+                  })
+
+                } else {
+                  //:fehler
+
+                }
+              })
+            })
+          }
+        })
+    })
+}
 
 
 
@@ -4601,63 +4064,85 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
 
 
 // Update submit POST route
-router.post("/edit/:id", upload.array("files" /* name attribute of <file> element in your form */),
+router.post("/edit_complete/:id", upload.array("files" /* name attribute of <file> element in your form */),
   (req, res) => {
+
+    return;
+    
     if (!req.user) {  //wer nicht angemeldet ist, kann nicht speichern
       req.flash('warning', 'Du bist nicht angemeldet');
       res.redirect('login');
       return
     }
-    /* if (!req.body.body || req.body.body.length <= 8) {  //Wenn der Azftrag zu kurz ist, kann man nicht speichern
-      req.flash('danger', 'Dein Auftrag ist leer oder viel zu kurz. Nochmal das Ganze.');
-      res.redirect('add_article_klasse');
+
+    if (!isPossibleFrist(req.body.termin)) {
+      req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit.');
+      res.redirect('/');
       return
     }
- */
+
+    Article.
+      findOne({ _id: req.params.id }).
+      populate('schuelers').
+      populate('stamm').
+      populate('stammverbund').
+      populate('disziplin').
+      populate('uploads').
+      exec(function (err2, main) {
 
 
-    var tag = req.body.termin.substring(0, 2)
-    var monat = req.body.termin.substring(3, 5)
-    var jahr = req.body.termin.substring(6, 10)
+        let article = {};
+        article.title = req.body.title;
+        article.author = main.author;
 
-    var d = new Date(jahr, monat - 1, tag, 16);
-    var jetzt = getMyNow();
-    var diffMs = (d - jetzt); // milliseconds between now & Christmas
+        article.termin = req.body.termin;
+        article.body = req.body.body;
 
-
-    if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
-      req.flash('danger', 'Die Abgabefrist deines Auftrags liegt in der Vergangenheit. Das ist nicht erlaubt. Ergibt ja auch keinen Sinn');
-      res.redirect('add_article_klasse');
-      return;
-    }
+        const start = getMyNow();
+        var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
+        article.created = nau;
 
 
-
-    if (req.body.shadow_klasse && !req.body.klasse) { //edit article neu
-
-      if (!req.body.schuelers) { // Wenn man kein SuS auswählt kann man (hier) nicht speichern
-        req.flash('warning', 'Du hast keine Schüler*innen ausgewählt. So wird das nichts mit dem Auftrag. ');
-        res.redirect('/');
-        return
-      }
-
-      var jo = []
-      var ii = 0;
-      req.body.schuelers.forEach(function (schueler) {
-        jo.push(schueler);
-        ii++;
-      });
+        if (main.stamm) {
+          if (req.body.suv.toString() === main.stamm._id.toString()) {
+            //console.log('klasse ist gleich geblieben   ');
+          } else {
+            neuVerknüpfungStamm(req, res, main)
+          }
 
 
-      Article.
-        findOne({ _id: req.params.id }).
-        populate('schuelers').
-        populate('uploads').
-        exec(function (err2, art) {
-          if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+        } else if (main.stammverbund) {
+          if (req.body.suv.toString() === main.stammverbund._id.toString()) {
+            //console.log('verbund ist gleich geblieben   ');
+          } else {
+            neuVerknüpfungStammverbund(req, res, main)
+          }
+        }
 
 
-          art.schuelers.forEach(function (schueler) {
+
+
+
+
+
+        if (main.schuelers.length !== 0) {
+          console.log('main.schuelers   ');
+
+
+
+
+
+          var jo = []
+          var ii = 0;
+          req.body.schuelers.forEach(function (schueler) {
+            jo.push(schueler);
+            ii++;
+          });
+
+
+
+
+          main.schuelers.forEach(function (schueler) {
             //console.log('record :   ' + schueler.name);
 
 
@@ -4726,558 +4211,47 @@ router.post("/edit/:id", upload.array("files" /* name attribute of <file> elemen
 
 
 
-          let query = { _id: req.params.id }
+        }
 
-          Article.findById(req.params.id, function (err, articleX) {
 
-            if (err) {
-              //console.log('wwwwww');
-              console.log(err);
-            }
 
 
-            let article = {};
-            article.title = req.body.title;
-            article.author = articleX.author;
-            article.shadow_klasse = req.body.shadow_klasse;
-            article.fach = req.body.fach;
-            article.termin = req.body.termin;
-            article.body = req.body.body;
 
 
 
-            const start = getMyNow();
 
 
+        Article.update({ _id: req.params.id }, article, function (err, artiii) {
+          if (err) {
+            console.log(err);
+            return;
+          } else {
 
 
-            var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
-
-
-            article.created = nau;
-
-
-
-            Article.update(query, article, function (err, artiii) {
-              if (err) {
-                console.log(err);
-                return;
-              } else {
-
-
-
-
-
-
-
-                if (req.body.delete) {
-                  /// es soll gelöscht werden
-
-                  art.uploads.forEach(function (load) {
-
-                    Load.remove({ _id: load._id }, function (err) { //löschen der LoadObjekte
-                      if (err) {
-                        console.log(err);
-                      }
-                    });
-
-
-                    const targetPath = path.join(__dirname, "../uploads/" + load.body); //Löschen aus dem filesystem
-                    fs.unlink(targetPath, err => {
-                      if (err) return handleError(err, res);
-                    });
-
-                  })
-
-
-                }
-
-
-
-
-
-
-
-
-                var ii = 0
-                req.files.forEach(function (file) {
-
-
-                  console.log('______________________-' + ii);
-
-                  ii++;
-
-
-
-
-
-
-
-                  const tempPath = file.path;
-                  const gigi = getMyNow().getTime() + "_" + file.originalname.toLowerCase();
-                  const gigi_sauber = gigi.split(' ').join('-');
-                  const targetPath = path.join(__dirname, "../uploads/" + gigi_sauber);
-                  //const targetPath = path.join(__dirname, "../uploads/" + req.user._id + "_" +path.extname(file.originalname).toLowerCase());
-                  console.log('bennoYYY ' + targetPath);
-
-                  const pipi = path.extname(file.originalname).toLowerCase()
-                  if (
-                    pipi == ".doc" ||
-                    pipi == ".docx" ||
-                    pipi == ".odt" ||
-                    pipi == ".pdf" ||
-                    pipi == ".rtf" ||
-                    pipi == ".tex" ||
-                    pipi == ".txt" ||
-                    pipi == ".wpd" ||
-                    pipi == ".ai" ||
-                    pipi == ".gif" ||
-                    pipi == ".ico" ||
-                    pipi == ".jpeg" ||
-                    pipi == ".jpg" ||
-                    pipi == ".png" ||
-                    pipi == ".ps" ||
-                    pipi == ".psd" ||
-                    pipi == ".svg" ||
-                    pipi == ".tif" ||
-                    pipi == ".tiff" ||
-                    pipi == ".ods" ||
-                    pipi == ".xls" ||
-                    pipi == ".xlsm" ||
-                    pipi == ".xlsx" ||
-                    pipi == ".key" ||
-                    pipi == ".odp" ||
-                    pipi == ".pps" ||
-                    pipi == ".ppt" ||
-                    pipi == ".pptx"
-                  ) {
-
-
-
-                    fs.rename(tempPath, targetPath, err => {
-                      if (err) return handleError(err, res);
-
-
-
-
-                      let load = new Load();
-                      load.body = gigi_sauber;
-                      load.extension = path.extname(gigi_sauber);
-                      load.name = file.originalname;
-
-
-                      if (
-                        pipi == ".doc" ||
-                        pipi == ".docx" ||
-                        pipi == ".odt" ||
-                        pipi == ".pdf" ||
-                        pipi == ".rtf" ||
-                        pipi == ".tex" ||
-                        pipi == ".txt" ||
-                        pipi == ".wpd"
-
-                      ) {
-                        load.type = '1'
-                      } else if (
-
-                        pipi == ".ai" ||
-                        pipi == ".gif" ||
-                        pipi == ".ico" ||
-                        pipi == ".jpeg" ||
-                        pipi == ".jpg" ||
-                        pipi == ".png" ||
-                        pipi == ".ps" ||
-                        pipi == ".psd" ||
-                        pipi == ".svg" ||
-                        pipi == ".tif" ||
-                        pipi == ".tiff"
-
-                      ) {
-
-                        load.type = '2'
-
-                      } else if (
-
-                        pipi == ".ods" ||
-                        pipi == ".xls" ||
-                        pipi == ".xlsm" ||
-                        pipi == ".xlsx"
-
-                      ) {
-
-                        load.type = '3'
-
-                      } else if (
-
-                        pipi == ".key" ||
-                        pipi == ".odp" ||
-                        pipi == ".pps" ||
-                        pipi == ".ppt" ||
-                        pipi == ".pptx"
-
-                      ) {
-
-                        load.type = '4'
-                      }
-
-
-
-                      load.save().then(function (loaded) {
-
-                        Article.findByIdAndUpdate(art._id,
-                          { $push: { uploads: loaded } },
-                          { safe: true, upsert: true },
-                          function (err, uptdatedArticle) {
-                            if (err) {
-                              console.log(err);
-                            } else {
-
-                            }
-                          });
-                      })
-
-
-
-
-                    })
-
-                  } else {
-                    fs.unlink(tempPath, err => {
-                      if (err) return handleError(err, res);
-
-
-                      req.flash('danger', 'Ein Dateityp wird nicht unterstützt.');
-
-
-
-
-                    });
-                  }
-
-
-                })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                req.flash('success', 'Auftrag mit upload erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
+            if (req.files.length === 0) {
+              setTimeout(function () {// das hier verzögert die Weiterleitung auf index, da vorher die $push Verknüpfung der schuelers Zeit zu brauchen scheint
+                req.flash('success', 'Auftrag wurde erteilt. Er wird jetzt den SuS angezeigt.');
                 res.redirect('/');
-
-                return
-
+              }, 300);
 
 
 
 
-
-              }
-            })
-
-          })
-
-
-
-
-
-
-
-
-
-
-
-        });
-
-
-
-
-
-    } else if (!req.body.shadow_klasse && req.body.klasse) {
-      console.log('ALT mmm');
-
-
-
-
-
-
-
-
-
-
-
-
-
-      Article.
-        findOne({ _id: req.params.id }).
-        populate('schuelers').
-        populate('uploads').
-        exec(function (err2, art) {
-          if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
-
-
-          let article = {};
-          article.title = req.body.title;
-          article.author = art.author;
-
-          article.klasse = req.body.klasse;
-          article.fach = req.body.fach;
-          article.termin = req.body.termin;
-          article.body = req.body.body;
-
-
-
-
-
-          const start = getMyNow();
-
-          var nau = ("00" + start.getDate()).slice(-2) + '.' + ("00" + (start.getMonth() + 1)).slice(-2) + '. ' + start.getHours() + '.' + ("00" + start.getMinutes()).slice(-2) + ' Uhr';
-
-          article.created = nau;
-
-          let query = { _id: req.params.id }
-          Article.update(query, article, function (err, artiii) {
-            if (err) {
-              console.log(err);
-              return;
             } else {
 
+              handleDeleteUpload(main, req, res)
 
-
-
-
-
-
-              if (req.body.delete) {
-                /// es soll gelöscht werden
-
-                art.uploads.forEach(function (load) {
-
-                  Load.remove({ _id: load._id }, function (err) { //löschen der LoadObjekte
-                    if (err) {
-                      console.log(err);
-                    }
-                  });
-
-
-                  const targetPath = path.join(__dirname, "../uploads/" + load.body); //Löschen aus dem filesystem
-                  fs.unlink(targetPath, err => {
-                    if (err) return handleError(err, res);
-                  });
-
-                })
-
-
-              }
-
-
-
-
-
-
-
-
-              var ii = 0
-              req.files.forEach(function (file) {
-
-
-                console.log('______________________-' + ii);
-
-                ii++;
-
-
-
-
-
-
-
-                const tempPath = file.path;
-                const gigi = getMyNow().getTime() + "_" + file.originalname.toLowerCase();
-                const gigi_sauber = gigi.split(' ').join('-');
-                const targetPath = path.join(__dirname, "../uploads/" + gigi_sauber);
-                //const targetPath = path.join(__dirname, "../uploads/" + req.user._id + "_" +path.extname(file.originalname).toLowerCase());
-                console.log('bennoYYY ' + targetPath);
-
-                const pipi = path.extname(file.originalname).toLowerCase()
-                if (
-                  pipi == ".doc" ||
-                  pipi == ".docx" ||
-                  pipi == ".odt" ||
-                  pipi == ".pdf" ||
-                  pipi == ".rtf" ||
-                  pipi == ".tex" ||
-                  pipi == ".txt" ||
-                  pipi == ".wpd" ||
-                  pipi == ".ai" ||
-                  pipi == ".gif" ||
-                  pipi == ".ico" ||
-                  pipi == ".jpeg" ||
-                  pipi == ".jpg" ||
-                  pipi == ".png" ||
-                  pipi == ".ps" ||
-                  pipi == ".psd" ||
-                  pipi == ".svg" ||
-                  pipi == ".tif" ||
-                  pipi == ".tiff" ||
-                  pipi == ".ods" ||
-                  pipi == ".xls" ||
-                  pipi == ".xlsm" ||
-                  pipi == ".xlsx" ||
-                  pipi == ".key" ||
-                  pipi == ".odp" ||
-                  pipi == ".pps" ||
-                  pipi == ".ppt" ||
-                  pipi == ".pptx"
-                ) {
-
-
-
-                  fs.rename(tempPath, targetPath, err => {
-                    if (err) return handleError(err, res);
-
-
-
-
-                    let load = new Load();
-                    load.body = gigi_sauber;
-                    load.extension = path.extname(gigi_sauber);
-                    load.name = file.originalname;
-
-
-                    if (
-                      pipi == ".doc" ||
-                      pipi == ".docx" ||
-                      pipi == ".odt" ||
-                      pipi == ".pdf" ||
-                      pipi == ".rtf" ||
-                      pipi == ".tex" ||
-                      pipi == ".txt" ||
-                      pipi == ".wpd"
-
-                    ) {
-                      load.type = '1'
-                    } else if (
-
-                      pipi == ".ai" ||
-                      pipi == ".gif" ||
-                      pipi == ".ico" ||
-                      pipi == ".jpeg" ||
-                      pipi == ".jpg" ||
-                      pipi == ".png" ||
-                      pipi == ".ps" ||
-                      pipi == ".psd" ||
-                      pipi == ".svg" ||
-                      pipi == ".tif" ||
-                      pipi == ".tiff"
-
-                    ) {
-
-                      load.type = '2'
-
-                    } else if (
-
-                      pipi == ".ods" ||
-                      pipi == ".xls" ||
-                      pipi == ".xlsm" ||
-                      pipi == ".xlsx"
-
-                    ) {
-
-                      load.type = '3'
-
-                    } else if (
-
-                      pipi == ".key" ||
-                      pipi == ".odp" ||
-                      pipi == ".pps" ||
-                      pipi == ".ppt" ||
-                      pipi == ".pptx"
-
-                    ) {
-
-                      load.type = '4'
-                    }
-
-
-
-                    load.save().then(function (loaded) {
-
-                      Article.findByIdAndUpdate(art._id,
-                        { $push: { uploads: loaded } },
-                        { safe: true, upsert: true },
-                        function (err, uptdatedArticle) {
-                          if (err) {
-                            console.log(err);
-                          } else {
-
-                          }
-                        });
-                    })
-
-
-
-
-                  })
-
-                } else {
-                  fs.unlink(tempPath, err => {
-                    if (err) return handleError(err, res);
-
-
-                    req.flash('danger', 'Ein Dateityp wird nicht unterstützt.');
-
-
-
-
-                  });
-                }
-
-
-              })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-              req.flash('success', 'Auftrag mit upload erteilt. Er wird jetzt den SuS angezeigt. Drücke auf den blauen "SuS"-Button deines Auftrags, um zu sehen welche SuS den Auftrag bearbeitet haben. ');
-              res.redirect('/');
-
-              return
-
-
-
-
+              handleUploadAndExit(main, req, res)
 
 
             }
-          })
+
+
+
+
+
+
+          }
 
         })
 
@@ -5296,20 +4270,15 @@ router.post("/edit/:id", upload.array("files" /* name attribute of <file> elemen
 
 
 
-
-    } else {//(req.body.shadow_klasse && !req.body.klasse)
-      console.log('FEHLER Sowohl Klasse als auc shadow_klasse scheinen leer zu sein!!!');
-      console.log('arti.klasse  ' + arti.klasse);
-      console.log('arti.shadow_klasse  ') + arti.shadow_klasse;
-
-    }
-
-
+      })
 
 
 
 
   });
+
+
+
 
 
 
@@ -5457,8 +4426,6 @@ router.delete('/:id', function (req, res) {
 
 
 
-
-
 // Get Single Article
 router.get('/:id', function (req, res) {
 
@@ -5509,10 +4476,6 @@ router.get('/:id', function (req, res) {
 
 
 });
-
-
-
-
 
 
 

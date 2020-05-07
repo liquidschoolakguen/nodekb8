@@ -25,6 +25,12 @@ let stammSchema = mongoose.Schema({
     
 
 
+    stammverbunds: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Stammverbund',
+        required: false
+    }],
+
 
     articles: [
         {

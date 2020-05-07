@@ -1,4 +1,4 @@
-extends layout
+extends ../layouts/layout
 
 block content
   if !user
@@ -50,7 +50,7 @@ block content
                                   .montainer
                                     a(href='/articles/schueler/' +hausarbeit.schueler._id, role='button')  #{hausarbeit.schueler.name}&nbsp;
                                 td.align-middle
-                                  | #{hausarbeit.schueler.money} $   
+                                  | #{hausarbeit.schueler.money} $   | #{article.termin}   | #{hausarbeit.status}   
                                 td
                                   if (article.termin !== 'abgelaufen' && hausarbeit.status ==='1')
                                     a.btn.btn-outline-warning(href="/articles/hausarbeit/"+hausarbeit._id, role='button')

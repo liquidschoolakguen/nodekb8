@@ -93,8 +93,8 @@ let User = require('./models/user');
 let Hausarbeit = require('./models/hausarbeit');
 let School = require('./models/school');
 let Stammverbund = require('./models/stammverbund');
-let Stamm= require('./models/stamm');
-let Group= require('./models/group');
+let Stamm = require('./models/stamm');
+let Group = require('./models/group');
 
 
 // Load view Engine
@@ -214,6 +214,11 @@ setTimeout(function () {
 
 
 
+app.get('/alt_index', function (req, res) {
+  res.render('alt_index', {
+  })
+
+});
 
 
 app.get('/update_changer', function (req, res) {
@@ -257,55 +262,55 @@ function createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse() {
             console.log('. ' + user.name + ' . ' + user.klasse);
             user.school = school;
 
-              Stamm.
+            Stamm.
               findOne({ name: user.klasse }).
               exec(function (err, stamm) {
+                if (stamm) {
+                  if (user.type === 'schueler') {
 
-                if(user.type === 'schueler'){
+                    user.klasse = undefined;
+                    user.klasse2 = undefined;
+                    user.klasse3 = undefined;
+                    user.klasse4 = undefined;
 
-                user.klasse = undefined;
-                user.klasse2= undefined;
-                user.klasse3= undefined;
-                user.klasse4= undefined;
-  
-                user.schueler_stamm = stamm
+                    user.schueler_stamm = stamm
 
-                }
-
-
+                  }
 
 
 
 
-                user.save(function (err, us) {
-                  if (err) throw err;
-    
-                  School.findByIdAndUpdate(school._id,
-                    { $push: { users: us } },
-                    { safe: true, upsert: true },
-                    function (err, uptdatedSchool) {
-                      if (err) throw err;
-    
-                        if(stamm){
+
+
+                  user.save(function (err, us) {
+                    if (err) throw err;
+
+                    School.findByIdAndUpdate(school._id,
+                      { $push: { users: us } },
+                      { safe: true, upsert: true },
+                      function (err, uptdatedSchool) {
+                        if (err) throw err;
+
+                        if (stamm) {
 
                           Stamm.findByIdAndUpdate(stamm._id,
                             { $push: { schuelers: us } },
                             { safe: true, upsert: true },
                             function (err, uptdatedStamm) {
                               if (err) throw err;
-                                    
+
                             })
 
 
                         }
-                     
-    
-    
-    
-    
-    
-                    })
-                });
+
+
+
+
+
+
+                      })
+                  });
 
 
 
@@ -315,7 +320,7 @@ function createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse() {
 
 
 
-
+                }
 
 
               });
@@ -324,7 +329,7 @@ function createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse() {
 
 
 
-           
+
 
 
 
@@ -434,671 +439,370 @@ app.get('/', function (req, res) {
 
 
 
+    User.
+      findOne({ _id: req.user._id }).
+      populate({
+        path: 'schueler_stamm',
+        populate: {
+          path: 'stammverbunds'
+        }
+      }).
+      exec(function (err, user) {
 
 
 
+        //User.findById(req.user._id, function (err, user) {
 
+        if (err) {
+          //console.log('wwwwww');
+          console.log(err);
+        }
 
-    User.findById(req.user._id, function (err, user) {
 
-      if (err) {
-        //console.log('wwwwww');
-        console.log(err);
-      }
 
+        if (user.type === 'lehrer') {
 
+          //console.log('lehrer')
 
-      if (user.type === 'lehrer') {
 
-        //console.log('lehrer')
 
+          Article.
+            find({ author: req.user._id }, 'title termin').
+            populate('lehrer').
+            populate('stamm').
+            populate('stammverbund').
+            populate('disziplin').
+            populate({
+              path: 'group',
+              populate: {
+                path: 'schuelers'
+              }
+            }).
+            populate('schuelers').
+            sort({ created_as_date: -1 }).
+            exec(function (err2, my_articles) {
+              if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
+              var length = my_articles.length;
 
-        Article.
-          find({ author: req.user._id }, 'title termin').
-          populate('lehrer').
-          populate('stamm').
-          populate('stammverbund').
-          populate('disziplin').
-          populate({
-            path: 'group',
-            populate: {
-              path: 'schuelers'
-            }
-          }).
-          populate('schuelers').
-          sort({ created_as_date: -1 }).
-          exec(function (err2, my_articles) {
-            if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
-            var length = my_articles.length;
+              var jo = []
 
 
-            var jo = []
 
 
+              my_articles.forEach(function (o) {
 
+                jo.push(o._id)
 
-            my_articles.forEach(function (o) {
 
-              jo.push(o._id)
+              }); // jo hält die ids der articles
 
 
-            }); // jo hält die ids der articles
 
 
+              Hausarbeit.find().where('article').in(jo).exec((err, has) => {
 
+                // Hausarbeit.
+                //   find().
+                //    exec(function (err, has) {
 
-            Hausarbeit.find().where('article').in(jo).exec((err, has) => {
 
-              // Hausarbeit.
-              //   find().
-              //    exec(function (err, has) {
 
-
-
-
-
-              my_articles.forEach(function (my_article) {
-
-                my_article.schuelers.sort();
-
-
-
-                var tag = my_article.termin.substring(0, 2)
-                var monat = my_article.termin.substring(3, 5)
-                var jahr = my_article.termin.substring(6, 10)
-
-                var termin = new Date(jahr, monat - 1, tag, 16);
-                var jetzt = getMyNow();
-
-                // To calculate the time difference of two dates 
-                var Difference_In_Time = termin.getTime() - jetzt.getTime();
-                var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-
-                var nicht_jetzt = new Date(jetzt);
-                // console.log('iiiiiiiiiiiiiiiiiii ' + my_article.termin);
-                my_article.termin = my_article.termin.substring(0, 10)
-                //console.log('iiiiiiiiiiiiiiiiiii ' + my_article.termin);
-
-
-                if (Difference_In_Days >= 0) {
-
-                  if (jetzt.getFullYear() === termin.getFullYear() &&
-                    jetzt.getMonth() === termin.getMonth() &&
-                    jetzt.getDate() === termin.getDate()) {
-
-                    my_article.termin = 'heute 16 Uhr'
-                  }
-
-
-
-
-
-                  nicht_jetzt.setDate(jetzt.getDate() + 1)
-
-                  if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                    nicht_jetzt.getMonth() === termin.getMonth() &&
-                    nicht_jetzt.getDate() === termin.getDate()) {
-                    //console.log('nicht_jetzt         ' + nicht_jetzt);
-                    //console.log('termin              ' + termin);
-                    my_article.termin = 'morgen 16 Uhr'
-                  }
-
-
-
-
-                  nicht_jetzt.setDate(jetzt.getDate() + 2)
-
-                  if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                    nicht_jetzt.getMonth() === termin.getMonth() &&
-                    nicht_jetzt.getDate() === termin.getDate()) {
-                    //console.log('nicht_jetzt         ' + nicht_jetzt);
-                    //console.log('termin              ' + termin);
-                    my_article.termin = 'übermorgen'
-                  }
-
-
-
-
-
-                  nicht_jetzt.setDate(jetzt.getDate() + 3)
-
-                  if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                    nicht_jetzt.getMonth() === termin.getMonth() &&
-                    nicht_jetzt.getDate() === termin.getDate()) {
-                    ////console.log('nicht_jetzt         ' + nicht_jetzt);
-                    //console.log('termin              ' + termin);
-                    my_article.termin = 'in 3 Tagen'
-                  }
-
-
-
-
-                  nicht_jetzt.setDate(jetzt.getDate() + 4)
-
-                  if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                    nicht_jetzt.getMonth() === termin.getMonth() &&
-                    nicht_jetzt.getDate() === termin.getDate()) {
-                    //console.log('nicht_jetzt         ' + nicht_jetzt);
-                    //console.log('termin              ' + termin);
-                    my_article.termin = 'in 4 Tagen'
-                  }
-
-
-
-
-                  nicht_jetzt.setDate(jetzt.getDate() + 5)
-
-                  if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                    nicht_jetzt.getMonth() === termin.getMonth() &&
-                    nicht_jetzt.getDate() === termin.getDate()) {
-                    //console.log('nicht_jetzt         ' + nicht_jetzt);
-                    //console.log('termin              ' + termin);
-                    my_article.termin = 'in 5 Tagen'
-                  }
-
-
-
-
-
-
-                  nicht_jetzt.setDate(jetzt.getDate() + 6)
-
-                  if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                    nicht_jetzt.getMonth() === termin.getMonth() &&
-                    nicht_jetzt.getDate() === termin.getDate()) {
-                    //console.log('nicht_jetzt         ' + nicht_jetzt);
-                    //console.log('termin              ' + termin);
-                    my_article.termin = 'in 6 Tagen'
-                  }
-
-
-
-
-
-
-
-                } else {
-                  ///Termin vorüber
-                  my_article.termin = 'abgelaufen'
-
-
-
-                  if (jetzt.getFullYear() === termin.getFullYear() &&
-                    jetzt.getMonth() === termin.getMonth() &&
-                    jetzt.getDate() === termin.getDate()) {
-
-                    my_article.termin = 'abgelaufen (heute)'
-                  }
-                  if (jetzt.getFullYear() === termin.getFullYear() &&
-                    jetzt.getMonth() === termin.getMonth() &&
-                    jetzt.getDate() - 1 === termin.getDate()) {
-
-                    my_article.termin = 'abgelaufen (gestern)'
-                  }
-                  if (jetzt.getFullYear() === termin.getFullYear() &&
-                    jetzt.getMonth() === termin.getMonth() &&
-                    jetzt.getDate() - 2 === termin.getDate()) {
-
-                    my_article.termin = 'abgelaufen (vorgestern)'
-                  }
-
-
-
-
-
-                }
-
-
-
-
-
-
-
-
-
-
-
-                my_article.ha_gruen = '0'
-                my_article.ha_gelb = '0'
-                my_article.ha_grau = '0'
-                var inte_gelb = parseInt(my_article.ha_gelb)
-                var inte_gruen = parseInt(my_article.ha_gruen);
-                var inte_grau = parseInt(my_article.ha_grau);
-
-                has.forEach(function (ha) {
-
-                  if (ha.article._id.toString() === my_article._id.toString()) {
-
-                    // console.log('pppp:    ' + my_article.title);
-
-                    if (ha.status === '1') {
-                      inte_gelb += 1;
-
-                    } else if (ha.status === '2') {
-                      inte_gruen += 1;
-                    } else if (ha.status === '3') {
-                      inte_grau += 1;
-                    }
-
-                  }
-
-
-
-
-                })
-
-
-                tuString_gelb = inte_gelb.toString();
-                my_article.ha_gelb = tuString_gelb
-
-                tuString_gruen = inte_gruen.toString();
-                my_article.ha_gruen = tuString_gruen
-
-                tuString_grau = inte_grau.toString();
-                my_article.ha_grau = tuString_grau
-
-
-
-
-
-
-
-              });
-
-
-
-
-              /*   my_articles.forEach(function (my_article) {
-  
-                  console.log('                          ');
-                  console.log('----------------------    ' + my_article.ha_gruen);
-                  console.log('----------------------    ' + my_article.ha_gelb);
-                  console.log('----------------------    ' + my_article.ha_grau);
-  
-                })
-   */
-
-
-              res.render('index', {
-                my_articles: my_articles,
-                length: length
-
-              });
-
-            })
-
-          });
-
-
-
-
-
-      } else if (user.type === 'schueler') {
-
-
-
-
-
-
-        /* 
-                  //alte User vorbereiten
-                User.find({type: 'schueler'}).
-                  exec(function (erro, updateUsers) {
-        
-        
-        
-                    updateUsers.forEach(function (updateUser) {
-        
-        
-        
-        
-                      let op = {};
-        
-                      if (updateUser.klasse.includes('St. Pauli')) {
-        
-                        op.klasse3 = 'St. Pauli'
-        
-                      } else if (updateUser.klasse.includes('Neustadt') ) {
-        
-                        op.klasse2 = ''
-                        op.klasse3 = 'Neustadt'
-        
-        
-                      } else if (updateUser.klasse.includes('Oberstufe') ) {
-        
-        
-                        op.klasse2 = ''
-                        op.klasse3 = 'Oberstufe'
-        
-        
-                      } else {
-        
-                        op.klasse2 = ''
-                        op.klasse3 = ''
-                        console.log('FE  HEHEHE LER');
-        
-        
-                      }
-        
-        
-                      op.klasse4 = 'alle drei Standorte'
-        
-        
-                      var query = { '_id': updateUser._id };
-        
-        
-                      User.findOneAndUpdate(query, op, { upsert: true }, function (err, doc) {
-                        if (err) return res.send(500, { error: err });
-                        //console.log('geändert:   ' + doc.name + ' (' + doc.klasse3 + ')')
-                      });
-        
-        
-                    })
-        
-        
-                  }) */
-
-
-
-
-        Stammverbund.
-          find({ stamms: user.klasse }).
-          exec(function (err3, verbunds) {
-            if (err3) return console.log('iiiibennoiiiiii ' + err3);
-
-            var jo = []
-
-            verbunds.forEach(function (verbund) {
-              console.log('verbund    ' + verbund.name);
-              jo.push(verbund.name);
-            })
-
-
-
-
-
-            /* // So würde die Abfrage aussehen, wenn es auf der serverdatenbank nicht bereits articles geben würde, die anders gespeichert wurden
-                        Article.
-                          find({
-                            $or: [
-                              { klasse: user.klasse },
-                              { klasse: { $in: jo } },
-                              { schuelers: user }
-                            ]
-            
-                          }). */
-
-
-
-
-
-            Article.
-              find({
-                $or: [
-                  { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }, { klasse: user.klasse3 }, { klasse: user.klasse4 }] },
-                  { klasse: { $in: jo } },
-                  { schuelers: user }
-                ]
-
-              }).
-              populate('lehrer').
-              populate('schuelers').
-              populate('uploads').
-              sort({ created_as_date: -1 }).
-              exec(function (err2, my_articles) {
-                if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
                 my_articles.forEach(function (my_article) {
-                  console.log('my_article::   ' + my_article.klasse);
+
+                  my_article.schuelers.sort();
+
+
+
+                  var tag = my_article.termin.substring(0, 2)
+                  var monat = my_article.termin.substring(3, 5)
+                  var jahr = my_article.termin.substring(6, 10)
+
+                  var termin = new Date(jahr, monat - 1, tag, 16);
+                  var jetzt = getMyNow();
+
+                  // To calculate the time difference of two dates 
+                  var Difference_In_Time = termin.getTime() - jetzt.getTime();
+                  var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+                  var nicht_jetzt = new Date(jetzt);
+                  // console.log('iiiiiiiiiiiiiiiiiii ' + my_article.termin);
+                  my_article.termin = my_article.termin.substring(0, 10)
+                  //console.log('iiiiiiiiiiiiiiiiiii ' + my_article.termin);
+
+
+                  if (Difference_In_Days >= 0) {
+
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() === termin.getDate()) {
+
+                      my_article.termin = 'heute 16 Uhr'
+                    }
+
+
+
+
+
+                    nicht_jetzt.setDate(jetzt.getDate() + 1)
+
+                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                      nicht_jetzt.getMonth() === termin.getMonth() &&
+                      nicht_jetzt.getDate() === termin.getDate()) {
+                      //console.log('nicht_jetzt         ' + nicht_jetzt);
+                      //console.log('termin              ' + termin);
+                      my_article.termin = 'morgen 16 Uhr'
+                    }
+
+
+
+
+                    nicht_jetzt.setDate(jetzt.getDate() + 2)
+
+                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                      nicht_jetzt.getMonth() === termin.getMonth() &&
+                      nicht_jetzt.getDate() === termin.getDate()) {
+                      //console.log('nicht_jetzt         ' + nicht_jetzt);
+                      //console.log('termin              ' + termin);
+                      my_article.termin = 'übermorgen'
+                    }
+
+
+
+
+
+                    nicht_jetzt.setDate(jetzt.getDate() + 3)
+
+                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                      nicht_jetzt.getMonth() === termin.getMonth() &&
+                      nicht_jetzt.getDate() === termin.getDate()) {
+                      ////console.log('nicht_jetzt         ' + nicht_jetzt);
+                      //console.log('termin              ' + termin);
+                      my_article.termin = 'in 3 Tagen'
+                    }
+
+
+
+
+                    nicht_jetzt.setDate(jetzt.getDate() + 4)
+
+                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                      nicht_jetzt.getMonth() === termin.getMonth() &&
+                      nicht_jetzt.getDate() === termin.getDate()) {
+                      //console.log('nicht_jetzt         ' + nicht_jetzt);
+                      //console.log('termin              ' + termin);
+                      my_article.termin = 'in 4 Tagen'
+                    }
+
+
+
+
+                    nicht_jetzt.setDate(jetzt.getDate() + 5)
+
+                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                      nicht_jetzt.getMonth() === termin.getMonth() &&
+                      nicht_jetzt.getDate() === termin.getDate()) {
+                      //console.log('nicht_jetzt         ' + nicht_jetzt);
+                      //console.log('termin              ' + termin);
+                      my_article.termin = 'in 5 Tagen'
+                    }
+
+
+
+
+
+
+                    nicht_jetzt.setDate(jetzt.getDate() + 6)
+
+                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                      nicht_jetzt.getMonth() === termin.getMonth() &&
+                      nicht_jetzt.getDate() === termin.getDate()) {
+                      //console.log('nicht_jetzt         ' + nicht_jetzt);
+                      //console.log('termin              ' + termin);
+                      my_article.termin = 'in 6 Tagen'
+                    }
+
+
+
+
+
+
+
+                  } else {
+                    ///Termin vorüber
+                    my_article.termin = 'abgelaufen'
+
+
+
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() === termin.getDate()) {
+
+                      my_article.termin = 'abgelaufen (heute)'
+                    }
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() - 1 === termin.getDate()) {
+
+                      my_article.termin = 'abgelaufen (gestern)'
+                    }
+                    if (jetzt.getFullYear() === termin.getFullYear() &&
+                      jetzt.getMonth() === termin.getMonth() &&
+                      jetzt.getDate() - 2 === termin.getDate()) {
+
+                      my_article.termin = 'abgelaufen (vorgestern)'
+                    }
+
+
+
+
+
+                  }
+
+
+
+
+
+
+
+
+
+
+
+                  my_article.ha_gruen = '0'
+                  my_article.ha_gelb = '0'
+                  my_article.ha_grau = '0'
+                  var inte_gelb = parseInt(my_article.ha_gelb)
+                  var inte_gruen = parseInt(my_article.ha_gruen);
+                  var inte_grau = parseInt(my_article.ha_grau);
+
+                  has.forEach(function (ha) {
+
+                    if (ha.article._id.toString() === my_article._id.toString()) {
+
+                      // console.log('pppp:    ' + my_article.title);
+
+                      if (ha.status === '1') {
+                        inte_gelb += 1;
+
+                      } else if (ha.status === '2') {
+                        inte_gruen += 1;
+                      } else if (ha.status === '3') {
+                        inte_grau += 1;
+                      }
+
+                    }
+
+
+
+
+                  })
+
+
+                  tuString_gelb = inte_gelb.toString();
+                  my_article.ha_gelb = tuString_gelb
+
+                  tuString_gruen = inte_gruen.toString();
+                  my_article.ha_gruen = tuString_gruen
+
+                  tuString_grau = inte_grau.toString();
+                  my_article.ha_grau = tuString_grau
+
+
+
+
+
+
 
                 });
 
 
 
 
+                /*   my_articles.forEach(function (my_article) {
+    
+                    console.log('                          ');
+                    console.log('----------------------    ' + my_article.ha_gruen);
+                    console.log('----------------------    ' + my_article.ha_gelb);
+                    console.log('----------------------    ' + my_article.ha_grau);
+    
+                  })
+     */
 
 
-                // Article.
-                //   find({
-                //     $or: [
+                res.render('index', {
+                  my_articles: my_articles,
+                  length: length
 
-                //       { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }, { klasse: user.klasse3 }, { klasse: user.klasse4 }] },
-                //       { schuelers: user }
+                });
 
-                //     ]
+              })
 
-                //   }).
-                //   populate('lehrer').
-                //   populate('schuelers').
-                //   populate('uploads').
-                //   sort({ created_as_date: -1 }).
-                //   exec(function (err2, my_articles) {
-                //     if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+            });
 
 
-                if (my_articles) {
 
 
 
-                  // console.log('okkkkkkkkkkk');
+        } else if (user.type === 'schueler') {
 
 
 
+          console.log('schueler_stamm:   ' + user.schueler_stamm.name)
 
-                } else {
 
 
 
-                  // console.log('neeeeeeeeeeeeeeee');
+       
 
 
-                }
 
+          if (user.klasse) {
 
-                var length = my_articles.length;
 
+            //fehler
 
-                //////////////////////7 gggg6g7
-                Hausarbeit.
-                  find({ schueler: req.user._id }).
-                  populate('article').
-                  exec(function (err, hausarbeits) {
-                    if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+          } else {
 
 
-                    //console.log('-------------------------------------')
-                    my_articles.forEach(function (my_article) {
 
+          }
 
+          var jo2 = []
 
+          user.schueler_stamm.stammverbunds.forEach(function (verbund) {
+            console.log('verbund    ' + verbund.name);
+            jo2.push(verbund);
+          })
 
 
+          //{ stamm: user.schueler_stamm },
 
-                      var tag = my_article.termin.substring(0, 2)
-                      var monat = my_article.termin.substring(3, 5)
-                      var jahr = my_article.termin.substring(6, 10)
 
-                      var termin = new Date(jahr, monat - 1, tag, 16);
-                      var jetzt = getMyNow();
+              Article.
+                find({
+                  $or: [
+                    { stamm: user.schueler_stamm },
+                    { stammverbund: { $in: jo2 } },
+                    { schuelers: user },
+                  ]
+                }).
+                populate('lehrer').
+                populate('schuelers').
+                populate('stamm').
+                populate('stammverbund').
+                populate('disziplin').
+                populate('uploads').
+                sort({ created_as_date: -1 }).
+                exec(function (err2, my_articles) {
+                  if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
-                      // To calculate the time difference of two dates 
-                      var Difference_In_Time = termin.getTime() - jetzt.getTime();
-                      var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 
-                      var nicht_jetzt = new Date(jetzt);
-
-                      my_article.termin = my_article.termin.substring(0, 10)
-
-                      if (Difference_In_Days >= 0) {
-
-                        if (jetzt.getFullYear() === termin.getFullYear() &&
-                          jetzt.getMonth() === termin.getMonth() &&
-                          jetzt.getDate() === termin.getDate()) {
-
-                          my_article.termin = 'heute 16 Uhr'
-                        }
-
-
-
-
-
-                        nicht_jetzt.setDate(jetzt.getDate() + 1)
-
-                        if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                          nicht_jetzt.getMonth() === termin.getMonth() &&
-                          nicht_jetzt.getDate() === termin.getDate()) {
-                          //console.log('nicht_jetzt         ' + nicht_jetzt);
-                          //console.log('termin              ' + termin);
-                          my_article.termin = 'morgen 16 Uhr'
-                        }
-
-
-
-
-                        nicht_jetzt.setDate(jetzt.getDate() + 2)
-
-                        if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                          nicht_jetzt.getMonth() === termin.getMonth() &&
-                          nicht_jetzt.getDate() === termin.getDate()) {
-                          //console.log('nicht_jetzt         ' + nicht_jetzt);
-                          //console.log('termin              ' + termin);
-                          my_article.termin = 'übermorgen'
-                        }
-
-
-
-
-
-                        nicht_jetzt.setDate(jetzt.getDate() + 3)
-
-                        if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                          nicht_jetzt.getMonth() === termin.getMonth() &&
-                          nicht_jetzt.getDate() === termin.getDate()) {
-                          //console.log('nicht_jetzt         ' + nicht_jetzt);
-                          //console.log('termin              ' + termin);
-                          my_article.termin = 'in 3 Tagen'
-                        }
-
-
-
-
-                        nicht_jetzt.setDate(jetzt.getDate() + 4)
-
-                        if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                          nicht_jetzt.getMonth() === termin.getMonth() &&
-                          nicht_jetzt.getDate() === termin.getDate()) {
-                          //console.log('nicht_jetzt         ' + nicht_jetzt);
-                          //console.log('termin              ' + termin);
-                          my_article.termin = 'in 4 Tagen'
-                        }
-
-
-
-
-                        nicht_jetzt.setDate(jetzt.getDate() + 5)
-
-                        if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                          nicht_jetzt.getMonth() === termin.getMonth() &&
-                          nicht_jetzt.getDate() === termin.getDate()) {
-                          //console.log('nicht_jetzt         ' + nicht_jetzt);
-                          //console.log('termin              ' + termin);
-                          my_article.termin = 'in 5 Tagen'
-                        }
-
-
-
-
-
-
-                        nicht_jetzt.setDate(jetzt.getDate() + 6)
-
-                        if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                          nicht_jetzt.getMonth() === termin.getMonth() &&
-                          nicht_jetzt.getDate() === termin.getDate()) {
-                          //console.log('nicht_jetzt         ' + nicht_jetzt);
-                          //console.log('termin              ' + termin);
-                          my_article.termin = 'in 6 Tagen'
-                        }
-
-
-
-
-
-
-
-                      } else {
-                        ///Termin vorüber
-                        my_article.termin = 'abgelaufen'
-
-
-
-                        if (jetzt.getFullYear() === termin.getFullYear() &&
-                          jetzt.getMonth() === termin.getMonth() &&
-                          jetzt.getDate() === termin.getDate()) {
-
-                          my_article.termin = 'abgelaufen (heute)'
-                        }
-                        if (jetzt.getFullYear() === termin.getFullYear() &&
-                          jetzt.getMonth() === termin.getMonth() &&
-                          jetzt.getDate() - 1 === termin.getDate()) {
-
-                          my_article.termin = 'abgelaufen (gestern)'
-                        }
-                        if (jetzt.getFullYear() === termin.getFullYear() &&
-                          jetzt.getMonth() === termin.getMonth() &&
-                          jetzt.getDate() - 2 === termin.getDate()) {
-
-                          my_article.termin = 'abgelaufen (vorgestern)'
-                        }
-
-
-
-
-
-                      }
-
-
-
-
-
-
-                      my_article.schueler_token = '0';
-                      hausarbeits.forEach(function (hausarbeit) {
-                        // console.log(hausarbeit);
-                        if (my_article._id.toString() === hausarbeit.article._id.toString()) {
-                          my_article.schueler_token = hausarbeit.status;
-                        }
-                      });
-                    });
-
-
-
-
-
-
-                    /* 
-                                    console.log('-------------------------------------');
-                                    my_articles.forEach(function (my) {
-                    
-                                      console.log('created:  ' + my.created + ' |  title:  ' + my.title + ' |  create_as_date  ' + my.created_as_date)
-                    
-                                    })
-                     */
-
-                    res.render('index', {
-
-                      my_articles: my_articles,
-                      length: length
-
-                    });
-
-
-
-
-
+                  my_articles.forEach(function (my_article) {
+                    // console.log('my_article::   ' + my_article.stamm.name);
 
                   });
 
@@ -1107,171 +811,416 @@ app.get('/', function (req, res) {
 
 
 
+                  // Article.
+                  //   find({
+                  //     $or: [
 
-              });
+                  //       { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }, { klasse: user.klasse3 }, { klasse: user.klasse4 }] },
+                  //       { schuelers: user }
 
-          });
+                  //     ]
 
-      } else if (user.type === 'admin') {
-
-
-
-
-        User.findOne({ _id: req.user._id }).
-          populate('school').
-          exec(function (err, user) {
-            if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
-
-
-
-            if (!user.school) {
-
-              res.redirect('/schools/add');
-              return;
-
-            }
+                  //   }).
+                  //   populate('lehrer').
+                  //   populate('schuelers').
+                  //   populate('uploads').
+                  //   sort({ created_as_date: -1 }).
+                  //   exec(function (err2, my_articles) {
+                  //     if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
-            School.findOne({ _id: user.school._id }).
-              populate('stammverbunds').
-              populate('s_stamms').
-              populate('s_disziplins').
-              populate('groups').
-              exec(function (err, schoool) {
+                  if (my_articles) {
 
 
-                res.render('index', {
 
-                  school: user.school,
-                  stammverbunds: schoool.stammverbunds,
-                  stamms: schoool.s_stamms,
-                  disziplins: schoool.s_disziplins,
-                  groups: schoool.groups,
+                    // console.log('okkkkkkkkkkk');
+
+
+
+
+                  } else {
+
+
+
+                    // console.log('neeeeeeeeeeeeeeee');
+
+
+                  }
+
+
+                  var length = my_articles.length;
+
+
+                  //////////////////////7 gggg6g7
+                  Hausarbeit.
+                    find({ schueler: req.user._id }).
+                    populate('article').
+                    exec(function (err, hausarbeits) {
+                      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+
+
+                      //console.log('-------------------------------------')
+                      my_articles.forEach(function (my_article) {
+
+
+
+
+
+                        var tag = my_article.termin.substring(7, 9)
+                        var monat = my_article.termin.substring(10, 12)
+                        var jahr = my_article.termin.substring(13, 17)
+
+                        var termin = new Date(jahr, monat - 1, tag, 16);
+                        var jetzt = getMyNow();
+
+                        // To calculate the time difference of two dates 
+                        var Difference_In_Time = termin.getTime() - jetzt.getTime();
+                        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+                        var nicht_jetzt = new Date(jetzt);
+
+                        my_article.termin = my_article.termin.substring(0, 10)
+
+                        if (Difference_In_Days >= 0) {
+
+                          if (jetzt.getFullYear() === termin.getFullYear() &&
+                            jetzt.getMonth() === termin.getMonth() &&
+                            jetzt.getDate() === termin.getDate()) {
+
+                            my_article.termin = 'heute 16 Uhr'
+                          }
+
+
+
+
+
+                          nicht_jetzt.setDate(jetzt.getDate() + 1)
+
+                          if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                            nicht_jetzt.getMonth() === termin.getMonth() &&
+                            nicht_jetzt.getDate() === termin.getDate()) {
+                            //console.log('nicht_jetzt         ' + nicht_jetzt);
+                            //console.log('termin              ' + termin);
+                            my_article.termin = 'morgen 16 Uhr'
+                          }
+
+
+
+
+                          nicht_jetzt.setDate(jetzt.getDate() + 2)
+
+                          if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                            nicht_jetzt.getMonth() === termin.getMonth() &&
+                            nicht_jetzt.getDate() === termin.getDate()) {
+                            //console.log('nicht_jetzt         ' + nicht_jetzt);
+                            //console.log('termin              ' + termin);
+                            my_article.termin = 'übermorgen'
+                          }
+
+
+
+
+
+                          nicht_jetzt.setDate(jetzt.getDate() + 3)
+
+                          if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                            nicht_jetzt.getMonth() === termin.getMonth() &&
+                            nicht_jetzt.getDate() === termin.getDate()) {
+                            //console.log('nicht_jetzt         ' + nicht_jetzt);
+                            //console.log('termin              ' + termin);
+                            my_article.termin = 'in 3 Tagen'
+                          }
+
+
+
+
+                          nicht_jetzt.setDate(jetzt.getDate() + 4)
+
+                          if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                            nicht_jetzt.getMonth() === termin.getMonth() &&
+                            nicht_jetzt.getDate() === termin.getDate()) {
+                            //console.log('nicht_jetzt         ' + nicht_jetzt);
+                            //console.log('termin              ' + termin);
+                            my_article.termin = 'in 4 Tagen'
+                          }
+
+
+
+
+                          nicht_jetzt.setDate(jetzt.getDate() + 5)
+
+                          if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                            nicht_jetzt.getMonth() === termin.getMonth() &&
+                            nicht_jetzt.getDate() === termin.getDate()) {
+                            //console.log('nicht_jetzt         ' + nicht_jetzt);
+                            //console.log('termin              ' + termin);
+                            my_article.termin = 'in 5 Tagen'
+                          }
+
+
+
+
+
+
+                          nicht_jetzt.setDate(jetzt.getDate() + 6)
+
+                          if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                            nicht_jetzt.getMonth() === termin.getMonth() &&
+                            nicht_jetzt.getDate() === termin.getDate()) {
+                            //console.log('nicht_jetzt         ' + nicht_jetzt);
+                            //console.log('termin              ' + termin);
+                            my_article.termin = 'in 6 Tagen'
+                          }
+
+
+
+
+
+
+
+                        } else {
+                          ///Termin vorüber
+                          my_article.termin = 'abgelaufen'
+
+
+
+                          if (jetzt.getFullYear() === termin.getFullYear() &&
+                            jetzt.getMonth() === termin.getMonth() &&
+                            jetzt.getDate() === termin.getDate()) {
+
+                            my_article.termin = 'abgelaufen (heute)'
+                          }
+                          if (jetzt.getFullYear() === termin.getFullYear() &&
+                            jetzt.getMonth() === termin.getMonth() &&
+                            jetzt.getDate() - 1 === termin.getDate()) {
+
+                            my_article.termin = 'abgelaufen (gestern)'
+                          }
+                          if (jetzt.getFullYear() === termin.getFullYear() &&
+                            jetzt.getMonth() === termin.getMonth() &&
+                            jetzt.getDate() - 2 === termin.getDate()) {
+
+                            my_article.termin = 'abgelaufen (vorgestern)'
+                          }
+
+
+
+
+
+                        }
+
+
+
+
+
+
+                        my_article.schueler_token = '0';
+                        hausarbeits.forEach(function (hausarbeit) {
+                          // console.log(hausarbeit);
+                          if (my_article._id.toString() === hausarbeit.article._id.toString()) {
+                            my_article.schueler_token = hausarbeit.status;
+                          }
+                        });
+                      });
+
+
+
+
+
+
+                      /* 
+                                      console.log('-------------------------------------');
+                                      my_articles.forEach(function (my) {
+                      
+                                        console.log('created:  ' + my.created + ' |  title:  ' + my.title + ' |  create_as_date  ' + my.created_as_date)
+                      
+                                      })
+                       */
+
+                      res.render('index', {
+
+                        my_articles: my_articles,
+                        length: length
+
+                      });
+
+
+
+
+
+
+                    });
+
+
+
+
+
+
 
                 });
 
+            
 
+        } else if (user.type === 'admin') {
 
 
 
-              })
 
+          User.findOne({ _id: req.user._id }).
+            populate('school').
+            exec(function (err, user) {
+              if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
 
 
 
+              if (!user.school) {
 
+                res.redirect('/schools/add');
+                return;
 
+              }
 
 
-          })
+              School.findOne({ _id: user.school._id }).
+                populate('stammverbunds').
+                populate('s_stamms').
+                populate('s_disziplins').
+                populate('groups').
+                exec(function (err, schoool) {
 
 
+                  res.render('index', {
 
+                    school: user.school,
+                    stammverbunds: schoool.stammverbunds,
+                    stamms: schoool.s_stamms,
+                    disziplins: schoool.s_disziplins,
+                    groups: schoool.groups,
 
+                  });
 
 
 
 
-      } else if (user.type === 'liquidboy') {
 
+                })
 
-      } else if (user.type === 'school') {
 
 
-        User.findOne({ _id: req.user._id }).
-          populate('school').
-          exec(function (err, user) {
-            if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
 
 
 
 
 
-            if (!user.school) {
-              //FEHLER  Es kann hier keinen user ohne school geben
-              res.redirect('/');
-              return;
+            })
 
-            }
 
-            if (user.school.complete_school === '2') {//stamms stehen an
-              res.redirect('/schools/add_school_stamms');
-              return;
 
-            }
-            if (user.school.complete_school === '3') {//disziplins stehen an
 
-              res.redirect('/schools/add_school_disziplins');
-              return;
 
-            }
 
-            if (user.school.complete_school === '4') {//logo steht an
 
-              res.redirect('/schools/add_school_logo');// schullogo ausgelassen
-              return;// schullogo ausgelassen
 
-            }
-            if (user.school.complete_school === '5') {// schülerschlüssel steht an
+        } else if (user.type === 'liquidboy') {
 
-              res.redirect('/schools/add_school_s_s');
-              return;
 
-            }
+        } else if (user.type === 'school') {
 
-            if (user.school.complete_school === '6') {// lehrerschlüssel steht an
 
-              res.redirect('/schools/add_school_l_s');
-              return;
+          User.findOne({ _id: req.user._id }).
+            populate('school').
+            exec(function (err, user) {
+              if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
 
-            }
 
-            if (user.school.complete_school === '7') { //adminschlüssel steht an
 
-              res.redirect('/schools/add_school_a_s');
-              return;
 
-            }
 
-            if (user.school.complete_school === '8') { //adminREGISTRIERUNG steht an
+              if (!user.school) {
+                //FEHLER  Es kann hier keinen user ohne school geben
+                res.redirect('/');
+                return;
 
-              res.redirect('/users/add_school_register_admin_first');
-              return;
+              }
 
-            }
+              if (user.school.complete_school === '2') {//stamms stehen an
+                res.redirect('/schools/add_school_stamms');
+                return;
 
-            if (user.school.complete_school === '1') {
-              //FEHLER  Der schoolUser dürfte garnicht mehr existieren
-              res.redirect('/');
-              return;
+              }
+              if (user.school.complete_school === '3') {//disziplins stehen an
 
-            }
+                res.redirect('/schools/add_school_disziplins');
+                return;
 
+              }
 
+              if (user.school.complete_school === '4') {//logo steht an
 
+                res.redirect('/schools/add_school_logo');// schullogo ausgelassen
+                return;// schullogo ausgelassen
 
+              }
+              if (user.school.complete_school === '5') {// schülerschlüssel steht an
 
+                res.redirect('/schools/add_school_s_s');
+                return;
 
+              }
 
+              if (user.school.complete_school === '6') {// lehrerschlüssel steht an
 
+                res.redirect('/schools/add_school_l_s');
+                return;
 
+              }
 
+              if (user.school.complete_school === '7') { //adminschlüssel steht an
 
+                res.redirect('/schools/add_school_a_s');
+                return;
 
+              }
 
+              if (user.school.complete_school === '8') { //adminREGISTRIERUNG steht an
 
+                res.redirect('/users/add_school_register_admin_first');
+                return;
 
+              }
 
-          })
+              if (user.school.complete_school === '1') {
+                //FEHLER  Der schoolUser dürfte garnicht mehr existieren
+                res.redirect('/');
+                return;
 
+              }
 
-      }
 
 
 
 
 
-    })
+
+
+
+
+
+
+
+
+
+
+            })
+
+
+        }
+
+
+
+
+
+      })
 
   }
 
@@ -1284,7 +1233,39 @@ app.get('/', function (req, res) {
 
 
 
+function handleOldVersionSchuelerIndex() {
 
+
+
+
+
+  Article.
+    find({
+      $or: [
+        { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }, { klasse: user.klasse3 }, { klasse: user.klasse4 }] },
+        { klasse: { $in: jo } },
+        { schuelers: user }
+      ]
+    }).
+    populate('lehrer').
+    populate('schuelers').
+    populate('stamm').
+    populate('stammverbund').
+    populate('disziplin').
+    populate('uploads').
+    sort({ created_as_date: -1 }).
+    exec(function (err2, my_articles) {
+      if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+
+
+    })
+
+
+
+
+}
 
 
 

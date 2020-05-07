@@ -446,9 +446,24 @@ router.post("/add_stammverbund", (req, res) => {
                             console.log(err);
                           } else {
 
+
+
+                            Stamm.findByIdAndUpdate(stamm._id,
+                              { $push: { stammverbunds: uptdatedStammverbund } },
+                              { safe: true, upsert: true },
+                              function (err, uptdatedStamm) {
+                                if (err) {
+                                  console.log(err);
+                                } else {
+
+                                }
+                              })
+
+
+
+
                           }
-                        }
-                      )
+                        })
                     })
                     req.flash('success', 'Verbund gespeichert');
                     res.redirect('/');
@@ -524,6 +539,18 @@ router.post("/edit/:id", upload.array("files" /* name attribute of <file> elemen
             { upsert: true, save: true },
             function (err, uptdatedVerbund) {
               if (err) throw err;
+
+
+
+              stamm.stammverbunds.pull(verbund);
+              stamm.save(function (err, scho) {
+                if (err) throw err;
+              })
+
+
+
+
+
             });
         });// alte Verknüpfungen werden gelöst
 
@@ -540,6 +567,23 @@ router.post("/edit/:id", upload.array("files" /* name attribute of <file> elemen
               { safe: true, upsert: true },
               function (err, uptdatedVerbund) {
                 if (err) throw err;
+
+
+
+                Stamm.findByIdAndUpdate(stamm._id,
+                  { $push: { stammverbunds: verbund } },
+                  { safe: true, upsert: true },
+                  function (err, uptdatedStamm) {
+                    if (err) {
+                      console.log(err);
+                    } else {
+
+                    }
+                  })
+
+
+
+
               });
           });//ende loop
         });
@@ -563,11 +607,11 @@ router.post("/edit/:id", upload.array("files" /* name attribute of <file> elemen
             if (err) throw err;
 
             if (gibbet_schon) {
-              if(gibbet_schon._id.toString()!==req.params.id.toString() ){
+              if (gibbet_schon._id.toString() !== req.params.id.toString()) {
                 req.flash('danger', 'Deine Schule hat bereits einen Klassenverbund mit diesem Namen');
                 res.redirect('/');
                 return
-              }else{
+              } else {
                 res.redirect('/');
                 return
               }
@@ -587,10 +631,10 @@ router.post("/edit/:id", upload.array("files" /* name attribute of <file> elemen
                 res.redirect('/');
                 return
               }
-    
+
               let verbundi = {};
               verbundi.name = name;
-  
+
               Stammverbund.update(query, verbundi, function (err, verbundiii) {
                 if (err) throw err;
                 req.flash('success', 'Stammverbund geändert');
@@ -855,6 +899,7 @@ router.delete('/stammverbund/:id', function (req, res) {
   Stammverbund.
     findOne({ _id: req.params.id }).
     populate('school').
+    populate('stamms').
     exec(function (err2, stammverbund) {
 
       if (req.user.type !== 'admin' || req.user.school.toString() !== stammverbund.school._id.toString()) {
@@ -879,6 +924,32 @@ router.delete('/stammverbund/:id', function (req, res) {
             console.log('-bennobenno--- ' + school.name);
 
             let query = { _id: req.params.id }
+
+
+
+
+
+
+            stammverbund.stamms.forEach(function (stamm) {
+              //console.log('record :   ' + schueler.name);
+
+
+              stamm.stammverbunds.pull(stammverbund);
+              stamm.save(function (err, scho) {
+                if (err) throw err;
+              })
+
+
+            });// alte Verknüpfungen werden gelöst
+
+
+
+
+
+
+
+
+
 
             Stammverbund.remove(query, function (err) {
               if (err) {

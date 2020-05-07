@@ -1,8 +1,9 @@
-extend layout
+extend ../layouts/layout
 
 
 
 block content
+    link(href='https://cdn.quilljs.com/1.3.6/quill.snow.css', rel='stylesheet')
     .container.padding_null
         .row.h-100.d-flex.justify-content-center
             .col-12
@@ -10,7 +11,14 @@ block content
                     .card-header
                         ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                             li.nav-item
-                                a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{hausarbeit.article.klasse} #{hausarbeit.article.shadow_klasse} |  #{hausarbeit.article.fach}  |  #{hausarbeit.article.lehrer.name}
+                                if hausarbeit.article.klasse
+                                    a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{hausarbeit.article.klasse} | #{hausarbeit.article.fach} | #{hausarbeit.article.created}
+                                if hausarbeit.article.stamm
+                                    a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{hausarbeit.article.stamm.name} | #{hausarbeit.article.disziplin.name} | #{hausarbeit.article.created}
+                                if hausarbeit.article.stammverbund
+                                    a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{hausarbeit.article.stammverbund.name} | #{hausarbeit.article.disziplin.name} | #{hausarbeit.article.created}
+                                if hausarbeit.article.schuelers.length !==0
+                                    a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') Sonderaufgabe |  #{hausarbeit.article.disziplin.name} | #{hausarbeit.article.created}
                     .card-body.padding_null
                         .tab-content.mt-3.my-min-height
                             #description.tab-pane.active(role='tabpanel')
@@ -23,9 +31,9 @@ block content
                                         div(style='clear:both;')        
                                         hr
                                         br 
-                                        br   
-                                        h5#invisible #{hausarbeit.article.body}
-                                        h6#hier-kommt-was-rein
+                                        br
+                                        input#income.form-control.invisible(type='text', placeholder='articleId',  name='article_id', value= hausarbeit.article.body)
+                                        #editor_show
     .container.padding_null
         .row.h-100.d-flex.justify-content-center
             .col-12
@@ -67,11 +75,6 @@ block content
                     .card.border
                         .card-body
                             h5.card-text Deine Hausarbeit wurde überprüft
-                            br 
-                            p.card-text
-                                | Du kannst zu jeder Hausarbeit einen "Lehrerkommentar", ein "ok", eine "Note" oder 0 - 5 "PauliDollar" (Leistungspunkte) bekommen. 
-                            p.card-text
-                                | Was du davon bekommst, entscheidet die Lehrkraft. Wie viele Dollar du insgesammt gesammelt hast, siehst du oben links, neben deinem Namen.
                             .card.bg-primary.text-white.my-margin-bottom-big.my-min-height
                                 .card-body.text-center
                                     p.card-text Lehrerkommentar
@@ -94,13 +97,26 @@ block content
                                             p.card-text.norm #{hausarbeit.ergebnis_note}
                                         else
                                             p.card-text.kursiv (Es wurde keine Note für deine Hausarbeit gegeben)
-                                .card.bg-success.text-white.my-min-height
-                                    .card-body.text-center
-                                        p.card-text PauliDollar
-                                        if hausarbeit.ergebnis_dollar != 'keine Auswahl'
-                                            p.card-text.norm #{hausarbeit.ergebnis_dollar}$
-                                        else
-                                            p.card-text.kursiv (Es wurden keine PauliDollar für deine Hausarbeit vergeben)
+                                if hausarbeit.ergebnis_dollar != 'keine Auswahl'
+                                    .card.bg-success.text-white.my-min-height
+                                        .card-body.text-center
+                                            p.card-text PauliDollar
+                                            if hausarbeit.ergebnis_dollar != 'keine Auswahl'
+                                                p.card-text.norm #{hausarbeit.ergebnis_dollar}$
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
     script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
     script(src='/js/article.js')
+    script(src='https://cdn.quilljs.com/1.3.6/quill.js')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+    script.
+        var jeks = document.getElementById("income").value;
+        var quill = new Quill('#editor_show', {
+            modules: {
+                "toolbar": false
+            },
+            theme: 'snow',
+            readOnly: true,
+        });
+        //console.log(jeks);
+        var geparst = JSON.parse(jeks)
+        quill.setContents(geparst);  

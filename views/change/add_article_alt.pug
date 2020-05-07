@@ -1,67 +1,304 @@
 extends ../layouts/layout
 
 block content
-            link(href='https://cdn.quilljs.com/1.3.6/quill.snow.css', rel='stylesheet')
-            form#reused_form.montform(method='POST', enctype='multipart/form-data' action='/articles/add_alt')
-                .card.border.border-success
-                    .card-header.bg-success.text-white
-                        | Auftrag für '#{bingo.name}' (#{bingo.typ})
-                    .card-body
+  link(href='https://cdn.quilljs.com/1.3.6/quill.snow.css', rel='stylesheet')
+  form#reused_form.montform(method='POST', enctype='multipart/form-data' action='/articles/add_alt')
+    .card.border.border-success
+      .card-header.bg-success.text-white
+        | Neuer Auftrag 
+      .card-body
+        #form-transition-group
+          .form-row
+            .form-group.col-md-12
+              input#title_field.form-control(type='text', placeholder='Titel der Hausarbeit (Pflichtfeld)', onkeyup='vali(this.value)', name='title')
+          .form-row                                        
+            .form-group.col-md-3                              
+              select#disziplin_field.form-control.custom-select.form-control(name='disziplin', type=text,  onchange='vali(this.value)', placeholder='Wähle eine Schulfach')
+                option(value='', selected='') Unterrichtsfach (Pflichtfeld)
+                each disziplin, i in user.school.s_disziplins
+                  option(value=disziplin._id) #{disziplin.name}
+            .form-group.col-md-3 
+              input#datepicker.form-control(type=text, name='termin', value='Frist: '+abgabe+ ' 16 Uhr', required='',  readonly='readonly', style='background:white;')
+            .form-group.col-md-3                              
+              select#adressat_field.form-control.custom-select.form-control(name='adressat', type=text,  onchange='changer(this.value)', placeholder='Wähle eine Schulfach')
+                option(selected='') An Klasse
+                option An mehrere Klassen
+                option An Schülergruppe (Vorlage)
+                option An neue Schülergruppe
+            .form-group.col-md-3                              
+              select#stamm_field.form-control.custom-select.form-control(name='stamm', type=text,  onchange='vali(this.value)', style='display: inline')
+                option(selected='') Klasse (Pflichtfeld)
+                each stamm, i in user.school.s_stamms
+                  option(value=stamm._id) #{stamm.name}
+              select#stammverbund_field.form-control.custom-select.form-control(name='stammverbund', type=text,  onchange='vali(this.value)', style='display: none')
+                option(selected='') Mehrere Klassen (Pflichtfeld)
+                each stammverbund, i in user.school.stammverbunds
+                  option(value=stammverbund._id) #{stammverbund.name}
+              select#group_field.form-control.custom-select.form-control(name='group', type=text,  onchange='vali(this.value)', style='display: none')
+                option(selected='') Schülergruppe (Pflichtfeld)
+                each group, i in user.school.groups
+                  option(value=group._id) #{group.name}
+              button#new_group_field.btn.btn-outline-success(type='button', data-toggle='modal', data-target='#exampleModalCenter' style='width: 100%; display: none;') Wähle eine Schülergruppe
+              #exampleModalCenter.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true', data-backdrop='static',  data-keyboard='false'      )
+                .modal-dialog.modal-dialog-centered.modal-xl
+                  .modal-content
+                    .modal-header
+                      h5#exampleModalLongTitle.modal-title Neue Schülergruppe
+                      button.close(type='button', data-dismiss='modal', aria-label='Close' onclick='valiModalReset()')
+                        span(aria-hidden='true') &times;
+                    .modal-body
+                      button#modal_button1.btn.btn-success.float-right(type='button', data-dismiss='modal' onclick='valiModal()' , disabled='') Schülergruppe verwenden
+                      .form-group.col-md-12
                         #form-transition-group.my-margin-top
-                                .form-row
-                                    .form-group.col-md-12
-                                        input#validationServer01.form-control(type='text', placeholder='Titel der Hausarbeit',  required=''  minlength='6' name='title')
-                                .form-row.my-margin-top                                        
-                                    .form-group.col-md-8 
-                                        label Für das Fach                                 
-                                        select#validationServer01.form-control.custom-select.form-control(name='disziplin', type=text,  required='', placeholder='Wähle eine Schulfach')
-                                            option(selected='')
-                                            each disziplin, i in user.school.s_disziplins
-                                                option(value=disziplin._id) #{disziplin.name}
-                                    .form-group.col-md-4 
-                                        label Abgabetermin (Standard: 3 Tage später)
-                                        input#datepicker.form-control(type=text, name='termin', value=abgabe+ ' 16 Uhr', required='',  readonly='readonly', style='background:white;')
-                                #editor
-                                .form-row
-                                    textarea#dada.invisible(name='body', type=text)
-                                    input.form-control.invisible(type='text', placeholder='bingo_id',  name='bingo_id', value= bingo._id)
-                                    input.form-control.invisible(type='text', placeholder='bingo_typ',  name='bingo_typ', value= bingo.typ)
-                                .custom-file.my-margin-top
-                                    input#inputGroupFile02.custom-file-input(type='file' name='files', multiple='')
-                                    label.custom-file-label(for='inputGroupFile02') (mehrere) hochladen 
-                                input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Auftrag veröffentlichen')
-                                #my-spinner.spinner-border.my-margin-top.text-success.float-right.d-none(role='status' style='margin-top: 19px!important; margin-right: 15px')
-                                    span.sr-only Loading...  
-            script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
-            script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
-            script(src='https://cdn.quilljs.com/1.3.6/quill.js')
-            script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
-            script(src='/js/add_article.js')  
-            link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
-            script(src='https://code.jquery.com/jquery-1.12.4.js')
-            script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js') 
-            script.
-                $( function() {
-                $( "#datepicker" ).datepicker({
-                prevText: '&#x3c;zurück', prevStatus: '',
-                prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
-                nextText: 'Vor&#x3e;', nextStatus: '',
-                nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
-                currentText: 'heute', currentStatus: '',
-                todayText: 'heute', todayStatus: '',
-                clearText: '-', clearStatus: '',
-                closeText: 'schließen', closeStatus: '',
-                monthNames: ['Januar','Februar','März','April','Mai','Juni',
-                'Juli','August','September','Oktober','November','Dezember'],
-                monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
-                'Jul','Aug','Sep','Okt','Nov','Dez'],
-                dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
-                dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-                dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-                showMonthAfterYear: false,
-                buttonImage: 'media/img/calendar.png',
-                buttonImageOnly: true,
-                dateFormat:'dd.mm.yy' + ' 16 Uhr'
-                }
-                );
-                });
+                          each stamm, i in user.school.s_stamms
+                            .form-group.col-md-12
+                              h4 #{stamm.name}
+                              .container-fluid(style='margin-left:10px; border:none !important;')
+                                .row.justify-content-start
+                                  each schueler, i in stamm.schuelers
+                                    .col-2(style='margin-bottom:0px; border:none !important;')
+                                      input#defaultCheck1.form-check-input(type='checkbox', value= schueler._id,  name='schuelers[]' onchange='vali(this.value)')
+                                      input.form-control.invisible(type='text',  name='id[]', value= schueler._id)
+                                      label.form-check-label(for='defaultCheck1')
+                                      | #{schueler.name}
+                            hr 
+                            br              
+                          .form-check
+                            input#exampleRadios1.form-check-input(type='radio', name='for_all', value='1' onchange='vali(this.value)' )
+                            label.form-check-label(for='exampleRadios1')
+                              | als öffentliche Vorlage speichern
+                          .form-check
+                            input#exampleRadios2.form-check-input(type='radio', name='for_all', value='2'   onchange='vali(this.value)')
+                            label.form-check-label(for='exampleRadios2')
+                              | als private Vorlage speichern
+                          .form-check
+                            input#exampleRadios3.form-check-input(type='radio', name='for_all', value='0', checked=''  onchange='vali(this.value)' )
+                            label.form-check-label(for='exampleRadios3')
+                              | nicht speichern  
+                            br 
+                            br 
+                      .form-row.justify-content-end
+                        .form-group.col-md-8
+                          input#vorlage_name_field.form-control.float-right(type='text', placeholder='Name der neuen Schülergruppe', onkeyup='vali(this.value)', name='vorlage_name')                                             
+                        .form-group.col-md-4
+                          button#modal_button2.btn.btn-success(type='button', data-dismiss='modal' onclick='valiModal()', disabled='' style='width:100%') Schülergruppe verwenden 
+                        
+          #editor
+          .form-row
+            textarea#dada.invisible(name='body', type=text)
+          .custom-file.my-margin-top
+            input#inputGroupFile02.custom-file-input(type='file' name='files', multiple='',  onchange='vali(this.value)')
+            label#to_clear.custom-file-label(for='inputGroupFile02') Datei(en) hochladen
+          input#geht_ab.btn.btn-success.my-margin-top.bg-success.text-white.float-right(type='submit', value='Auftrag veröffentlichen' disabled='')
+          #my-spinner.spinner-border.my-margin-top.text-success.float-right.d-none(role='status' style='margin-top: 19px!important; margin-right: 15px')
+            span.sr-only Loading...  
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+  script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+  script(src='https://cdn.quilljs.com/1.3.6/quill.js')
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+  script(src='/js/add_article.js')  
+  link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
+  script(src='https://code.jquery.com/jquery-1.12.4.js')
+  script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js') 
+  script.
+    $( function() {
+    $( "#datepicker" ).datepicker({
+    prevText: '&#x3c;zurück', prevStatus: '',
+    prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+    nextText: 'Vor&#x3e;', nextStatus: '',
+    nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+    currentText: 'heute', currentStatus: '',
+    todayText: 'heute', todayStatus: '',
+    clearText: '-', clearStatus: '',
+    closeText: 'schließen', closeStatus: '',
+    monthNames: ['Januar','Februar','März','April','Mai','Juni',
+    'Juli','August','September','Oktober','November','Dezember'],
+    monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+    'Jul','Aug','Sep','Okt','Nov','Dez'],
+    dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+    dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+    dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+    showMonthAfterYear: false,
+    buttonImage: 'media/img/calendar.png',
+    buttonImageOnly: true,
+    dateFormat:'Frist: '+'dd.mm.yy' + ' 16 Uhr'
+    }
+    );
+    });
+    function vali(val){
+    //alert('title:  '+val);
+
+
+
+    var titleCheck =0
+    var disziCheck =0
+    var uploadCheck =1
+
+    var stammCheck =0
+    var stammverbundCheck = 0
+    var groupCheck=0
+    var checkButtonsCheck =0
+
+    var radioButtonsOk =1
+
+
+
+    var title_field = document.getElementById("title_field");
+    if(title_field.value !==''){
+      titleCheck = 1
+    }
+    var disziplin_field = document.getElementById("disziplin_field");
+    if(disziplin_field.value !==''){
+      disziCheck = 1
+    }
+
+    var stamm_field = document.getElementById("stamm_field");
+    if(stamm_field.value !=='Klasse (Pflichtfeld)'){
+      stammCheck = 1
+    }
+
+    var stammverbund_field = document.getElementById("stammverbund_field");
+    if(stammverbund_field.value !=='Mehrere Klassen (Pflichtfeld)'){
+      stammverbundCheck = 1
+    }
+
+
+    var group_field = document.getElementById("group_field");
+    if(group_field.value !=='Schülergruppe (Pflichtfeld)'){
+      groupCheck = 1
+    }
+
+
+
+
+   
+    var aa = document.querySelectorAll("input[type=checkbox]");
+    for (var i = 0; i < aa.length; i++){
+       
+
+        if(aa[i].checked){
+        checkButtonsCheck = 1
+        }
+    }
+
+    
+    var exampleRadios3 = document.getElementById("exampleRadios3");
+    var vorlage_name_field = document.getElementById("vorlage_name_field");
+    if(exampleRadios3.checked) {
+      //alert("F: ");
+      radioButtonsOk =1
+      vorlage_name_field.style.display = "none";
+    }else  {
+      vorlage_name_field.style.display = "inline";
+    if(vorlage_name_field.value !==''){
+       radioButtonsOk =1
+    }else{
+      radioButtonsOk =0
+
+    }
+
+    }
+
+    var modalOk = checkButtonsCheck * radioButtonsOk
+
+
+    var uploadField = document.getElementById("inputGroupFile02");
+    var allet =0;
+    for (var i = 0, f; f = uploadField.files[i]; i++) {
+    //alert("F: "+f.size);
+    allet = allet + f.size
+    }
+    //alert("Gesamt: "+allet);
+    if(allet > 2097152){
+      uploadCheck =0 
+    alert("Der Anhang ist zu groß! (maximal 2MB Anhang)");
+      $("#geht_ab").val('Der Anhang ist zu groß! (maximal 2MB Anhang)');
+    }else{
+      $("#geht_ab").val('Auftrag veröffentlichen');
+    };
+
+    //alert('titleCheck:'+titleCheck + ';   disziCheck: '+disziCheck+ ';   stammCheck: '+stammCheck+ ';   stammverbundCheck: '+stammverbundCheck+ ';   groupCheck: '+groupCheck + '   '+(titleCheck*disziCheck*uploadCheck * (stammCheck+stammverbundCheck+groupCheck)));
+
+    if((titleCheck*disziCheck*uploadCheck * (stammCheck+stammverbundCheck+groupCheck+modalOk))  ===0){
+    document.getElementById("geht_ab").disabled = true;
+    }else{
+    document.getElementById("geht_ab").disabled = false;
+    }
+
+    if(modalOk){
+      $("#new_group_field").text('Schülergruppe ausgewählt');
+      document.getElementById("modal_button1").disabled = false;
+      document.getElementById("modal_button2").disabled = false;
+      $("#modal_button1").text('Schülergruppe verwenden');
+      $("#modal_button2").text('Schülergruppe verwenden');
+    }else{
+      $("#new_group_field").text('auswählen');
+       document.getElementById("modal_button1").disabled = true;
+       document.getElementById("modal_button2").disabled = true;
+       $("#modal_button1").text('Name eingeben');
+       $("#modal_button2").text('Name eingeben');
+    }
+
+
+    //alert('title:'+title_field.value +'  '+ 'disziplin: '+disziplin_field.options[disziplin_field.selectedIndex].text +'  ');
+    //alert('title:'+title_field.value +'  '+ 'disziplin: '+disziplin_field.value +'  ');
+    }
+    function changer(val){
+      // alert('title:  '+val);
+
+      if(val=='An Klasse'){
+      reset();
+      document.getElementById("stamm_field").style.display = "inline";
+      document.getElementById("stammverbund_field").style.display = "none";
+      document.getElementById("group_field").style.display = "none";
+      document.getElementById("new_group_field").style.display = "none";
+
+      }else if(val=='An mehrere Klassen'){
+      reset();
+      document.getElementById("stamm_field").style.display = "none";
+      document.getElementById("stammverbund_field").style.display = "inline";
+      document.getElementById("group_field").style.display = "none";
+      document.getElementById("new_group_field").style.display = "none";
+
+      }if(val=='An Schülergruppe (Vorlage)'){
+      reset();
+      document.getElementById("stamm_field").style.display = "none";
+      document.getElementById("stammverbund_field").style.display = "none";
+      document.getElementById("group_field").style.display = "inline";
+      document.getElementById("new_group_field").style.display = "none";
+
+      }if(val=='An neue Schülergruppe'){
+      reset();
+      document.getElementById("stamm_field").style.display = "none";
+      document.getElementById("stammverbund_field").style.display = "none";
+      document.getElementById("group_field").style.display = "none";
+      document.getElementById("new_group_field").style.display = "inline";
+
+      }
+
+
+    vali(val);
+
+   
+
+    }
+    function valiModal(){
+      vali('checkTheCheckButtons');
+    }
+    function valiModalReset(){
+      reset();
+      vali('checkTheCheckButtons');
+    }
+    function reset(){
+      document.getElementById("stamm_field").value = "Klasse (Pflichtfeld)";
+      document.getElementById("stammverbund_field").value = "Mehrere Klassen (Pflichtfeld)";
+      document.getElementById("group_field").value = "Schülergruppe (Pflichtfeld)";
+      
+      var aa = document.querySelectorAll("input[type=checkbox]");
+      for (var i = 0; i < aa.length; i++){
+         aa[i].checked = false;
+      }
+    }
+
+
+

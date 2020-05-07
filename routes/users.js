@@ -1241,7 +1241,7 @@ router.post('/register_schueler', function (req, res) {
                                 username: username.toString().toLowerCase().trim(),
                                 password: password,
                                 password_visible: password,
-                                schuelers_stamm: stamm,
+                                schueler_stamm: stamm,
                                 logged: false,
                                 money: '0'
 

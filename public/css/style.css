@@ -1022,10 +1022,46 @@ table.dataTable td {
 
 #editor {
   min-height: 275px;
+  background-color:  #00791a1e;
 }
+
+
+#inputGroupFile02 {
+  background-color:  #00791a1e;
+}
+
+#to_clear {
+  background-color:  #00791a1e;
+ 
+}
+
+
+
+
+.form-control{
+
+  white-space: pre; 
+}
+
 #editor_update {
   min-height: 275px;
+  background-color:  #00791a1e;
 }
+
+#inputGroupFile02_update {
+  background-color:  #00791a1e;
+  
+}
+
+#to_clear_update {
+  background-color:  #00791a1e;
+  margin-left: 5px!important;
+  margin-right: 5px!important;
+}
+
+
+
+
 
 #editor_show.ql-container.ql-snow{
 
@@ -1035,4 +1071,17 @@ table.dataTable td {
 #editor_show.ql-editor{
   
   padding: 0px!important;
+}
+
+
+#to_clear.custom-file-label::after{
+  border-left: none !important;
+  background-color: rgba(255, 255, 255, 0) !important;
+  content: 'hochladen'
+}
+
+#to_clear_update.custom-file-label::after{
+  border-left: none !important;
+  background-color: rgba(255, 255, 255, 0) !important;
+  content: ''
 }

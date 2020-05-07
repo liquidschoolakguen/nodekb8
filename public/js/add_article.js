@@ -23,7 +23,7 @@ $(document).ready(function () {
 
     function myFunction() {
 
-        console.log('jjj');
+        //console.log('jjj');
 
         // $('#reused_form #geht_ab').submit();
 
@@ -109,16 +109,40 @@ var quill = new Quill('#editor', {
     modules: {
         toolbar: toolbarOptions
     },
-    theme: 'snow'
+    theme: 'snow',
+    placeholder: 'Formuliere einen Auftrag...'
 });
+
+
 $('#geht_ab').click(function () {
     var delta = quill.getContents();
-    console.log(JSON.stringify(delta));
-    $("#dada").val(JSON.stringify(delta));
+    //console.log(JSON.stringify(delta));
 
-    $("#my-spinner").removeClass('d-none');
 
-    return true
+    var control_delta = JSON.stringify(delta).replace(/\s/g, '') ;
+   // console.log(control_delta);
+
+    var uploadField = document.getElementById("inputGroupFile02");
+    var allet =0;
+    for (var i = 0, f; f = uploadField.files[i]; i++) {
+    //hier werden die dateigrößen der dateien addiert.
+    allet = allet + f.size
+    }
+
+
+    if(control_delta.length === 25 && uploadField.files.length === 0){
+        alert("Du hast weder einen Aufrag formuliert noch eine Datei hochgeladen. Irgend etwas solltest du den SchülerInnen schon zu tun geben. ");
+        //var uploadField = document.getElementById("#to_clear");
+        return false
+    }else{
+
+        $("#dada").val(JSON.stringify(delta));
+        $("#my-spinner").removeClass('d-none');
+        return true
+
+    }
+
+
 });
 
 

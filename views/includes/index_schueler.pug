@@ -10,64 +10,6 @@
                                     .col-md-8.col-8.float-left
                                         br
                                         h4.card-title #{user.name}s Hausarbeiten
-                                    .col-md-12.col-12.float-left
-                                        table#customerTable_Erklaerung.table.borderless(cellspacing='0', width='100%')
-                                            thead
-                                                tr               
-                                                    th.th-sm.
-                                                        | Symbol
-                                                    th.th-sm
-                                                        | Erklärung
-                                            tbody
-                                                tr
-                                                    td
-                                                        br 
-                                                        .btn.btn-outline-danger
-                                                            svg.bi.bi-file-richtext(width='0.7em', height='0.7em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
-                                                                path(fill-rule='evenodd', d='M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z', clip-rule='evenodd')
-                                                                path(fill-rule='evenodd', d='M4.5 11.5A.5.5 0 015 11h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 9h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm1.639-3.708l1.33.886 1.854-1.855a.25.25 0 01.289-.047l1.888.974V7.5a.5.5 0 01-.5.5H5a.5.5 0 01-.5-.5V7s1.54-1.274 1.639-1.208zM6.25 5a.75.75 0 100-1.5.75.75 0 000 1.5z', clip-rule='evenodd')
-                                                    td
-                                                        | Das Symbol ist rot, wenn die Hausarbeit neu ist. Klicke drauf, um sie zu machen. Danach wird das Symbol gelb.                                
-                                                tr
-                                                    td
-                                                        .btn.btn-outline-warning
-                                                            svg.bi.bi-file-richtext(width='0.7em', height='0.7em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
-                                                                path(fill-rule='evenodd', d='M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z', clip-rule='evenodd')
-                                                                path(fill-rule='evenodd', d='M4.5 11.5A.5.5 0 015 11h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 9h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm1.639-3.708l1.33.886 1.854-1.855a.25.25 0 01.289-.047l1.888.974V7.5a.5.5 0 01-.5.5H5a.5.5 0 01-.5-.5V7s1.54-1.274 1.639-1.208zM6.25 5a.75.75 0 100-1.5.75.75 0 000 1.5z', clip-rule='evenodd')
-                                                    td
-                                                        | Das Symbol ist gelb, wenn du deine Hausarbeit abgeschickt hast, sie aber noch nicht von deiner Lehrerin/deinem Lehrer überprüft wurde. So lange dein HA-Symbol gelb ist, kannst du deine Arbeit noch korrigieren.
-                                                tr
-                                                    td
-                                                        .btn.btn-outline-success
-                                                            svg.bi.bi-file-richtext(width='0.7em', height='0.7em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
-                                                                ath(fill-rule='evenodd', d='M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z', clip-rule='evenodd')
-                                                                path(fill-rule='evenodd', d='M4.5 11.5A.5.5 0 015 11h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 9h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm1.639-3.708l1.33.886 1.854-1.855a.25.25 0 01.289-.047l1.888.974V7.5a.5.5 0 01-.5.5H5a.5.5 0 01-.5-.5V7s1.54-1.274 1.639-1.208zM6.25 5a.75.75 0 100-1.5.75.75 0 000 1.5z', clip-rule='evenodd')
-                                                    td                         
-                                                        | Das Symbol ist grün, wenn deine Lehrerin/dein Lehrer deine Arbeit korrigiert hat. Klicke auf das Symbol, um nachzusehen, wie deine Lehrkraft deine Arbeit beurteilt. 
-                                                tr
-                                                    td
-                                                        .btn.btn-outline-info
-                                                            svg.bi.bi-file-richtext(width='0.7em', height='0.7em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
-                                                                path(fill-rule='evenodd', d='M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z', clip-rule='evenodd')
-                                                                path(fill-rule='evenodd', d='M4.5 11.5A.5.5 0 015 11h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 9h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm1.639-3.708l1.33.886 1.854-1.855a.25.25 0 01.289-.047l1.888.974V7.5a.5.5 0 01-.5.5H5a.5.5 0 01-.5-.5V7s1.54-1.274 1.639-1.208zM6.25 5a.75.75 0 100-1.5.75.75 0 000 1.5z', clip-rule='evenodd')
-                                                    td                         
-                                                        | Das Symbol ist blau, wenn deine Lehrerin/dein Lehrer deine Arbeit zum Nachbessern an dich zurück gesendet hat. Irgend etwas scheint damit nicht zu stimmen. Verbessere es und schicke es schnell nochmal ab.                                                          
-                                                tr
-                                                    td
-                                                        .btn.btn-danger
-                                                            svg.bi.bi-lightning-fill(width='0.7em', height='0.7em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
-                                                                path(fill-rule='evenodd', d='M11.251.068a.5.5 0 01.227.58L9.677 6.5H13a.5.5 0 01.364.843l-8 8.5a.5.5 0 01-.842-.49L6.323 9.5H3a.5.5 0 01-.364-.843l8-8.5a.5.5 0 01.615-.09z', clip-rule='evenodd')
-                                                    td                         
-                                                        | Das Symbol mit dem Blitz bedeutet, dass du Probleme mit deiner Lehrerin/ deinem Lehrer bekommst. Denn du hast nicht rechtzeitig eine gültige Hausarbeit abgeschickt.
-                                                tr
-                                                    td
-                                                        .nav-link.active.text-primary
-                                                            svg.bi.bi-card-image(width='2em', height='2em', viewBox='0 0 16 16', fill='currentColor', xmlns='http://www.w3.org/2000/svg')
-                                                                path(fill-rule='evenodd', d='M14.5 3h-13a.5.5 0 00-.5.5v9a.5.5 0 00.5.5h13a.5.5 0 00.5-.5v-9a.5.5 0 00-.5-.5zm-13-1A1.5 1.5 0 000 3.5v9A1.5 1.5 0 001.5 14h13a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0014.5 2h-13z', clip-rule='evenodd')
-                                                                path(d='M10.648 7.646a.5.5 0 01.577-.093L15.002 9.5V13h-14v-1l2.646-2.354a.5.5 0 01.63-.062l2.66 1.773 3.71-3.71z')
-                                                                path(fill-rule='evenodd', d='M4.502 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3z', clip-rule='evenodd')   
-                                                    td                         
-                                                        | Das Symbol bedeutet, dass eine Datei an den Auftrag angehängt ist. Klicke drauf, um die Datei zu öffnen
                                     br 
                                     br
                                     .col-md-8.col-8.float-left
@@ -127,13 +69,17 @@
                                                 else
                                                     tr
                                                         td 
-                                                            if my_article.klasse
+                                                            if my_article.klasse || my_article.stamm
                                                                 .box
-                                                            else 
+                                                                    |
+                                                            else if my_article.stammverbund
+                                                                .box
+                                                                    | &nbsp;#{my_article.stammverbund.name} | 
+                                                            else if my_article.schuelers
                                                                 .box.text-primary
                                                                     | Sonderaufgabe |
                                                             .box
-                                                                | &nbsp;#{my_article.fach} |
+                                                                | &nbsp;#{my_article.fach} &nbsp;#{my_article.disziplin.name} | 
                                                             .box
                                                                 | &nbsp;#{my_article.lehrer.name}
                                                         td 
