@@ -229,8 +229,7 @@ app.get('/update_changer', function (req, res) {
 
 app.post('/update_changer', function (req, res) {
   createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse();
-  changeArticlesKlassesAndFachs();
-  console.log('update_changer complete');
+
   res.render('debug/update_changer', {
   })
 
@@ -347,25 +346,9 @@ function createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse() {
             console.log('. ' + user.name + ' . ' + user.klasse);
             user.school = school;
 
-            Stamm.
-              findOne({ name: user.klasse }).
-              exec(function (err, stamm) {
-                if (stamm) {
-                  if (user.type === 'schueler') {
 
-                    user.klasse = undefined;
-                    user.klasse2 = undefined;
-                    user.klasse3 = undefined;
-                    user.klasse4 = undefined;
-
-                    user.schueler_stamm = stamm
-
-                  }
-
-
-
-
-
+              
+          
 
                   user.save(function (err, us) {
                     if (err) throw err;
@@ -373,31 +356,26 @@ function createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse() {
 
                     if (user.type === 'schueler') {
 
+                      School.findByIdAndUpdate(school._id,
+                        { $push: { schuelers: us } },
+                        { safe: true, upsert: true },
+                        function (err, uptdatedSchool) {
+                          if (err) throw err;
+  
+                        })
+
 
                     } else if (user.type === 'lehrer') {
-
+                      School.findByIdAndUpdate(school._id,
+                        { $push: { lehrers: us } },
+                        { safe: true, upsert: true },
+                        function (err, uptdatedSchool) {
+                          if (err) throw err;
+  
+                        })
 
                     } 
 
-                    School.findByIdAndUpdate(school._id,
-                      { $push: { users: us } },
-                      { safe: true, upsert: true },
-                      function (err, uptdatedSchool) {
-                        if (err) throw err;
-
-                        if (stamm) {
-
-                          Stamm.findByIdAndUpdate(stamm._id,
-                            { $push: { schuelers: us } },
-                            { safe: true, upsert: true },
-                            function (err, uptdatedStamm) {
-                              if (err) throw err;
-
-                            })
-
-
-                        }
-                      })
                   });
 
 
@@ -408,10 +386,10 @@ function createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse() {
 
 
 
-                }
+               
 
 
-              });
+             
 
 
 
@@ -458,11 +436,6 @@ function changeSchuelersKlasses() {
 
 }
 
-
-function changeArticlesKlassesAndFachs() {
-
-
-}
 
 
 
