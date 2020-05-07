@@ -238,7 +238,7 @@ app.post('/update_changer', function (req, res) {
 app.post('/update_changer_2', function (req, res) {
 
 
- 
+
   console.log('update_changer 2 complete');
   res.render('debug/update_changer', {
   })
@@ -294,36 +294,36 @@ function createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse() {
             user.school = school;
 
 
-              
-          
 
-                  user.save(function (err, us) {
+
+
+            user.save(function (err, us) {
+              if (err) throw err;
+
+
+              if (user.type === 'schueler') {
+
+                School.findByIdAndUpdate(school._id,
+                  { $push: { schuelers: us } },
+                  { safe: true, upsert: true },
+                  function (err, uptdatedSchool) {
                     if (err) throw err;
 
-
-                    if (user.type === 'schueler') {
-
-                      School.findByIdAndUpdate(school._id,
-                        { $push: { schuelers: us } },
-                        { safe: true, upsert: true },
-                        function (err, uptdatedSchool) {
-                          if (err) throw err;
-  
-                        })
+                  })
 
 
-                    } else if (user.type === 'lehrer') {
-                      School.findByIdAndUpdate(school._id,
-                        { $push: { lehrers: us } },
-                        { safe: true, upsert: true },
-                        function (err, uptdatedSchool) {
-                          if (err) throw err;
-  
-                        })
+              } else if (user.type === 'lehrer') {
+                School.findByIdAndUpdate(school._id,
+                  { $push: { lehrers: us } },
+                  { safe: true, upsert: true },
+                  function (err, uptdatedSchool) {
+                    if (err) throw err;
 
-                    } 
+                  })
 
-                  });
+              }
+
+            });
 
 
 
@@ -333,10 +333,10 @@ function createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse() {
 
 
 
-               
 
 
-             
+
+
 
 
 
@@ -351,14 +351,6 @@ function createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse() {
         });
     });
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -382,6 +374,161 @@ function changeSchuelersKlasses() {
     });
 
 }
+
+
+
+
+
+
+
+
+function myStringToDate(termin_string) {
+
+  var tag = termin_string.substring(7, 9)
+  var monat = termin_string.substring(10, 12)
+  var jahr = termin_string.substring(13, 17)
+  //console.log('tag   ' + tag);
+  //console.log('monat   ' + monat);
+  //console.log('jahr   ' + jahr);
+  return new Date(jahr, monat - 1, tag, 16);
+
+}
+
+
+function getTimeStringFuture(termin_string) {
+  var jetzt = getMyNow();
+
+
+  var termin = myStringToDate(termin_string);
+
+
+
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() === termin.getDate()) {
+
+    return 'heute 16 Uhr'
+  }
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() + 1 === termin.getDate()) {
+
+    return 'morgen 16 Uhr'
+  }
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() + 2 === termin.getDate()) {
+
+    return 'übermorgen'
+  }
+
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() + 3 === termin.getDate()) {
+
+    return 'in 3 Tagen'
+  }
+
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() + 4 === termin.getDate()) {
+
+    return 'in 4 Tagen'
+  }
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() + 5 === termin.getDate()) {
+
+    return 'in 5 Tagen'
+  }
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() + 6 === termin.getDate()) {
+
+    return 'in 6 Tagen'
+  }
+
+
+  return termin_string;
+
+
+
+
+}
+
+
+
+
+
+
+
+function getTimeStringPast(termin_string) {
+  var jetzt = getMyNow();
+
+
+  var termin = myStringToDate(termin_string);
+
+
+  //Vergangen
+
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() === termin.getDate()) {
+
+    return 'abgelaufen (heute)'
+  }
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() - 1 === termin.getDate()) {
+
+    return 'abgelaufen (gestern)'
+  }
+  if (jetzt.getFullYear() === termin.getFullYear() &&
+    jetzt.getMonth() === termin.getMonth() &&
+    jetzt.getDate() - 2 === termin.getDate()) {
+
+    return 'abgelaufen (vorgestern)'
+  }
+
+  return 'abgelaufen'
+
+
+}
+
+
+
+
+
+
+
+
+
+
+function isPossibleFrist(termin) {
+
+  var tag = termin.substring(7, 9)
+  var monat = termin.substring(10, 12)
+  var jahr = termin.substring(13, 17)
+  //console.log('tag   ' + tag);
+  //console.log('monat   ' + monat);
+  //console.log('jahr   ' + jahr);
+  var d = new Date(jahr, monat - 1, tag, 16);
+  var jetzt = getMyNow();
+  var diffMs = (d - jetzt); // milliseconds between now & Christmas
+
+
+  if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
+
+    return false;
+  } else {
+
+    return true;
+
+  }
+
+}
+
+
 
 
 
@@ -438,12 +585,6 @@ app.get('/', function (req, res) {
 
 
     //console.log('lehrer+:::   ' + req.user._id)
-
-
-
-
-
-
 
 
 
@@ -525,157 +666,14 @@ app.get('/', function (req, res) {
 
 
 
-                  var tag = my_article.termin.substring(0, 2)
-                  var monat = my_article.termin.substring(3, 5)
-                  var jahr = my_article.termin.substring(6, 10)
-
-                  var termin = new Date(jahr, monat - 1, tag, 16);
-                  var jetzt = getMyNow();
-
-                  // To calculate the time difference of two dates 
-                  var Difference_In_Time = termin.getTime() - jetzt.getTime();
-                  var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-
-                  var nicht_jetzt = new Date(jetzt);
-                  // console.log('iiiiiiiiiiiiiiiiiii ' + my_article.termin);
-                  my_article.termin = my_article.termin.substring(0, 10)
-                  //console.log('iiiiiiiiiiiiiiiiiii ' + my_article.termin);
 
 
-                  if (Difference_In_Days >= 0) {
-
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() === termin.getDate()) {
-
-                      my_article.termin = 'heute 16 Uhr'
-                    }
-
-
-
-
-
-                    nicht_jetzt.setDate(jetzt.getDate() + 1)
-
-                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                      nicht_jetzt.getMonth() === termin.getMonth() &&
-                      nicht_jetzt.getDate() === termin.getDate()) {
-                      //console.log('nicht_jetzt         ' + nicht_jetzt);
-                      //console.log('termin              ' + termin);
-                      my_article.termin = 'morgen 16 Uhr'
-                    }
-
-
-
-
-                    nicht_jetzt.setDate(jetzt.getDate() + 2)
-
-                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                      nicht_jetzt.getMonth() === termin.getMonth() &&
-                      nicht_jetzt.getDate() === termin.getDate()) {
-                      //console.log('nicht_jetzt         ' + nicht_jetzt);
-                      //console.log('termin              ' + termin);
-                      my_article.termin = 'übermorgen'
-                    }
-
-
-
-
-
-                    nicht_jetzt.setDate(jetzt.getDate() + 3)
-
-                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                      nicht_jetzt.getMonth() === termin.getMonth() &&
-                      nicht_jetzt.getDate() === termin.getDate()) {
-                      ////console.log('nicht_jetzt         ' + nicht_jetzt);
-                      //console.log('termin              ' + termin);
-                      my_article.termin = 'in 3 Tagen'
-                    }
-
-
-
-
-                    nicht_jetzt.setDate(jetzt.getDate() + 4)
-
-                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                      nicht_jetzt.getMonth() === termin.getMonth() &&
-                      nicht_jetzt.getDate() === termin.getDate()) {
-                      //console.log('nicht_jetzt         ' + nicht_jetzt);
-                      //console.log('termin              ' + termin);
-                      my_article.termin = 'in 4 Tagen'
-                    }
-
-
-
-
-                    nicht_jetzt.setDate(jetzt.getDate() + 5)
-
-                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                      nicht_jetzt.getMonth() === termin.getMonth() &&
-                      nicht_jetzt.getDate() === termin.getDate()) {
-                      //console.log('nicht_jetzt         ' + nicht_jetzt);
-                      //console.log('termin              ' + termin);
-                      my_article.termin = 'in 5 Tagen'
-                    }
-
-
-
-
-
-
-                    nicht_jetzt.setDate(jetzt.getDate() + 6)
-
-                    if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                      nicht_jetzt.getMonth() === termin.getMonth() &&
-                      nicht_jetzt.getDate() === termin.getDate()) {
-                      //console.log('nicht_jetzt         ' + nicht_jetzt);
-                      //console.log('termin              ' + termin);
-                      my_article.termin = 'in 6 Tagen'
-                    }
-
-
-
-
-
-
-
+                  if (isPossibleFrist(my_article.termin)) {
+                    my_article.termin = getTimeStringFuture(my_article.termin)
                   } else {
-                    ///Termin vorüber
-                    my_article.termin = 'abgelaufen'
-
-
-
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() === termin.getDate()) {
-
-                      my_article.termin = 'abgelaufen (heute)'
-                    }
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() - 1 === termin.getDate()) {
-
-                      my_article.termin = 'abgelaufen (gestern)'
-                    }
-                    if (jetzt.getFullYear() === termin.getFullYear() &&
-                      jetzt.getMonth() === termin.getMonth() &&
-                      jetzt.getDate() - 2 === termin.getDate()) {
-
-                      my_article.termin = 'abgelaufen (vorgestern)'
-                    }
-
-
-
-
+                    my_article.termin = getTimeStringPast(my_article.termin)
 
                   }
-
-
-
-
-
-
-
 
 
 
@@ -730,17 +728,6 @@ app.get('/', function (req, res) {
 
 
 
-                /*   my_articles.forEach(function (my_article) {
-    
-                    console.log('                          ');
-                    console.log('----------------------    ' + my_article.ha_gruen);
-                    console.log('----------------------    ' + my_article.ha_gelb);
-                    console.log('----------------------    ' + my_article.ha_grau);
-    
-                  })
-     */
-
-
                 res.render('index', {
                   my_articles: my_articles,
                   length: length
@@ -764,7 +751,7 @@ app.get('/', function (req, res) {
 
 
 
-       
+
 
 
 
@@ -790,28 +777,266 @@ app.get('/', function (req, res) {
           //{ stamm: user.schueler_stamm },
 
 
-              Article.
-                find({
-                  $or: [
-                    { klasse: user.schueler_stamm.name },
-                    { stamm: user.schueler_stamm },
-                    { stammverbund: { $in: jo2 } },
-                    { schuelers: user },
-                  ]
-                }).
-                populate('lehrer').
-                populate('schuelers').
-                populate('stamm').
-                populate('stammverbund').
-                populate('disziplin').
-                populate('uploads').
-                sort({ created_as_date: -1 }).
-                exec(function (err2, my_articles) {
-                  if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+          Article.
+            find({
+              $or: [
+                { klasse: user.schueler_stamm.name },
+                { stamm: user.schueler_stamm },
+                { stammverbund: { $in: jo2 } },
+                { schuelers: user },
+              ]
+            }).
+            populate('lehrer').
+            populate('schuelers').
+            populate('stamm').
+            populate('stammverbund').
+            populate('disziplin').
+            populate('uploads').
+            sort({ created_as_date: -1 }).
+            exec(function (err2, my_articles) {
+              if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
+              my_articles.forEach(function (my_article) {
+                // console.log('my_article::   ' + my_article.stamm.name);
+
+              });
+
+
+
+
+
+
+              // Article.
+              //   find({
+              //     $or: [
+
+              //       { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }, { klasse: user.klasse3 }, { klasse: user.klasse4 }] },
+              //       { schuelers: user }
+
+              //     ]
+
+              //   }).
+              //   populate('lehrer').
+              //   populate('schuelers').
+              //   populate('uploads').
+              //   sort({ created_as_date: -1 }).
+              //   exec(function (err2, my_articles) {
+              //     if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
+
+
+              if (my_articles) {
+
+
+
+                // console.log('okkkkkkkkkkk');
+
+
+
+
+              } else {
+
+
+
+                // console.log('neeeeeeeeeeeeeeee');
+
+
+              }
+
+
+              var length = my_articles.length;
+
+
+              //////////////////////7 gggg6g7
+              Hausarbeit.
+                find({ schueler: req.user._id }).
+                populate('article').
+                exec(function (err, hausarbeits) {
+                  if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+
+
+                  //console.log('-------------------------------------')
                   my_articles.forEach(function (my_article) {
-                    // console.log('my_article::   ' + my_article.stamm.name);
+
+
+
+
+
+                    var tag = my_article.termin.substring(7, 9)
+                    var monat = my_article.termin.substring(10, 12)
+                    var jahr = my_article.termin.substring(13, 17)
+
+                    var termin = new Date(jahr, monat - 1, tag, 16);
+                    var jetzt = getMyNow();
+
+                    // To calculate the time difference of two dates 
+                    var Difference_In_Time = termin.getTime() - jetzt.getTime();
+                    var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+                    var nicht_jetzt = new Date(jetzt);
+
+                    my_article.termin = my_article.termin.substring(0, 10)
+
+                    if (Difference_In_Days >= 0) {
+
+                      if (jetzt.getFullYear() === termin.getFullYear() &&
+                        jetzt.getMonth() === termin.getMonth() &&
+                        jetzt.getDate() === termin.getDate()) {
+
+                        my_article.termin = 'heute 16 Uhr'
+                      }
+
+
+
+
+
+                      nicht_jetzt.setDate(jetzt.getDate() + 1)
+
+                      if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                        nicht_jetzt.getMonth() === termin.getMonth() &&
+                        nicht_jetzt.getDate() === termin.getDate()) {
+                        //console.log('nicht_jetzt         ' + nicht_jetzt);
+                        //console.log('termin              ' + termin);
+                        my_article.termin = 'morgen 16 Uhr'
+                      }
+
+
+
+
+                      nicht_jetzt.setDate(jetzt.getDate() + 2)
+
+                      if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                        nicht_jetzt.getMonth() === termin.getMonth() &&
+                        nicht_jetzt.getDate() === termin.getDate()) {
+                        //console.log('nicht_jetzt         ' + nicht_jetzt);
+                        //console.log('termin              ' + termin);
+                        my_article.termin = 'übermorgen'
+                      }
+
+
+
+
+
+                      nicht_jetzt.setDate(jetzt.getDate() + 3)
+
+                      if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                        nicht_jetzt.getMonth() === termin.getMonth() &&
+                        nicht_jetzt.getDate() === termin.getDate()) {
+                        //console.log('nicht_jetzt         ' + nicht_jetzt);
+                        //console.log('termin              ' + termin);
+                        my_article.termin = 'in 3 Tagen'
+                      }
+
+
+
+
+                      nicht_jetzt.setDate(jetzt.getDate() + 4)
+
+                      if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                        nicht_jetzt.getMonth() === termin.getMonth() &&
+                        nicht_jetzt.getDate() === termin.getDate()) {
+                        //console.log('nicht_jetzt         ' + nicht_jetzt);
+                        //console.log('termin              ' + termin);
+                        my_article.termin = 'in 4 Tagen'
+                      }
+
+
+
+
+                      nicht_jetzt.setDate(jetzt.getDate() + 5)
+
+                      if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                        nicht_jetzt.getMonth() === termin.getMonth() &&
+                        nicht_jetzt.getDate() === termin.getDate()) {
+                        //console.log('nicht_jetzt         ' + nicht_jetzt);
+                        //console.log('termin              ' + termin);
+                        my_article.termin = 'in 5 Tagen'
+                      }
+
+
+
+
+
+
+                      nicht_jetzt.setDate(jetzt.getDate() + 6)
+
+                      if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
+                        nicht_jetzt.getMonth() === termin.getMonth() &&
+                        nicht_jetzt.getDate() === termin.getDate()) {
+                        //console.log('nicht_jetzt         ' + nicht_jetzt);
+                        //console.log('termin              ' + termin);
+                        my_article.termin = 'in 6 Tagen'
+                      }
+
+
+
+
+
+
+
+                    } else {
+                      ///Termin vorüber
+                      my_article.termin = 'abgelaufen'
+
+
+
+                      if (jetzt.getFullYear() === termin.getFullYear() &&
+                        jetzt.getMonth() === termin.getMonth() &&
+                        jetzt.getDate() === termin.getDate()) {
+
+                        my_article.termin = 'abgelaufen (heute)'
+                      }
+                      if (jetzt.getFullYear() === termin.getFullYear() &&
+                        jetzt.getMonth() === termin.getMonth() &&
+                        jetzt.getDate() - 1 === termin.getDate()) {
+
+                        my_article.termin = 'abgelaufen (gestern)'
+                      }
+                      if (jetzt.getFullYear() === termin.getFullYear() &&
+                        jetzt.getMonth() === termin.getMonth() &&
+                        jetzt.getDate() - 2 === termin.getDate()) {
+
+                        my_article.termin = 'abgelaufen (vorgestern)'
+                      }
+
+
+
+
+
+                    }
+
+
+
+
+
+
+                    my_article.schueler_token = '0';
+                    hausarbeits.forEach(function (hausarbeit) {
+                      // console.log(hausarbeit);
+                      if (my_article._id.toString() === hausarbeit.article._id.toString()) {
+                        my_article.schueler_token = hausarbeit.status;
+                      }
+                    });
+                  });
+
+
+
+
+
+
+                  /* 
+                                  console.log('-------------------------------------');
+                                  my_articles.forEach(function (my) {
+                  
+                                    console.log('created:  ' + my.created + ' |  title:  ' + my.title + ' |  create_as_date  ' + my.created_as_date)
+                  
+                                  })
+                   */
+
+                  res.render('index', {
+
+                    my_articles: my_articles,
+                    length: length
 
                   });
 
@@ -820,255 +1045,17 @@ app.get('/', function (req, res) {
 
 
 
-                  // Article.
-                  //   find({
-                  //     $or: [
-
-                  //       { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }, { klasse: user.klasse3 }, { klasse: user.klasse4 }] },
-                  //       { schuelers: user }
-
-                  //     ]
-
-                  //   }).
-                  //   populate('lehrer').
-                  //   populate('schuelers').
-                  //   populate('uploads').
-                  //   sort({ created_as_date: -1 }).
-                  //   exec(function (err2, my_articles) {
-                  //     if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
-                  if (my_articles) {
-
-
-
-                    // console.log('okkkkkkkkkkk');
-
-
-
-
-                  } else {
-
-
-
-                    // console.log('neeeeeeeeeeeeeeee');
-
-
-                  }
-
-
-                  var length = my_articles.length;
-
-
-                  //////////////////////7 gggg6g7
-                  Hausarbeit.
-                    find({ schueler: req.user._id }).
-                    populate('article').
-                    exec(function (err, hausarbeits) {
-                      if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
-
-
-                      //console.log('-------------------------------------')
-                      my_articles.forEach(function (my_article) {
-
-
-
-
-
-                        var tag = my_article.termin.substring(7, 9)
-                        var monat = my_article.termin.substring(10, 12)
-                        var jahr = my_article.termin.substring(13, 17)
-
-                        var termin = new Date(jahr, monat - 1, tag, 16);
-                        var jetzt = getMyNow();
-
-                        // To calculate the time difference of two dates 
-                        var Difference_In_Time = termin.getTime() - jetzt.getTime();
-                        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-
-                        var nicht_jetzt = new Date(jetzt);
-
-                        my_article.termin = my_article.termin.substring(0, 10)
-
-                        if (Difference_In_Days >= 0) {
-
-                          if (jetzt.getFullYear() === termin.getFullYear() &&
-                            jetzt.getMonth() === termin.getMonth() &&
-                            jetzt.getDate() === termin.getDate()) {
-
-                            my_article.termin = 'heute 16 Uhr'
-                          }
-
-
-
-
-
-                          nicht_jetzt.setDate(jetzt.getDate() + 1)
-
-                          if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                            nicht_jetzt.getMonth() === termin.getMonth() &&
-                            nicht_jetzt.getDate() === termin.getDate()) {
-                            //console.log('nicht_jetzt         ' + nicht_jetzt);
-                            //console.log('termin              ' + termin);
-                            my_article.termin = 'morgen 16 Uhr'
-                          }
-
-
-
-
-                          nicht_jetzt.setDate(jetzt.getDate() + 2)
-
-                          if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                            nicht_jetzt.getMonth() === termin.getMonth() &&
-                            nicht_jetzt.getDate() === termin.getDate()) {
-                            //console.log('nicht_jetzt         ' + nicht_jetzt);
-                            //console.log('termin              ' + termin);
-                            my_article.termin = 'übermorgen'
-                          }
-
-
-
-
-
-                          nicht_jetzt.setDate(jetzt.getDate() + 3)
-
-                          if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                            nicht_jetzt.getMonth() === termin.getMonth() &&
-                            nicht_jetzt.getDate() === termin.getDate()) {
-                            //console.log('nicht_jetzt         ' + nicht_jetzt);
-                            //console.log('termin              ' + termin);
-                            my_article.termin = 'in 3 Tagen'
-                          }
-
-
-
-
-                          nicht_jetzt.setDate(jetzt.getDate() + 4)
-
-                          if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                            nicht_jetzt.getMonth() === termin.getMonth() &&
-                            nicht_jetzt.getDate() === termin.getDate()) {
-                            //console.log('nicht_jetzt         ' + nicht_jetzt);
-                            //console.log('termin              ' + termin);
-                            my_article.termin = 'in 4 Tagen'
-                          }
-
-
-
-
-                          nicht_jetzt.setDate(jetzt.getDate() + 5)
-
-                          if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                            nicht_jetzt.getMonth() === termin.getMonth() &&
-                            nicht_jetzt.getDate() === termin.getDate()) {
-                            //console.log('nicht_jetzt         ' + nicht_jetzt);
-                            //console.log('termin              ' + termin);
-                            my_article.termin = 'in 5 Tagen'
-                          }
-
-
-
-
-
-
-                          nicht_jetzt.setDate(jetzt.getDate() + 6)
-
-                          if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                            nicht_jetzt.getMonth() === termin.getMonth() &&
-                            nicht_jetzt.getDate() === termin.getDate()) {
-                            //console.log('nicht_jetzt         ' + nicht_jetzt);
-                            //console.log('termin              ' + termin);
-                            my_article.termin = 'in 6 Tagen'
-                          }
-
-
-
-
-
-
-
-                        } else {
-                          ///Termin vorüber
-                          my_article.termin = 'abgelaufen'
-
-
-
-                          if (jetzt.getFullYear() === termin.getFullYear() &&
-                            jetzt.getMonth() === termin.getMonth() &&
-                            jetzt.getDate() === termin.getDate()) {
-
-                            my_article.termin = 'abgelaufen (heute)'
-                          }
-                          if (jetzt.getFullYear() === termin.getFullYear() &&
-                            jetzt.getMonth() === termin.getMonth() &&
-                            jetzt.getDate() - 1 === termin.getDate()) {
-
-                            my_article.termin = 'abgelaufen (gestern)'
-                          }
-                          if (jetzt.getFullYear() === termin.getFullYear() &&
-                            jetzt.getMonth() === termin.getMonth() &&
-                            jetzt.getDate() - 2 === termin.getDate()) {
-
-                            my_article.termin = 'abgelaufen (vorgestern)'
-                          }
-
-
-
-
-
-                        }
-
-
-
-
-
-
-                        my_article.schueler_token = '0';
-                        hausarbeits.forEach(function (hausarbeit) {
-                          // console.log(hausarbeit);
-                          if (my_article._id.toString() === hausarbeit.article._id.toString()) {
-                            my_article.schueler_token = hausarbeit.status;
-                          }
-                        });
-                      });
-
-
-
-
-
-
-                      /* 
-                                      console.log('-------------------------------------');
-                                      my_articles.forEach(function (my) {
-                      
-                                        console.log('created:  ' + my.created + ' |  title:  ' + my.title + ' |  create_as_date  ' + my.created_as_date)
-                      
-                                      })
-                       */
-
-                      res.render('index', {
-
-                        my_articles: my_articles,
-                        length: length
-
-                      });
-
-
-
-
-
-
-                    });
-
-
-
-
-
-
-
                 });
 
-            
+
+
+
+
+
+
+            });
+
+
 
         } else if (user.type === 'admin') {
 
