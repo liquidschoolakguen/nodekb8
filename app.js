@@ -793,6 +793,7 @@ app.get('/', function (req, res) {
               Article.
                 find({
                   $or: [
+                    { klasse: user.schueler_stamm.name },
                     { stamm: user.schueler_stamm },
                     { stammverbund: { $in: jo2 } },
                     { schuelers: user },
