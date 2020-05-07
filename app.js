@@ -584,10 +584,6 @@ app.get('/', function (req, res) {
   } else {
 
 
-    //console.log('lehrer+:::   ' + req.user._id)
-
-
-
     User.
       findOne({ _id: req.user._id }).
       populate({
@@ -600,19 +596,8 @@ app.get('/', function (req, res) {
 
 
 
-        //User.findById(req.user._id, function (err, user) {
-
-        if (err) {
-          //console.log('wwwwww');
-          console.log(err);
-        }
-
-
 
         if (user.type === 'lehrer') {
-
-          //console.log('lehrer')
-
 
 
           Article.
@@ -634,21 +619,10 @@ app.get('/', function (req, res) {
 
               var length = my_articles.length;
 
-
               var jo = []
-
-
-
-
               my_articles.forEach(function (o) {
-
                 jo.push(o._id)
-
-
               }); // jo hält die ids der articles
-
-
-
 
               Hausarbeit.find().where('article').in(jo).exec((err, has) => {
 
@@ -657,15 +631,8 @@ app.get('/', function (req, res) {
                 //    exec(function (err, has) {
 
 
-
-
-
                 my_articles.forEach(function (my_article) {
-
                   my_article.schuelers.sort();
-
-
-
 
 
                   if (isPossibleFrist(my_article.termin)) {
@@ -674,9 +641,6 @@ app.get('/', function (req, res) {
                     my_article.termin = getTimeStringPast(my_article.termin)
 
                   }
-
-
-
 
                   my_article.ha_gruen = '0'
                   my_article.ha_gelb = '0'
@@ -689,11 +653,8 @@ app.get('/', function (req, res) {
 
                     if (ha.article._id.toString() === my_article._id.toString()) {
 
-                      // console.log('pppp:    ' + my_article.title);
-
                       if (ha.status === '1') {
                         inte_gelb += 1;
-
                       } else if (ha.status === '2') {
                         inte_gruen += 1;
                       } else if (ha.status === '3') {
@@ -701,10 +662,6 @@ app.get('/', function (req, res) {
                       }
 
                     }
-
-
-
-
                   })
 
 
@@ -717,65 +674,25 @@ app.get('/', function (req, res) {
                   tuString_grau = inte_grau.toString();
                   my_article.ha_grau = tuString_grau
 
-
-
-
-
-
-
                 });
-
-
-
 
                 res.render('index', {
                   my_articles: my_articles,
                   length: length
-
                 });
-
               })
-
             });
-
-
 
 
 
         } else if (user.type === 'schueler') {
 
 
-
-          console.log('schueler_stamm:   ' + user.schueler_stamm.name)
-
-
-
-
-
-
-
-
-          if (user.klasse) {
-
-
-            //fehler
-
-          } else {
-
-
-
-          }
-
           var jo2 = []
-
           user.schueler_stamm.stammverbunds.forEach(function (verbund) {
             console.log('verbund    ' + verbund.name);
             jo2.push(verbund);
           })
-
-
-          //{ stamm: user.schueler_stamm },
-
 
           Article.
             find({
@@ -796,58 +713,8 @@ app.get('/', function (req, res) {
             exec(function (err2, my_articles) {
               if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
-
-              my_articles.forEach(function (my_article) {
-                // console.log('my_article::   ' + my_article.stamm.name);
-
-              });
-
-
-
-
-
-
-              // Article.
-              //   find({
-              //     $or: [
-
-              //       { $or: [{ klasse: user.klasse }, { klasse: user.klasse2 }, { klasse: user.klasse3 }, { klasse: user.klasse4 }] },
-              //       { schuelers: user }
-
-              //     ]
-
-              //   }).
-              //   populate('lehrer').
-              //   populate('schuelers').
-              //   populate('uploads').
-              //   sort({ created_as_date: -1 }).
-              //   exec(function (err2, my_articles) {
-              //     if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
-              if (my_articles) {
-
-
-
-                // console.log('okkkkkkkkkkk');
-
-
-
-
-              } else {
-
-
-
-                // console.log('neeeeeeeeeeeeeeee');
-
-
-              }
-
-
               var length = my_articles.length;
 
-
-              //////////////////////7 gggg6g7
               Hausarbeit.
                 find({ schueler: req.user._id }).
                 populate('article').
@@ -858,157 +725,13 @@ app.get('/', function (req, res) {
                   //console.log('-------------------------------------')
                   my_articles.forEach(function (my_article) {
 
-
-
-
-
-                    var tag = my_article.termin.substring(7, 9)
-                    var monat = my_article.termin.substring(10, 12)
-                    var jahr = my_article.termin.substring(13, 17)
-
-                    var termin = new Date(jahr, monat - 1, tag, 16);
-                    var jetzt = getMyNow();
-
-                    // To calculate the time difference of two dates 
-                    var Difference_In_Time = termin.getTime() - jetzt.getTime();
-                    var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-
-                    var nicht_jetzt = new Date(jetzt);
-
-                    my_article.termin = my_article.termin.substring(0, 10)
-
-                    if (Difference_In_Days >= 0) {
-
-                      if (jetzt.getFullYear() === termin.getFullYear() &&
-                        jetzt.getMonth() === termin.getMonth() &&
-                        jetzt.getDate() === termin.getDate()) {
-
-                        my_article.termin = 'heute 16 Uhr'
-                      }
-
-
-
-
-
-                      nicht_jetzt.setDate(jetzt.getDate() + 1)
-
-                      if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                        nicht_jetzt.getMonth() === termin.getMonth() &&
-                        nicht_jetzt.getDate() === termin.getDate()) {
-                        //console.log('nicht_jetzt         ' + nicht_jetzt);
-                        //console.log('termin              ' + termin);
-                        my_article.termin = 'morgen 16 Uhr'
-                      }
-
-
-
-
-                      nicht_jetzt.setDate(jetzt.getDate() + 2)
-
-                      if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                        nicht_jetzt.getMonth() === termin.getMonth() &&
-                        nicht_jetzt.getDate() === termin.getDate()) {
-                        //console.log('nicht_jetzt         ' + nicht_jetzt);
-                        //console.log('termin              ' + termin);
-                        my_article.termin = 'übermorgen'
-                      }
-
-
-
-
-
-                      nicht_jetzt.setDate(jetzt.getDate() + 3)
-
-                      if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                        nicht_jetzt.getMonth() === termin.getMonth() &&
-                        nicht_jetzt.getDate() === termin.getDate()) {
-                        //console.log('nicht_jetzt         ' + nicht_jetzt);
-                        //console.log('termin              ' + termin);
-                        my_article.termin = 'in 3 Tagen'
-                      }
-
-
-
-
-                      nicht_jetzt.setDate(jetzt.getDate() + 4)
-
-                      if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                        nicht_jetzt.getMonth() === termin.getMonth() &&
-                        nicht_jetzt.getDate() === termin.getDate()) {
-                        //console.log('nicht_jetzt         ' + nicht_jetzt);
-                        //console.log('termin              ' + termin);
-                        my_article.termin = 'in 4 Tagen'
-                      }
-
-
-
-
-                      nicht_jetzt.setDate(jetzt.getDate() + 5)
-
-                      if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                        nicht_jetzt.getMonth() === termin.getMonth() &&
-                        nicht_jetzt.getDate() === termin.getDate()) {
-                        //console.log('nicht_jetzt         ' + nicht_jetzt);
-                        //console.log('termin              ' + termin);
-                        my_article.termin = 'in 5 Tagen'
-                      }
-
-
-
-
-
-
-                      nicht_jetzt.setDate(jetzt.getDate() + 6)
-
-                      if (nicht_jetzt.getFullYear() === termin.getFullYear() &&
-                        nicht_jetzt.getMonth() === termin.getMonth() &&
-                        nicht_jetzt.getDate() === termin.getDate()) {
-                        //console.log('nicht_jetzt         ' + nicht_jetzt);
-                        //console.log('termin              ' + termin);
-                        my_article.termin = 'in 6 Tagen'
-                      }
-
-
-
-
-
-
-
+                    if (isPossibleFrist(my_article.termin)) {
+                      my_article.termin = getTimeStringFuture(my_article.termin)
                     } else {
-                      ///Termin vorüber
-                      my_article.termin = 'abgelaufen'
-
-
-
-                      if (jetzt.getFullYear() === termin.getFullYear() &&
-                        jetzt.getMonth() === termin.getMonth() &&
-                        jetzt.getDate() === termin.getDate()) {
-
-                        my_article.termin = 'abgelaufen (heute)'
-                      }
-                      if (jetzt.getFullYear() === termin.getFullYear() &&
-                        jetzt.getMonth() === termin.getMonth() &&
-                        jetzt.getDate() - 1 === termin.getDate()) {
-
-                        my_article.termin = 'abgelaufen (gestern)'
-                      }
-                      if (jetzt.getFullYear() === termin.getFullYear() &&
-                        jetzt.getMonth() === termin.getMonth() &&
-                        jetzt.getDate() - 2 === termin.getDate()) {
-
-                        my_article.termin = 'abgelaufen (vorgestern)'
-                      }
-
-
-
-
-
+                      my_article.termin = getTimeStringPast(my_article.termin)
+  
                     }
-
-
-
-
-
+  
 
                     my_article.schueler_token = '0';
                     hausarbeits.forEach(function (hausarbeit) {
@@ -1019,40 +742,11 @@ app.get('/', function (req, res) {
                     });
                   });
 
-
-
-
-
-
-                  /* 
-                                  console.log('-------------------------------------');
-                                  my_articles.forEach(function (my) {
-                  
-                                    console.log('created:  ' + my.created + ' |  title:  ' + my.title + ' |  create_as_date  ' + my.created_as_date)
-                  
-                                  })
-                   */
-
                   res.render('index', {
-
                     my_articles: my_articles,
                     length: length
-
                   });
-
-
-
-
-
-
                 });
-
-
-
-
-
-
-
             });
 
 
