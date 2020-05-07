@@ -50,7 +50,9 @@ block content
                                     | #{schueler.klasse}
                                   td.align-middle 
                                     .box
-                                    | #{schueler.name} | #{schueler.school.plz}
+                                    | #{schueler.name} 
+                                    if schueler.school
+                                      | hat Schule
                                   td.align-middle
                                     | #{schueler.money} $                                  
                         else
