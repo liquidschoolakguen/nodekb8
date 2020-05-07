@@ -219,7 +219,11 @@ app.get('/alt_index', function (req, res) {
   })
 
 });
+app.get('/alt_index2', function (req, res) {
+  res.render('alt_index2', {
+  })
 
+});
 
 app.get('/update_changer', function (req, res) {
   res.render('debug/update_changer', {
