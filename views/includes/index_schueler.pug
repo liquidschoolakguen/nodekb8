@@ -78,8 +78,12 @@
                                                             else if my_article.schuelers
                                                                 .box.text-primary
                                                                     | Sonderaufgabe |
-                                                            .box
-                                                                | &nbsp;#{my_article.fach} &nbsp;#{my_article.disziplin.name} | 
+                                                            if my_article.disziplin
+                                                                .box
+                                                                    |  &nbsp;#{my_article.disziplin.name} |
+                                                            else
+                                                                .box
+                                                                    | &nbsp;#{my_article.fach} |
                                                             .box
                                                                 | &nbsp;#{my_article.lehrer.name}
                                                         td 
