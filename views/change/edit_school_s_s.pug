@@ -12,7 +12,7 @@ block content
                         h5.text-info Vorsicht! veränderte Zugangsschlüssel sind sofort nach Änderung wirksam.       
                     .form-group.col-md-4 
                         label Schülerschlüssel
-                        input#validationServer01.form-control(type='text', value=school.schueler_schluessel,  minlength='10' placeholder='\'Adminschlüssel\' (mind 10 Zeichen)',  title="Diesen Schlüssel brauchen die SuS, die sich in Liquidschool anmelden.\n\n(optional)"  name='schueler_schluessel')
+                        input#validationServer01.form-control(type='text', value=school.schueler_schluessel,  minlength='6' placeholder='\'Adminschlüssel\' (mind 6 Zeichen)',  title="Diesen Schlüssel brauchen die SuS, die sich in Liquidschool anmelden.\n\n(optional)"  name='schueler_schluessel')
             br
             input#geht_ab.btn.btn-info.my-margin-top.bg-info.text-white.float-right(type='submit', value='Änderungen speichern')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
