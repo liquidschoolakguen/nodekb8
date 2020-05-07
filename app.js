@@ -285,7 +285,7 @@ function changeArticleTermin() {
 
       allArticles.forEach(function (art) {
 
-        art.termin = 'Frist: ' + art.termin
+        art.termin = art.termin.substring(7, art.termin.length-1)
         art.save(function (err, us) {
           if (err) throw err;
 
