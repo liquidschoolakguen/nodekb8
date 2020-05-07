@@ -1174,6 +1174,10 @@ app.get('/', function (req, res) {
                 populate('s_stamms').
                 populate('s_disziplins').
                 populate('groups').
+                populate('users').
+                populate('admins').
+                populate('lehrers').
+                populate('schuelers').
                 exec(function (err, schoool) {
 
 
@@ -1184,6 +1188,11 @@ app.get('/', function (req, res) {
                     stamms: schoool.s_stamms,
                     disziplins: schoool.s_disziplins,
                     groups: schoool.groups,
+
+                    users: schoool.users,
+                    admins: schoool.admins,
+                    lehrers: schoool.lehrers,
+                    schuelers: schoool.schuelers,
 
                   });
 

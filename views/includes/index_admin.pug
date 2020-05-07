@@ -51,3 +51,31 @@
         a.btn.btn-info.text-white(href='/groups/add_group') Schülergruppe hinzufügen
         br
         br
+    .form-group.col-md-12                                   
+        each usi, i in users
+            .box
+                a.text-info(href='/groups/' + usi._id, role='button') | #{usi.name} &nbsp;
+        div(style='clear:both;') 
+        br
+        br
+    .form-group.col-md-12                                   
+        each admin, i in admins
+            .box
+                a.text-info(href='/groups/' + admin._id, role='button') | #{admin.name} &nbsp;
+        div(style='clear:both;') 
+        br
+        br
+    .form-group.col-md-12                                   
+        each lehrer, i in lehrers
+            .box
+                a.text-info(href='/groups/' + lehrer._id, role='button') | #{lehrer.name} &nbsp;
+        div(style='clear:both;') 
+        br
+        br 
+    .form-group.col-md-12                                   
+        each schueler, i in schuelers
+            .box
+                a.text-info(href='/groups/' + schueler._id, role='button') | #{schueler.name} &nbsp;
+        div(style='clear:both;') 
+        br
+        br  

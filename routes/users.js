@@ -1421,34 +1421,34 @@ router.get('/4____4', function (req, res) {
     User.
         find({ type: 'lehrer' }).
         populate('school')
-        exec(function (err, schuelers) {
-            if (err) return console.log('4_iiiiiiiiiiii ' + err);
+    exec(function (err, schuelers) {
+        if (err) return console.log('4_iiiiiiiiiiii ' + err);
 
-            if (schuelers) {
+        if (schuelers) {
 
-                if (err) return console.log('5_iiiiiiiiiiii ' + err);
-
-
-
-                let length = schuelers.length;
-
-
-                res.render('4____4', {
-                    schuelers: schuelers,
-                    length: length
-                });
+            if (err) return console.log('5_iiiiiiiiiiii ' + err);
 
 
 
+            let length = schuelers.length;
 
-            } else {
 
-                req.flash('danger', 'Es sind noch keine SuS registriert ');
-                res.redirect('/');
+            res.render('4____4', {
+                schuelers: schuelers,
+                length: length
+            });
 
-            }
 
-        });
+
+
+        } else {
+
+            req.flash('danger', 'Es sind noch keine SuS registriert ');
+            res.redirect('/');
+
+        }
+
+    });
 
 
 
@@ -1618,7 +1618,7 @@ router.post('/login_l', function (req, res, next) {
 
 
                     if (!user) {
-                        req.flash('warning', 'Falsche Kennung. '+req.body.username.toString().toLowerCase().trim()+'  '+school.name+ '  /'+lehrer_schluessel);
+                        req.flash('warning', 'Falsche Kennung. ' + req.body.username.toString().toLowerCase().trim() + '  ' + school.name + '  /' + lehrer_schluessel);
                         res.redirect('/users/login_lehrer');
                     } else {
 
