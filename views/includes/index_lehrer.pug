@@ -56,6 +56,9 @@
                                                                 else
                                                                     .box
                                                                         a(href='/articles/schueler/' +schueler._id, role='button') | #{schueler.name}&nbsp;
+                                                        else if my_article.klasse
+                                                            .box
+                                                                | #{my_article.klasse} 
                                                         else
                                                             | |ERROR 
                                                     td
