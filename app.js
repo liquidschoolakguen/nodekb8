@@ -279,7 +279,7 @@ function nochmal() {
                   if (user.type === 'schueler') {
 
                     School.findByIdAndUpdate(school._id,
-                      { $push: { users: us } },
+                      { $push: { schuelers: us } },
                       { safe: true, upsert: true },
                       function (err, uptdatedSchool) {
                         if (err) throw err;
@@ -293,7 +293,7 @@ function nochmal() {
 
 
                     School.findByIdAndUpdate(school._id,
-                      { $push: { users: us } },
+                      { $push: { lehrers: us } },
                       { safe: true, upsert: true },
                       function (err, uptdatedSchool) {
                         if (err) throw err;
