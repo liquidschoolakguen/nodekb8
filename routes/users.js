@@ -1388,7 +1388,7 @@ router.post('/register_schueler_dummy', function (req, res) {
 router.get('/all_schueler', function (req, res) {
     User.
         find({ type: 'schueler' }).
-        populate('school')
+        populate('school').
         exec(function (err, schuelers) {
             if (err) return console.log('4_iiiiiiiiiiii ' + err);
             if (schuelers) {
