@@ -228,8 +228,8 @@ app.get('/update_changer', function (req, res) {
 });
 
 app.post('/update_changer', function (req, res) {
-  createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse();
-
+  //createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse();
+  deleteUserVerknüpfung();
   res.render('debug/update_changer', {
   })
 
@@ -238,7 +238,7 @@ app.post('/update_changer', function (req, res) {
 app.post('/update_changer_2', function (req, res) {
 
 
- nochmal()
+ 
   console.log('update_changer 2 complete');
   res.render('debug/update_changer', {
   })
@@ -250,83 +250,36 @@ app.post('/update_changer_2', function (req, res) {
 
 
 
-function nochmal() {
-
-
+function deleteUserVerknüpfung() {
   User.
-  find().
-  exec(function (err, all_users) {
+    find().
+    exec(function (err, all_users) {
 
-    School.
-      findOne({ plz: '20355' }).
-      exec(function (err, school) {
+      School.
+        findOne({ plz: '20355' }).
+        exec(function (err, school) {
 
-        all_users.forEach(function (user) {
+          all_users.forEach(function (user) {
 
-          console.log('. ' + user.name + ' . ' + user.klasse);
-          user.school = school;
+            console.log('. ' + user.name + ' . ' + user.klasse);
+            user.school = school;
 
-    
-               
+          
 
+            school.users.pull(user);
+            school.save(function (err, scho) {
+              if (err) throw err;
 
-
-
-
-
-
-                  if (user.type === 'schueler') {
-
-                    School.findByIdAndUpdate(school._id,
-                      { $push: { schuelers: us } },
-                      { safe: true, upsert: true },
-                      function (err, uptdatedSchool) {
-                        if (err) throw err;
-  
-                      })
+            })
 
 
 
 
-                  } else if (user.type === 'lehrer') {
 
-
-                    School.findByIdAndUpdate(school._id,
-                      { $push: { lehrers: us } },
-                      { safe: true, upsert: true },
-                      function (err, uptdatedSchool) {
-                        if (err) throw err;
-  
-                      })
-
-
-
-
-                  } 
-
-                
-              
-
-
-
-
+          });
         });
-      });
-  });
-
-
-
-
-
-
-
-
-
-
-
-
+    });
 }
-
 
 
 
