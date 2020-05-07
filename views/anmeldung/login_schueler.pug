@@ -1,33 +1,27 @@
 extends ../layouts/layout
 
 block content
-    .container
-      .row.h-100.d-flex.justify-content-center
-        .col-12.col-sm-8.col-md-5.col-lg-5
-          .card.border
-            .card-header
-              ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
-                li.nav-item
-                  .nav-link.active(href='#bingo', role='tab', aria-controls='bingo', aria-selected='false') Schüleranmeldung
-            .card-body
-              h4.card-title Du möchtest deine Hausarbeiten sehen? Dann melde dich an.
-              .tab-content.mt-3
-                #bingo.tab-pane.active(role='tabpanel', aria-labelledby='bingo-tab')
-                  p.card-text
-                    form(method='POST', action='/users/login_s')
-                        #form-group  
-                            label Schulschlüssel (frag deine Lehrerin, wenn du ihn nicht kennst):
-                            input#validationServer01.form-control.monospace(name='schueler_schluessel', type=text, required=''  minlength='6')
-                            br
-                        #form-group  
-                            label Name:
-                            input#validationServer01.form-control(name='username', type=text, required='')
-                            br
-                        #form-group  
-                            label Passwort:
-                            input#validationServer01.form-control(type=text, name='password', required='') 
-                        br
-                        input.btn.btn-primary.my-margin-top.bg-primary.text-white.float-right(type='submit', value='Anmelden und loslegen')                        
-        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
-        script(src='/bower_components/bootstrap/dist/js/bootstrap.js')  
-        script(src='/js/log_reg.js')
+  .container
+    .row.h-100.d-flex.justify-content-center
+      .col-12.col-sm-8.col-md-5.col-lg-5.shadow.p-3.mb-5.bg-white.rounded.text-danger.border-danger
+        .card.border
+          .card-body
+            br
+            h6 Du möchtest deine Hausarbeiten sehen?
+            h3 Anmelden als SchülerIn
+            br 
+            br 
+            form(method='POST', action='/users/login_s')
+                #form-group  
+                    label Schulschlüssel (frag deine Lehrerin, wenn du ihn nicht kennst):
+                    input#validationServer01.form-control.monospace(name='schueler_schluessel', type=text, required=''  minlength='6')
+                    br
+                #form-group  
+                    label Name:
+                    input#validationServer01.form-control(name='username', type=text, required='')
+                    br
+                #form-group  
+                    label Passwort:
+                    input#validationServer01.form-control(type='password', name='password', required='') 
+                br
+                input.btn.btn-danger.my-margin-top.bg-danger.text-white.float-right(type='submit', value='Anmelden')

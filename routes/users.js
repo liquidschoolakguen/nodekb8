@@ -1587,84 +1587,26 @@ router.post('/login_s', function (req, res, next) {
 
 
 
+
+
 router.post('/login_l', function (req, res, next) {
-
-
-
-    const lehrer_schluessel = req.body.lehrer_schluessel.toLowerCase().trim();
-    console.log('lehrer_schluessel:   ' + lehrer_schluessel);
-
-    School.
-        findOne({ lehrer_schluessel: lehrer_schluessel }).
-        exec(function (err2, school) {
-
-
-            if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
-
-
-
-            User.
-                findOne({
-
-                    $and: [
-                        { username: req.body.username.toString().toLowerCase().trim() },
-                        { school: school }
-                    ]
-
-                }).
-                exec(function (err, user) {
-                    if (err) throw err;
-
-
-
-                    if (!user) {
-                        req.flash('warning', 'Falsche Kennung. ' + req.body.username.toString().toLowerCase().trim() + '  ' + school.name + '  /' + lehrer_schluessel);
-                        res.redirect('/users/login_lehrer');
-                    } else {
-
-
-                        if (user.type !== 'lehrer') {
-
-                            req.flash('warning', 'Hier bist du falsch. Hier können sich nur Lehrkräfte anmelden');
-                            res.redirect('/users/login_lehrer');
-
-
-
-
-                        } else {
-
-
-
-                            passport.authenticate('local', {
-                                successRedirect: '/',
-                                failureRedirect: '/users/login_lehrer',
-                                failureFlash: true
-
-                            })(req, res, next);
-
-
-
-
-
-                        }
-
-
-
-                    }
-
-
-                });
-
+    User.findOne({ username: req.body.username.toString().toLowerCase().trim() }).
+        populate('school').
+        exec(function (err, user) {
+            if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
+            if (!user) {
+                req.flash('warning', 'Falsche Kennung.');
+                res.redirect('/users/login_lehrer');
+            } else {
+                passport.authenticate('local', {
+                    successRedirect: '/',
+                    failureRedirect: '/users/login_lehrer',
+                    failureFlash: true
+                })(req, res, next);
+            }
 
         });
-
-
-
 });
-
-
-
-
 
 
 
@@ -1757,11 +1699,11 @@ router.post('/login_a', function (req, res, next) {
             if (err) return console.log('iiiiiiiiiiiiiiiiiii ' + err);
             if (!user) {
                 req.flash('warning', 'Falsche Kennung.');
-                res.redirect('/users/login_admin_first');
+                res.redirect('/users/login_admin');
             } else {
                 passport.authenticate('local', {
                     successRedirect: '/',
-                    failureRedirect: '/users/login_admin_first',
+                    failureRedirect: '/users/login_admin',
                     failureFlash: true
                 })(req, res, next);
             }

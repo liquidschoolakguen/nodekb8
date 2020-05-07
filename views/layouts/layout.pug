@@ -27,7 +27,7 @@ html
                                 .box
                                     .led-green-main
                                 .box.active   
-                                    a.nav-link(href='/') #{user.name}s Aufträge 
+                                    a.nav-link(href='/') #{user.name}
                             li.nav-item.dropdown
                                 a#navbardrop1.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
                                     | Überblick
@@ -35,11 +35,8 @@ html
                                     a.dropdown-item(href='/index_all') Alle Aufträge
                                     a.dropdown-item(href='/users/all_schueler') Alle SuS 
                                     a.dropdown-item(href='/groups/all_groups_l') Alle Schülergruppen 
-                            li.nav-item.dropdown
-                                a#navbardrop2.nav-link.dropdown-toggle.active(href='#', data-toggle='dropdown')
-                                    | Neuer Auftrag
-                                .dropdown-menu
-                                    a.dropdown-item(href='/articles/n_auftrag_') Neuer Auftrag                    
+                            li.nav-item.active
+                                    a.nav-link(href='/articles/n_auftrag_') Auftrag +                   
                         else
                             li.nav-item.active
                                 .box
@@ -50,6 +47,8 @@ html
                                     p.white
                                         | #{user.money} 
                     else
+                        li.nav-item.active
+                            a.text-primary(href='/alt_index' style='width:300px; font-size: 18px; margin: 10px;') Schule einrichten | Konto erstellen
             .mx-auto.order-0
                 a.navbar-brand.mx-auto(href='/') Liquidschool
                 button.navbar-toggler(type='button', data-toggle='collapse', data-target='.dual-collapse2')
@@ -86,7 +85,7 @@ html
                         h6.text-uppercase.mb-4.font-weight-bold LiquidSchool
                         p
                             | Hier entsteht eine barrierefreie Schulsoftware, die auch für jüngere SchülerInnen ideal geeignet ist. 
-                            | Alles unkompliziert.
+                            | Alles einfach.
                     hr.w-100.clearfix.d-md-none
                     .col-md-2.col-lg-2.col-xl-2.mx-auto.mt-3
                         h6.text-uppercase.mb-4.font-weight-bold Plattform
