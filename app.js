@@ -475,7 +475,7 @@ app.get('/', function (req, res) {
 
 
           Article.
-            find({ author: req.user._id }, 'title termin').
+            find({ author: req.user._id }, 'title termin klasse').
             populate('lehrer').
             populate('stamm').
             populate('stammverbund').
