@@ -848,7 +848,7 @@ router.get('/article_schuelers/:id', function (req, res) {
                   find({
                     $and: [
                       { type: 'schueler' },
-                      { schueler_stamm: article.stamm}
+                      { schueler_stamm: article.stamm }
                     ]
                   }).
                   sort({ name: 1 }).
@@ -917,7 +917,7 @@ router.get('/article_schuelers/:id', function (req, res) {
                   find({
                     $and: [
                       { type: 'schueler' },
-                      { schueler_stamm: { $in: jo2 }}
+                      { schueler_stamm: { $in: jo2 } }
                     ]
                   }).
                   sort({ name: 1 }).
@@ -2355,6 +2355,18 @@ router.post("/add_alt", upload.array("files"), (req, res) => {
 
   let article = new Article();
 
+  constructArticle(article, req, res)
+
+
+})
+
+
+
+
+
+function constructArticle(article, req, res) {
+
+
   if (req.body.adressat === 'An Klasse') {
     console.log('hier: Adressat: Klasse');
     Stamm.findOne({ _id: req.body.stamm }, function (err, gefunden_stamm) {
@@ -2419,11 +2431,6 @@ router.post("/add_alt", upload.array("files"), (req, res) => {
 
 
 
-
-
-
-
-
   } else {
     console.log('FEHLER');
     //fehler
@@ -2431,7 +2438,19 @@ router.post("/add_alt", upload.array("files"), (req, res) => {
   }
 
 
-})
+
+
+
+
+
+}
+
+
+
+
+
+
+
 
 
 
@@ -4059,6 +4078,209 @@ function neuVerknüpfungDisziplin(req, res, main) {
 
 
 
+function clearArticle(main, req, res) {
+
+  clearArticle_Disziplin(main, req, res)
+
+
+}
+
+
+
+
+
+
+function clearArticle_Disziplin(main, req, res) {
+
+  if (main.disziplin) {
+
+    Article.findByIdAndUpdate(main._id,
+      { $unset: { disziplin: 1 } },
+      function (err, uptdatedArticle) {
+        if (err) throw err;
+
+        Disziplin.findOne({ _id: main.disziplin._id }).
+          populate('articles').
+          exec(function (err, oldDisziplin) {
+            if (err) throw err;
+            if (oldDisziplin) {
+              console.log('alter Stamm   ' + oldDisziplin.name);
+              oldDisziplin.articles.pull(main);
+              oldDisziplin.save(function (err, scho) {
+
+
+                clearArticle_Stamm(main, req, res)
+
+
+              })
+            }
+          })
+      })
+
+  } else {
+
+    clearArticle_Stamm(main, req, res)
+
+
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function clearArticle_Stamm(main, req, res) {
+  if (main.stamm) {
+    Article.findByIdAndUpdate(main._id,
+      { $unset: { stamm: 1 } },
+      function (err, uptdatedArticle) {
+        if (err) throw err;
+
+        Stamm.findOne({ _id: main.stamm._id }).
+          populate('articles').
+          exec(function (err, oldStamm) {
+            if (err) throw err;
+            if (oldStamm) {
+              console.log('alter Stamm   ' + oldStamm.name);
+              oldStamm.articles.pull(main);
+              oldStamm.save(function (err, scho) {
+
+
+                clearArticle_Stammverbund(main, req, res)
+
+
+              })
+            }
+          })
+      })
+
+
+  } else {
+
+    clearArticle_Stammverbund(main, req, res)
+
+  }
+
+}
+
+
+
+
+function clearArticle_Stammverbund(main, req, res) {
+
+  if (main.stammverbund) {
+    Article.findByIdAndUpdate(main._id,
+      { $unset: { stammverbund: 1 } },
+      function (err, uptdatedArticle) {
+        if (err) throw err;
+
+        Stammverbund.findOne({ _id: main.stammverbund._id }).
+          populate('articles').
+          exec(function (err, oldStammverbund) {
+            if (err) throw err;
+            if (oldStammverbund) {
+              console.log('alter Stamm   ' + oldStammverbund.name);
+              oldStammverbund.articles.pull(main);
+              oldStammverbund.save(function (err, scho) {
+
+                clearArticle_Schuelers(main, req, res)
+
+              })
+            }
+          })
+      })
+
+  } else {
+
+    clearArticle_Schuelers(main, req, res)
+  }
+
+}
+
+
+function clearArticle_Schuelers(main, req, res) {
+
+  if (main.schuelers.length !== 0) {
+    main.schuelers.forEach(function (schueler) {
+      //console.log('record :   ' + schueler.name);
+      Article.findByIdAndUpdate(main._id,
+        { $pull: { schuelers: schueler } },
+        { upsert: true, save: true },
+        function (err, uptdatedArticle) {
+          if (err) {
+            console.log(err);
+          } else {
+            User.findByIdAndUpdate(schueler._id,
+              { $pull: { auftrags: main._id } },
+              { save: true, upsert: true },
+              function (err, uptdatedSchueler) {
+                if (err) { console.log(err); }
+
+
+
+              });
+          }
+        });
+    });// alte Verknüpfungen werden gelöst
+    setTimeout(function () {// das hier verzögert die Weiterleitung, da vorher die $push Verknüpfung der schuelers Zeit zu brauchen scheint
+      buildArticle(main, req, res)
+    }, 300);
+  } else {
+
+
+    buildArticle(main, req, res)
+
+
+  }
+
+}
+
+
+
+
+
+function buildArticle(main, req, res) {
+
+
+  Article.
+    findOne({ _id: main._id }).
+    populate('schuelers').
+    populate('stamm').
+    populate('stammverbund').
+    populate('disziplin').
+    populate('uploads').
+    exec(function (err2, main) {
+
+      constructArticle(main, req, res);
+
+
+    });
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4067,8 +4289,8 @@ function neuVerknüpfungDisziplin(req, res, main) {
 router.post("/edit_complete/:id", upload.array("files" /* name attribute of <file> element in your form */),
   (req, res) => {
 
-    return;
-    
+
+
     if (!req.user) {  //wer nicht angemeldet ist, kann nicht speichern
       req.flash('warning', 'Du bist nicht angemeldet');
       res.redirect('login');
@@ -4090,6 +4312,15 @@ router.post("/edit_complete/:id", upload.array("files" /* name attribute of <fil
       populate('uploads').
       exec(function (err2, main) {
 
+       // console.log('______VORHER_______  ');
+        //console.log(main);
+        //console.log('   ');
+        //console.log('   ');
+        clearArticle(main, req, res)
+
+
+
+        return;
 
         let article = {};
         article.title = req.body.title;
@@ -4255,25 +4486,7 @@ router.post("/edit_complete/:id", upload.array("files" /* name attribute of <fil
 
         })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       })
-
-
-
 
   });
 
