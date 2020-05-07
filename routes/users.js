@@ -1616,7 +1616,7 @@ router.post('/login_l', function (req, res, next) {
 
 
                     if (!user) {
-                        req.flash('warning', 'Falsche Kennung.');
+                        req.flash('warning', 'Falsche Kennung. '+req.body.username.toString().toLowerCase().trim()+'  '+school.name+ '  /'+lehrer_schluessel);
                         res.redirect('/users/login_lehrer');
                     } else {
 

@@ -238,11 +238,96 @@ app.post('/update_changer', function (req, res) {
 
 app.post('/update_changer_2', function (req, res) {
 
+
+ nochmal()
   console.log('update_changer 2 complete');
   res.render('debug/update_changer', {
   })
 
 });
+
+
+
+
+
+
+function nochmal() {
+
+
+  User.
+  find().
+  exec(function (err, all_users) {
+
+    School.
+      findOne({ plz: '20355' }).
+      exec(function (err, school) {
+
+        all_users.forEach(function (user) {
+
+          console.log('. ' + user.name + ' . ' + user.klasse);
+          user.school = school;
+
+    
+               
+
+
+
+
+
+
+
+                  if (user.type === 'schueler') {
+
+                    School.findByIdAndUpdate(school._id,
+                      { $push: { users: us } },
+                      { safe: true, upsert: true },
+                      function (err, uptdatedSchool) {
+                        if (err) throw err;
+  
+                      })
+
+
+
+
+                  } else if (user.type === 'lehrer') {
+
+
+                    School.findByIdAndUpdate(school._id,
+                      { $push: { users: us } },
+                      { safe: true, upsert: true },
+                      function (err, uptdatedSchool) {
+                        if (err) throw err;
+  
+                      })
+
+
+
+
+                  } 
+
+                
+              
+
+
+
+
+        });
+      });
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
 
 
 
@@ -285,6 +370,15 @@ function createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse() {
                   user.save(function (err, us) {
                     if (err) throw err;
 
+
+                    if (user.type === 'schueler') {
+
+
+                    } else if (user.type === 'lehrer') {
+
+
+                    } 
+
                     School.findByIdAndUpdate(school._id,
                       { $push: { users: us } },
                       { safe: true, upsert: true },
@@ -303,12 +397,6 @@ function createSchuelersAndLehrersSchool_AndChangeSchuelersKlasse() {
 
 
                         }
-
-
-
-
-
-
                       })
                   });
 
