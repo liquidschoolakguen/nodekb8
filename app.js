@@ -259,24 +259,18 @@ function deleteUserVerknüpfung() {
         findOne({ plz: '20355' }).
         exec(function (err, school) {
 
-          all_users.forEach(function (user) {
 
-            console.log('. ' + user.name + ' . ' + user.klasse);
-            user.school = school;
 
-          
 
-            school.users.pull(user);
-            school.save(function (err, scho) {
+          School.findByIdAndUpdate(school._id,
+            { $unset: { users: 1 } },
+            function (err, uptdatedArticle) {
               if (err) throw err;
+
 
             })
 
 
-
-
-
-          });
         });
     });
 }
