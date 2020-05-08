@@ -1420,35 +1420,35 @@ router.get('/4____4', function (req, res) {
 
     User.
         find({ type: 'lehrer' }).
-        populate('school')
-    exec(function (err, schuelers) {
-        if (err) return console.log('4_iiiiiiiiiiii ' + err);
+        populate('school').
+        exec(function (err, schuelers) {
+            if (err) return console.log('4_iiiiiiiiiiii ' + err);
 
-        if (schuelers) {
+            if (schuelers) {
 
-            if (err) return console.log('5_iiiiiiiiiiii ' + err);
-
-
-
-            let length = schuelers.length;
-
-
-            res.render('4____4', {
-                schuelers: schuelers,
-                length: length
-            });
+                if (err) return console.log('5_iiiiiiiiiiii ' + err);
 
 
 
+                let length = schuelers.length;
 
-        } else {
 
-            req.flash('danger', 'Es sind noch keine SuS registriert ');
-            res.redirect('/');
+                res.render('4____4', {
+                    schuelers: schuelers,
+                    length: length
+                });
 
-        }
 
-    });
+
+
+            } else {
+
+                req.flash('danger', 'Es sind noch keine SuS registriert ');
+                res.redirect('/');
+
+            }
+
+        });
 
 
 
