@@ -3,14 +3,15 @@
 $(document).ready(function () {
 
    
-    
-    if(document.getElementById("invisible")!=null){
+   /*  
+    if(document.getElementById("income")!=null){
+        //alert(x)
 
-        var x = document.getElementById("invisible").textContent;
-
+        var x = document.getElementById("income").value;
+        //var y = document.getElementById("income").value;
         var k = document.getElementById("hier-kommt-was-rein")
         k.innerHTML += x;
-    }
+    } */
 
     
 

@@ -241,7 +241,7 @@ app.post('/update_changer', function (req, res) {
 
 app.post('/update_changer_2', function (req, res) {
 
-  changeArticleTermin()
+  globaleTerminverschiebung()
 
   console.log('update_changer 2 complete');
   res.render('debug/update_changer', {
@@ -252,6 +252,77 @@ app.post('/update_changer_2', function (req, res) {
 
 
 
+
+
+
+
+
+
+
+
+function myStringToDate_InZweiTagen(termin_string) {
+
+  var tag = termin_string.substring(7, 9)
+  var monat = termin_string.substring(10, 12)
+  var jahr = termin_string.substring(13, 17)
+  //console.log('tag   ' + tag);
+  //console.log('monat   ' + monat);
+  //console.log('jahr   ' + jahr);
+
+
+  var noi = new Date(jahr, monat - 1, tag, 16);
+  noi.setDate(noi.getDate() + 2);
+
+  return noi;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function globaleTerminverschiebung(){
+
+
+  Article.
+    find().
+    exec(function (err, allArticles) {
+
+      allArticles.forEach(function (art) {
+
+        var tomorrow = myStringToDate_InZweiTagen(art.termin) 
+
+        var nau = ("00" + tomorrow.getDate()).slice(-2) + '.' + ("00" + (tomorrow.getMonth() + 1)).slice(-2) + '.' + tomorrow.getFullYear()
+
+        var complet = 'Frist: '+ nau + ' 16 Uhr'
+          console.log('--------------------------------')
+          console.log(art.termin)
+          console.log(complet)
+
+/*         art.termin = art.termin.substring(7, art.termin.length-1)
+        art.save(function (err, us) {
+          if (err) throw err;
+
+        }); */
+      });
+
+    })
+
+
+
+
+
+
+
+
+}
 
 
 function deleteUserVerknüpfung() {
