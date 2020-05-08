@@ -837,12 +837,41 @@ router.get('/article_schuelers/:id', function (req, res) {
             if (hausarbeits) {
               //console.log('The hausarbeits is %s', hausarbeits);
 
+              
+              if (article.klasse) {
 
+                Stamm.
+                  findOne({ name: article.klasse }).
+                  exec(function (err2, stamm) {
 
-              var nu_hauses = []
+                    if (stamm) {
+                      User.
+                        find({
+                          $and: [
+                            { type: 'schueler' },
+                            { schueler_stamm: stamm }
+                          ]
+                        }).
+                        sort({ name: 1 }).
+                        exec(function (err2, all_schuelers) {
+                          if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
+                          var schuelersList = getSchuelersList(hausarbeits, all_schuelers)
 
-              if (article.stamm) {
+                          res.render('change/article_schueler', {
+                            now: getMyNow(),
+                            article: article,
+                            hausarbeits: schuelersList,
+                            length: schuelersList.length,
+                            my_termin: myStringToDate(article.termin)
+                          });
+                        
+
+                        })
+                    }
+                  })
+
+              } else if (article.stamm) {
 
                 User.
                   find({
@@ -856,62 +885,24 @@ router.get('/article_schuelers/:id', function (req, res) {
                     if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
-                    all_schuelers.forEach(function (sss) {
-                      console.log('all_schueler is %s', sss.username);
-
-                      var hat_arbeit = false
-                      hausarbeits.forEach(function (h) {
-                        console.log('hausarbeit is %s', h.schueler.username);
-
-                        if (sss.username === h.schueler.username) {
-                          nu_hauses.push(h)
-                          hat_arbeit = true
-                        }
-                      });
-
-                      if (!hat_arbeit) {
-                        let hhh = new Hausarbeit();
-                        hhh.schueler = sss;
-                        hhh.status = '0';
-                        nu_hauses.push(hhh)
-
-                      }
-                    });
-
-
-                    let schuelers = [];
-                    nu_hauses.forEach(function (hausarbeit) {
-                      console.log('The Fotzi is %s', hausarbeit.schueler.name + '/' + hausarbeit.status);
-                      schuelers.push(hausarbeit.schueler);
-                    });
-
-                    let length = nu_hauses.length;
+                    var schuelersList = getSchuelersList(hausarbeits, all_schuelers)
 
                     res.render('change/article_schueler', {
                       now: getMyNow(),
                       article: article,
-                      hausarbeits: nu_hauses,
-                      length: length,
+                      hausarbeits: schuelersList,
+                      length: schuelersList.length,
                       my_termin: myStringToDate(article.termin)
-
                     });
+
                   })
-
-
-
-
-
-
               } else if (article.stammverbund) {
 
                 var jo2 = []
-
                 article.stammverbund.stamms.forEach(function (stamm) {
                   console.log('verbund    ' + stamm.name);
                   jo2.push(stamm);
                 })
-
-
 
                 User.
                   find({
@@ -925,144 +916,31 @@ router.get('/article_schuelers/:id', function (req, res) {
                     if (err2) return console.log('iiiiiiiiiiiiiiiiiii ' + err2);
 
 
-                    all_schuelers.forEach(function (sss) {
-                      console.log('all_schueler is %s', sss.username);
-
-                      var hat_arbeit = false
-                      hausarbeits.forEach(function (h) {
-                        console.log('hausarbeit is %s', h.schueler.username);
-
-                        if (sss.username === h.schueler.username) {
-                          nu_hauses.push(h)
-                          hat_arbeit = true
-                        }
-                      });
-
-                      if (!hat_arbeit) {
-                        let hhh = new Hausarbeit();
-                        hhh.schueler = sss;
-                        hhh.status = '0';
-                        nu_hauses.push(hhh)
-
-                      }
-                    });
-
-
-                    let schuelers = [];
-                    nu_hauses.forEach(function (hausarbeit) {
-                      console.log('The Fotzi is %s', hausarbeit.schueler.name + '/' + hausarbeit.status);
-                      schuelers.push(hausarbeit.schueler);
-                    });
-
-                    let length = nu_hauses.length;
+                    var schuelersList = getSchuelersList(hausarbeits, all_schuelers)
 
                     res.render('change/article_schueler', {
                       now: getMyNow(),
                       article: article,
-                      hausarbeits: nu_hauses,
-                      length: length,
+                      hausarbeits: schuelersList,
+                      length: schuelersList.length,
                       my_termin: myStringToDate(article.termin)
-
                     });
                   })
 
-
-
-
-
-
-
-
-
-
-
-
               } else {
-                console.log('Fotzen type')
 
-                var all_schuelers = article.schuelers
-
-
-
-
-
-                all_schuelers.forEach(function (sss) {
-                  console.log('all_schueler is %s', sss.username);
-
-                  var hat_arbeit = false
-                  hausarbeits.forEach(function (h) {
-                    console.log('hausarbeit is %s', h.schueler.username);
-
-                    if (sss.username === h.schueler.username) {
-                      nu_hauses.push(h)
-                      hat_arbeit = true
-                    }
-
-
-
-                  });
-
-                  if (!hat_arbeit) {
-
-
-                    let hhh = new Hausarbeit();
-                    hhh.schueler = sss;
-                    hhh.status = '0';
-
-                    nu_hauses.push(hhh)
-
-
-
-                  }
-
-
-
-
-                });
-
-
-
-
-
-                let schuelers = [];
-
-                nu_hauses.forEach(function (hausarbeit) {
-                  console.log('The Fotzi is %s', hausarbeit.schueler.name + '/' + hausarbeit.status);
-
-                  schuelers.push(hausarbeit.schueler);
-                });
-
-                let length = nu_hauses.length;
-
-
-
+                var schuelersList = getSchuelersList(hausarbeits, article.schuelers)
 
                 res.render('change/article_schueler', {
                   now: getMyNow(),
                   article: article,
-                  hausarbeits: nu_hauses,
-                  length: length,
+                  hausarbeits: schuelersList,
+                  length: schuelersList.length,
                   my_termin: myStringToDate(article.termin)
-
-
                 });
 
 
-
-
-
-
-
-
-
-
               }
-
-
-
-
-
-
 
 
             } else {
@@ -1073,11 +951,6 @@ router.get('/article_schuelers/:id', function (req, res) {
             }
 
           });
-
-
-
-
-
 
 
 
@@ -1098,7 +971,63 @@ router.get('/article_schuelers/:id', function (req, res) {
 
 
 
+function getSchuelersList(hausarbeits, all_schuelers) {
 
+  var nu_hauses = []
+
+  all_schuelers.forEach(function (sss) {
+    console.log('all_schueler is %s', sss.username);
+
+    var hat_arbeit = false
+    hausarbeits.forEach(function (h) {
+      console.log('hausarbeit is %s', h.schueler.username);
+
+      if (sss.username === h.schueler.username) {
+        nu_hauses.push(h)
+        hat_arbeit = true
+      }
+
+
+
+    });
+
+    if (!hat_arbeit) {
+
+
+      let hhh = new Hausarbeit();
+      hhh.schueler = sss;
+      hhh.status = '0';
+
+      nu_hauses.push(hhh)
+
+
+
+    }
+
+
+
+
+  });
+
+
+
+  /* 
+  
+    let schuelers = [];
+  
+    nu_hauses.forEach(function (hausarbeit) {
+      console.log('The Fotzi is %s', hausarbeit.schueler.name + '/' + hausarbeit.status);
+  
+      schuelers.push(hausarbeit.schueler);
+    });
+  
+   */
+
+
+
+
+  return nu_hauses
+}
 
 
 

@@ -55,7 +55,8 @@ font-size: 1.2em!important;
 
 
   a {
-    color: #68aec0;
+    /* color: #68aec0; */
+    color: rgb(255,64,129)
   }
 
   a:hover{
