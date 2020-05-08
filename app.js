@@ -306,11 +306,11 @@ function globaleTerminverschiebung(){
           console.log(art.termin)
           console.log(complet)
 
-/*         art.termin = art.termin.substring(7, art.termin.length-1)
+         art.termin = complet
         art.save(function (err, us) {
           if (err) throw err;
 
-        }); */
+        }); 
       });
 
     })
