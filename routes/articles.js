@@ -3716,68 +3716,52 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
 
 
 
+  function is_2_Std_PossibleFrist(termin) {
+
+    var tag = termin.substring(7, 9)
+    var monat = termin.substring(10, 12)
+    var jahr = termin.substring(13, 17)
+    //console.log('tag   ' + tag);
+    //console.log('monat   ' + monat);
+    //console.log('jahr   ' + jahr);
+    var d = new Date(jahr, monat - 1, tag, 14);
+    var jetzt = getMyNow();
+    var diffMs = (d - jetzt); // milliseconds between now & Christmas
+
+
+    if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
+
+      return false;
+    } else {
+
+      return true;
+
+    }
+
+  }
+
 
 
 
   Hausarbeit.findById(req.params.id, function (err, ha) {
 
 
-
     Article.findById(ha.article, function (err, article) {
-
-
 
       //console.log('-------------------------------------')
 
-      // console.log(my_article);
 
-      var tag = article.termin.substring(0, 2)
-      var monat = article.termin.substring(3, 5)
-      var jahr = article.termin.substring(6, 10)
-
-      console.log('tag:     ' + tag);
-      console.log('monat:   ' + monat);
-      console.log('jahr:    ' + jahr);
-
-      var d = new Date(jahr, monat - 1, tag, 14); //// Bei 14 heiß es 2 Stunden vor Abgabe ist keine Korrektur mehr möglich
-
-      console.log('Date:    ' + d);
-      var jetzt = getMyNow();
-      console.log('Date:    ' + jetzt);
-
-
-
-      var today = jetzt
-      var Christmas = d
-      var diffMs = (Christmas - today); // milliseconds between now & Christmas
-      var diffDays = Math.floor(diffMs / 86400000); // days
-      var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
-      var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
-
-
-      console.log('diffMs:    ' + diffMs);
-
-      if (diffMs >= 0) {
-
-
+      if (is_2_Std_PossibleFrist(article.termin)) {
 
 
         var query = { '_id': req.params.id };
-
-
         let hausarbeit = {};
-
         hausarbeit.nachbessern_text = req.body.nachbessern_text;
         hausarbeit.nachbessern_option = req.body.nachbessern_option;
-
         hausarbeit.status = '3';
-
 
         Hausarbeit.findOneAndUpdate(query, hausarbeit, { upsert: true }, function (err, doc) {
           if (err) return res.send(500, { error: err });
-
-
-
 
 
 
@@ -3786,74 +3770,28 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
             if (err) throw err;
             if (user) {
 
-
-
-
-
-
-
               req.flash('success', 'Du hast die Hausarbeit von ' + user.name + ' zum Nachbessern zurückgesendet. Na, ob das noch mal was wird?');
               res.redirect('/articles/article_schuelers/' + doc.article);
 
-
-
-
-
-
             } else {
-
-
-
               req.flash('danger', 'fehler. Bitte Mithat Akgün kontaktieren');
               res.redirect('/');
-
-
             }
-
-
 
 
           })
 
-
-
-
-
-
-
-
-
-
-
         });
-
-
-
-
-
 
       } else {
         ///zu spät
-
-
         req.flash('danger', 'Dein Nachbesserungswunsch wurde nicht versendet. Der/die Schüler/in sollte mindestens 2 Stunden Zeit haben, um die Arbeit nachzubessern. Alles andere wäre ja auch unfair.');
         res.redirect('/articles/article_schuelers/' + article._id);
         return;
 
-
       }
-
-
     })
-
-
   })
-
-
-
-
-
-
 });
 
 
@@ -4312,7 +4250,7 @@ router.post("/edit_complete/:id", upload.array("files" /* name attribute of <fil
       populate('uploads').
       exec(function (err2, main) {
 
-       // console.log('______VORHER_______  ');
+        // console.log('______VORHER_______  ');
         //console.log(main);
         //console.log('   ');
         //console.log('   ');
