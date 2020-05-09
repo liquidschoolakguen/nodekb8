@@ -18,7 +18,10 @@ block content
                                 if hausarbeit.article.stammverbund
                                     a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{hausarbeit.article.stammverbund.name} | #{hausarbeit.article.disziplin.name} | #{hausarbeit.article.created}
                                 if hausarbeit.article.schuelers.length !==0
-                                    a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') Sonderaufgabe |  #{hausarbeit.article.disziplin.name} | #{hausarbeit.article.created}
+                                    if hausarbeit.article.disziplin
+                                        a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') Sonderaufgabe |  #{hausarbeit.article.disziplin.name} | #{hausarbeit.article.created}
+                                    else
+                                        a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') Sonderaufgabe |  #{hausarbeit.article.fach} | #{hausarbeit.article.created} 
                     .card-body.padding_null
                         .tab-content.mt-3.my-min-height
                             #description.tab-pane.active(role='tabpanel')
