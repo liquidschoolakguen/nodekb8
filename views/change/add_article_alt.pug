@@ -49,19 +49,20 @@ block content
                     .modal-body
                       button#modal_button1.btn.btn-success.float-right(type='button', data-dismiss='modal' onclick='valiModal()' , disabled='') Schülergruppe verwenden
                       .form-group.col-md-12
-                        #form-transition-group
+                        #form-transition-group.my-margin-top
                           each stamm, i in user.school.s_stamms
                             .form-group.col-md-12
                               h4 #{stamm.name}
                               .container-fluid(style='margin-left:10px; border:none !important;')
                                 .row.justify-content-start
                                   each schueler, i in stamm.schuelers
-                                    .col-md-2(style='margin-bottom:0px; border:none !important;')
+                                    .col-2(style='margin-bottom:0px; border:none !important;')
                                       input#defaultCheck1.form-check-input(type='checkbox', value= schueler._id,  name='schuelers[]' onchange='vali(this.value)')
                                       input.form-control.invisible(type='text',  name='id[]', value= schueler._id)
                                       label.form-check-label(for='defaultCheck1')
                                       | #{schueler.name}
-                            hr             
+                            hr 
+                            br              
                           .form-check
                             input#exampleRadios1.form-check-input(type='radio', name='for_all', value='1' onchange='vali(this.value)' )
                             label.form-check-label(for='exampleRadios1')
@@ -93,6 +94,7 @@ block content
             span.sr-only Loading...  
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
   script(src='https://cdn.quilljs.com/1.3.6/quill.js')
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
   script(src='/js/add_article.js')  
   link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
   script(src='https://code.jquery.com/jquery-1.12.4.js')

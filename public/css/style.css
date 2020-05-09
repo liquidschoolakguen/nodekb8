@@ -63,7 +63,7 @@ font-size: 1.2em!important;
   p {
     margin-top: 0;
     margin-bottom: 1rem;
-    white-space: pre-line;
+   
   }
 
 
@@ -251,6 +251,11 @@ a:hover {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe',GradientType=0 ); /* IE6-9 */
   padding: 20px;
 }
+
+
+
+
+
 
 .led-box {
   height: 30px;
