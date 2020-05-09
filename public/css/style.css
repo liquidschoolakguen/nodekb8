@@ -1,8 +1,9 @@
 
+
+
+/* @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap'); */
   body {
-    
-
-
+   /*  font-family: 'Architects Daughter', cursive!important; */
     background:  linear-gradient(
       rgba(0, 0, 0, 0.4), 
       rgba(0, 0, 0, 0.4)
@@ -29,6 +30,12 @@ background-blend-mode: screen;
 
   }
   
+
+h1, h2, h3, h4, h5, h6 {
+ /* font-family: 'Architects Daughter', cursive!important; */
+ /* https://fonts.google.com/specimen/Indie+Flower?preview.text_type=custom&preview.text=Liquidschool&query=Indie+Flower&sidebar.open&selection.family=Indie+Flower */
+}
+
 
 .nnn{
 

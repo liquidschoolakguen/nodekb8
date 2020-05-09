@@ -56,7 +56,7 @@ block content
                               .container-fluid(style='margin-left:10px; border:none !important;')
                                 .row.justify-content-start
                                   each schueler, i in stamm.schuelers
-                                    .col-2(style='margin-bottom:0px; border:none !important;')
+                                    .col-md-2(style='margin-bottom:0px; border:none !important;')
                                       input#defaultCheck1.form-check-input(type='checkbox', value= schueler._id,  name='schuelers[]' onchange='vali(this.value)')
                                       input.form-control.invisible(type='text',  name='id[]', value= schueler._id)
                                       label.form-check-label(for='defaultCheck1')
