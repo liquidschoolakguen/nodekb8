@@ -49,7 +49,7 @@ block content
                     .modal-body
                       button#modal_button1.btn.btn-success.float-right(type='button', data-dismiss='modal' onclick='valiModal()' , disabled='') Schülergruppe verwenden
                       .form-group.col-md-12
-                        #form-transition-group.my-margin-top
+                        #form-transition-group
                           each stamm, i in user.school.s_stamms
                             .form-group.col-md-12
                               h4 #{stamm.name}
@@ -61,8 +61,7 @@ block content
                                       input.form-control.invisible(type='text',  name='id[]', value= schueler._id)
                                       label.form-check-label(for='defaultCheck1')
                                       | #{schueler.name}
-                            hr 
-                            br              
+                            hr             
                           .form-check
                             input#exampleRadios1.form-check-input(type='radio', name='for_all', value='1' onchange='vali(this.value)' )
                             label.form-check-label(for='exampleRadios1')

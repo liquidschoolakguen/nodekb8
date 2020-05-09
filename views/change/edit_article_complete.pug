@@ -70,20 +70,19 @@ block content
                       .modal-body
                         button#modal_button1.btn.btn-success.float-right(type='button', data-dismiss='modal' , disabled='') Schülergruppe verwenden
                         .form-group.col-md-12
-                          #form-transition-group.my-margin-top
+                          #form-transition-group
                             each stamm, i in s_stamms
                               .form-group.col-md-12
                                 h4 #{stamm.name}
                                 .container-fluid(style='margin-left:10px; border:none !important;')
                                   .row.justify-content-start
                                     each schueler, i in stamm.schuelers
-                                      .col-2(style='margin-bottom:0px; border:none !important;')
+                                      .col-md-2(style='margin-bottom:0px; border:none !important;')
                                         input#defaultCheck1.form-check-input(type='checkbox', value= schueler._id, checked=schueler.article_token,  name='schuelers[]', onchange='vali(this.value)')
                                         input.form-control.invisible(type='text',  name='id['+i+']', value= schueler.id)
                                         label.form-check-label(for='defaultCheck1')
                                         | #{schueler.name}
-                            hr
-                            br              
+                              hr            
                         .form-row.justify-content-end
                           .form-group.col-md-4
                             button#modal_button2.btn.btn-success(type='button', data-dismiss='modal', disabled='' style='width:100%') Schülergruppe verwenden
