@@ -1,15 +1,6 @@
 extends ./layouts/layout
 
 block content
-  .shadow.p-3.mb-5.bg-white.rounded.text-dark.border-dark   
-      .card
-          .card-header.bold
-              |  Als Lehrkraft noch nicht auf Liquidschool? 
-          .card-body
-              h2.float-right Registriere dich als Lehrkraft auf deiner Liquid-Schule.
-              br 
-          .col-md-12.col-12.float-right.padding_null
-              a.btn.btn-dark.text-white.button-margin(href='/users/register_lehrer_00') Liquidschool-Lehrer werden
   .shadow.p-3.mb-5.bg-white.rounded.text-danger.border-danger   
       .card
           .card-header.bold
@@ -19,21 +10,3 @@ block content
               br 
           .col-md-12.col-12.float-right.padding_null
               a.btn.btn-danger.text-white.button-margin(href='/users/register_schueler_00') Liquidschool-SchülerIn werden
-  .shadow.p-3.mb-5.bg-white.rounded.text-primary.border-primary
-      .card
-          .card-header.bold
-              |  Deine Schule ist noch nicht flüssig? 
-          .card-body
-              h2.float-right Mache deine Schule zur Liquidschool.
-              br 
-          .col-md-12.col-12.float-right.padding_null
-              a.btn.btn-primary.text-white.button-margin.disabled(href='/users/add_school_first') Liquidschool für deine Schule einrichten
-  .shadow.p-3.mb-5.bg-white.rounded.text-primary.border-primary   
-      .card
-          .card-header.bold
-              |  Du möchtest deine Schule auf Liquidschool verwalten? 
-          .card-body
-              h2.float-right Werde Administrator deiner Schule.
-              br 
-          .col-md-12.col-12.float-right.padding_null
-              a.btn.btn-primary.text-white.button-margin.disabled(href='/users/register_admin_00') Administrator werden

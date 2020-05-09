@@ -110,7 +110,7 @@ var quill = new Quill('#editor', {
         toolbar: toolbarOptions
     },
     theme: 'snow',
-    placeholder: 'Formuliere einen Auftrag...'
+    placeholder: '(Bei der Erstellung eines Auftrags kann es mit dem Firefox zu Darstellungsproblemen kommen. Nutze am Besten den Chrome-Browser oder einen anderen)'
 });
 
 
