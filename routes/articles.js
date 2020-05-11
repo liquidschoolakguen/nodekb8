@@ -632,7 +632,7 @@ router.get('/hausarbeit/:id', function (req, res) {
 
 
 // Get Single Schueler
-router.get('/schueler/:id', function (req, res) {
+router.get('/schueler/:id', ensureAuthenticated, function (req, res) {
 
   User.
     findOne({ _id: req.params.id }).
