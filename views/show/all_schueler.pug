@@ -47,12 +47,10 @@ block content
                                         path(fill-rule='evenodd', d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 100-6 3 3 0 000 6z', clip-rule='evenodd')                                
                                   td.align-middle 
                                     .box
-                                    | #{schueler.klasse}
+                                    | #{schueler.schueler_stamm.name}
                                   td.align-middle 
                                     .box
                                     | #{schueler.name} 
-                                    if schueler.school
-                                      | hat Schule
                                   td.align-middle
                                     | #{schueler.money} $                                  
                         else

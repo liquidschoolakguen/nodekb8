@@ -10,7 +10,7 @@ block content
                     .card-header
                         ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
                             li.nav-item
-                                a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') Alle Hausarbeiten von #{schueler.name}  |  #{schueler.klasse}
+                                a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') Alle Hausarbeiten von #{schueler.name}  |  #{schueler.schueler_stamm.name}
                     .card-body.padding_null
                         .tab-content.mt-3.my-min-height
                             #description.tab-pane.active(role='tabpanel')
@@ -20,9 +20,7 @@ block content
                                     p.card-text
                                         | Kennung: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#{schueler.username}"
                                     p.card-text
-                                        | Passwort: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#{schueler.password_visible}"
-                                    p.card-text
-                                            | ID: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#{schueler._id}"                                                                          
+                                        | Passwort: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#{schueler.password_visible}"                                                                         
                                     if length != 0
                                         .col-md-6.col-6.float-right.padding_null
                                             input#inputFilter.form-control.my-margin-bottom-right(type='text', placeholder='suche..')

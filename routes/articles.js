@@ -636,6 +636,7 @@ router.get('/schueler/:id', function (req, res) {
 
   User.
     findOne({ _id: req.params.id }).
+    populate('schueler_stamm').
     exec(function (err, user) {
       if (err) {
 
@@ -3449,15 +3450,7 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
   }
 
 
-
-
-
-
-  var query = { '_id': req.params.id };
-
-
   let hausarbeit = {};
-
   hausarbeit.ergebnis_ok = req.body.ergebnis_ok;
   hausarbeit.ergebnis_dollar = req.body.ergebnis_dollar;
   hausarbeit.ergebnis_note = req.body.ergebnis_note;
@@ -3465,11 +3458,8 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
   hausarbeit.status = '2';
 
 
-  Hausarbeit.findOneAndUpdate(query, hausarbeit, { upsert: true }, function (err, doc) {
+  Hausarbeit.findOneAndUpdate({ '_id': req.params.id }, hausarbeit, { upsert: true }, function (err, doc) {
     if (err) return res.send(500, { error: err });
-
-
-
 
 
 
@@ -3492,12 +3482,6 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
         }
 
 
-        console.log('opUser.money  ' + opUser.money)
-
-
-        console.log('doc.schueler ' + doc.schueler)
-        //console.log('hausarbeit.schueler ' + hausarbeit.schueler )
-        //hausarbeit.schueler
 
         User.update({ _id: doc.schueler }, opUser, function (err) {
           if (err) {
@@ -3505,124 +3489,60 @@ router.post('/korrektur_hausarbeit/:id', function (req, res) {
             return;
           } else {
 
-
-
-
-
-
-            Article.findById(doc.article, function (err, articleX) {
-
-              if (err) {
-                //console.log('wwwwww');
-                console.log(err);
-              }
-
-
-
-
-
-
-              /* 
-                            console.log('article.ha_gelb  ' + articleX.ha_gelb)
-                            console.log('parseInt(article.ha_gelb) ' + parseInt(articleX.ha_gelb))
-              
-                            var inte_gelb = parseInt(articleX.ha_gelb);
-                            inte_gelb -= 1;
-              
-                            tuString_gelb = inte_gelb.toString();
-                            console.log('tuString_gelb ergebnis ' + tuString_gelb)
-              
-              
-              
-              
-                            var inte_gruen = parseInt(articleX.ha_gruen);
-                            inte_gruen += 1;
-              
-                            tuString_gruen = inte_gruen.toString();
-                            console.log('tuString_gruen ergebnis ' + tuString_gruen)
-              
-              
-              
-              
-              
-                            var art = {}
-                            art.ha_gelb = tuString_gelb
-                            art.ha_gruen = tuString_gruen
-              
-              
-                            Article.findOneAndUpdate({ _id: articleX._id }, art, { upsert: true }, function (err, docX) {
-                              if (err) return res.send(500, { error: err });
-              
-                              console.log('docX.ha_gelb NEU  ' + docX.ha_gelb)
-                              console.log('docX.ha_gruen NEU  ' + docX.ha_gruen)
-              
-              
-              
-                            }); */
-
-
-
-
-
-            });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             req.flash('success', 'Sauber! Schnell alles wegkorrigiert. Da wird sich ' + user.name + ' aber freuen.');
             res.redirect('/articles/article_schuelers/' + doc.article);
-
-
-
-
 
           }
         })
 
 
-
       } else {
-
-
 
         req.flash('danger', 'fehler');
         res.redirect('/');
 
-
       }
 
 
-
-
-
     })
-
-
-
-
-
-
   });
-
-
 });
+
+
+
+
+
+
+
+function is_2_Std_PossibleFrist(termin) {
+
+  var tag = termin.substring(7, 9)
+  var monat = termin.substring(10, 12)
+  var jahr = termin.substring(13, 17)
+  //console.log('tag   ' + tag);
+  //console.log('monat   ' + monat);
+  //console.log('jahr   ' + jahr);
+  var d = new Date(jahr, monat - 1, tag, 14);
+  var jetzt = getMyNow();
+  var diffMs = (d - jetzt); // milliseconds between now & Christmas
+
+
+  if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
+
+    return false;
+  } else {
+
+    return true;
+
+  }
+
+}
+
+
+
+
+
+
 
 
 
@@ -3645,29 +3565,7 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
 
 
 
-  function is_2_Std_PossibleFrist(termin) {
 
-    var tag = termin.substring(7, 9)
-    var monat = termin.substring(10, 12)
-    var jahr = termin.substring(13, 17)
-    //console.log('tag   ' + tag);
-    //console.log('monat   ' + monat);
-    //console.log('jahr   ' + jahr);
-    var d = new Date(jahr, monat - 1, tag, 14);
-    var jetzt = getMyNow();
-    var diffMs = (d - jetzt); // milliseconds between now & Christmas
-
-
-    if (diffMs < 0) { //wenn der Termin in der Vergangenheit liegt, ist Schluss mit Speichern
-
-      return false;
-    } else {
-
-      return true;
-
-    }
-
-  }
 
 
 
@@ -3678,9 +3576,6 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
     Article.findById(ha.article, function (err, article) {
 
       //console.log('-------------------------------------')
-
-
-      if (is_2_Std_PossibleFrist(article.termin)) {
 
 
         var query = { '_id': req.params.id };
@@ -3712,13 +3607,7 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
 
         });
 
-      } else {
-        ///zu spät
-        req.flash('danger', 'Dein Nachbesserungswunsch wurde nicht versendet. Der/die Schüler/in sollte mindestens 2 Stunden Zeit haben, um die Arbeit nachzubessern. Alles andere wäre ja auch unfair.');
-        res.redirect('/articles/article_schuelers/' + article._id);
-        return;
 
-      }
     })
   })
 });
