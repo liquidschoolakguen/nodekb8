@@ -124,6 +124,7 @@ block content
         $(document).ready(function () {
         if(document.getElementById("income")!=null){
         try {
+            jeks =encodeURI(jeks)
             var geparst = JSON.parse(jeks)
             quill.setContents(geparst);
         } catch (e) {
