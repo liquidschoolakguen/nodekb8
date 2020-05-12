@@ -171,7 +171,7 @@ block content
     $(document).ready(function () {
       if(document.getElementById("income")!=null){
         //alert(x)
-
+       console.log('1 ' )
       var jeks = document.getElementById("income").value;
         var quill = new Quill('#editor_show', {
           modules: {
@@ -193,7 +193,7 @@ block content
         //alert('#{article.lehrer.name}')
           var geparst = JSON.parse(jeks)
           quill.setContents(geparst);
-         console.log('perfekt neu ' )
+          console.log('perfekt neu ' )
       } catch (e) {
 
         var hack_50 = document.getElementById("hack_50").value
@@ -238,11 +238,6 @@ block content
 
       }
       });
-  script.
-    $(window).on('load', function(){ // makes sure the whole site is loaded
-      $("#status").fadeOut(); // will first fade out the loading animation
-      $("#preloader").delay(500).fadeOut("slow"); // will fade out the white DIV that covers the website.
-      })
 
 
 
