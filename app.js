@@ -97,6 +97,8 @@ let Stamm = require('./models/stamm');
 let Group = require('./models/group');
 
 
+let User_service = require('./service/user_service');
+
 // Load view Engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -638,7 +640,7 @@ function isPossibleFrist(termin) {
 
 
 // Home Route
-app.get('/', function (req, res) {
+app.get('/', async function (req, res) {
 
 
   if (typeof req.user === "undefined") {
@@ -775,6 +777,15 @@ app.get('/', function (req, res) {
                   my_article.ha_grau = tuString_grau
 
                 });
+
+
+                //console.log('--XXXXXXXXXXXX ' + user.theName());
+               // console.log('--XXXXXXXXXXXX ' + user.getSchool_name());
+               
+               
+               //console.log('--Xoooooooo ' + User_service.fifi());
+               // const bubu = await User_service.gerSchoolNameById();
+
 
                 res.render('index', {
                   my_articles: my_articles,

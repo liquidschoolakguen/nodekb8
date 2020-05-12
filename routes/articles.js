@@ -706,7 +706,7 @@ router.get('/schueler/:id', ensureAuthenticated, function (req, res) {
 
 
 function myStringToDate(termin_string) {
-
+  console.log('kkk: '+termin_string);
   var tag = termin_string.substring(7, 9)
   var monat = termin_string.substring(10, 12)
   var jahr = termin_string.substring(13, 17)
@@ -864,7 +864,7 @@ router.get('/article_schuelers/:id', function (req, res) {
                             article: article,
                             hausarbeits: schuelersList,
                             length: schuelersList.length,
-                            my_termin: myStringToDate(article.termin)
+                            my_termin: article.termin
                           });
                         
 
@@ -893,7 +893,7 @@ router.get('/article_schuelers/:id', function (req, res) {
                       article: article,
                       hausarbeits: schuelersList,
                       length: schuelersList.length,
-                      my_termin: myStringToDate(article.termin)
+                      my_termin: article.termin
                     });
 
                   })
@@ -924,20 +924,20 @@ router.get('/article_schuelers/:id', function (req, res) {
                       article: article,
                       hausarbeits: schuelersList,
                       length: schuelersList.length,
-                      my_termin: myStringToDate(article.termin)
+                      my_termin: article.termin
                     });
                   })
 
               } else {
 
                 var schuelersList = getSchuelersList(hausarbeits, article.schuelers)
-
+                  console.log('LLLLLL: '+article.termin)
                 res.render('change/article_schueler', {
                   now: getMyNow(),
                   article: article,
                   hausarbeits: schuelersList,
                   length: schuelersList.length,
-                  my_termin: myStringToDate(article.termin)
+                  my_termin: article.termin
                 });
 
 

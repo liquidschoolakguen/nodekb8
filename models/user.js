@@ -158,4 +158,38 @@ const UserSchema = mongoose.Schema({
 }
 );
 
+
+UserSchema.methods.theName = function () {
+    return this.name;
+};
+
+
+UserSchema.methods.getSchool_name = function () {
+
+
+    console.log('ggg: ' +this.school._id)
+    School.findOne({ _id: this.school._id }).
+    exec(function (err, schoool) {
+       if(schoool){
+        console.log('...... ' +schoool)
+        console.log('...... ' +schoool._id)
+        console.log('...... ' +schoool.name)
+        return schoool.name;
+       }else{
+        return 'nix';
+
+        }
+       
+      
+
+
+    });
+
+
+
+};
+
+
+
+
 const User = module.exports = mongoose.model('User', UserSchema);
