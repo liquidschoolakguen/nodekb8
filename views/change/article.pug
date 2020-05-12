@@ -163,9 +163,10 @@ block content
       //alert('#{article.lehrer.name}')
         var geparst = JSON.parse(jeks)
         quill.setContents(geparst);
+        console.log('-aa ' +jeks.length)
     } catch (e) {
-           console.log('AA ' +e.message)
-
+          console.log('AA ' +e.message)
+          console.log('aa ' +jeks.length)
     
         console.log('alt');
         var k = document.getElementById("hier-kommt-was-rein")
