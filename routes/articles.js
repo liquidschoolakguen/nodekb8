@@ -4546,6 +4546,7 @@ router.get('/:id', function (req, res) {
     populate('lehrer').
     populate('schuelers').
     populate('uploads').
+    populate('stamm').
     exec(function (err, article) {
       if (err) {
 
