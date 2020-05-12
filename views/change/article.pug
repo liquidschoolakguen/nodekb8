@@ -171,8 +171,8 @@ block content
     $(document).ready(function () {
       if(document.getElementById("income")!=null){
         //alert(x)
-       console.log('1 ' )
-      var jeks = document.getElementById("income").value;
+        console.log('1 ' )
+        var jeks = document.getElementById("income").value;
         var quill = new Quill('#editor_show', {
           modules: {
             "toolbar": false
@@ -180,21 +180,21 @@ block content
           theme: 'snow',
           readOnly: true,
         });
-      //console.log(jeks);
+        //console.log(jeks);
 
-      console.log('hhhh  ' +jeks);
-      console.log('hhhh  ' +jeks.substring(0, 20));
+        console.log('hhhh  ' +jeks);
+       console.log('hhhh  ' +jeks.substring(0, 20));
 
 
-      if('{"ops":' === jeks.substring(0, 7)){//erkennt ob der artikel neu ist
-      console.log('neuBeginn');
+        f('{"ops":' === jeks.substring(0, 7)){//erkennt ob der artikel neu ist
+        console.log('neuBeginn');
 
-      try {
+        try {
         //alert('#{article.lehrer.name}')
           var geparst = JSON.parse(jeks)
           quill.setContents(geparst);
           console.log('perfekt neu ' )
-      } catch (e) {
+        } catch (e) {
 
         var hack_50 = document.getElementById("hack_50").value
         var hack_100 = document.getElementById("hack_100").value
@@ -222,21 +222,21 @@ block content
           quill.setContents(geparst);
           console.log('zu groß neu ' )
 
-        }
-
       }
+
 
       }else{
 
         console.log('alt und ok');
         var k = document.getElementById("hier-kommt-was-rein")
         k.innerHTML += jeks;
+      }
+
+
 
 
       }
 
-
-      }
       });
 
 
