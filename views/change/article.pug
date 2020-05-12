@@ -140,20 +140,24 @@ block content
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
   script(src='/js/article.js')
   script.
+   
+   $(document).ready(function () {
+
+    
+    
+    if(document.getElementById("income")!=null){
+        //alert(x)
+
     var jeks = document.getElementById("income").value;
-    var quill = new Quill('#editor_show', {
-      modules: {
-        "toolbar": false
-      },
-      theme: 'snow',
-      readOnly: true,
-    });
+        var quill = new Quill('#editor_show', {
+          modules: {
+            "toolbar": false
+          },
+          theme: 'snow',
+          readOnly: true,
+        });
     //console.log(jeks);
    
-
-   $(document).ready(function () {
-      if(document.getElementById("income")!=null){
-        //alert(x)
 
     try {
       //alert('#{article.lehrer.name}')
