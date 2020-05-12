@@ -2,9 +2,9 @@ extends layouts/layout
 
 block content
     if !user
+      //include includes/new_index.pug
       //include includes/index_no_user.pug
       include includes/wartung.pug
-     // include includes/new_index.pug
     else
       if user.type == 'lehrer'
         include includes/index_lehrer.pug
