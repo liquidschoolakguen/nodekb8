@@ -186,23 +186,15 @@ block content
       console.log('hhhh  ' +jeks.substring(0, 20));
 
 
-      if('{"ops":' === jeks.substring(0, 7)){
-      console.log('neu');
-
-      }else{
-      console.log('alt');
-
-      }
+      if('{"ops":' === jeks.substring(0, 7)){//erkennt ob der artikel neu ist
+      console.log('neuBeginn');
 
       try {
         //alert('#{article.lehrer.name}')
           var geparst = JSON.parse(jeks)
           quill.setContents(geparst);
-        // console.log('-aa ' +jeks.length)
+         console.log('perfekt neu ' )
       } catch (e) {
-          console.log('-aa ' +'#{article.stamm}')
-        if('#{article.stamm}'){ //Das was folgt ist alles für den Safaribrowser, der keine langen Strings ausliefert
-
 
         var hack_50 = document.getElementById("hack_50").value
         var hack_100 = document.getElementById("hack_100").value
@@ -226,23 +218,24 @@ block content
         var hack_1000 = document.getElementById("hack_1000").value
 
         var complete = hack_50.concat(hack_100, hack_150, hack_200, hack_250, hack_300,hack_350, hack_400 , hack_450, hack_500, hack_550, hack_600, hack_650, hack_700, hack_750, hack_800, hack_850, hack_900, hack_950, hack_1000);
-        console.log('-aa ' +complete.length)
         var geparst = JSON.parse(complete)
           quill.setContents(geparst);
-          console.log('-aa GESCHAFFT ' +jeks.length)
+          console.log('zu groß neu ' )
 
+        }
 
-        }else{ // das hier ist für die alten Aufträge, die mit nicEdit erstellz wurden
+      }
+
+      }else{
 
         console.log('alt und ok');
         var k = document.getElementById("hier-kommt-was-rein")
         k.innerHTML += jeks;
 
 
-
-        }
-
       }
+
+
       }
       });
   script.
