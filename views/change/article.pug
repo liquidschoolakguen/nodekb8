@@ -19,7 +19,7 @@ block content
           .card-header
             ul#bologna-list.nav.nav-tabs.card-header-tabs(role='tablist')
               li.nav-item
-                a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{article.klasse} #{article.shadow_klasse} |  #{article.fach}  |  #{article.lehrer.name} |  #{article.stamm.name}
+                a.nav-link.active(href='#description', role='tab', aria-controls='description', aria-selected='true') #{article.klasse} #{article.shadow_klasse} |  #{article.fach}  |  #{article.lehrer.name}
           .card-body.padding_null
             .tab-content.mt-3.my-min-height
               p.card-text
@@ -182,6 +182,17 @@ block content
         });
       //console.log(jeks);
 
+      console.log('hhhh  ' +jeks);
+      console.log('hhhh  ' +jeks.substring(0, 20));
+
+
+      if('{"ops":[{"insert":"d' === jeks.substring(0, 20)){
+      console.log('neu');
+
+      }else{
+      console.log('alt');
+
+      }
 
       try {
         //alert('#{article.lehrer.name}')
@@ -232,7 +243,6 @@ block content
         }
 
       }
-      console.log('fertig');
       }
       });
   script.
