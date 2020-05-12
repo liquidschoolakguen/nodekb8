@@ -134,6 +134,12 @@ $('#geht_ab').click(function () {
         alert("Du hast weder einen Aufrag formuliert noch eine Datei hochgeladen. Irgend etwas solltest du den SchülerInnen schon zu tun geben. ");
         //var uploadField = document.getElementById("#to_clear");
         return false
+    var control_delta = JSON.stringify(delta).replace(/\s/g, '') ;
+    }else if(control_delta.length>10000000){
+
+        alert("Bitte wähle Bilder mit einer geringeren Dateigröße. Handyfotos sind hochauflösend und haben daher eine riesige Dateigröße.");
+        return false
+
     }else{
 
         $("#dada").val(JSON.stringify(delta));

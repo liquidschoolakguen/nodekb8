@@ -706,7 +706,7 @@ router.get('/schueler/:id', ensureAuthenticated, function (req, res) {
 
 
 function myStringToDate(termin_string) {
-  console.log('kkk: '+termin_string);
+  console.log('kkk: ' + termin_string);
   var tag = termin_string.substring(7, 9)
   var monat = termin_string.substring(10, 12)
   var jahr = termin_string.substring(13, 17)
@@ -838,7 +838,7 @@ router.get('/article_schuelers/:id', function (req, res) {
             if (hausarbeits) {
               //console.log('The hausarbeits is %s', hausarbeits);
 
-              
+
               if (article.klasse) {
 
                 Stamm.
@@ -866,7 +866,7 @@ router.get('/article_schuelers/:id', function (req, res) {
                             length: schuelersList.length,
                             my_termin: article.termin
                           });
-                        
+
 
                         })
                     }
@@ -931,7 +931,7 @@ router.get('/article_schuelers/:id', function (req, res) {
               } else {
 
                 var schuelersList = getSchuelersList(hausarbeits, article.schuelers)
-                  console.log('LLLLLL: '+article.termin)
+                console.log('LLLLLL: ' + article.termin)
                 res.render('change/article_schueler', {
                   now: getMyNow(),
                   article: article,
@@ -1086,13 +1086,89 @@ router.get('/edit_hausarbeit/:id', ensureAuthenticated, function (req, res) {
 
 
 
+        var num = 500000
+
+        var result = [];
+        for (var i = 0; i < ha.article.body.length; i += num) {
+          result.push(ha.article.body.substr(i, num));
+        }
 
 
 
+        var hack_50 = ''
+        var hack_100 = ''
+        var hack_150 = ''
+        var hack_200 = ''
+        var hack_250 = ''
+        var hack_300 = ''
+        var hack_350 = ''
+        var hack_400 = ''
+        var hack_450 = ''
+        var hack_500 = ''
+        var hack_550 = ''
+        var hack_600 = ''
+        var hack_650 = ''
+        var hack_700 = ''
+        var hack_750 = ''
+        var hack_800 = ''
+        var hack_850 = ''
+        var hack_900 = ''
+        var hack_950 = ''
+        var hack_1000 = ''
+
+
+       
+        if(result[0]){ hack_50 = result[0]}
+        if(result[1]){ hack_100 = result[1]}
+        if(result[2]){ hack_150 = result[2]}
+        if(result[3]){ hack_200 = result[3]}
+        if(result[4]){ hack_250 = result[4]}
+        if(result[5]){ hack_300 = result[5]}
+        if(result[6]){ hack_350 = result[6]}
+        if(result[7]){ hack_400 = result[7]}
+        if(result[8]){ hack_450 = result[8]}
+        if(result[9]){ hack_500 = result[9]}
+        if(result[10]){ hack_550 = result[10]}
+        if(result[11]){ hack_600 = result[11]}
+        if(result[12]){ hack_650 = result[12]}
+        if(result[13]){ hack_700 = result[13]}
+        if(result[14]){ hack_750 = result[14]}
+        if(result[15]){ hack_800 = result[15]}
+        if(result[16]){ hack_850 = result[16]}
+        if(result[17]){ hack_900 = result[17]}
+        if(result[18]){ hack_950 = result[18]}
+        if(result[19]){ hack_1000 = result[19]}
+
+       
+     
 
 
         res.render('change/edit_hausarbeit', {
           hausarbeit: ha,
+
+          hack_50: hack_50,
+          hack_100: hack_100,
+          hack_150: hack_150,
+          hack_200: hack_200,
+          hack_250: hack_250,
+          hack_300: hack_300,
+          hack_350: hack_350,
+          hack_400: hack_400,
+          hack_450: hack_450,
+          hack_500: hack_500,
+          hack_550: hack_550,
+          hack_600: hack_600,
+          hack_650: hack_650,
+          hack_700: hack_700,
+          hack_750: hack_750,
+          hack_800: hack_800,
+          hack_850: hack_850,
+          hack_900: hack_900,
+          hack_950: hack_950,
+          hack_1000: hack_1000,
+
+
+
 
         });
       } else {
@@ -1178,15 +1254,82 @@ router.get('/finished_hausarbeit/:id', ensureAuthenticated, function (req, res) 
       }
 
       if (ha) {
-        // console.log('The ha is %s', ha);
 
 
-        //console.log('x nnnnn ' + ha.article.klasse);
+        var num = 500000
 
+        var result = [];
+        for (var i = 0; i < ha.article.body.length; i += num) {
+          result.push(ha.article.body.substr(i, num));
+        }
+
+
+
+        var hack_50 = ''
+        var hack_100 = ''
+        var hack_150 = ''
+        var hack_200 = ''
+        var hack_250 = ''
+        var hack_300 = ''
+        var hack_350 = ''
+        var hack_400 = ''
+        var hack_450 = ''
+        var hack_500 = ''
+        var hack_550 = ''
+        var hack_600 = ''
+        var hack_650 = ''
+        var hack_700 = ''
+        var hack_750 = ''
+        var hack_800 = ''
+        var hack_850 = ''
+        var hack_900 = ''
+        var hack_950 = ''
+        var hack_1000 = ''
+       
+        if(result[0]){ hack_50 = result[0]}
+        if(result[1]){ hack_100 = result[1]}
+        if(result[2]){ hack_150 = result[2]}
+        if(result[3]){ hack_200 = result[3]}
+        if(result[4]){ hack_250 = result[4]}
+        if(result[5]){ hack_300 = result[5]}
+        if(result[6]){ hack_350 = result[6]}
+        if(result[7]){ hack_400 = result[7]}
+        if(result[8]){ hack_450 = result[8]}
+        if(result[9]){ hack_500 = result[9]}
+        if(result[10]){ hack_550 = result[10]}
+        if(result[11]){ hack_600 = result[11]}
+        if(result[12]){ hack_650 = result[12]}
+        if(result[13]){ hack_700 = result[13]}
+        if(result[14]){ hack_750 = result[14]}
+        if(result[15]){ hack_800 = result[15]}
+        if(result[16]){ hack_850 = result[16]}
+        if(result[17]){ hack_900 = result[17]}
+        if(result[18]){ hack_950 = result[18]}
+        if(result[19]){ hack_1000 = result[19]}
 
         res.render('show/finished_hausarbeit', {
           hausarbeit: ha,
 
+          hack_50: hack_50,
+          hack_100: hack_100,
+          hack_150: hack_150,
+          hack_200: hack_200,
+          hack_250: hack_250,
+          hack_300: hack_300,
+          hack_350: hack_350,
+          hack_400: hack_400,
+          hack_450: hack_450,
+          hack_500: hack_500,
+          hack_550: hack_550,
+          hack_600: hack_600,
+          hack_650: hack_650,
+          hack_700: hack_700,
+          hack_750: hack_750,
+          hack_800: hack_800,
+          hack_850: hack_850,
+          hack_900: hack_900,
+          hack_950: hack_950,
+          hack_1000: hack_1000,
         });
       } else {
 
@@ -3578,34 +3721,34 @@ router.post('/rueckgabe_hausarbeit/:id', function (req, res) {
       //console.log('-------------------------------------')
 
 
-        var query = { '_id': req.params.id };
-        let hausarbeit = {};
-        hausarbeit.nachbessern_text = req.body.nachbessern_text;
-        hausarbeit.nachbessern_option = req.body.nachbessern_option;
-        hausarbeit.status = '3';
+      var query = { '_id': req.params.id };
+      let hausarbeit = {};
+      hausarbeit.nachbessern_text = req.body.nachbessern_text;
+      hausarbeit.nachbessern_option = req.body.nachbessern_option;
+      hausarbeit.status = '3';
 
-        Hausarbeit.findOneAndUpdate(query, hausarbeit, { upsert: true }, function (err, doc) {
-          if (err) return res.send(500, { error: err });
-
-
-
-          User.findById(doc.schueler, function (err, user) {
-
-            if (err) throw err;
-            if (user) {
-
-              req.flash('success', 'Du hast die Hausarbeit von ' + user.name + ' zum Nachbessern zurückgesendet. Na, ob das noch mal was wird?');
-              res.redirect('/articles/article_schuelers/' + doc.article);
-
-            } else {
-              req.flash('danger', 'fehler. Bitte Mithat Akgün kontaktieren');
-              res.redirect('/');
-            }
+      Hausarbeit.findOneAndUpdate(query, hausarbeit, { upsert: true }, function (err, doc) {
+        if (err) return res.send(500, { error: err });
 
 
-          })
 
-        });
+        User.findById(doc.schueler, function (err, user) {
+
+          if (err) throw err;
+          if (user) {
+
+            req.flash('success', 'Du hast die Hausarbeit von ' + user.name + ' zum Nachbessern zurückgesendet. Na, ob das noch mal was wird?');
+            res.redirect('/articles/article_schuelers/' + doc.article);
+
+          } else {
+            req.flash('danger', 'fehler. Bitte Mithat Akgün kontaktieren');
+            res.redirect('/');
+          }
+
+
+        })
+
+      });
 
 
     })
@@ -4423,13 +4566,86 @@ router.get('/:id', function (req, res) {
         //console.log('x nnnnn ' + article.lehrer.name);
 
 
+        var num = 500000
+
+        var result = [];
+        for (var i = 0; i < article.body.length; i += num) {
+          result.push(article.body.substr(i, num));
+        }
 
 
 
+        var hack_50 = ''
+        var hack_100 = ''
+        var hack_150 = ''
+        var hack_200 = ''
+        var hack_250 = ''
+        var hack_300 = ''
+        var hack_350 = ''
+        var hack_400 = ''
+        var hack_450 = ''
+        var hack_500 = ''
+        var hack_550 = ''
+        var hack_600 = ''
+        var hack_650 = ''
+        var hack_700 = ''
+        var hack_750 = ''
+        var hack_800 = ''
+        var hack_850 = ''
+        var hack_900 = ''
+        var hack_950 = ''
+        var hack_1000 = ''
+
+
+       
+        if(result[0]){ hack_50 = result[0]}
+        if(result[1]){ hack_100 = result[1]}
+        if(result[2]){ hack_150 = result[2]}
+        if(result[3]){ hack_200 = result[3]}
+        if(result[4]){ hack_250 = result[4]}
+        if(result[5]){ hack_300 = result[5]}
+        if(result[6]){ hack_350 = result[6]}
+        if(result[7]){ hack_400 = result[7]}
+        if(result[8]){ hack_450 = result[8]}
+        if(result[9]){ hack_500 = result[9]}
+        if(result[10]){ hack_550 = result[10]}
+        if(result[11]){ hack_600 = result[11]}
+        if(result[12]){ hack_650 = result[12]}
+        if(result[13]){ hack_700 = result[13]}
+        if(result[14]){ hack_750 = result[14]}
+        if(result[15]){ hack_800 = result[15]}
+        if(result[16]){ hack_850 = result[16]}
+        if(result[17]){ hack_900 = result[17]}
+        if(result[18]){ hack_950 = result[18]}
+        if(result[19]){ hack_1000 = result[19]}
+
+       
         //console.log('x  ' + article.body);
         res.render('change/article', {
           article: article,
-          x: x
+          x: x,
+          hack_50: hack_50,
+          hack_100: hack_100,
+          hack_150: hack_150,
+          hack_200: hack_200,
+          hack_250: hack_250,
+          hack_300: hack_300,
+          hack_350: hack_350,
+          hack_400: hack_400,
+          hack_450: hack_450,
+          hack_500: hack_500,
+          hack_550: hack_550,
+          hack_600: hack_600,
+          hack_650: hack_650,
+          hack_700: hack_700,
+          hack_750: hack_750,
+          hack_800: hack_800,
+          hack_850: hack_850,
+          hack_900: hack_900,
+          hack_950: hack_950,
+          hack_1000: hack_1000,
+
+
         });
       } else {
 
@@ -4450,7 +4666,23 @@ router.get('/:id', function (req, res) {
 
 
 
+function splitNChars(txt, num) {
+  var result = [];
+  for (var i = 0; i < txt.length; i += num) {
+    result.push(txt.substr(i, num));
+  }
 
+
+
+
+  if (result[0]) {
+
+
+
+
+  }
+  return result;
+}
 
 
 

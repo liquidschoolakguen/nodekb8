@@ -34,7 +34,27 @@ block content
                                         div(style='clear:both;')        
                                         hr
                                         br 
-                                        br
+                                        input#hack_50.form-control.invisible(type='text',    value= hack_50)
+                                        input#hack_100.form-control.invisible(type='text',  value= hack_100)
+                                        input#hack_150.form-control.invisible(type='text',  value= hack_150)
+                                        input#hack_200.form-control.invisible(type='text',  value= hack_200)
+                                        input#hack_250.form-control.invisible(type='text',  value= hack_250)
+                                        input#hack_300.form-control.invisible(type='text',  value= hack_300)
+                                        input#hack_350.form-control.invisible(type='text',  value= hack_350)
+                                        input#hack_400.form-control.invisible(type='text',  value= hack_400)
+                                        input#hack_450.form-control.invisible(type='text',  value= hack_450)
+                                        input#hack_500.form-control.invisible(type='text',  value= hack_500)
+                                        input#hack_550.form-control.invisible(type='text',  value= hack_550)
+                                        input#hack_600.form-control.invisible(type='text',  value= hack_600)
+                                        input#hack_650.form-control.invisible(type='text',  value= hack_650)
+                                        input#hack_700.form-control.invisible(type='text',  value= hack_700)
+                                        input#hack_750.form-control.invisible(type='text',  value= hack_750)
+                                        input#hack_800.form-control.invisible(type='text',  value= hack_800)
+                                        input#hack_850.form-control.invisible(type='text',  value= hack_850)
+                                        input#hack_900.form-control.invisible(type='text',  value= hack_900)
+                                        input#hack_950.form-control.invisible(type='text',  value= hack_950)
+                                        input#hack_1000.form-control.invisible(type='text', value= hack_1000)
+                                        br                                       
                                         input#income.form-control.invisible(type='text', placeholder='articleId',  name='article_id', value= hausarbeit.article.body)
                                         #editor_show
                                         h6#hier-kommt-was-rein
@@ -122,25 +142,68 @@ block content
     script(src='https://cdn.quilljs.com/1.3.6/quill.js')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
     script.
+        $(document).ready(function () {
+        if(document.getElementById("income")!=null){
+            //alert(x)
+
         var jeks = document.getElementById("income").value;
-        var quill = new Quill('#editor_show', {
+            var quill = new Quill('#editor_show', {
             modules: {
                 "toolbar": false
             },
             theme: 'snow',
             readOnly: true,
-        });
-        $(document).ready(function () {
-        if(document.getElementById("income")!=null){
-            //alert(x)
+            });
+        //console.log(jeks);
+
 
         try {
             var geparst = JSON.parse(jeks)
             quill.setContents(geparst);
+            // console.log('-aa ' +jeks.length)
         } catch (e) {
-            console.log('alt');
+
+            if('#article.stamm.name'){ //Das was folgt ist alles für den Safaribrowser, der keine langen Strings ausliefert
+
+
+            var hack_50 = document.getElementById("hack_50").value
+            var hack_100 = document.getElementById("hack_100").value
+            var hack_150 = document.getElementById("hack_150").value
+            var hack_200 = document.getElementById("hack_200").value
+            var hack_250 = document.getElementById("hack_250").value
+            var hack_300 = document.getElementById("hack_300").value
+            var hack_350 = document.getElementById("hack_350").value
+            var hack_400 = document.getElementById("hack_400").value
+            var hack_450 = document.getElementById("hack_450").value
+            var hack_500 = document.getElementById("hack_500").value
+            var hack_550 = document.getElementById("hack_550").value
+            var hack_600 = document.getElementById("hack_600").value
+            var hack_650 = document.getElementById("hack_650").value
+            var hack_700 = document.getElementById("hack_700").value
+            var hack_750 = document.getElementById("hack_750").value
+            var hack_800 = document.getElementById("hack_800").value
+            var hack_850 = document.getElementById("hack_850").value
+            var hack_900 = document.getElementById("hack_900").value
+            var hack_950 = document.getElementById("hack_950").value
+            var hack_1000 = document.getElementById("hack_1000").value
+
+            var complete = hack_50.concat(hack_100, hack_150, hack_200, hack_250, hack_300,hack_350, hack_400 , hack_450, hack_500, hack_550, hack_600, hack_650, hack_700, hack_750, hack_800, hack_850, hack_900, hack_950, hack_1000);
+            console.log('-aa ' +complete.length)
+            var geparst = JSON.parse(complete)
+            quill.setContents(geparst);
+            console.log('-aa GESCHAFFT ' +jeks.length)
+
+
+            }else{ // das hier ist für die alten Aufträge, die mit nicEdit erstellz wurden
+
+            console.log('alt und ok');
             var k = document.getElementById("hier-kommt-was-rein")
             k.innerHTML += jeks;
+
+
+
+            }
+
         }
         console.log('fertig');
         }
