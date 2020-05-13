@@ -188,9 +188,57 @@ block content
                 console.log('neu');
 
 
-          }else{
-              console.log('neu');
 
+      try {
+        //alert('#{article.lehrer.name}')
+          var geparst = JSON.parse(jeks)
+          quill.setContents(geparst);
+         console.log('perfekt neu ' )
+      } catch (e) {
+
+        var hack_50 = document.getElementById("hack_50").value
+        var hack_100 = document.getElementById("hack_100").value
+        var hack_150 = document.getElementById("hack_150").value
+        var hack_200 = document.getElementById("hack_200").value
+        var hack_250 = document.getElementById("hack_250").value
+        var hack_300 = document.getElementById("hack_300").value
+        var hack_350 = document.getElementById("hack_350").value
+        var hack_400 = document.getElementById("hack_400").value
+        var hack_450 = document.getElementById("hack_450").value
+        var hack_500 = document.getElementById("hack_500").value
+        var hack_550 = document.getElementById("hack_550").value
+        var hack_600 = document.getElementById("hack_600").value
+        var hack_650 = document.getElementById("hack_650").value
+        var hack_700 = document.getElementById("hack_700").value
+        var hack_750 = document.getElementById("hack_750").value
+        var hack_800 = document.getElementById("hack_800").value
+        var hack_850 = document.getElementById("hack_850").value
+        var hack_900 = document.getElementById("hack_900").value
+        var hack_950 = document.getElementById("hack_950").value
+        var hack_1000 = document.getElementById("hack_1000").value
+
+        var complete = hack_50.concat(hack_100, hack_150, hack_200, hack_250, hack_300,hack_350, hack_400 , hack_450, hack_500, hack_550, hack_600, hack_650, hack_700, hack_750, hack_800, hack_850, hack_900, hack_950, hack_1000);
+        console.log('-aa ' +complete.length)
+        var geparst = JSON.parse(complete)
+          quill.setContents(geparst);
+          console.log('fast neu ' )
+
+        }
+
+
+
+
+
+
+
+
+
+
+        }else{
+            
+        console.log('alt und ok');
+        var k = document.getElementById("hier-kommt-was-rein")
+        k.innerHTML += jeks
             
           }
 
