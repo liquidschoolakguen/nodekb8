@@ -170,13 +170,29 @@ block content
   script.
     $(document).ready(function () {
       if(document.getElementById("income")!=null){
-        //alert(x)
+       
+
+     var jeks = document.getElementById("income").value;
+        var quill = new Quill('#editor_show', {
+          modules: {
+            "toolbar": false
+          },
+          theme: 'snow',
+          readOnly: true,
+        });
+
+
+
+
+
 
 
 
       
 
 
+      }else{
+        console.log('income NULL');
       }
       });
   script.
